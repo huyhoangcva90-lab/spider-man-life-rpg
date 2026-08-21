@@ -3,6 +3,9 @@
 > **Gamify Your Life with Spider-Man RPG Mechanics!**  
 > Biến hành động cuộc sống hàng ngày (thói quen, mục tiêu, dự án) thành game nhập vai Siêu Anh Hùng Spider-Man hành động thời gian thực lấy cảm hứng từ *Marvel Snap*, *Solo Leveling System*, *LifeReset: 66 Day Habit* và *Notion Life RPG*.
 
+🌐 **Live Demo Trải Nghiệm Trực Tuyến:** [https://huyhoangcva90-lab.github.io/spider-man-life-rpg/](https://huyhoangcva90-lab.github.io/spider-man-life-rpg/)  
+📦 **GitHub Repository:** [https://github.com/huyhoangcva90-lab/spider-man-life-rpg](https://github.com/huyhoangcva90-lab/spider-man-life-rpg)
+
 ---
 
 ## 🌟 Tính Năng Nổi Bật (Key Features)
