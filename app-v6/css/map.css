@@ -1,0 +1,206 @@
+/* WEB OPS TRACKER V6 - MAP STYLES & CUSTOM MARKERS */
+
+#map {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #0b1220;
+}
+
+/* Custom Navy Map Tint Overlay */
+.map-dark-filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(0, 240, 255, 0.03) 0%, rgba(9, 14, 23, 0.4) 100%);
+  z-index: 1;
+}
+
+/* Offline / Raster Fallback Grid Notice */
+.offline-grid-banner {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  background: rgba(255, 51, 102, 0.9);
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Custom MapLibre Pixel Markers */
+.custom-pixel-marker {
+  width: 32px;
+  height: 38px;
+  cursor: pointer;
+  transform: translate(-50%, -100%);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+}
+
+.custom-pixel-marker:hover {
+  transform: translate(-50%, -110%) scale(1.15);
+  z-index: 999 !important;
+}
+
+.custom-pixel-marker.active-selected {
+  transform: translate(-50%, -115%) scale(1.25);
+  z-index: 1000 !important;
+}
+
+.marker-pin-body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.marker-icon-box {
+  width: 28px;
+  height: 28px;
+  background: var(--marker-color, var(--cyan-mid));
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #ffffff;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
+}
+
+.marker-pin-tip {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--marker-color, var(--cyan-mid));
+}
+
+/* Selection Ring */
+.marker-selected-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -2px;
+  border: 2px dashed var(--cyan-bright);
+  border-radius: 8px;
+  animation: rotate-ring 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate-ring {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* User Location GPS Marker */
+.user-gps-marker {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.user-gps-dot {
+  width: 14px;
+  height: 14px;
+  background: var(--cyan-bright);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  box-shadow: 0 0 10px var(--cyan-bright);
+  z-index: 2;
+}
+
+.user-gps-pulse {
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 240, 255, 0.35);
+  border: 1px solid var(--cyan-bright);
+  border-radius: 50%;
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  animation: gps-pulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes gps-pulse {
+  0% { transform: scale(0.4); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* MapLibre Popup Tweaks */
+.maplibregl-popup-content {
+  background: var(--bg-card) !important;
+  border: 2px solid var(--cyan-mid) !important;
+  border-radius: 6px !important;
+  padding: 10px 14px !important;
+  color: var(--text-main) !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.8) !important;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: var(--cyan-mid) !important;
+}
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: var(--cyan-mid) !important;
+}
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--cyan-mid) !important;
+}
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--cyan-mid) !important;
+}
+
+.popup-title {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--cyan-bright);
+  margin-bottom: 4px;
+}
+
+.popup-type-tag {
+  display: inline-block;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.popup-btn {
+  margin-top: 6px;
+  width: 100%;
+  padding: 4px;
+  background: var(--cyan-mid);
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 3px;
+  text-align: center;
+}

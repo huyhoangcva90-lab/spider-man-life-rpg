@@ -1,0 +1,93 @@
+/* ==========================================================================
+   V4 DESIGN SYSTEM TOKENS - DIMENSIONAL FIELD DOSSIER
+   Spider-Verse Life-RPG Field Command System
+   ========================================================================== */
+
+:root {
+  /* Core Color Palette - Dimensional Field Dossier */
+  --color-night-asphalt: #080A0F;     /* Quiet asphalt foundation */
+  --color-paper-base: #080A0F;        /* Main background */
+  --color-paper-card: #11141D;        /* Physical evidence card panel */
+  --color-paper-elevated: #181C28;    /* Elevated tactical surface */
+  --color-paper-subtle: #0D1017;      /* Recessed evidence board backer */
+  
+  --color-newsprint-bone: #E8E0CF;    /* Editorial readable surface & primary copy */
+  --color-ink-primary: #E8E0CF;       /* High-contrast newsprint typography */
+  --color-ink-secondary: #B0B8C8;     /* Secondary editorial copy */
+  --color-ink-muted: #727D90;         /* Muted telemetry & metadata */
+  --color-ink-dim: #414856;           /* Faded grid lines & borders */
+
+  /* Spider-Verse Signature Accents */
+  --color-spider-red: #F02B3A;        /* Decisive action CTA & spider signal */
+  --color-spider-red-glow: rgba(240, 43, 58, 0.28);
+  --color-portal-cyan: #28D7F2;       /* Focus, web links & telemetry */
+  --color-portal-cyan-glow: rgba(40, 215, 242, 0.22);
+  --color-venom-violet: #845EF7;      /* Dimensional depth (boss encounter accent) */
+  --color-venom-violet-glow: rgba(132, 94, 247, 0.25);
+  --color-warning-amber: #F2B84B;     /* Rewards, gold & stagger meter */
+  --color-warning-amber-glow: rgba(242, 184, 75, 0.25);
+  --color-success-green: #20C997;     /* Tactical resolution green */
+
+  /* Backward Compatibility Aliases */
+  --color-gold-warning: var(--color-warning-amber);
+  --color-gold-glow: var(--color-warning-amber-glow);
+  --color-spider-cyan: var(--color-portal-cyan);
+  --color-spider-cyan-glow: var(--color-portal-cyan-glow);
+
+  /* Typography Roles */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-telemetry: 'JetBrains Mono', Consolas, Monaco, monospace;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Baseline Spacing Grid (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Tactile Clipped Corner & Radius Tokens */
+  --radius-tag: 3px;
+  --radius-card: 8px;
+  --radius-pill: 9999px;
+  --clip-dossier-corner: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  --clip-dossier-stamp: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+
+  /* Tactical Hairlines & Borders */
+  --border-hairline: 1px solid rgba(232, 224, 207, 0.08);
+  --border-subtle: 1px solid rgba(232, 224, 207, 0.14);
+  --border-active: 1px solid var(--color-portal-cyan);
+  --border-danger: 1px solid var(--color-spider-red);
+  --border-amber: 1px solid var(--color-warning-amber);
+  --border-violet: 1px solid var(--color-venom-violet);
+
+  /* Shadows & Dimensional Glows */
+  --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.6);
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.75);
+  --shadow-glow-red: 0 0 16px var(--color-spider-red-glow);
+  --shadow-glow-cyan: 0 0 16px var(--color-portal-cyan-glow);
+  --shadow-glow-amber: 0 0 16px var(--color-warning-amber-glow);
+  --shadow-glow-violet: 0 0 16px var(--color-venom-violet-glow);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-draw: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* Layout Dimensions & Touch Targets */
+  --rail-width-desktop: 200px;
+  --topbar-height: 52px;
+  --dock-height-mobile: 68px;
+  --min-touch-target: 44px;
+}
+

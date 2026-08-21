@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPIDER-MAN LIFE RPG - MYTHIC OMNIPOTENT ENGINE</title>
+  <meta name="description" content="Local-first Life RPG Prototype biến hành động cuộc sống thành game nhập vai superhero action-RPG!">
+  
+  <!-- Google Fonts: Inter & Bebas Neue & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme suit-advanced spider-halftone-pattern" id="appBody">
+
+  <!-- Interactive Spider-Web Particle Canvas -->
+  <canvas id="spiderWebCanvas"></canvas>
+
+  <!-- Floating Comic Pops Container -->
+  <div id="comicPopContainer" class="comic-pop-container"></div>
+
+  <div class="app-shell">
+    
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="app-sidebar spider-web-bg">
+      <div class="sidebar-brand">
+        <div class="brand-spider-logo spider-eyes-glow">
+          <svg viewBox="0 0 100 100" class="spider-logo-svg">
+            <path d="M50 8 C25 8 10 30 10 55 C10 80 35 92 50 92 C65 92 90 80 90 55 C90 30 75 8 50 8 Z" fill="#e62429" stroke="#ffffff" stroke-width="3"/>
+            <polygon points="22,42 44,52 38,32" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+            <polygon points="78,42 56,52 62,32" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h2 class="spider-title-glow skewed-spider-title">SPIDER LIFE</h2>
+          <span>MYTHIC SYSTEM</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-nav="home"><span class="icon">🎮</span> OVERVIEW</button>
+        <button class="nav-item" data-nav="character"><span class="icon">👤</span> HERO PROFILE</button>
+        <button class="nav-item" data-nav="daily"><span class="icon">⚡</span> DAILY HABITS</button>
+        <button class="nav-item" data-nav="quests"><span class="icon">📊</span> KANBAN TASKS</button>
+        <button class="nav-item" data-nav="projects"><span class="icon">📁</span> PROJECTS</button>
+        <button class="nav-item" data-nav="boss"><span class="icon">⚔️</span> BOSS ARENA</button>
+        <button class="nav-item" data-nav="map"><span class="icon">🗺️</span> CITY MAP</button>
+        <button class="nav-item" data-nav="skills"><span class="icon">🌳</span> SKILL TREE</button>
+        <button class="nav-item" data-nav="suits"><span class="icon">🥋</span> SUITS STUDIO</button>
+        <button class="nav-item" data-nav="gadgets"><span class="icon">🔧</span> GADGETS</button>
+        <button class="nav-item" data-nav="allies"><span class="icon">🤝</span> ALLIES</button>
+        <button class="nav-item" data-nav="villains"><span class="icon">🦹</span> VILLAINS</button>
+        <button class="nav-item" data-nav="shop"><span class="icon">🪙</span> REWARD SHOP</button>
+        <button class="nav-item" data-nav="collection"><span class="icon">🎒</span> COLLECTION</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
+          <button class="secondary-btn" id="exportDataBtn" style="flex:1; font-size:0.8rem; padding:4px;" title="Tải file sao lưu JSON">📥 EXPORT</button>
+          <button class="secondary-btn" id="importDataBtn" style="flex:1; font-size:0.8rem; padding:4px;" title="Nạp file khôi phục JSON">📤 IMPORT</button>
+          <input type="file" id="importFileInput" accept=".json" style="display:none;">
+        </div>
+        <button class="reset-data-btn" id="resetDemoDataBtn">🔄 RESET DEMO DATA</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <div class="main-wrapper">
+      
+      <!-- TOP STATUS HEADER BAR -->
+      <header class="top-status-header spider-header-glow">
+        <div class="hero-quick-profile">
+          <div class="hero-avatar-badge spider-eyes-glow" id="heroAvatarIcon">🕷️</div>
+          <div>
+            <div class="hero-name-row">
+              <strong id="heroNameHeader" class="spider-hero-title">Peter Parker</strong>
+              <span class="rank-tag-badge" id="rankBadgeHeader">LV.12 HERO</span>
+            </div>
+            <div class="xp-mini-track">
+              <div class="xp-mini-fill" id="xpMiniFill" style="width: 82%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-currencies">
+          <div class="curr-pill streak-pill" title="Chuỗi Check-in thói quen liên tục">
+            <span class="icon">🔥</span>
+            <strong id="headerComboVal" style="color:#f97316;">7 STREAK</strong>
+            <span class="label">2.0x DMG</span>
+          </div>
+
+          <div class="curr-pill gold-pill" title="Gold để đổi quà thực tế">
+            <span class="icon">🪙</span>
+            <strong id="headerGoldVal">1,250</strong>
+            <span class="label">GOLD</span>
+          </div>
+
+          <div class="curr-pill energy-pill" title="Thể lực Energy">
+            <span class="icon">⚡</span>
+            <strong id="headerEnergyVal">74%</strong>
+            <span class="label">ENERGY</span>
+          </div>
+
+          <div class="curr-pill momentum-pill" title="Đà Momentum">
+            <span class="icon">🔥</span>
+            <strong id="headerMomentumVal">85%</strong>
+            <span class="label">MOMENTUM</span>
+          </div>
+
+          <div class="curr-pill sp-pill" title="Skill Points">
+            <span class="icon">✨</span>
+            <strong id="headerSkillPtsVal">4</strong>
+            <span class="label">SKILL PTS</span>
+          </div>
+
+          <button id="openRiftBtn" class="sound-toggle-btn" title="Cánh Cổng Mạng Nhện Đa Vũ Trụ Multiverse Rift">🌌</button>
+          <button id="openWheelBtn" class="sound-toggle-btn" title="Vòng xoay Gadgets Wheel 360°">🔧</button>
+          <button id="bgmToggleBtn" class="sound-toggle-btn" title="Bật/Tắt Synthwave BGM">🎵</button>
+          <button id="soundToggleBtn" class="sound-toggle-btn" title="Bật/Tắt SFX Audio">🔊</button>
+        </div>
+      </header>
+
+      <main class="content-body">
+
+        <!-- VIEW 1: OVERVIEW BENTO DASHBOARD -->
+        <section id="view-home" class="app-view active">
+          
+          <!-- SPIDER-SENSE BANNER -->
+          <div class="spider-sense-banner-alert">
+            <div class="sense-waves-icon">〰️ ⚡ 〰️</div>
+            <div class="sense-alert-content">
+              <strong>SPIDER-SENSE ALERT: DOCTOR OCTOPUS ĐANG TẤN CÔNG DỰ ÁN CỦA BẠN!</strong>
+              <p>Check-in thói quen daily để giải phóng đòn tơ nhện gây sát thương & làm Stagger giáp Boss!</p>
+            </div>
+            <button class="primary-btn qte-trigger-btn" id="startQteBtn">⚡ SPIDER-SENSE QTE</button>
+          </div>
+
+          <!-- BENTO BOX GRID LAYOUT -->
+          <div class="bento-grid-container">
+            
+            <!-- BENTO CARD 1: TODAY'S DIRECTIVE -->
+            <div class="bento-card bento-directive-card tilt-card">
+              <div class="bento-card-header">
+                <h3 class="skewed-spider-title">🎯 TODAY'S HERO DIRECTIVE</h3>
+                <span class="date-lbl" id="homeTodayDate">Thứ Ba, 12/08/2026</span>
+              </div>
+              <p class="bento-subtitle">Nhiệm vụ hàng ngày giúp tăng Level & hạ gục Boss Doctor Octopus:</p>
+              <div class="home-actions-list" id="homeActionsList"></div>
+            </div>
+
+            <!-- BENTO CARD 2: BOSS ENCOUNTER CARD -->
+            <div class="bento-card bento-boss-card tilt-card" id="homeBossCard">
+              <div class="boss-head">
+                <span class="encounter-badge">🦹 ACTIVE BOSS ENCOUNTER</span>
+                <h2 id="homeBossName" class="skewed-spider-title">DOCTOR OCTOPUS</h2>
+                <span class="boss-weakness-tag" id="homeBossWeakness">WEAKNESS: INTELLECT / PLANNING</span>
+              </div>
+
+              <div class="boss-visual-flex">
+                <div class="boss-avatar-frame reticle-container" id="homeBossAvatar">
+                  <div class="spider-reticle-overlay"></div>
+                  <span class="boss-emoji-icon">🐙</span>
+                </div>
+                <div class="boss-meters-col">
+                  <div class="meter-group">
+                    <div class="meter-label"><span>HP:</span><strong id="homeBossHpTxt">680 / 1000</strong></div>
+                    <div class="meter-track hp-track"><div class="meter-fill hp-fill" id="homeBossHpFill" style="width: 68%;"></div></div>
+                  </div>
+                  <div class="meter-group">
+                    <div class="meter-label"><span>ARMOR:</span><strong id="homeBossArmorTxt">150 / 300</strong></div>
+                    <div class="meter-track armor-track"><div class="meter-fill armor-fill" id="homeBossArmorFill" style="width: 50%;"></div></div>
+                  </div>
+                  <div class="meter-group">
+                    <div class="meter-label"><span>STAGGER:</span><strong id="homeBossStaggerTxt">45 / 100</strong></div>
+                    <div class="meter-track stagger-track"><div class="meter-fill stagger-fill" id="homeBossStaggerFill" style="width: 45%;"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="boss-quick-actions">
+                <button class="primary-btn spider-btn-thwip" id="goToBossCombatBtn">⚔️ COMBAT ARENA</button>
+                <button class="secondary-btn" id="openVariantCardBtn">🎴 VARIANT CARD</button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- VIEW 2: HERO CHARACTER SHEET WITH RADAR CHART -->
+        <section id="view-character" class="app-view">
+          <div class="page-title-wrap">
+            <h2 class="skewed-spider-title">👤 HERO CHARACTER PROFILE</h2>
+            <p>Bảng tổng quan thông số, cấp độ và Biểu đồ Radar 6 thuộc tính Mạng Nhện.</p>
+          </div>
+
+          <div class="bento-grid-container">
+            <div class="bento-card tilt-card">
+              <div class="sheet-header">
+                <div class="sheet-avatar spider-eyes-glow">🕷️</div>
+                <div>
+                  <h2 id="sheetHeroName" class="spider-hero-title skewed-spider-title">Peter Parker</h2>
+                  <span class="sheet-title" id="sheetHeroRank">LEVEL 12 &bull; ADVANCED SUIT HERO</span>
+                </div>
+              </div>
+
+              <div class="sheet-progress-box">
+                <div class="meter-label"><span>LEVEL PROGRESSION (XP):</span><strong id="sheetXpTxt">820 / 1000 XP</strong></div>
+                <div class="meter-track xp-track"><div class="meter-fill xp-fill" id="sheetXpFill" style="width: 82%;"></div></div>
+              </div>
+
+              <!-- SPIDER WEB HEXAGON RADAR CHART -->
+              <div class="radar-chart-box">
+                <h4 style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-bottom:8px;">🕸️ 6-ATTRIBUTE SPIDER RADAR CHART</h4>
+                <div style="display:flex; justify-content:center;">
+                  <canvas id="spiderRadarCanvas" width="260" height="260"></canvas>
+                </div>
+              </div>
+
+              <div class="loadout-summary-box">
+                <div class="loadout-item">
+                  <span class="label">EQUIPPED SUIT:</span>
+                  <strong id="sheetEquippedSuit">Advanced Suit</strong>
+                </div>
+                <div class="loadout-item">
+                  <span class="label">ACTIVE COMPANION:</span>
+                  <strong id="sheetActiveCompanion">Miles Morales</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="bento-card tilt-card">
+              <h3 class="skewed-spider-title">🦾 6 CORE HERO ATTRIBUTES</h3>
+              <div class="attributes-grid" id="attributesGrid"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: DAILY HABITS -->
+        <section id="view-daily" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">⚡ DAILY HABITS & ROUTINES</h2>
+              <p>Check-in thói quen hàng ngày để tích lũy thuộc tính & gây sát thương Boss!</p>
+            </div>
+            <button class="primary-btn spider-btn-thwip" id="openAddHabitModalBtn">+ THÊM THÓI QUEN MỚI</button>
+          </div>
+
+          <div class="daily-habits-grid" id="dailyHabitsGrid"></div>
+        </section>
+
+        <!-- VIEW 4: NOTION KANBAN TASKS -->
+        <section id="view-quests" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">📊 NOTION KANBAN BOARD</h2>
+              <p>Bảng quản lý công việc chuẩn Notion 3 cột trực quan.</p>
+            </div>
+            <button class="primary-btn spider-btn-thwip" id="openAddTaskModalBtn">+ THÊM TASK MỚI</button>
+          </div>
+
+          <div class="notion-kanban-board" id="notionKanbanBoard">
+            <div class="kanban-column" id="kanbanColumnTodo">
+              <div class="column-header">
+                <h3>⚪ TO DO (CẦN LÀM)</h3>
+                <span class="task-count-badge" id="countTodo">0</span>
+              </div>
+              <div class="kanban-cards-list" id="listTodo"></div>
+            </div>
+
+            <div class="kanban-column" id="kanbanColumnDoing">
+              <div class="column-header">
+                <h3 style="color:var(--spider-blue);">🕸️ WEB SLINGING (ĐANG LÀM)</h3>
+                <span class="task-count-badge" id="countDoing">0</span>
+              </div>
+              <div class="kanban-cards-list" id="listDoing"></div>
+            </div>
+
+            <div class="kanban-column" id="kanbanColumnDone">
+              <div class="column-header">
+                <h3 style="color:var(--success-green);">✓ BOSS DAMAGED (HOÀN THÀNH)</h3>
+                <span class="task-count-badge" id="countDone">0</span>
+              </div>
+              <div class="kanban-cards-list" id="listDone"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 5: PROJECTS -->
+        <section id="view-projects" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">📁 PROJECTS (BOSS ENCOUNTERS)</h2>
+              <p>Mỗi dự án lớn liên kết trực tiếp với một Siêu Phản Diện phó bản.</p>
+            </div>
+            <button class="primary-btn spider-btn-thwip" id="openAddProjectModalBtn">+ TẠO DỰ ÁN LỚN MỚI</button>
+          </div>
+
+          <div class="projects-grid" id="projectsGrid"></div>
+        </section>
+
+        <!-- VIEW 6: BOSS COMBAT ARENA -->
+        <section id="view-boss" class="app-view">
+          <div class="boss-arena-wrapper">
+            <div class="arena-header">
+              <span class="arena-tag">⚔️ BOSS COMBAT ARENA</span>
+              <h1 id="arenaBossName" class="skewed-spider-title">DOCTOR OCTOPUS</h1>
+              <p id="arenaBossDesc">Phase 2: Overclocked AI &bull; Cánh tay cơ khí tăng 20% giáp phòng thủ.</p>
+            </div>
+
+            <div class="arena-stage">
+              <div class="arena-boss-card bento-card tilt-card">
+                <div class="arena-boss-avatar reticle-container" id="arenaBossAvatar">
+                  <div class="spider-reticle-overlay"></div>
+                  <span class="boss-emoji-icon">🐙</span>
+                </div>
+                <div class="arena-boss-info">
+                  <span class="weakness-alert" id="arenaWeaknessTxt">⚡ WEAKNESS MATCH: INTELLECT / PLANNING (1.5x DAMAGE)</span>
+                  
+                  <div class="meter-group">
+                    <div class="meter-label"><span>HP:</span><strong id="arenaBossHpTxt">680 / 1000</strong></div>
+                    <div class="meter-track hp-track"><div class="meter-fill hp-fill" id="arenaBossHpFill" style="width: 68%;"></div></div>
+                  </div>
+
+                  <div class="meter-group">
+                    <div class="meter-label"><span>ARMOR:</span><strong id="arenaBossArmorTxt">150 / 300</strong></div>
+                    <div class="meter-track armor-track"><div class="meter-fill armor-fill" id="arenaBossArmorFill" style="width: 50%;"></div></div>
+                  </div>
+
+                  <div class="meter-group">
+                    <div class="meter-label"><span>STAGGER:</span><strong id="arenaBossStaggerTxt">45 / 100</strong></div>
+                    <div class="meter-track stagger-track"><div class="meter-fill stagger-fill" id="arenaBossStaggerFill" style="width: 45%;"></div></div>
+                  </div>
+
+                  <div class="arena-boss-actions">
+                    <button class="primary-btn finisher-btn spider-btn-thwip" id="arenaFinisherBtn" disabled>⚡ EXECUTE FINISHER (STAGGER 100% REQUIRED)</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-card combat-log-card">
+                <h3 class="skewed-spider-title">📜 COMBAT ACTION LOG</h3>
+                <div class="combat-log-list" id="combatLogList"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 7: CITY MAP (SPIDER OPS TRACKER CONSOLE) -->
+        <section id="view-map" class="app-view">
+          <!-- Top Tracker Shell Header / Status Strip -->
+          <div class="tracker-header-strip">
+            <div class="tracker-id-brand">
+              <span class="tracker-status-indicator pulse-cyan">● SYS_ONLINE</span>
+              <h2 class="tracker-title font-display">SPIDER OPS TRACKER</h2>
+              <span class="tracker-serial">FREQ: 142.85 MHz</span>
+            </div>
+            
+            <div class="tracker-header-actions">
+              <button class="tracker-btn sound-mode-btn" id="trackerSoundToggleBtn" aria-pressed="true" title="Toggle Tracker Audio Cues">
+                <span id="trackerSoundIcon">🔊</span> <span id="trackerSoundLabel">SOUND ON</span>
+              </button>
+              <button class="tracker-btn calibration-btn" id="replayCalibrationBtn" title="Replay Calibration Sequence">
+                ⚙️ REPLAY CALIBRATION
+              </button>
+              <button class="tracker-btn center-btn" id="centerMapBtn" title="Re-center Map Viewport">
+                🎯 RE-CENTER
+              </button>
+            </div>
+          </div>
+
+          <!-- Controls Bar: Filter Chips & Search Input -->
+          <div class="tracker-controls-bar">
+            <div class="map-filter-chips" id="mapFilterChips" role="tablist" aria-label="Target Filters">
+              <button class="filter-chip active" data-mapfilter="all" role="tab" aria-selected="true">ALL TARGETS</button>
+              <button class="filter-chip chip-confirmed" data-mapfilter="active_mission" role="tab" aria-selected="false">🔷 CONFIRMED</button>
+              <button class="filter-chip chip-rumored" data-mapfilter="boss_threat" role="tab" aria-selected="false">⚠️ RUMORED</button>
+              <button class="filter-chip chip-project" data-mapfilter="project" role="tab" aria-selected="false">⭐ PROJECTS</button>
+              <button class="filter-chip chip-ally" data-mapfilter="ally_intel" role="tab" aria-selected="false">🤝 ALLY INTEL</button>
+              <button class="filter-chip chip-locked" data-mapfilter="locked" role="tab" aria-selected="false">🔒 LOCKED</button>
+              <button class="filter-chip chip-completed" data-mapfilter="completed" role="tab" aria-selected="false">✅ COMPLETED</button>
+            </div>
+            <div class="search-input-wrap">
+              <input type="text" id="mapSearchInput" placeholder="🔍 Search district / target signal..." class="tech-search-input" aria-label="Search map nodes">
+            </div>
+          </div>
+
+          <!-- Visible Marker Legend Bar -->
+          <div class="tracker-legend-bar">
+            <span class="legend-title">MARKER LEGEND:</span>
+            <span class="legend-item legend-confirmed"><span class="legend-shape shape-diamond">🔷</span> Confirmed Mission</span>
+            <span class="legend-item legend-rumored"><span class="legend-shape shape-square">⚠️</span> Rumored Threat</span>
+            <span class="legend-item legend-project"><span class="legend-shape shape-star">⭐</span> Active Project</span>
+            <span class="legend-item legend-ally"><span class="legend-shape shape-circle">🤝</span> Ally Recon</span>
+            <span class="legend-item legend-locked"><span class="legend-shape shape-square">🔒</span> Locked Zone</span>
+            <span class="legend-item legend-completed"><span class="legend-shape shape-circle">✅</span> Completed</span>
+          </div>
+
+          <!-- Tracker Main Grid (Viewport + Side Intel Panel) -->
+          <div class="tracker-main-grid">
+            <div class="tracker-viewport-card bento-card">
+              <div class="map-visual-container" id="cityMapContainer">
+                <div class="oscorp-radar-sweep"></div>
+                <div class="map-grid-overlay"></div>
+                <div class="crt-scanline-overlay"></div>
+                
+                <!-- Live Tactical Radar Minimap Widget -->
+                <div class="tracker-minimap-widget">
+                  <canvas id="trackerRadarCanvas" width="90" height="90" aria-label="Tactical Radar Display"></canvas>
+                  <div class="minimap-label">RADAR SWEEP</div>
+                </div>
+
+                <!-- NYC Vector Map SVG -->
+                <svg viewBox="0 0 800 600" class="nyc-vector-map-svg" id="nycMapSvg">
+                  <g class="districts-group">
+                    <path d="M200 450 L380 430 L450 550 L250 580 Z" class="district-path" data-district="financial_district" id="dist_financial_district"><title>Financial District</title></path>
+                    <path d="M380 430 L520 400 L580 500 L450 550 Z" class="district-path" data-district="chinatown" id="dist_chinatown"><title>Chinatown & Lower East</title></path>
+                    <path d="M220 280 L520 260 L520 400 L200 450 Z" class="district-path" data-district="midtown" id="dist_midtown"><title>Midtown Manhattan</title></path>
+                    <path d="M350 140 L580 140 L520 260 L300 260 Z" class="district-path" data-district="central_park" id="dist_central_park"><title>Central Park & Upper East</title></path>
+                    <path d="M180 80 L550 80 L580 140 L350 140 Z" class="district-path" data-district="harlem" id="dist_harlem"><title>Harlem & Upper West</title></path>
+                    <path d="M120 250 L220 280 L200 450 L100 400 Z" class="district-path" data-district="hells_kitchen" id="dist_hells_kitchen"><title>Hell's Kitchen</title></path>
+                    <path d="M520 400 L750 380 L780 580 L580 500 Z" class="district-path" data-district="queens_brooklyn" id="dist_queens_brooklyn"><title>Queens & Brooklyn</title></path>
+                  </g>
+                  <!-- Hudson & East River Accents -->
+                  <path d="M0 0 L180 80 L120 250 L100 400 L0 350 Z" fill="rgba(2, 132, 199, 0.12)" stroke="rgba(0, 240, 255, 0.25)"></path>
+                  <path d="M550 80 L800 0 L800 380 L750 380 L580 140 Z" fill="rgba(2, 132, 199, 0.12)" stroke="rgba(0, 240, 255, 0.25)"></path>
+                  
+                  <!-- Web-Frequency Scanner SVG Line Connections Layer -->
+                  <g id="webConnectionsLayer" class="web-connections-layer"></g>
+                </svg>
+                <!-- Interactive Node Markers Layer -->
+                <div class="map-nodes-layer" id="mapNodesLayer"></div>
+              </div>
+            </div>
+
+            <!-- Contextual Intel Side Panel -->
+            <div class="tracker-intel-panel bento-card" id="mapNodeDetailPanel">
+              <div class="intel-panel-header">
+                <div class="intel-badge-wrap">
+                  <span class="encounter-badge" id="mapPanelTypeBadge">🔷 CONFIRMED MISSION</span>
+                  <span class="coords-badge" id="mapPanelCoords">73.985°W / 40.758°N</span>
+                </div>
+                <h3 id="mapPanelTitle" class="skewed-spider-title">SELECT A TARGET NODE</h3>
+              </div>
+
+              <div class="intel-panel-body">
+                <p id="mapPanelDesc" class="intel-description">Select a location marker on the city map to inspect tactical intel & launch mission ops.</p>
+                <div class="node-meta-box">
+                  <div class="meta-row"><span class="meta-label">DISTRICT:</span> <strong id="mapPanelDistrict" class="meta-val">Midtown Manhattan</strong></div>
+                  <div class="meta-row"><span class="meta-label">SIGNAL STATUS:</span> <strong id="mapPanelStatus" class="meta-val val-cyan">ACTIVE</strong></div>
+                  <div class="meta-row"><span class="meta-label">INTEL SOURCE:</span> <strong id="mapPanelSource" class="meta-val val-frost">Oscorp Mainframe</strong></div>
+                  <div class="meta-row"><span class="meta-label">ESTIMATED REWARDS:</span> <strong id="mapPanelRewards" class="meta-val val-gold">XP & Gold</strong></div>
+                </div>
+              </div>
+
+              <div class="intel-panel-footer">
+                <button class="primary-btn spider-btn-thwip launch-btn" id="launchMapNodeBtn">🚀 DEPLOY TO MISSION SCREEN</button>
+                <div class="map-activity-log-box">
+                  <div class="log-title-row">
+                    <span>📡 PATROL LOG</span>
+                    <span class="log-count" id="logCount">0 RECENT</span>
+                  </div>
+                  <div id="mapActivityLog" class="activity-log-list" tabIndex="0" role="region" aria-label="Patrol Activity Log">
+                    <div class="log-entry">[RADAR]: Scanner active. 7 districts operational.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Moving Ticker Strip -->
+          <div class="tracker-ticker-wrap" aria-live="polite">
+            <div class="ticker-label">SPIDER-NET BROADCAST:</div>
+            <div class="ticker-content-track" id="trackerTickerContent">
+              <span class="ticker-item">[OSCORP RADAR]: SCANNING NEW YORK CITY SECTORS...</span>
+              <span class="ticker-item">[SPIDER OPS]: 8 TACTICAL NODES MONITORED...</span>
+              <span class="ticker-item">[DAILY BUGLE WIRE]: CRIME WAVE REPORTED IN MIDTOWN...</span>
+              <span class="ticker-item">[FEAST NETWORK]: PATROL UNITS ON STANDBY...</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- FIRST-VISIT CALIBRATION / ONBOARDING OVERLAY MODAL -->
+        <div class="modal-overlay tracker-calibration-modal" id="trackerCalibrationModal" role="dialog" aria-modal="true" aria-label="Spider Ops Tracker Calibration Console">
+          <div class="modal-card calibration-card bento-card">
+            <div class="calibration-header">
+              <div>
+                <span class="calibration-badge">SYSTEM CALIBRATION</span>
+                <h3 class="skewed-spider-title font-display" style="margin-top:4px;">SPIDER OPS TERMINAL INITIALIZATION</h3>
+              </div>
+              <button class="secondary-btn skip-btn" id="skipCalibrationBtn" aria-label="Skip Calibration">SKIP [ESC]</button>
+            </div>
+
+            <div class="calibration-terminal-body" id="calibrationLogBody" aria-live="polite">
+              <div class="boot-line">> INITIALIZING SPIDER-OPS DIRECT PATROL LINK [SYS_v4.9]...</div>
+              <div class="boot-line">> CALIBRATING OSCORP SUB-WAVE FREQUENCY SCANNER...</div>
+              <div class="boot-line">> LOCATING ACTIVE THREATS & ALLY SIGNAL BEACONS...</div>
+              <div class="boot-line">> AUDIO HARNESS CHECK: SELECT PREFERRED AUDIO MODE.</div>
+            </div>
+
+            <div class="calibration-actions">
+              <button class="primary-btn calibration-choice-btn sound-on-choice" id="calibSoundOnBtn" aria-label="Enable Sound and Enter Tracker Mode">
+                🔊 SOUND ON
+              </button>
+              <button class="secondary-btn calibration-choice-btn sound-off-choice" id="calibSoundOffBtn" aria-label="Mute Sound and Enter Tracker Mode">
+                🔇 SOUND OFF
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW 8: SKILL TREE -->
+        <section id="view-skills" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">🌳 VISUAL SKILL TREE & MOVES</h2>
+              <p>Mở khóa các nội công & tuyệt kỹ võ thuật Insomniac Spider-Man (2018, Miles Morales, Spider-Man 2).</p>
+            </div>
+            <div class="compendium-controls-bar">
+              <input type="text" id="skillSearchInput" placeholder="🔍 Tìm skill / move..." class="tech-search-input">
+              <select id="skillGameSelect" class="tech-select-filter" aria-label="Lọc theo tựa game">
+                <option value="all">ALL GAMES</option>
+                <option value="sm2018">Spider-Man (2018)</option>
+                <option value="miles2020">Miles Morales</option>
+                <option value="sm2">Spider-Man 2</option>
+                <option value="other">Other / Inspired</option>
+              </select>
+              <select id="skillHeroSelect" class="tech-select-filter" aria-label="Lọc theo nhân vật">
+                <option value="all">ALL HEROES</option>
+                <option value="peter">Peter Parker</option>
+                <option value="miles">Miles Morales</option>
+                <option value="shared">Shared Tree</option>
+              </select>
+              <select id="skillFamilySelect" class="tech-select-filter" aria-label="Lọc theo loại kỹ năng">
+                <option value="all">ALL ABILITIES</option>
+                <option value="traversal">Traversal</option>
+                <option value="combat">Combat</option>
+                <option value="web">Web Combat</option>
+                <option value="gadget">Gadget</option>
+                <option value="stealth">Stealth</option>
+                <option value="venom">Venom</option>
+                <option value="camouflage">Camouflage</option>
+                <option value="spider-arms">Spider-Arms</option>
+                <option value="symbiote">Symbiote</option>
+                <option value="defense">Defense</option>
+              </select>
+              <select id="skillBranchSelect" class="tech-select-filter" aria-label="Lọc theo nhánh kỹ năng">
+                <option value="all">ALL BRANCHES</option>
+                <option value="spider_abilities">Spider Abilities</option>
+                <option value="web_combat">Web Combat</option>
+                <option value="tech_stealth">Tech & Stealth</option>
+                <option value="venom_bioelectric">Bio-Electric Venom</option>
+                <option value="symbiote_powers">Symbiote Powers</option>
+              </select>
+            </div>
+          </div>
+          <div class="skill-tree-branches-container" id="skillTreeContainer"></div>
+        </section>
+
+        <!-- VIEW 9: SUITS STUDIO -->
+        <section id="view-suits" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">🥋 SUITS STUDIO & PALETTE</h2>
+              <p>Trang bị Suit để lập tức thay đổi toàn bộ màu sắc & âm thanh giao diện!</p>
+            </div>
+            <div class="compendium-controls-bar">
+              <input type="text" id="suitSearchInput" placeholder="🔍 Tìm kiếm suit..." class="tech-search-input">
+              <select id="suitGameSelect" class="tech-select-filter" aria-label="Lọc theo tựa game">
+                <option value="all">ALL GAMES</option>
+                <option value="sm2018">Spider-Man (2018)</option>
+                <option value="miles2020">Miles Morales</option>
+                <option value="sm2">Spider-Man 2</option>
+                <option value="other">Other / Inspired</option>
+              </select>
+              <select id="suitHeroSelect" class="tech-select-filter" aria-label="Lọc theo nhân vật">
+                <option value="all">ALL HEROES</option>
+                <option value="peter">Peter Parker</option>
+                <option value="miles">Miles Morales</option>
+                <option value="both">Both / Spider-Verse</option>
+              </select>
+              <select id="suitRaritySelect" class="tech-select-filter" aria-label="Lọc theo phẩm chất">
+                <option value="all">ALL RARITIES</option>
+                <option value="Common">Common</option>
+                <option value="Rare">Rare</option>
+                <option value="Epic">Epic</option>
+                <option value="Legendary">Legendary</option>
+                <option value="Mythic">Mythic</option>
+              </select>
+              <select id="suitEquippedSelect" class="tech-select-filter" aria-label="Lọc theo trạng thái trang bị">
+                <option value="all">ALL STATUS</option>
+                <option value="equipped">Equipped</option>
+                <option value="unlocked">Unlocked</option>
+                <option value="locked">Locked</option>
+              </select>
+            </div>
+          </div>
+          <div class="suits-grid" id="suitsGrid"></div>
+        </section>
+
+        <!-- VIEW 10: GADGETS -->
+        <section id="view-gadgets" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">🔧 GADGETS COLLECTION</h2>
+              <p>Bộ sưu tập thiết bị hỗ trợ theo dõi dự án & chiến đấu.</p>
+            </div>
+            <div class="compendium-controls-bar">
+              <input type="text" id="gadgetSearchInput" placeholder="🔍 Tìm kiếm gadget..." class="tech-search-input">
+              <select id="gadgetRaritySelect" class="tech-select-filter">
+                <option value="all">ALL RARITIES</option>
+                <option value="Common">Common</option>
+                <option value="Uncommon">Uncommon</option>
+                <option value="Rare">Rare</option>
+                <option value="Epic">Epic</option>
+                <option value="Legendary">Legendary</option>
+              </select>
+            </div>
+          </div>
+          <div class="gadgets-grid" id="gadgetsGrid"></div>
+        </section>
+
+        <!-- VIEW 11: ALLIES -->
+        <section id="view-allies" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">🤝 SPIDER-ALLIES & COMPANIONS</h2>
+              <p>Bạn đồng hành bổ trợ đòn đánh bị động & hiệu ứng đặc biệt (26 Allies).</p>
+            </div>
+            <div class="compendium-controls-bar">
+              <input type="text" id="allySearchInput" placeholder="🔍 Tìm đồng minh..." class="tech-search-input">
+              <select id="allyRoleSelect" class="tech-select-filter">
+                <option value="all">ALL CATEGORIES</option>
+                <option value="support">Support & Recon</option>
+                <option value="mentor">Mentors</option>
+                <option value="hero">Marvel Heroes</option>
+                <option value="avenger">Avengers</option>
+                <option value="defender">Defenders</option>
+              </select>
+            </div>
+          </div>
+          <div class="companions-grid" id="companionsGrid"></div>
+        </section>
+
+        <!-- VIEW 12: VILLAINS CODEX -->
+        <section id="view-villains" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">🦹 VILLAINS CODEX</h2>
+              <p>Danh sách Siêu Phản Diện & chọn Boss thách đấu dự án (30 Villains).</p>
+            </div>
+            <div class="compendium-controls-bar">
+              <input type="text" id="villainSearchInput" placeholder="🔍 Tìm siêu phản diện..." class="tech-search-input">
+              <select id="villainCategorySelect" class="tech-select-filter">
+                <option value="all">ALL CATEGORIES</option>
+                <option value="street">Street</option>
+                <option value="science">Science</option>
+                <option value="symbiote">Symbiote</option>
+                <option value="crime">Crime</option>
+                <option value="multiverse">Multiverse</option>
+                <option value="supernatural">Supernatural</option>
+              </select>
+              <select id="villainDifficultySelect" class="tech-select-filter">
+                <option value="all">ALL DIFFICULTIES</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+                <option value="Expert">Expert</option>
+                <option value="Master">Master</option>
+                <option value="Mythic">Mythic</option>
+              </select>
+            </div>
+          </div>
+          <div class="villains-grid" id="villainsGrid"></div>
+        </section>
+
+        <!-- VIEW 13: REWARD SHOP -->
+        <section id="view-shop" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">🪙 GOLD REWARD SHOP</h2>
+              <p>Đổi tiền Gold lấy phần thưởng đời thực!</p>
+            </div>
+            <button class="primary-btn spider-btn-thwip" id="openAddRewardModalBtn">+ TẠO QUÀ MỚI</button>
+          </div>
+          <div class="shop-grid" id="shopGrid"></div>
+        </section>
+
+        <!-- VIEW 14: COLLECTION & SPIDER-VERSE -->
+        <section id="view-collection" class="app-view">
+          <div class="page-title-wrap flex-title-bar">
+            <div>
+              <h2 class="skewed-spider-title">🎒 HERO COLLECTION & SPIDER-VERSE</h2>
+              <p>Bộ sưu tập 36 Spider-People / Spider-Verse identities và vật phẩm chiến lợi phẩm.</p>
+            </div>
+            <div class="compendium-controls-bar">
+              <input type="text" id="variantSearchInput" placeholder="🔍 Tìm Spider-Person..." class="tech-search-input">
+              <select id="variantRaritySelect" class="tech-select-filter">
+                <option value="all">ALL SPIDER-PEOPLE</option>
+                <option value="Common">Common</option>
+                <option value="Rare">Rare</option>
+                <option value="Epic">Epic</option>
+                <option value="Legendary">Legendary</option>
+                <option value="Mythic">Mythic</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Collection Tabs -->
+          <div class="collection-tabs-row" style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+            <button class="secondary-btn active" id="tabShowVariantsBtn">🎴 SPIDER-PEOPLE / SPIDER-VERSE (36)</button>
+            <button class="secondary-btn" id="tabShowCollectionBtn">🎒 ITEMS & LOOT</button>
+          </div>
+
+          <div class="variants-grid" id="variantsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem;"></div>
+          <div class="collection-grid" id="collectionGrid" style="display: none; gap: 1.25rem;"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+
+  <!-- Modal -1: MULTIVERSE RIFT EVENT MODAL -->
+  <div class="modal-overlay" id="multiverseRiftModal">
+    <div class="modal-card bento-card" style="max-width:480px; text-align:center;">
+      <button class="modal-close" id="closeRiftModalBtn">&times;</button>
+      <div style="font-size:3rem; animation: flamePulse 1.5s infinite;">🌌</div>
+      <h2 class="skewed-spider-title" style="color:var(--spider-blue);">MULTIVERSE RIFT ENCOUNTER</h2>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin-top:4px;" id="riftText">Spider-Ham từ Trái Đất 8311 gửi viện trợ: "+150 XP & +100 Gold" nếu bạn hoàn thành 1 mục tiêu hôm nay!</p>
+      <div class="modal-actions" style="justify-content:center; margin-top:1.25rem;">
+        <button class="primary-btn spider-btn-thwip" id="claimRiftBtn">🏆 NHẬN THƯỞNG ĐA VŨ TRỤ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 0: 360° RADIAL GADGET WHEEL MODAL -->
+  <div class="modal-overlay" id="gadgetWheelModal">
+    <div class="modal-card radial-wheel-card bento-card">
+      <button class="modal-close" id="closeWheelModalBtn">&times;</button>
+      <h3 class="skewed-spider-title" style="color:var(--spider-blue);">🔧 RADAR GADGET SELECTOR</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Chọn nhanh thiết bị đặc biệt để kích hoạt đòn đánh phụ trợ:</p>
+
+      <div class="radial-wheel-container">
+        <div class="radial-center-hub">🕷️</div>
+        <button class="radial-gadget-node node-1" data-gadget="web_shooter">🕸️ WEB-SHOOTER</button>
+        <button class="radial-gadget-node node-2" data-gadget="impact_web">💥 IMPACT WEB</button>
+        <button class="radial-gadget-node node-3" data-gadget="web_bomb">💣 WEB BOMB</button>
+        <button class="radial-gadget-node node-4" data-gadget="spider_drone">🤖 SPIDER-DRONE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 1: QTE Reaction Minigame Modal -->
+  <div class="modal-overlay" id="qteModal">
+    <div class="modal-card qte-card bento-card">
+      <div class="qte-header">
+        <span class="sense-waves-icon">⚡ 〰️ ⚡</span>
+        <h2 class="skewed-spider-title" style="color:var(--gold-accent);">SPIDER-SENSE QTE REACTION</h2>
+        <p>Bấm <strong>STRIKE NOW!</strong> đúng mốc vòng tròn để tung <strong>+500 OVERKILL DAMAGE!</strong></p>
+      </div>
+
+      <div class="qte-ring-stage">
+        <div class="qte-outer-ring"></div>
+        <div class="qte-target-zone"></div>
+        <div class="qte-shrinking-ring" id="qteShrinkingRing"></div>
+        <button class="primary-btn qte-strike-btn" id="qteStrikeActionBtn">💥 STRIKE NOW!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Marvel Snap Ultra Rare Variant Card Modal -->
+  <div class="modal-overlay" id="achievementCardModal">
+    <div class="modal-card variant-showcase-card holographic-variant-card">
+      <button class="modal-close" id="closeVariantCardBtn">&times;</button>
+      <div class="card-frame-inner">
+        <div class="variant-hero-avatar">🕷️</div>
+        <span class="variant-rarity-badge">ULTRA RARE VARIANT</span>
+        <h2 class="variant-hero-name" id="varHeroName">PETER PARKER</h2>
+        <div class="variant-stats-row">
+          <div><strong id="varLevel">LV.12</strong><span>HERO LEVEL</span></div>
+          <div><strong id="varGold">1,250</strong><span>GOLD</span></div>
+          <div><strong id="varSuit">ADVANCED</strong><span>SUIT</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Add Task Modal -->
+  <div class="modal-overlay" id="addTaskModal">
+    <div class="modal-card bento-card">
+      <button class="modal-close" id="closeTaskModalBtn">&times;</button>
+      <h3 class="modal-title skewed-spider-title">TẠO TASK HÀNH ĐỘNG MỚI</h3>
+      <form id="addTaskForm">
+        <div class="form-group">
+          <label for="taskNameInput">Tên Task (Ví dụ: Đọc 30 trang sách, Lập trình 1 feature)</label>
+          <input type="text" id="taskNameInput" required placeholder="Nhập tên việc cần làm...">
+        </div>
+        <div class="form-group">
+          <label for="taskAttrSelect">Thuộc Tính Liên Quan:</label>
+          <select id="taskAttrSelect">
+            <option value="intellect">🧠 Intellect (Trí Tuệ & Code/Học tập)</option>
+            <option value="agility">⚡ Agility (Thể Chất & Vận Động)</option>
+            <option value="focus">🧘‍♂️ Focus (Tập Trung Deep Work)</option>
+            <option value="discipline">🛡️ Discipline (Kỷ Luật & Thói Quen)</option>
+            <option value="power">🦾 Power (Sức Mạnh Trọng Đột)</option>
+            <option value="willpower">💎 Willpower (Ý Chí Vượt Khó)</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" id="cancelTaskModalBtn">HỦY BỎ</button>
+          <button type="submit" class="primary-btn spider-btn-thwip">TẠO TASK HÀNH ĐỘNG</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: Add Project Modal -->
+  <div class="modal-overlay" id="addProjectModal">
+    <div class="modal-card bento-card">
+      <button class="modal-close" id="closeProjectModalBtn">&times;</button>
+      <h3 class="modal-title skewed-spider-title">TẠO DỰ ÁN LỚN (LINKED BOSS)</h3>
+      <form id="addProjectForm">
+        <div class="form-group">
+          <label for="projTitleInput">Tên Dự Án Mục Tiêu:</label>
+          <input type="text" id="projTitleInput" required placeholder="Nhập tên dự án mục tiêu...">
+        </div>
+        <div class="form-group">
+          <label for="projVillainSelect">Gắn Liên Với Boss Phản Diện:</label>
+          <select id="projVillainSelect">
+            <option value="docock">🐙 Doctor Octopus (Intellect / Planning)</option>
+            <option value="greengoblin">👺 Green Goblin (Discipline / Chaos)</option>
+            <option value="venom">🖤 Venom (Willpower / Symbiote)</option>
+            <option value="mysterio">🔮 Mysterio (Focus / Illusions)</option>
+            <option value="kraven">🦁 Kraven The Hunter (Power / Fitness)</option>
+            <option value="lizard">🦎 The Lizard (Agility / Regeneration)</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" id="cancelProjectModalBtn">HỦY BỎ</button>
+          <button type="submit" class="primary-btn spider-btn-thwip">KÍCH HOẠT DỰ ÁN HERO</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 5: Add Reward Modal -->
+  <div class="modal-overlay" id="addRewardModal">
+    <div class="modal-card bento-card">
+      <button class="modal-close" id="closeRewardModalBtn">&times;</button>
+      <h3 class="modal-title skewed-spider-title">TẠO PHẦN THƯỞNG ĐỜI THỰC MỚI</h3>
+      <form id="addRewardForm">
+        <div class="form-group">
+          <label for="rewardNameInput">Tên Món Quà Tự Thưởng:</label>
+          <input type="text" id="rewardNameInput" required placeholder="Nhập món quà bạn tự thưởng...">
+        </div>
+        <div class="form-group">
+          <label for="rewardCostInput">Chi Phí Đổi (Gold):</label>
+          <input type="number" id="rewardCostInput" value="300" min="50" step="50">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" id="cancelRewardModalBtn">HỦY BỎ</button>
+          <button type="submit" class="primary-btn spider-btn-thwip">THÊM VÀO SHOP</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 6: Boss Defeated Loot Reveal Modal -->
+  <div class="modal-overlay" id="bossLootModal">
+    <div class="modal-card loot-reveal-card bento-card">
+      <div class="loot-chest-icon">🎁</div>
+      <h2 class="loot-title skewed-spider-title">VICTORY! BOSS HẠ GỤC!</h2>
+      <p class="loot-subtitle">Bạn đã chiến thắng xuất sắc và nhận rương quà huyền thoại!</p>
+      <div class="loot-items-box" id="lootItemsBox"></div>
+      <div class="modal-actions" style="justify-content: center; margin-top: 1.5rem;">
+        <button class="primary-btn spider-btn-thwip" id="claimBossLootBtn">🏆 NHẬN TOÀN BỘ PHẦN THƯỞNG</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 7: Level Up Celebration Modal -->
+  <div class="modal-overlay" id="levelUpModal">
+    <div class="modal-card level-up-modal-card bento-card">
+      <div class="level-up-star-glow">🌟</div>
+      <h2 class="level-up-title skewed-spider-title" id="levelUpTitle">LEVEL UP! CẤP 13</h2>
+      <p class="level-up-sub">Chúc mừng Siêu Anh Hùng! Sự kỷ luật của bạn đã đơm hoa kết trái.</p>
+      <div class="level-up-rewards-box">
+        <div>✨ <strong>+2 SKILL POINTS</strong></div>
+        <div style="margin-top:4px;">⚡ <strong>+20 MAX ENERGY</strong></div>
+      </div>
+      <div class="modal-actions" style="justify-content: center; margin-top: 1.5rem;">
+        <button class="primary-btn spider-btn-thwip" id="closeLevelUpBtn">🚀 ĐỒNG Ý & TIẾP TỤC</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 8: Large Card Viewer Modal / Lightbox -->
+  <div class="modal-overlay large-card-modal-overlay" id="compendiumDetailModal" role="dialog" aria-modal="true" aria-labelledby="largeCardViewerTitle">
+    <div class="modal-card bento-card large-card-viewer-card">
+      <div class="large-card-modal-header">
+        <button class="modal-nav-btn prev-card-btn" id="prevCardBtn" aria-label="Previous Portrait Card" title="Thẻ trước (Phím Mũi Tên Trái)">◄ PREV</button>
+        <div class="large-card-modal-title-wrap">
+          <span class="chip-tag chip-category" id="largeCardCollectionTag">SPIDER-VERSE</span>
+          <span class="chip-tag chip-universe" id="largeCardUniverseTag">Earth-616</span>
+        </div>
+        <button class="modal-nav-btn next-card-btn" id="nextCardBtn" aria-label="Next Portrait Card" title="Thẻ tiếp (Phím Mũi Tên Phải)">NEXT ►</button>
+        <button class="modal-close large-card-close-btn" id="closeCompendiumModalBtn" aria-label="Close Large Card Viewer">&times;</button>
+      </div>
+      <div id="compendiumModalContent" class="large-card-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="data/media.js"></script>
+  <script src="data/villains.js"></script>
+  <script src="data/skills.js"></script>
+  <script src="data/suits.js"></script>
+  <script src="data/gadgets.js"></script>
+  <script src="data/companions.js"></script>
+  <script src="data/allies.js"></script>
+  <script src="data/spider-people.js"></script>
+  <script src="data/variants.js"></script>
+  <script src="data/quests.js"></script>
+  <script src="data/items.js"></script>
+  <script src="data/map.js"></script>
+
+  <script src="js/storage.js"></script>
+  <script src="js/xp-system.js"></script>
+  <script src="js/stat-system.js"></script>
+  <script src="js/mastery-system.js"></script>
+  <script src="js/boss-system.js"></script>
+  <script src="js/loot-system.js"></script>
+  <script src="js/build-system.js"></script>
+  <script src="js/game-engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

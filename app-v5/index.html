@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="description" content="V5 True Game Rebuild — Cyber Urban Web Operative Living City RPG powered by truthful Notion snapshot." />
+  <title>NEON NOIR LIVING CITY — Web Operative Life RPG</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+  <!-- CSS Design System -->
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/city-map.css" />
+  <link rel="stylesheet" href="css/overlays.css" />
+</head>
+<body>
+
+  <!-- Main Game Viewport -->
+  <div id="game-viewport">
+
+    <!-- Layer 1: Interactive Living City Canvas & SVG Map -->
+    <div id="city-map-container">
+      <!-- Canvas & SVG layers rendered by CityMapCanvas.js -->
+    </div>
+
+    <!-- Foreground Hero Key Art Ledge -->
+    <div class="hero-ledge-overlay">
+      <img src="../app-v4/assets/characters/web-operative-v1.png" alt="Web Operative Ledge" class="hero-ledge-image" onerror="this.src='assets/characters/web-operative-v1.png'; this.onerror=null;" />
+    </div>
+
+    <!-- Layer 2: Compact Diegetic Top HUD Overlay -->
+    <div id="hud-container">
+      <!-- Rendered by HudController.js -->
+    </div>
+
+    <!-- Layer 3: Primary Prompt Action Button over Living City -->
+    <div class="primary-prompt-overlay">
+      <button class="btn-primary-prompt" id="btn-primary-prompt">
+        <span class="prompt-icon">📡</span>
+        <span class="prompt-prefix">XEM BRIEFING:</span>
+        <span class="prompt-title">CHỌN TÍN HIỆU NHIỆM VỤ ĐỂ MỞ BRIEFING</span>
+      </button>
+    </div>
+
+    <!-- Camera Reset Floating Control -->
+    <button class="btn-reset-cam" id="btn-reset-camera" title="Căn chỉnh lại góc nhìn camera thành phố">
+      🎯 Reset Camera
+    </button>
+
+    <!-- Layer 4: In-World Mission Briefing Drawer/Sheet -->
+    <div id="briefing-drawer-container" class="overlay-container">
+      <!-- Rendered by BriefingDrawer.js -->
+    </div>
+
+    <!-- Layer 5: Fullscreen Focus Mode Overlay -->
+    <div id="focus-overlay-container" class="overlay-container">
+      <!-- Rendered by FocusOverlay.js -->
+    </div>
+
+    <!-- Layer 6: Web Strike Completion & Reward Tally Modal -->
+    <div id="strike-overlay-container" class="overlay-container">
+      <!-- Rendered by StrikeOverlay.js -->
+    </div>
+
+    <!-- Layer 7: Operative Profile System Drawer -->
+    <div id="operative-view-container" class="system-drawer-container">
+      <!-- Rendered by OperativeView.js -->
+    </div>
+
+    <!-- Layer 8: Tactical Missions Board System Drawer -->
+    <div id="missions-view-container" class="system-drawer-container">
+      <!-- Rendered by MissionsView.js -->
+    </div>
+
+    <!-- Layer 9: Hideout Equipment & Gear System Drawer -->
+    <div id="hideout-view-container" class="system-drawer-container">
+      <!-- Rendered by HideoutView.js -->
+    </div>
+
+    <!-- Layer 10: Chronicle & Story Arcs System Drawer -->
+    <div id="chronicle-view-container" class="system-drawer-container">
+      <!-- Rendered by ChronicleView.js -->
+    </div>
+
+    <!-- Bottom Game Navigation Dock (Desktop Command Rail / Mobile Dock) -->
+    <div id="navigation-dock-container">
+      <!-- Rendered by NavigationDock.js -->
+    </div>
+
+  </div>
+
+  <!-- Entry Script -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

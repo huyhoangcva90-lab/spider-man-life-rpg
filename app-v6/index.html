@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>WEB OPS TRACKER — V6 Accurate Real-Map Tracker Hub</title>
+  
+  <!-- MapLibre GL JS Engine -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" />
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+  <!-- Google Fonts: Pixel Typography + Readable Vietnamese Body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Modular CSS Stylesheets -->
+  <link rel="stylesheet" href="./css/tokens.css" />
+  <link rel="stylesheet" href="./css/tracker-frame.css" />
+  <link rel="stylesheet" href="./css/map.css" />
+  <link rel="stylesheet" href="./css/panels.css" />
+  <link rel="stylesheet" href="./css/mobile.css" />
+</head>
+<body>
+
+  <!-- Tracker Device Viewport Outer Frame -->
+  <div class="tracker-viewport">
+    <div class="tracker-device-frame">
+
+      <!-- TOP HEADER BAR -->
+      <header class="frame-top-bar">
+        <!-- Left: Operative Avatar Control -->
+        <div class="avatar-control-box" id="avatar-trigger" title="Mở Hồ Sơ Đặc Vụ V6">
+          <div class="avatar-img-frame">
+            <img src="./assets/characters/web-operative-v1.png" onError="this.src='../app-v4/assets/characters/web-operative-v1.png'" alt="Web Operative" />
+          </div>
+          <div class="avatar-info">
+            <span class="avatar-title">WEB OPERATIVE</span>
+            <div class="avatar-status-badge">
+              <span class="status-dot"></span>
+              <span id="gps-status-text">ĐANG KHỞI ĐỘNG...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: Brand Plaque -->
+        <div class="brand-plaque">
+          <span class="brand-title">WEB OPS TRACKER</span>
+          <span class="brand-subtitle">V6 ACCURATE REAL-MAP HUB • <span id="live-clock">00:00:00</span></span>
+        </div>
+
+        <!-- Action Row Controls -->
+        <div class="frame-action-bar">
+          <button class="btn-pixel-icon" id="btn-add-entry" title="Thêm Địa Điểm Mới">
+            ➕ <span>THÊM</span>
+          </button>
+          <button class="btn-pixel-icon" id="btn-activity-log" title="Mở Nhật Ký Hoạt Động">
+            📜 <span>NHẬT KÝ</span>
+          </button>
+          <button class="btn-pixel-icon" id="btn-unlocated-missions" title="Nhiệm Vụ Notion Chưa Định Vị">
+            📝 <span>NOTION (<span id="unlocated-count-badge">0</span>)</span>
+          </button>
+          <button class="btn-pixel-icon" id="btn-map-guide" title="Hướng Dẫn & Nhập/Xuất GeoJSON">
+            ⚙️ <span>HƯỚNG DẪN</span>
+          </button>
+        </div>
+
+        <!-- Utility Controls (Sound & Menu) -->
+        <div class="top-right-controls">
+          <button class="btn-pixel-icon" id="btn-sound-toggle" title="Bật/Tắt Âm Thanh 8-bit" aria-label="Bật hoặc tắt âm thanh">
+            🔊 SFX
+          </button>
+          <button class="btn-pixel-icon" id="btn-hub-menu" title="Mở Bảng Trung Tâm V5" aria-label="Mở menu trung tâm">
+            ☰ MENU
+          </button>
+        </div>
+      </header>
+
+      <!-- SEARCH ROW CONTAINER -->
+      <div class="frame-search-row">
+        <div class="search-panel">
+          <div class="search-input-wrap">
+            <input type="text" id="search-input" class="form-input search-input-field" placeholder="🔍 Tìm kiếm vị trí thực tế (Nhấn Enter để tìm)..." />
+            <button class="btn-primary search-submit-btn" id="search-submit-btn" title="Tìm kết quả">
+              <span class="search-btn-icon">🔍</span>
+              <span class="search-btn-text">TÌM KẾT QUẢ</span>
+            </button>
+          </div>
+          <!-- Search Dropdown Results -->
+          <div id="search-results-dropdown" class="search-dropdown-menu"></div>
+        </div>
+      </div>
+
+      <!-- FILTER ROW CONTAINER -->
+      <div class="frame-filter-row">
+        <aside class="rail-left">
+          <button class="filter-btn active" data-filter="ALL" style="--filter-color: var(--cyan-bright)">
+            <span class="filter-icon">🌐</span>
+            <span>Tất cả</span>
+            <span class="filter-count">0</span>
+          </button>
+          <button class="filter-btn" data-filter="MEETING" style="--filter-color: var(--color-meeting)">
+            <span class="filter-icon">🤝</span>
+            <span>Cuộc họp</span>
+            <span class="filter-count">0</span>
+          </button>
+          <button class="filter-btn" data-filter="PERSON" style="--filter-color: var(--color-person)">
+            <span class="filter-icon">👤</span>
+            <span>Người</span>
+            <span class="filter-count">0</span>
+          </button>
+          <button class="filter-btn" data-filter="PLAN" style="--filter-color: var(--color-plan)">
+            <span class="filter-icon">📅</span>
+            <span>Kế hoạch</span>
+            <span class="filter-count">0</span>
+          </button>
+          <button class="filter-btn" data-filter="LEISURE" style="--filter-color: var(--color-leisure)">
+            <span class="filter-icon">☕</span>
+            <span>Giải trí</span>
+            <span class="filter-count">0</span>
+          </button>
+          <button class="filter-btn" data-filter="ERRAND" style="--filter-color: var(--color-errand)">
+            <span class="filter-icon">🛒</span>
+            <span>Việc vặt</span>
+            <span class="filter-count">0</span>
+          </button>
+          <button class="filter-btn" data-filter="WORK" style="--filter-color: var(--color-work)">
+            <span class="filter-icon">💼</span>
+            <span>Công việc</span>
+            <span class="filter-count">0</span>
+          </button>
+          <button class="filter-btn" data-filter="NOTION_MISSION" style="--filter-color: var(--color-notion)">
+            <span class="filter-icon">📝</span>
+            <span>Notion</span>
+            <span class="filter-count">0</span>
+          </button>
+        </aside>
+      </div>
+
+      <!-- MAIN CONTENT AREA (MAP + OVERLAYS) -->
+      <main class="frame-main-content">
+        
+        <!-- MAPLIBRE MAP CONTAINER -->
+        <div id="map"></div>
+        <div class="map-dark-filter"></div>
+
+        <!-- RIGHT CAMERA & GPS CONTROLS RAIL -->
+        <aside class="rail-right">
+          <div class="map-control-group">
+            <button class="map-control-btn" id="btn-zoom-in" title="Phóng to">+</button>
+            <button class="map-control-btn" id="btn-zoom-out" title="Thu nhỏ">-</button>
+          </div>
+          <div class="map-control-group">
+            <button class="map-control-btn" id="btn-center-gps" title="Căn giữa vị trí GPS của bạn">🎯</button>
+            <button class="map-control-btn" id="btn-reset-north" title="Căn chỉnh Hướng Bắc">🌐</button>
+            <button class="map-control-btn" id="btn-track-toggle" title="Tự động bám theo GPS (Auto-track)">📡</button>
+          </div>
+        </aside>
+
+        <!-- WEB OPERATIVE CHARACTER CALLOUT DIALOG OVERLAY -->
+        <div class="operative-callout hidden" id="operative-callout" hidden inert>
+          <div class="callout-avatar">
+            <img src="./assets/characters/web-operative-v1.png" onError="this.src='../app-v4/assets/characters/web-operative-v1.png'" alt="Operative Avatar" />
+          </div>
+          <div class="callout-bubble">
+            <div class="callout-close-btn" id="callout-close-btn">✕</div>
+            <div class="callout-title">WEB OPERATIVE INSTRUCTION</div>
+            <div class="callout-text">
+              Chào Đặc Vụ! Bấm <strong>+ THÊM</strong> hoặc click trực tiếp lên Bản Đồ Thực Tế để tạo điểm hẹn, cuộc họp hoặc định vị nhiệm vụ Notion.
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDE DRAWER: ACTIVITY LOG -->
+        <div class="side-drawer-panel" id="activity-log-drawer" hidden inert>
+          <div class="drawer-header">
+            <span class="drawer-title">📜 NHẬT KÝ HOẠT ĐỘNG THỰC TẾ</span>
+            <button class="modal-close-btn" id="activity-log-close">✕</button>
+          </div>
+          <div class="drawer-body">
+            <!-- Search in log -->
+            <input type="text" id="log-search-input" class="form-input" placeholder="🔍 Lọc nhật ký theo từ khóa..." />
+            <!-- Subfilters -->
+            <div style="display: flex; gap: 4px;">
+              <button class="log-tab-btn active btn-secondary" data-subfilter="ALL" style="flex: 1; font-size: 9px; padding: 6px;">Tất cả</button>
+              <button class="log-tab-btn btn-secondary" data-subfilter="TODAY" style="flex: 1; font-size: 9px; padding: 6px;">Hôm nay</button>
+              <button class="log-tab-btn btn-secondary" data-subfilter="UPCOMING" style="flex: 1; font-size: 9px; padding: 6px;">Sắp tới</button>
+              <button class="log-tab-btn btn-secondary" data-subfilter="DONE" style="flex: 1; font-size: 9px; padding: 6px;">Đã xong</button>
+            </div>
+            <!-- Log items list container -->
+            <div id="activity-log-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;"></div>
+          </div>
+        </div>
+
+        <!-- SIDE DRAWER: UNLOCATED NOTION MISSIONS QUEUE -->
+        <div class="side-drawer-panel" id="unlocated-queue-drawer" hidden inert>
+          <div class="drawer-header">
+            <span class="drawer-title">📝 NHIỆM VỤ NOTION CHƯA ĐỊNH VỊ</span>
+            <button class="modal-close-btn" id="unlocated-queue-close">✕</button>
+          </div>
+          <div class="drawer-body">
+            <p style="font-size: 11px; color: var(--text-muted);">
+              Các nhiệm vụ trong Notion chưa có tọa độ địa lý. Bấm <strong>📍 Chọn vị trí</strong> để gán tọa độ thực tế trên bản đồ.
+            </p>
+            <div id="unlocated-queue-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- BOTTOM TICKER STRIP -->
+      <footer class="frame-bottom-bar">
+        <div class="ticker-wrap">
+          <div class="ticker-content">
+            <span class="ticker-status-tag">[SYS_OK]</span>
+            WEB OPS TRACKER V6 • ACCURATE REAL-MAP ENGINE RUNNING • MAPLIBRE GL JS ACTIVE <span id="ticker-gps-readout">• GPS FIX: STANDBY</span> • GEOLOCATION HIGH ACCURACY ENABLED
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- MODAL 1: ENTRY EDITOR (CREATE / EDIT) -->
+  <div class="panel-backdrop" id="editor-modal-backdrop" hidden inert>
+    <div class="pixel-modal">
+      <div class="modal-header">
+        <span class="modal-title" id="editor-modal-title">➕ THÊM ĐỊA ĐIỂM MỚI TRÊN BẢN ĐỒ</span>
+        <button class="modal-close-btn" id="editor-modal-close">✕</button>
+      </div>
+      <form id="entry-editor-form" class="modal-body">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">LOẠI ĐỊA ĐIỂM</label>
+            <select id="editor-type" class="form-select">
+              <option value="MEETING">🤝 CUỘC HỌP / GẶP MẶT</option>
+              <option value="PERSON">👤 NGƯỜI NĂNG ĐỘNG</option>
+              <option value="PLAN">📅 KẾ HOẠCH HẸN</option>
+              <option value="LEISURE">☕ GIẢI TRÍ / NGHỈ NGƠI</option>
+              <option value="ERRAND">🛒 VIỆC VẶT / MUA SẮM</option>
+              <option value="WORK">💼 CÔNG VIỆC</option>
+              <option value="NOTION_MISSION">📝 NHIỆM VỤ NOTION</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">TRẠNG THÁI</label>
+            <select id="editor-status" class="form-select">
+              <option value="PLANNED">DỰ KIẾN (PLANNED)</option>
+              <option value="CONFIRMED">XÁC NHẬN (CONFIRMED)</option>
+              <option value="DONE">HOÀN THÀNH (DONE)</option>
+              <option value="CANCELLED">ĐÃ HỦY (CANCELLED)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">TIÊU ĐỀ ĐỊA ĐIỂM / MỤC TIÊU *</label>
+          <input type="text" id="editor-title" class="form-input" placeholder="Ví dụ: Họp đối tác Tech, Ghé thăm quán cà phê..." required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">NGƯỜI LIÊN QUAN (Tùy chọn)</label>
+          <input type="text" id="editor-person" class="form-input" placeholder="Ví dụ: Nguyễn Văn A, Đồng nghiệp..." />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">VĨ ĐỘ (LATITUDE)</label>
+            <input type="number" step="any" id="editor-lat" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">KINH ĐỘ (LONGITUDE)</label>
+            <input type="number" step="any" id="editor-lng" class="form-input" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label class="form-label">ĐỊA CHỈ THỰC TẾ</label>
+            <button type="button" class="btn-secondary" id="btn-reverse-geocode" style="font-size: 8px; padding: 2px 6px;">📍 Lấy địa chỉ tự động</button>
+          </div>
+          <input type="text" id="editor-address" class="form-input" placeholder="Tên đường, phường/xã, quận/huyện..." />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">THỜI GIAN BẮT ĐẦU</label>
+            <input type="datetime-local" id="editor-starts-at" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">LIÊN KẾT NOTION (URL)</label>
+            <input type="url" id="editor-notion-url" class="form-input" placeholder="https://app.notion.com/..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">GHI CHÚ CHI TIẾT</label>
+          <textarea id="editor-notes" class="form-textarea" rows="3" placeholder="Nội dung thảo luận, chuẩn bị..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="editor-cancel-btn">HỦY BỎ</button>
+          <button type="submit" class="btn-primary">💾 LƯU ĐỊA ĐIỂM</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: MARKER DOSSIER -->
+  <div class="panel-backdrop" id="dossier-modal-backdrop" hidden inert>
+    <div class="pixel-modal">
+      <div class="modal-header">
+        <span class="modal-title">📋 HỒ SƠ CHI TIẾT ĐỊA ĐIỂM</span>
+        <button class="modal-close-btn" id="dossier-modal-close">✕</button>
+      </div>
+      <div class="modal-body dossier-card">
+        <div class="dossier-header-badge">
+          <span id="dossier-type-badge" class="activity-type-badge">TYPE</span>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 10px; color: var(--text-muted);">TRẠNG THÁI:</span>
+            <select id="dossier-status-select" class="form-select" style="padding: 2px 6px; font-size: 10px;">
+              <option value="PLANNED">PLANNED</option>
+              <option value="CONFIRMED">CONFIRMED</option>
+              <option value="DONE">DONE</option>
+              <option value="CANCELLED">CANCELLED</option>
+            </select>
+          </div>
+        </div>
+
+        <h2 id="dossier-title" style="font-family: var(--font-pixel); font-size: 14px; color: #fff;">TITLE</h2>
+
+        <div class="dossier-distance-box" id="dossier-distance-text">
+          📏 Tính toán khoảng cách...
+        </div>
+
+        <div style="font-size: 12px; color: var(--text-main); display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; border: 1px solid var(--steel-border);">
+          <div>📍 <strong>Tọa độ:</strong> <span id="dossier-coords" style="font-family: var(--font-mono); color: var(--cyan-bright);"></span></div>
+          <div>🏡 <strong>Địa chỉ:</strong> <span id="dossier-address"></span></div>
+          <div>📅 <strong>Thời gian:</strong> <span id="dossier-time" style="color: var(--amber-gold);"></span></div>
+          <div>👤 <strong>Người liên quan:</strong> <span id="dossier-person"></span></div>
+        </div>
+
+        <div>
+          <div style="font-family: var(--font-pixel); font-size: 9px; color: var(--amber-gold); margin-bottom: 4px;">GHI CHÚ ĐẶC VỤ</div>
+          <div id="dossier-notes" style="font-size: 12px; color: var(--text-muted); background: var(--bg-input); padding: 8px 10px; border-radius: 4px; line-height: 1.4;"></div>
+        </div>
+
+        <div id="dossier-notion-box"></div>
+
+        <div>
+          <div style="font-family: var(--font-pixel); font-size: 9px; color: var(--cyan-bright); margin-bottom: 6px;">DẪN ĐƯỜNG BẢN ĐỒ THỰC TẾ</div>
+          <div class="nav-links-grid" id="dossier-nav-grid"></div>
+        </div>
+
+        <div class="modal-footer" style="margin-top: 10px;">
+          <button class="btn-danger" id="dossier-btn-delete">🗑️ XÓA</button>
+          <button class="btn-secondary" id="dossier-btn-edit">✏️ SỬA</button>
+          <button class="btn-primary" id="dossier-btn-done">✅ ĐÁNH DẤU XONG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: HUB OVERLAY PANELS (V5 SYSTEMS REUSE) -->
+  <div class="panel-backdrop" id="hub-overlay-backdrop" hidden inert>
+    <div class="pixel-modal" style="max-width: 620px;">
+      <div class="modal-header">
+        <span class="modal-title">🛡️ BẢNG TRUNG TÂM V5 REUSED OVERLAY</span>
+        <button class="modal-close-btn" id="hub-modal-close">✕</button>
+      </div>
+      <div style="display: flex; background: #070e1b; border-bottom: 2px solid var(--cyan-mid);">
+        <button class="hub-tab-btn active btn-secondary" data-tab="MISSIONS" style="flex: 1; border-radius: 0;">🎯 NHIỆM VỤ</button>
+        <button class="hub-tab-btn btn-secondary" data-tab="OPERATIVE" style="flex: 1; border-radius: 0;">👤 ĐẶC VỤ</button>
+        <button class="hub-tab-btn btn-secondary" data-tab="HIDEOUT" style="flex: 1; border-radius: 0;">🛠️ CĂN CỨ</button>
+        <button class="hub-tab-btn btn-secondary" data-tab="CHRONICLE" style="flex: 1; border-radius: 0;">📜 NHẬT KÝ</button>
+      </div>
+      <div class="modal-body" id="hub-tab-content"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: MAP GUIDE & SETTINGS -->
+  <div class="panel-backdrop" id="map-guide-modal-backdrop" hidden inert>
+    <div class="pixel-modal">
+      <div class="modal-header">
+        <span class="modal-title">⚙️ HƯỚNG DẪN SỬ DỤNG & CẤU HÌNH BẢN ĐỒ</span>
+        <button class="modal-close-btn" id="map-guide-modal-close">✕</button>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <h4 style="font-family: var(--font-pixel); font-size: 10px; color: var(--amber-gold); margin-bottom: 6px;">CHÚ GIẢI LOẠI ĐỊA ĐIỂM (LEGEND)</h4>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; font-size: 11px;">
+            <div>🤝 <span style="color: var(--color-meeting); font-weight: bold;">Cuộc họp:</span> Họp công việc, đối tác</div>
+            <div>👤 <span style="color: var(--color-person); font-weight: bold;">Người:</span> Điểm hẹn cá nhân</div>
+            <div>📅 <span style="color: var(--color-plan); font-weight: bold;">Kế hoạch:</span> Hẹn giờ lịch trình</div>
+            <div>☕ <span style="color: var(--color-leisure); font-weight: bold;">Giải trí:</span> Cà phê, nghỉ dưỡng</div>
+            <div>🛒 <span style="color: var(--color-errand); font-weight: bold;">Việc vặt:</span> Mua sắm, tạp hóa</div>
+            <div>💼 <span style="color: var(--color-work); font-weight: bold;">Công việc:</span> Ghé thăm văn phòng</div>
+            <div>📝 <span style="color: var(--color-notion); font-weight: bold;">Notion:</span> Nhiệm vụ từ Notion API</div>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: var(--font-pixel); font-size: 10px; color: var(--cyan-bright); margin-bottom: 6px;">QUẢN LÝ DỮ LIỆU DEMO & GEOJSON</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-secondary" id="btn-load-demo" style="flex: 1;">🧪 TẢI DEMO DATA</button>
+              <button class="btn-danger" id="btn-clear-demo" style="flex: 1;">🧹 XÓA DEMO DATA</button>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-primary" id="btn-export-geojson" style="flex: 1;">📥 DOWNLOAD GEOJSON</button>
+              <button class="btn-secondary" id="btn-import-geojson" style="flex: 1;">📤 IMPORT GEOJSON</button>
+              <input type="file" id="import-geojson-input" accept=".geojson,.json" style="display: none;" />
+            </div>
+          </div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; border: 1px solid var(--steel-border); font-size: 11px; line-height: 1.4; color: var(--text-muted);">
+          <strong style="color: var(--cyan-bright);">Lưu ý về Provider, Geocoding & GPS:</strong><br />
+          - Tìm kiếm thực hiện sau khi bấm Enter hoặc nút Tìm kiếm (Rate limit max 1 req/sec).<br />
+          - Vị trí mặc định: Ho Chi Minh City (lng 106.7009, lat 10.7769) - Vị trí mặc định — bật GPS để định vị chính xác.<br />
+          - 🔒 <strong>Bảo mật GPS (Geolocation):</strong> API định vị GPS của trình duyệt yêu cầu kết nối HTTPS bảo mật hoặc localhost/127.0.0.1.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entry Script -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+{
+  "metadata": {
+    "syncedAt": "2026-08-13T19:27:40.000Z",
+    "version": "5.0.0",
+    "systemPhilosophy": "One system, one truth. Inbox -> Master Calendar -> Project -> Area -> Goal."
+  },
+  "sourceRegistries": {
+    "masterCalendar": "collection://272d7876-36c6-81a4-ac75-000b15fb6b72",
+    "projects": "collection://272d7876-36c6-8110-8472-000bd57843d8",
+    "goals": "collection://272d7876-36c6-81bf-8132-000bc120d74a",
+    "habits": "collection://272d7876-36c6-8186-a928-000baf0dc5cb",
+    "daily": "collection://272d7876-36c6-8159-a810-000b01bef441",
+    "inbox": "collection://272d7876-36c6-8101-8e6f-000beb8f2030"
+  },
+  "collections": {
+    "masterCalendar": [
+      {
+        "id": "384d787636c6812f9f5ac628c57b6444",
+        "title": "Khu còn lại notion",
+        "date": "2026-08-09T08:15:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "As and when",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c6812f9f5ac628c57b6444"
+      },
+      {
+        "id": "384d787636c681a494bee6fbb1c2efd9",
+        "title": "Chuẩn hoá Habit 9 Mood",
+        "date": "2026-08-07T08:30:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "Low Priority",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c681a494bee6fbb1c2efd9"
+      },
+      {
+        "id": "384d787636c681d98c52df0525328580",
+        "title": "Finance Googlesheet Hoàn chỉnh",
+        "date": "2026-08-05T01:30:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "Low Priority",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c681d98c52df0525328580"
+      },
+      {
+        "id": "384d787636c6815c86ade97daa7ab150",
+        "title": "Finance Googlesheet Review",
+        "date": "2026-08-03T09:45:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "As and when",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c6815c86ade97daa7ab150"
+      },
+      {
+        "id": "384d787636c68151a22be5b7009b9e15",
+        "title": "Finance Googlesheet Mobile",
+        "date": "2026-08-04T03:15:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "Low Priority",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c68151a22be5b7009b9e15"
+      },
+      {
+        "id": "384d787636c6815091bdd0a5870139ce",
+        "title": "Finance Googlesheet Web",
+        "date": "2026-08-03T07:30:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "As and when",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c6815091bdd0a5870139ce"
+      },
+      {
+        "id": "384d787636c6815d9369dd1da64dbf50",
+        "title": "Finance Googlesheet Dashboard",
+        "date": "2026-08-03T02:30:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "Low Priority",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c6815d9369dd1da64dbf50"
+      },
+      {
+        "id": "384d787636c681019412cd7c3454a6ef",
+        "title": "Khu đọc sách mới",
+        "date": "2026-08-09T09:45:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "As and when",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c681019412cd7c3454a6ef"
+      },
+      {
+        "id": "384d787636c681d78445dce6a6e40ab7",
+        "title": "Biểu đồ kinh tế",
+        "date": "2026-08-08T01:15:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "Low Priority",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c681d78445dce6a6e40ab7"
+      },
+      {
+        "id": "384d787636c6810fad7ff4c4feaba90d",
+        "title": "Quần thể life",
+        "date": "2026-08-07T07:15:00.000Z",
+        "status": "Upcoming",
+        "done": false,
+        "type": "Work",
+        "priority": "As and when",
+        "collectionId": "272d7876-36c6-81a4-ac75-000b15fb6b72",
+        "sourceUrl": "https://app.notion.com/384d787636c6810fad7ff4c4feaba90d"
+      }
+    ],
+    "habits": [
+      {
+        "id": "272d787636c68113b7d5c3f5d97da959",
+        "name": "Sleep early",
+        "status": "In Progress",
+        "priority": "High",
+        "timeBlock": "Night",
+        "outcome": "Giấc ngủ ngon cho một ngày năng suất",
+        "description": "Ngủ sớm trước 10h30",
+        "category": "Good",
+        "today": false,
+        "yesterday": false,
+        "collectionId": "272d7876-36c6-8186-a928-000baf0dc5cb",
+        "sourceUrl": "https://app.notion.com/272d787636c68113b7d5c3f5d97da959"
+      },
+      {
+        "id": "272d787636c6811881c5c47b59512196",
+        "name": "Không Tiktok",
+        "status": "Harder",
+        "priority": "Medium",
+        "timeBlock": "All day",
+        "outcome": "Giảm xao nhãng social content ngắn",
+        "description": "Không mở Tiktok trong ngày",
+        "category": "Resistance",
+        "today": false,
+        "yesterday": false,
+        "collectionId": "272d7876-36c6-8186-a928-000baf0dc5cb",
+        "sourceUrl": "https://app.notion.com/272d787636c6811881c5c47b59512196"
+      },
+      {
+        "id": "272d787636c681619fa4cc873428fbf1",
+        "name": "Tiếng Anh",
+        "status": "In Progress",
+        "priority": "Critical",
+        "timeBlock": "Before work",
+        "outcome": "Nói chuyện lưu loát với người nước ngoài",
+        "description": "Học tiếng anh 15p mỗi ngày",
+        "category": "Good",
+        "today": false,
+        "yesterday": false,
+        "collectionId": "272d7876-36c6-8186-a928-000baf0dc5cb",
+        "sourceUrl": "https://app.notion.com/272d787636c681619fa4cc873428fbf1"
+      }
+    ],
+    "goals": [
+      {
+        "id": "272d787636c68150b2f4e78207d2c536",
+        "title": "Phát triển bản thân Bước đi đầu tiên",
+        "goalNumber": 1,
+        "type": "Goal",
+        "achieved": false,
+        "startDate": "2024-10-18T00:00:00.000Z",
+        "targetArea": "Personal Development",
+        "collectionId": "272d7876-36c6-81bf-8132-000bc120d74a",
+        "sourceUrl": "https://app.notion.com/272d787636c68150b2f4e78207d2c536"
+      }
+    ],
+    "daily": [],
+    "projects": [],
+    "inbox": []
+  }
+}

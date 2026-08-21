@@ -1,0 +1,494 @@
+/* ==========================================================================
+   V4 VIEW STYLES - SPIDER-VERSE GAME-FIRST HUB & NOTION LIFE-RPG
+   Flagship World Stage, Living City Web, Mission Beacon & Character Sheet
+   ========================================================================== */
+
+.world-game-hub, .missions-view-container, .hero-view-container, .arsenal-view-container, .chronicle-view-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   1. WORLD STAGE CONTAINER & LIVING CITY STAGE
+   -------------------------------------------------------------------------- */
+
+.world-stage-container {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid rgba(40, 215, 242, 0.3);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7);
+  background: var(--color-night-asphalt);
+}
+
+.stage-sky-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(40, 215, 242, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.stage-svg-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Integrated Doctor Octopus Threat Overlay Banner */
+.integrated-boss-banner {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(17, 20, 29, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(240, 43, 58, 0.4);
+  border-radius: var(--radius-card);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+  min-width: 200px;
+}
+
+.boss-banner-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.boss-banner-meters {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mini-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mini-meter-label {
+  font-family: var(--font-telemetry);
+  font-size: 0.68rem;
+  font-weight: bold;
+}
+
+/* Floating Snapshot HUD Chip */
+.world-snapshot-hud {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 10;
+}
+
+.notion-snapshot-chip {
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+.notion-snapshot-chip:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-portal-cyan);
+}
+
+.btn-refresh-pill {
+  background: rgba(40, 215, 242, 0.15);
+  color: var(--color-portal-cyan);
+  padding: 2px 6px;
+  border-radius: var(--radius-tag);
+  font-size: 0.65rem;
+  margin-left: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   2. PRIMARY MISSION STRIKE CTA PANEL
+   -------------------------------------------------------------------------- */
+
+.world-primary-strike-panel {
+  background: linear-gradient(135deg, var(--color-paper-card) 0%, #161926 100%);
+  border: 1px solid rgba(240, 43, 58, 0.4);
+  box-shadow: 0 8px 28px rgba(240, 43, 58, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.beacon-title-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.beacon-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-portal-cyan);
+  box-shadow: 0 0 10px var(--color-portal-cyan);
+  animation: pulse-ring 2s infinite;
+}
+
+.active-mission-title {
+  font-size: 1.4rem;
+  color: var(--color-newsprint-bone);
+  line-height: 1.25;
+}
+
+.active-mission-reason {
+  font-size: 0.88rem;
+  color: var(--color-ink-secondary);
+  line-height: 1.45;
+}
+
+.strike-meta-pills {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.notion-link-pill {
+  color: var(--color-portal-cyan) !important;
+  border-color: rgba(40, 215, 242, 0.4) !important;
+}
+
+.predicted-impact-summary {
+  background: rgba(240, 43, 58, 0.08);
+  border: 1px solid rgba(240, 43, 58, 0.3);
+  border-radius: var(--radius-card);
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.strike-cta-row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.btn-hero-cta {
+  flex: 1.5;
+  font-size: 0.95rem;
+  padding: 12px 20px;
+}
+
+/* --------------------------------------------------------------------------
+   3. LIVING CITY WEB OF CONSEQUENCE (TASK -> PROJECT -> AREA -> GOAL)
+   -------------------------------------------------------------------------- */
+
+.living-city-web-section {
+  background: linear-gradient(135deg, var(--color-paper-card) 0%, #131722 100%);
+  border: 1px solid rgba(40, 215, 242, 0.3);
+}
+
+.web-chain-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.web-node {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-paper-subtle);
+  border: var(--border-hairline);
+  border-radius: var(--radius-card);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.web-node.broken-strand-node {
+  border: 1px dashed var(--color-spider-red);
+  background: rgba(240, 43, 58, 0.06);
+}
+
+/* --------------------------------------------------------------------------
+   4. MISSIONS VIEW & DRAWER
+   -------------------------------------------------------------------------- */
+
+.missions-header-row, .arsenal-header-row, .chronicle-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.missions-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.mission-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mission-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mission-source-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mission-title {
+  font-size: 1.1rem;
+  color: var(--color-newsprint-bone);
+  margin-bottom: 4px;
+}
+
+.mission-reason {
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+  line-height: 1.35;
+}
+
+.mission-meta-strip {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.mission-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: var(--border-hairline);
+  padding-top: 10px;
+  flex-wrap: wrap;
+}
+
+.drawer-card {
+  max-width: 600px;
+}
+
+/* --------------------------------------------------------------------------
+   5. HERO VIEW & CHARACTER SHEET
+   -------------------------------------------------------------------------- */
+
+.character-sheet-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  gap: var(--space-5);
+  overflow: hidden;
+}
+
+.hero-key-art {
+  position: relative;
+  min-height: 360px;
+  margin: -16px 0 -16px -16px;
+  overflow: hidden;
+  border-right: 1px solid rgba(40, 215, 242, 0.3);
+  background: #080b12;
+}
+
+.hero-key-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 46%, rgba(8, 10, 15, 0.98) 100%);
+  pointer-events: none;
+}
+
+.hero-key-art img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 42% 28%;
+  filter: saturate(0.92) contrast(1.05);
+}
+
+.hero-key-art figcaption {
+  position: absolute;
+  z-index: 1;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--color-newsprint-bone);
+}
+
+.hero-key-art figcaption strong {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+}
+
+.hero-sheet-content {
+  min-width: 0;
+}
+
+.character-sheet-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.hero-avatar-large {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-paper-elevated);
+  border: 2px solid var(--color-portal-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-portal-cyan);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.hero-identity-box {
+  flex: 1;
+}
+
+.hero-name {
+  font-size: 1.5rem;
+  color: var(--color-newsprint-bone);
+}
+
+.hero-handle {
+  font-family: var(--font-telemetry);
+  font-size: 0.78rem;
+  color: var(--color-portal-cyan);
+}
+
+.hero-rank-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.rank-number {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.stat-box {
+  background: var(--color-paper-subtle);
+  border: var(--border-hairline);
+  border-radius: var(--radius-card);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-value {
+  font-family: var(--font-telemetry);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.stat-label {
+  font-family: var(--font-telemetry);
+  font-size: 0.7rem;
+  color: var(--color-ink-muted);
+  letter-spacing: 0.04em;
+}
+
+.stat-sub {
+  font-size: 0.7rem;
+  color: var(--color-ink-secondary);
+}
+
+.daily-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   6. RESPONSIVE MOBILE RULES (360px - 430px VIEWPORTS)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .world-stage-container {
+    height: 280px;
+  }
+
+  .integrated-boss-banner {
+    top: 8px;
+    right: 8px;
+    padding: 6px 10px;
+    min-width: 160px;
+  }
+
+  .world-snapshot-hud {
+    bottom: 8px;
+    left: 8px;
+  }
+
+  .strike-cta-row {
+    flex-direction: column;
+  }
+
+  .strike-cta-row .btn {
+    width: 100%;
+  }
+
+  .character-sheet-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .character-sheet-card {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-key-art {
+    min-height: 330px;
+    margin: -16px -16px 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(40, 215, 242, 0.3);
+  }
+
+  .hero-key-art img {
+    object-position: 50% 22%;
+  }
+
+  .hero-rank-box {
+    align-items: flex-start;
+  }
+
+  .missions-header-row, .arsenal-header-row, .chronicle-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+}

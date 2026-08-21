@@ -1,0 +1,510 @@
+/* WEB OPS TRACKER V6 - MOBILE & RESPONSIVE STYLES */
+
+@media (max-width: 800px) {
+
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tracker-viewport {
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .tracker-device-frame {
+    border-width: 2px;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  /* 1. TOP ROW (52–60px) */
+  .frame-top-bar {
+    height: 100px;
+    min-height: 100px;
+    flex-shrink: 0;
+    padding: 0 6px;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) 88px;
+    grid-template-rows: 54px 46px;
+    align-items: center;
+    background: linear-gradient(180deg, #111e38 0%, #0b1426 100%);
+    border-bottom: 2px solid var(--cyan-mid);
+    position: relative;
+    z-index: 30;
+    box-sizing: border-box;
+  }
+
+  .avatar-control-box {
+    grid-column: 1;
+    grid-row: 1;
+    width: 54px;
+    height: 44px;
+    padding: 3px;
+    gap: 0;
+    justify-content: center;
+    background: var(--bg-dark);
+    border: 1px solid var(--cyan-mid);
+    border-radius: 4px;
+    max-width: none;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .avatar-img-frame {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .avatar-title {
+    display: none; /* Hide 'WEB OPERATIVE' title to keep status text clean */
+  }
+
+  .avatar-info {
+    display: none;
+  }
+
+  .avatar-status-badge {
+    font-size: 10px;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  #gps-status-text {
+    font-size: 9.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand-plaque {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 4px 10px;
+    border-width: 1px;
+    box-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .brand-title {
+    font-size: clamp(9px, 2.8vw, 11px);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand-subtitle {
+    display: none; /* Hide clock/subtitle on mobile so title stays on 1 clean line */
+  }
+
+  .top-right-controls {
+    grid-column: 3;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .top-right-controls .btn-pixel-icon {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+
+  #btn-sound-toggle::before {
+    content: '🔊';
+    font-size: 16px;
+  }
+
+  #btn-hub-menu::before {
+    content: '☰';
+    font-size: 18px;
+  }
+
+  /* 2. ACTION ROW (44–48px) */
+  .frame-action-bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    height: 46px;
+    min-height: 46px;
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 2px 0;
+    background: #09101d;
+    border-bottom: 1px solid var(--steel-border);
+    position: relative;
+    z-index: 25;
+    box-sizing: border-box;
+    align-items: center;
+  }
+
+  .frame-action-bar .btn-pixel-icon {
+    height: 42px;
+    min-height: 42px;
+    padding: 0 2px;
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--cyan-mid);
+    color: var(--cyan-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .frame-action-bar .btn-pixel-icon span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 3. SEARCH ROW (44–48px) */
+  .frame-search-row {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    height: 46px;
+    min-height: 46px;
+    flex-shrink: 0;
+    padding: 2px 6px;
+    background: #09101d;
+    border-bottom: 1px solid var(--steel-border);
+    z-index: 24;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-panel {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .search-input-wrap {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    height: 42px;
+    background: rgba(9, 16, 29, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--cyan-mid);
+    padding: 2px 4px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+  }
+
+  .search-input-field {
+    flex: 1;
+    height: 38px;
+    min-height: 38px;
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: 1px solid var(--steel-border);
+    border-radius: 3px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .search-submit-btn {
+    width: 44px;
+    height: 38px;
+    min-width: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--cyan-bright);
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .search-btn-text {
+    display: none; /* Hide 'TÌM KẾT QUẢ' text on mobile so submit button stays a square icon button */
+  }
+
+  .search-btn-icon {
+    display: inline-block;
+    font-size: 15px;
+  }
+
+  .search-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--bg-card);
+    border: 2px solid var(--cyan-bright);
+    border-radius: 4px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
+  }
+
+  /* 4. FILTER ROW (44–48px) */
+  .frame-filter-row {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 46px;
+    min-height: 46px;
+    flex-shrink: 0;
+    padding: 2px 0;
+    background: #09101d;
+    border-bottom: 2px solid var(--cyan-mid);
+    z-index: 20;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .rail-left {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 42px;
+    max-height: 42px;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 6px;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    align-items: center;
+    display: flex;
+    white-space: nowrap;
+  }
+
+  .rail-left::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    height: 38px;
+    min-height: 38px;
+    padding: 0 10px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    background: var(--bg-card);
+    border: 1px solid var(--steel-border);
+    border-left: 3px solid var(--filter-color, var(--cyan-mid));
+    border-radius: 3px;
+    color: var(--text-main);
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  .filter-count {
+    font-size: 8px;
+    padding: 2px 5px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+    color: var(--text-muted);
+    margin-left: 4px;
+  }
+
+  /* 5. MAP FILLS REMAINING SPACE BELOW FILTER ROW */
+  .frame-main-content {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* 6. RIGHT MAP CONTROLS BEGIN BELOW FILTER ROW (44px touch targets) */
+  .rail-right {
+    position: absolute;
+    top: 12px;
+    right: 8px;
+    bottom: auto;
+    left: auto;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .map-control-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(9, 16, 29, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--cyan-mid);
+    color: var(--cyan-bright);
+    border-radius: 4px;
+  }
+
+  /* 7. ATTRIBUTION & TICKER STRIP AT BOTTOM */
+  .frame-bottom-bar {
+    height: 32px;
+    min-height: 32px;
+    flex-shrink: 0;
+    padding: 0 8px;
+    background: #060b14;
+    border-top: 2px solid var(--cyan-mid);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    overflow: hidden;
+  }
+
+  .ticker-wrap {
+    margin-right: 0;
+    padding: 1px 6px;
+  }
+
+  .ticker-content {
+    font-size: 9.5px;
+  }
+
+  /* 9. BOTTOM SHEETS & MODALS */
+  .side-drawer-panel {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 75vh;
+    max-height: 80vh;
+    background: var(--bg-navy);
+    border-left: none;
+    border-top: 3px solid var(--cyan-bright);
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.85);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .side-drawer-panel.active {
+    transform: translateY(0);
+  }
+
+  .drawer-header {
+    border-radius: 16px 16px 0 0;
+    padding: 12px 16px;
+    background: var(--bg-dark);
+    border-bottom: 2px solid var(--cyan-mid);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .drawer-body {
+    padding: 12px 16px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .pixel-modal {
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-width: 2px;
+    border-radius: 8px;
+  }
+
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .operative-callout {
+    position: absolute;
+    bottom: 40px;
+    left: 8px;
+    right: 8px;
+    max-width: calc(100% - 65px);
+    z-index: 25;
+  }
+
+  .callout-avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .callout-bubble {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+}

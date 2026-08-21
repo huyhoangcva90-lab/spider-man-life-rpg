@@ -1,0 +1,153 @@
+/* ==========================================================================
+   V4 BASE STYLES & RESET - DIMENSIONAL FIELD DOSSIER
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-night-asphalt);
+  /* CSS paper grain texture effect on Asphalt foundation */
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(40, 215, 242, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(132, 94, 247, 0.03) 0%, transparent 50%),
+    linear-gradient(rgba(232, 224, 207, 0.015) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
+  background-attachment: fixed;
+  color: var(--color-newsprint-bone);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-night-asphalt);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(232, 224, 207, 0.18);
+  border-radius: var(--radius-tag);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(40, 215, 242, 0.4);
+}
+
+/* Typography Base Defaults - Distinct Roles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-newsprint-bone);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+}
+
+h1 { font-size: 1.65rem; }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.05rem; }
+h4 { font-size: 0.92rem; }
+
+p {
+  color: var(--color-ink-secondary);
+  overflow-wrap: break-word;
+  line-height: 1.45;
+}
+
+a {
+  color: var(--color-portal-cyan);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--color-newsprint-bone);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Visible Focus Outline Policy for Accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-portal-cyan) !important;
+  outline-offset: 3px !important;
+}
+
+/* Telemetry & Technical Text (Mono Only) */
+.telemetry-text {
+  font-family: var(--font-telemetry);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.mono-value {
+  font-family: var(--font-telemetry);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Inline SVG helper sizes */
+.icon-inline {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1em;
+}
+
+/* Responsive Container Grid */
+#app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Utility Helpers */
+.hidden {
+  display: none !important;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-cyan { color: var(--color-portal-cyan) !important; }
+.text-red { color: var(--color-spider-red) !important; }
+.text-amber { color: var(--color-warning-amber) !important; }
+.text-gold { color: var(--color-warning-amber) !important; }
+.text-violet { color: var(--color-venom-violet) !important; }
+.text-muted { color: var(--color-ink-muted) !important; }
+.text-success { color: var(--color-success-green) !important; }
+.text-bone { color: var(--color-newsprint-bone) !important; }
+
+/* Motion & Animation Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

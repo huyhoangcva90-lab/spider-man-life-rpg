@@ -1,0 +1,114 @@
+/* WEB OPS TRACKER V6 - DESIGN TOKENS */
+
+:root {
+  /* Color Palette - Navy & Pixel Cyan Theme */
+  --bg-dark: #070b12;
+  --bg-navy: #0d1527;
+  --bg-card: #131f37;
+  --bg-card-hover: #1c2c4c;
+  --bg-input: #09101d;
+
+  /* Pixel Frame Accents */
+  --cyan-bright: #00f0ff;
+  --cyan-mid: #00a8cc;
+  --cyan-dark: #004d66;
+  --cyan-glow: rgba(0, 240, 255, 0.25);
+
+  --steel-blue: #1e293b;
+  --steel-border: #334155;
+  --steel-light: #475569;
+
+  --amber-gold: #ffb703;
+  --amber-glow: rgba(255, 183, 3, 0.3);
+
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --text-bright: #ffffff;
+
+  /* Marker Category Colors */
+  --color-meeting: #ff3366;       /* Red/Pink */
+  --color-person: #ff9900;        /* Orange */
+  --color-plan: #ffcc00;          /* Yellow */
+  --color-leisure: #00e676;       /* Emerald Green */
+  --color-errand: #00e5ff;        /* Cyan */
+  --color-work: #2979ff;          /* Royal Blue */
+  --color-notion: #d500f9;        /* Purple */
+  --color-user: #00f0ff;          /* User GPS Cyan */
+
+  /* Status Colors */
+  --status-planned: #38bdf8;      /* Blue */
+  --status-confirmed: #a855f7;    /* Purple */
+  --status-done: #22c55e;         /* Green */
+  --status-cancelled: #ef4444;    /* Red */
+
+  /* Typography */
+  --font-pixel: 'Press Start 2P', 'Silkscreen', cursive, monospace;
+  --font-body: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Consolas', 'Courier New', monospace;
+
+  /* Spacing & Borders */
+  --frame-padding: 12px;
+  --pixel-border-width: 4px;
+  --radius-pixel: 2px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  /* Shadows & Effects */
+  --shadow-pixel: 0 4px 0 #000000;
+  --shadow-cyan-glow: 0 0 15px rgba(0, 240, 255, 0.4);
+  --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.8);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  color: inherit;
+  outline: none;
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cyan-dark);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyan-mid);
+}

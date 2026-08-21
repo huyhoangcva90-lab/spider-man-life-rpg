@@ -1,0 +1,156 @@
+/* ==========================================================================
+   SPIDER-MAN LIFE RPG - CITY MAP SEED DATA (NEW YORK DISTRICTS & NODES)
+   ========================================================================== */
+
+const MAP_DATA = {
+  districts: [
+    { id: "financial_district", name: "Financial District", code: "FDI", threatLevel: "Low", description: "Khu tài chính thương mại sầm uất với các tòa nhà chọc trời Wall Street." },
+    { id: "chinatown", name: "Chinatown & Lower East", code: "CLE", threatLevel: "Medium", description: "Các con phố đông đúc, chợ truyền thống và hang ổ của băng đảng Maggia." },
+    { id: "midtown", name: "Midtown Manhattan", code: "MID", threatLevel: "High", description: "Trung tâm New York với Oscorp Tower, Quảng trường Thời Đại và Grand Central." },
+    { id: "central_park", name: "Central Park & Upper East", code: "CPE", threatLevel: "Medium", description: "Công viên trung tâm xanh mát và khu nhà giàu xa hoa của giới thượng lưu." },
+    { id: "harlem", name: "Harlem & Upper West", code: "HUW", threatLevel: "High", description: "Khu vực lịch sử lâu đời, trụ sở trung tâm tình nguyện FEAST Shelter." },
+    { id: "hells_kitchen", name: "Hell's Kitchen", code: "HKT", threatLevel: "High", description: "Địa bàn tuần tra thân thuộc của Daredevil với bãi đáp cảng biển tăm tối." },
+    { id: "queens_brooklyn", name: "Queens & Brooklyn Heights", code: "QBH", threatLevel: "Low", description: "Quê nhà Forest Hills của Peter Parker và khu nghệ thuật năng động của Miles." }
+  ],
+
+  nodes: [
+    {
+      id: "node_docock_threat",
+      districtId: "midtown",
+      title: "Doctor Octopus Attack",
+      type: "boss_threat",
+      category: "confirmed",
+      typeLabel: "🦹 CONFIRMED THREAT",
+      status: "active",
+      targetView: "boss",
+      icon: "💀",
+      shape: "square",
+      x: 52, y: 38,
+      coords: "73.9851° W, 40.7589° N",
+      source: "Oscorp Mainframe Alert",
+      description: "Doctor Octopus đang tiến công trụ sở Oscorp Tower! Thất thoát dữ liệu nguy cấp. Tiến vào Boss Arena xuất kích lập tức.",
+      rewardHint: "600 XP & 500 Gold & Anti-Ock Blueprint"
+    },
+    {
+      id: "node_life_rpg_project",
+      districtId: "midtown",
+      title: "Build Prototype Project",
+      type: "project",
+      category: "project",
+      typeLabel: "⭐ ACTIVE PROJECT",
+      status: "active",
+      targetView: "projects",
+      icon: "⭐",
+      shape: "star",
+      x: 48, y: 44,
+      coords: "73.9812° W, 40.7532° N",
+      source: "Parker Lab Terminal",
+      description: "Dự án phát triển ứng dụng Spider-Man Life RPG với các mốc Milestone trọng điểm.",
+      rewardHint: "Project Milestones & Boss Critical Damage"
+    },
+    {
+      id: "node_miles_intel",
+      districtId: "queens_brooklyn",
+      title: "Miles Morales Patrol",
+      type: "ally_intel",
+      category: "completed",
+      typeLabel: "🤝 ALLY INTEL (COMPLETED)",
+      status: "completed",
+      targetView: "allies",
+      icon: "🤝",
+      shape: "circle",
+      x: 75, y: 72,
+      coords: "73.9500° W, 40.6900° N",
+      source: "Spider-Band Frequency",
+      description: "Miles Morales đã hoàn thành tuần tra Brooklyn. Sẵn sàng hỗ trợ chiến đấu trong đội hình Companion.",
+      rewardHint: "+15% Damage Buff & Venom Strike"
+    },
+    {
+      id: "node_daily_habits",
+      districtId: "harlem",
+      title: "FEAST Shelter Routine",
+      type: "active_mission",
+      category: "confirmed",
+      typeLabel: "🔷 CONFIRMED MISSION",
+      status: "active",
+      targetView: "daily",
+      icon: "⚡",
+      shape: "diamond",
+      x: 35, y: 22,
+      coords: "73.9450° W, 40.8100° N",
+      source: "FEAST Logistics Net",
+      description: "Nhiệm vụ rèn luyện thói quen hàng ngày nâng cao thể lực & chỉ số nhân vật.",
+      rewardHint: "Daily XP & Attribute XP & Stagger"
+    },
+    {
+      id: "node_kraven_hunt",
+      districtId: "central_park",
+      title: "Kraven's Hunting Ground",
+      type: "boss_threat",
+      category: "rumored",
+      typeLabel: "⚠️ RUMORED THREAT",
+      status: "active",
+      targetView: "villains",
+      icon: "🦁",
+      shape: "square",
+      x: 58, y: 28,
+      coords: "73.9660° W, 40.7810° N",
+      source: "Police Scanner Chitter",
+      description: "Tình báo nghi vấn: Kraven The Hunter đang giăng bẫy phục kích trong rừng cây Central Park.",
+      rewardHint: "Challenge Kraven in Villains Codex"
+    },
+    {
+      id: "node_kanban_quests",
+      districtId: "financial_district",
+      title: "Wall Street Notion Kanban",
+      type: "active_mission",
+      category: "confirmed",
+      typeLabel: "🔷 CONFIRMED MISSION",
+      status: "active",
+      targetView: "quests",
+      icon: "📊",
+      shape: "diamond",
+      x: 25, y: 82,
+      coords: "74.0090° W, 40.7070° N",
+      source: "Peter's Notion Terminal",
+      description: "Bảng quản lý công việc tồn đọng Kanban 3 cột hỗ trợ giải quyết mục tiêu real-life.",
+      rewardHint: "Kanban Task Damage & Attack"
+    },
+    {
+      id: "node_mysterio_illusion",
+      districtId: "chinatown",
+      title: "Mysterio Drone Illusion",
+      type: "boss_threat",
+      category: "locked",
+      typeLabel: "🔒 LOCKED THREAT",
+      status: "locked",
+      targetView: "villains",
+      icon: "🔒",
+      shape: "square",
+      x: 62, y: 64,
+      coords: "73.9970° W, 40.7150° N",
+      source: "Oscorp Signal Intercept",
+      description: "Khu vực ảo ảnh Mysterio đang bị phong tỏa. Cần đạt Level 10 Focus để giải mã tín hiệu.",
+      rewardHint: "Locked Threat (Requires Lvl 10 Focus)"
+    },
+    {
+      id: "node_mj_intel",
+      districtId: "hells_kitchen",
+      title: "Daily Bugle Press Intel",
+      type: "ally_intel",
+      category: "ally_intel",
+      typeLabel: "🤝 ALLY INTEL",
+      status: "active",
+      targetView: "allies",
+      icon: "👩‍🦰",
+      shape: "circle",
+      x: 32, y: 55,
+      coords: "73.9920° W, 40.7630° N",
+      source: "MJ Encrypted Channel",
+      description: "Mary Jane đang điều tra tung tích tài liệu mật tại tòa soạn tin tức Daily Bugle.",
+      rewardHint: "Ally Recon & Intellect Buff"
+    }
+  ]
+};
+
+window.MAP_DATA = MAP_DATA;
