@@ -36,6 +36,8 @@ export class HeroAnimationController {
     this.previewIndex = 2;
     this.attackIndex = 0;
     this.playToken = 0;
+    this.speed = 1;
+    this.pendingComicText = null;
   }
 
   init() {
@@ -48,11 +50,18 @@ export class HeroAnimationController {
     });
     this.bus.on('HERO_PREPARE_MISSION', () => this.sequence(['run', 'jump', 'combat_idle']));
     this.bus.on('RPG_UPDATED', (result) => this.playCombatResult(result));
+    this.bus.on('SETTINGS_CHANGED', (settings) => { this.speed = settings.combatSpeed || 1; });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) window.clearInterval(this.timer);
+      else this.play('combat_idle');
+    });
     this.play('combat_idle');
   }
 
   async playCombatResult(result = {}) {
     if (result.blocked) return;
+    if (!result.action && !result.animation && !result.heroKo && !result.perfectDodge && !result.victory && !result.finisher) return;
+    this.pendingComicText = result.comicText?.[Math.floor(Math.random() * result.comicText.length)] || null;
     if (result.heroKo) return this.sequence(['hurt', 'KO', 'combat_idle']);
     if (result.perfectDodge) return this.sequence(['dodge', 'attack_02', 'combat_idle']);
     if (result.victory) return this.sequence(['attack_03', 'victory']);
@@ -90,9 +99,13 @@ export class HeroAnimationController {
       index += 1;
     };
     draw();
-    const interval = Math.round(1000 / config.fps);
+    const interval = Math.max(24, Math.round(1000 / config.fps / this.speed));
     this.timer = window.setInterval(draw, interval);
-    if (config.vfx) window.setTimeout(() => this.spawnVfx(...config.vfx), interval * Math.max(1, config.frames.length - 1));
+    if (config.vfx) {
+      const word = this.pendingComicText || config.vfx[0];
+      this.pendingComicText = null;
+      window.setTimeout(() => this.spawnVfx(word, config.vfx[1]), interval * Math.max(1, config.frames.length - 1));
+    }
 
     const loops = config.loop && !options.preview ? Infinity : 1;
     if (loops === Infinity) return Promise.resolve();

@@ -5,21 +5,23 @@
 - Live: <https://huyhoangcva90-lab.github.io/spider-man-life-rpg/>
 - Repository: <https://github.com/huyhoangcva90-lab/spider-man-life-rpg>
 - Brand guide: [`docs/SPIDEY_LIFE_BRAND_GUIDE.md`](docs/SPIDEY_LIFE_BRAND_GUIDE.md)
+- LXXXV architecture audit: [`docs/APP_V6_AUDIT_LXXXV.md`](docs/APP_V6_AUDIT_LXXXV.md)
 
 ## Luồng chính
 
 1. Tạo một mission thật trong Arena hoặc Map.
 2. Chuyển mission sang `DONE`.
-3. Nhận XP, Web Coins, điểm thuộc tính, streak và gây damage lên raid boss.
-4. Đánh đầy stagger để mở `WEB FINISHER`; hạ boss để sang raid kế tiếp.
+3. Quest event được normalize rồi kích hoạt CombatEngine và RewardEngine.
+4. Nhận XP, Web Coins, streak, loot và gây damage lên encounter hiện tại.
+5. Đánh đầy stagger để mở `FINISHER`; hạ Green Goblin để kết thúc Chapter.
 
 ## Các mode có chức năng
 
 - **Arena:** màn hình mặc định, Spider đấu villain, boss HP và battle action.
-- **Missions:** nhật ký nhiệm vụ, tìm kiếm và lọc trạng thái.
-- **Allies:** chọn một trong 100 Spider ally pixel.
-- **Map:** mode bản đồ CARTO/MapLibre để tìm, lọc và điều hướng; bấm nền map không tự tạo dữ liệu.
-- **Profile:** level, 6 thuộc tính, streak, raid, combat log và loot đã nhận.
+- **Missions:** Main/Side/Daily quest và cổng tạo nhiệm vụ đời thật.
+- **Spider-Verse:** Peter Classic, Miles assist và team synergy của vertical slice.
+- **City:** mode MapLibre để tìm, lọc và điều hướng; bấm nền map không tự tạo dữ liệu.
+- **Hero:** profile, skill tree, gadget và inventory.
 
 Các nút không có nội dung đã được loại bỏ. Giao diện không dùng rương/lootbox; phần thưởng đến từ mission thật.
 
@@ -34,6 +36,18 @@ Hero Arena dùng sprite sheet hành động với 17 state từ `idle` tới `vi
 - Hoàn thành nhiệm vụ đời thật là trigger chính cho animation, damage, XP, Web Coins, daily progress và loot.
 - Ba sample audio gốc được giữ nguyên: `spidey_jingle` cho Arena/victory, `another_day_another_sighting` cho crime/wave mới, `calling_all_webheads` cho Ally Call.
 
+## Kiến trúc Phase A
+
+- Content được tách thành registry có ID kebab-case và validation khi boot: actions, heroes, allies, enemies, quests, rewards, districts và zones.
+- `QuestEngine`, `DamageEngine`, `CombatEngine` và `RewardEngine` không phụ thuộc DOM; `PhaseOneGameEngine` chỉ điều phối state/event.
+- Save canonical là version 2, tự migrate từ `spidey-action-rpg-phase-one-v1` mà không xóa dữ liệu cũ; có export/import/reset trong Game Settings.
+- Event game chuẩn hóa cho quest, hit, damage, boss phase, reward, SFX, VFX và save; hai event cũ vẫn được phát để giữ tương thích UI/animation.
+- Auto Combat là demo animation-only, không gây damage và không farm progression.
+
+## Test
+
+Mở `app-v6/tests/domain-tests.html` qua static server. Bộ test browser-native kiểm tra 11 rule quan trọng: reward-once, HP clamp, boss phase, Finisher, cooldown, unique loot, save/load, migration, difficulty, ally cooldown và Ultimate cap.
+
 ## Chạy local
 
 Đây là ứng dụng HTML/CSS/JavaScript module không cần build step. Vì trình duyệt chặn ES modules khi mở bằng `file://`, hãy phục vụ thư mục bằng một static server, ví dụ:
@@ -47,7 +61,7 @@ Sau đó mở <http://127.0.0.1:4173/>. Root tự chuyển sang `app-v6/`, cũng
 ## Dữ liệu và âm thanh
 
 - Dữ liệu Life RPG, missions và ally được lưu trong LocalStorage của trình duyệt.
-- Âm thanh mặc định là `OFF` và chỉ bật sau thao tác của người dùng.
+- SFX mặc định bật, nhưng trình duyệt chỉ cho phát audio sau thao tác đầu tiên của người dùng; có thể tắt ngay trên thanh trên hoặc trong Game Settings.
 - App không tự xin quyền GPS khi khởi động.
 
 ## Công nghệ

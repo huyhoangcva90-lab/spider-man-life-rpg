@@ -18,9 +18,9 @@ import { MarkerDossier } from './ui/MarkerDossier.js';
 import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?v=spidey-allies-1';
 import { HubOverlayPanels } from './ui/HubOverlayPanels.js?v=map-first-1';
 import { MapGuideModal } from './ui/MapGuideModal.js';
-import { HeroAnimationController } from './game/HeroAnimationController.js?v=phase-one-1';
-import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?v=phase-one-1';
-import { ActionRpgController } from './ui/ActionRpgController.js?v=phase-one-1';
+import { HeroAnimationController } from './game/HeroAnimationController.js?v=phase-a-2';
+import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?v=phase-a-2';
+import { ActionRpgController } from './ui/ActionRpgController.js?v=phase-a-2';
 
 class App {
   constructor() {
@@ -28,6 +28,9 @@ class App {
     this.state = new StateStore(this.bus);
     this.sound = new SoundController(this.state);
     this.campaign = new PhaseOneGameEngine(this.bus);
+    this.sound.setMasterVolume(this.campaign.state.settings.volume);
+    this.sound.setMusicEnabled(this.campaign.state.settings.music);
+    this.campaign.state.settings.sfx = this.state.get('soundEnabled');
     
     this.repo = new MapEntryRepository(this.bus);
     this.geocoder = new GeocoderAdapter();
@@ -118,6 +121,10 @@ class App {
     // Real-life completion is the canonical trigger for game combat and rewards.
     this.bus.on('ENTRY_CREATED', (entry) => this.campaign.completeRealQuest(entry));
     this.bus.on('ENTRY_UPDATED', (entry) => this.campaign.completeRealQuest(entry));
+    this.bus.on('SOUND_TOGGLED', (enabled) => {
+      if (this.campaign.state.settings.sfx !== enabled) this.campaign.updateSettings({ sfx: enabled });
+    });
+    this.bus.on('SFX_REQUESTED', ({ id }) => this.sound.playGameSfx(id));
 
     // Filter change
     this.bus.on('FILTER_CHANGED', (filter) => {

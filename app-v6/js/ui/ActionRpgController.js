@@ -7,6 +7,7 @@ export class ActionRpgController {
     this.panelSection = 'QUESTS';
     this.panelTab = 'MAIN';
     this.introPlayed = false;
+    this.autoTimer = null;
   }
 
   init() {
@@ -16,9 +17,9 @@ export class ActionRpgController {
     document.getElementById('game-panel-backdrop')?.addEventListener('click', (event) => { if (event.target.id === 'game-panel-backdrop') this.closePanel(); });
     document.getElementById('btn-next-patrol')?.addEventListener('click', () => this.engine.startNextPatrol());
     document.getElementById('action-rpg-screen')?.addEventListener('pointerdown', () => this.playIntroOnce(), { once: true });
+    document.addEventListener('visibilitychange', () => this.syncAutoCombat(this.engine.snapshot().settings));
     this.bus.on('CAMPAIGN_UPDATED', (result) => this.handleUpdate(result));
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
-      if (section === 'SETTINGS') return this.bus.emit('OPEN_MODAL', 'MAP_GUIDE');
       if (section === 'CITY') return this.selectSection('CITY');
       this.panelSection = section;
       this.panelTab = tab || (section === 'QUESTS' ? 'MAIN' : section === 'VERSE' ? 'ROSTER' : 'PROFILE');
@@ -73,11 +74,6 @@ export class ActionRpgController {
       this.toast(result.reason);
       return;
     }
-    if (action === 'ally') this.sound.playAllyCall();
-    else if (action === 'web') this.sound.playWebAction();
-    else if (action === 'gadget') this.sound.playGadgetAction();
-    else if (action === 'ultimate') this.sound.playHeavyImpact();
-    else this.sound.playCombatHit();
   }
 
   handleUpdate(result) {
@@ -130,13 +126,19 @@ export class ActionRpgController {
     const ultimate = document.querySelector('[data-combat-action="ultimate"]');
     ultimate?.toggleAttribute('disabled', hero.ultimate < 100 || snapshot.storyComplete);
     ultimate?.classList.toggle('ready', hero.ultimate >= 100 && !snapshot.storyComplete);
+    ultimate?.classList.toggle('finisher-ready', snapshot.enemyStagger >= 100 && hero.ultimate >= 100 && !snapshot.storyComplete);
+    ultimate?.querySelector('strong') && (ultimate.querySelector('strong').textContent = snapshot.enemyStagger >= 100 ? 'FINISHER' : 'ULTIMATE');
     document.getElementById('btn-next-patrol')?.toggleAttribute('hidden', !snapshot.storyComplete);
+    document.body.classList.toggle('game-reduce-motion', snapshot.settings.reduceMotion);
+    document.body.classList.toggle('game-no-shake', !snapshot.settings.screenShake);
+    document.body.classList.toggle('game-no-comic', !snapshot.settings.comicText);
+    this.syncAutoCombat(snapshot.settings);
     if (!document.getElementById('game-panel-backdrop')?.hasAttribute('hidden')) this.renderPanel();
   }
 
   openPanel(section) {
     this.panelSection = section;
-    this.panelTab = section === 'QUESTS' ? 'MAIN' : section;
+    this.panelTab = section === 'QUESTS' ? 'MAIN' : section === 'SETTINGS' ? 'GAME' : section;
     const panel = document.getElementById('game-panel-backdrop');
     panel?.removeAttribute('hidden'); panel?.removeAttribute('inert');
     this.renderPanel();
@@ -153,13 +155,14 @@ export class ActionRpgController {
     const tabs = document.getElementById('game-panel-tabs');
     const content = document.getElementById('game-panel-content');
     if (!title || !tabs || !content) return;
-    title.textContent = this.panelSection === 'QUESTS' ? 'NHIỆM VỤ' : this.panelSection === 'VERSE' ? 'SPIDER-VERSE' : 'HERO / BUILD';
-    const tabNames = this.panelSection === 'QUESTS' ? ['MAIN','SIDE','DAILY','COMPLETED'] : this.panelSection === 'VERSE' ? ['ROSTER','TEAM'] : ['PROFILE','SKILLS','GADGETS','INVENTORY'];
+    title.textContent = this.panelSection === 'QUESTS' ? 'NHIỆM VỤ' : this.panelSection === 'VERSE' ? 'SPIDER-VERSE' : this.panelSection === 'SETTINGS' ? 'GAME SETTINGS / SAVE' : 'HERO / BUILD';
+    const tabNames = this.panelSection === 'QUESTS' ? ['MAIN','SIDE','DAILY','COMPLETED'] : this.panelSection === 'VERSE' ? ['ROSTER','TEAM'] : this.panelSection === 'SETTINGS' ? ['GAME','SAVE'] : ['PROFILE','SKILLS','GADGETS','INVENTORY'];
     if (!tabNames.includes(this.panelTab)) this.panelTab = tabNames[0];
     tabs.innerHTML = tabNames.map((tab) => `<button class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab}</button>`).join('');
     tabs.querySelectorAll('button').forEach((button) => button.addEventListener('click', () => { this.sound.playSelect(); this.panelTab = button.dataset.gamePanelTab; this.renderPanel(); }));
-    content.innerHTML = this.panelSection === 'QUESTS' ? this.renderQuests() : this.panelSection === 'VERSE' ? this.renderVerse() : this.renderHero();
+    content.innerHTML = this.panelSection === 'QUESTS' ? this.renderQuests() : this.panelSection === 'VERSE' ? this.renderVerse() : this.panelSection === 'SETTINGS' ? this.renderSettings() : this.renderHero();
     content.querySelector('[data-open-real-mission]')?.addEventListener('click', () => { this.closePanel(); this.bus.emit('OPEN_EDITOR', { type: 'WORK', status: 'PLANNED' }); });
+    this.bindSettings(content);
   }
 
   renderQuests() {
@@ -167,7 +170,10 @@ export class ActionRpgController {
     if (this.panelTab === 'COMPLETED') return `<div class="game-card-grid">${s.defeated.length ? s.defeated.map((id) => `<article class="game-card"><small>ENEMY DEFEATED</small><h3>${id.replaceAll('-',' ').toUpperCase()}</h3><footer>RECORDED IN COMBAT LOG</footer></article>`).join('') : '<article class="game-card"><h3>NO CLEARS YET</h3><p>Hoàn thành nhiệm vụ thật hoặc chiến đấu trong Arena để tiến cốt truyện.</p></article>'}</div>`;
     const type = this.panelTab;
     const quests = s.data.quests.filter((quest) => quest.type === type);
-    return `<div class="game-card-grid">${quests.map((quest) => `<article class="game-card"><small>${quest.type} QUEST</small><h3>${quest.title}</h3><p>${quest.copy}</p><footer>${quest.type === 'DAILY' ? `PROGRESS // ${Math.min(3,s.daily.completed)} / 3<br>` : ''}REWARD // ${quest.reward}</footer></article>`).join('')}</div><button class="game-panel-action" data-open-real-mission>+ TẠO NHIỆM VỤ ĐỜI THẬT</button>`;
+    return `<div class="game-card-grid">${quests.map((quest) => {
+      const progress = quest.metric ? s.daily.metrics?.[quest.metric] || 0 : s.daily.completed;
+      return `<article class="game-card"><small>${quest.type} QUEST</small><h3>${quest.title}</h3><p>${quest.copy}</p><footer>${quest.type === 'DAILY' ? `PROGRESS // ${Math.min(quest.target || 3, progress)} / ${quest.target || 3}<br>` : ''}REWARD // ${quest.reward}</footer></article>`;
+    }).join('')}</div><button class="game-panel-action" data-open-real-mission>+ TẠO NHIỆM VỤ ĐỜI THẬT</button>`;
   }
 
   renderVerse() {
@@ -182,6 +188,62 @@ export class ActionRpgController {
     if (this.panelTab === 'GADGETS') return `<div class="game-card-grid">${s.data.gadgets.map((g) => `<article class="game-card"><small>LV ${g.level} // ${g.charges} CHARGES</small><h3>${g.name}</h3><p>${g.effect}</p></article>`).join('')}</div>`;
     if (this.panelTab === 'INVENTORY') return `<div class="game-card-grid">${Object.keys(s.inventory).length ? Object.entries(s.inventory).map(([name,count]) => `<article class="game-card"><small>MATERIAL</small><h3>${name}</h3><footer>OWNED // ${count}</footer></article>`).join('') : '<article class="game-card"><h3>INVENTORY EMPTY</h3><p>Defeat enemies to collect upgrade materials.</p></article>'}</div>`;
     return `<article class="game-card"><small>${s.data.hero.rank}</small><h3>${s.data.hero.name} // ${s.data.hero.variant}</h3><div class="game-stat-list"><span>LV ${s.hero.level}</span><span>HP ${s.hero.hp}</span><span>WEB ${s.hero.webEnergy}</span><span>ULT ${s.hero.ultimate}%</span><span>COINS ${s.hero.coins}</span><span>SKILL ${s.hero.skillPoints}</span><span>K.O. ${s.defeated.length}</span><span>STREAK ${s.hero.streak}</span></div></article>`;
+  }
+
+  renderSettings() {
+    const settings = this.engine.snapshot().settings;
+    if (this.panelTab === 'SAVE') return `<div class="game-save-tools">
+      <article class="game-card"><small>VERSIONED LOCAL SAVE</small><h3>PROGRESSION BACKUP</h3><p>Export a JSON backup, import a previous backup, or reset only the action-RPG save. Map missions are stored separately.</p></article>
+      <button class="game-panel-action" data-save-export>EXPORT SAVE JSON</button>
+      <label class="game-panel-action game-panel-file">IMPORT SAVE JSON<input type="file" accept="application/json" data-save-import></label>
+      <button class="game-panel-action game-panel-action--danger" data-save-reset>RESET GAME SAVE</button>
+    </div>`;
+    const toggle = (key, label) => `<label class="game-setting-row"><span>${label}</span><input type="checkbox" data-setting="${key}" ${settings[key] ? 'checked' : ''}></label>`;
+    return `<div class="game-settings-grid">
+      ${toggle('sfx', 'SFX')}${toggle('music', 'MUSIC')}${toggle('reduceMotion', 'REDUCE MOTION')}${toggle('screenShake', 'SCREEN SHAKE')}${toggle('comicText', 'COMIC TEXT')}${toggle('autoCombat', 'AUTO COMBAT')}
+      <label class="game-setting-row"><span>COMBAT SPEED</span><select data-setting="combatSpeed"><option value="1" ${settings.combatSpeed === 1 ? 'selected' : ''}>x1</option><option value="2" ${settings.combatSpeed === 2 ? 'selected' : ''}>x2</option></select></label>
+      <label class="game-setting-row"><span>DIFFICULTY</span><select data-setting="difficulty">${Object.keys(this.engine.content.difficulties).map((id) => `<option ${id === settings.difficulty ? 'selected' : ''}>${id}</option>`).join('')}</select></label>
+      <label class="game-setting-row game-setting-row--wide"><span>MASTER VOLUME // ${Math.round(settings.volume * 100)}%</span><input type="range" min="0" max="1" step="0.1" value="${settings.volume}" data-setting="volume"></label>
+    </div><p class="game-settings-note">Difficulty applies fully when the next enemy or patrol begins. Quest combat remains the only source of persistent progression.</p>`;
+  }
+
+  bindSettings(content) {
+    content.querySelectorAll('[data-setting]').forEach((control) => control.addEventListener('change', () => {
+      const key = control.dataset.setting;
+      const value = control.type === 'checkbox' ? control.checked : key === 'volume' || key === 'combatSpeed' ? Number(control.value) : control.value;
+      const settings = this.engine.updateSettings({ [key]: value });
+      if (key === 'sfx') this.sound.stateStore.setState({ soundEnabled: settings.sfx });
+      if (key === 'volume') this.sound.setMasterVolume(settings.volume);
+      if (key === 'music') this.sound.setMusicEnabled(settings.music);
+      this.sound.playSelect();
+      this.renderPanel();
+    }));
+    content.querySelector('[data-save-export]')?.addEventListener('click', () => {
+      const blob = new Blob([this.engine.exportSave()], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob); link.download = `spidey-life-save-${Date.now()}.json`; link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 0);
+    });
+    content.querySelector('[data-save-import]')?.addEventListener('change', async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      try { this.engine.importSave(await file.text()); this.toast('SAVE IMPORTED'); }
+      catch (error) { this.toast(`IMPORT FAILED // ${error.message}`); }
+    });
+    content.querySelector('[data-save-reset]')?.addEventListener('click', () => {
+      if (window.confirm('Reset action-RPG progression? Map missions will be preserved.')) { this.engine.resetSave(); this.toast('GAME SAVE RESET'); }
+    });
+  }
+
+  syncAutoCombat(settings) {
+    window.clearInterval(this.autoTimer);
+    this.autoTimer = null;
+    if (!settings.autoCombat || document.hidden) return;
+    const interval = Math.round(4200 / (settings.combatSpeed || 1));
+    this.autoTimer = window.setInterval(() => {
+      if (document.body.dataset.gameMode !== 'ARENA' || !document.getElementById('game-panel-backdrop')?.hasAttribute('hidden')) return;
+      this.bus.emit('RPG_UPDATED', { action: 'demo', animation: 'attack_01', comicText: ['POW!', 'THWIP!'], demo: true });
+    }, interval);
   }
 
   toast(message) {

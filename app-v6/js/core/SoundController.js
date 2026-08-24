@@ -11,6 +11,8 @@ export class SoundController {
       fresh: new URL('../../assets/audio/calling_all_webheads.mp3', import.meta.url).href
     };
     this.unlocked = false;
+    this.masterVolume = 0.8;
+    this.musicEnabled = true;
   }
 
   init() {
@@ -38,7 +40,7 @@ export class SoundController {
       }
       audio.pause();
       audio.currentTime = 0;
-      audio.volume = volume;
+      audio.volume = Math.max(0, Math.min(1, volume * this.masterVolume));
       audio.play().catch(() => {});
     } catch { /* audio remains optional */ }
   }
@@ -46,14 +48,20 @@ export class SoundController {
   playTrackerJingle() { this.playSample('jingle', 0.58); }
   playActivityVoice() { this.playSample('activity', 0.78); }
   playFreshSightingVoice() { this.playSample('fresh', 0.78); }
-  playArenaIntro() { this.playSample('jingle', 0.52); }
+  playArenaIntro() { if (this.musicEnabled) this.playSample('jingle', 0.52); }
   playCrimeAlert() { this.playSample('activity', 0.72); }
   playAllyCall() { this.playSample('fresh', 0.72); }
-  playVictoryCue() { this.playSample('jingle', 0.62); }
+  playVictoryCue() { if (this.musicEnabled) this.playSample('jingle', 0.62); }
 
   isEnabled() {
     return this.stateStore.get('soundEnabled');
   }
+
+  setMasterVolume(value) {
+    this.masterVolume = Math.max(0, Math.min(1, Number(value) || 0));
+  }
+
+  setMusicEnabled(enabled) { this.musicEnabled = Boolean(enabled); }
 
   playTone(freq, type = 'square', duration = 0.1, gainVal = 0.1) {
     if (!this.isEnabled()) return;
@@ -70,7 +78,7 @@ export class SoundController {
       osc.type = type;
       osc.frequency.setValueAtTime(freq, this.audioCtx.currentTime);
 
-      gain.gain.setValueAtTime(gainVal, this.audioCtx.currentTime);
+      gain.gain.setValueAtTime(gainVal * this.masterVolume, this.audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, this.audioCtx.currentTime + duration);
 
       osc.connect(gain);
@@ -134,5 +142,16 @@ export class SoundController {
   playPerfectDodge() {
     this.playTone(1450, 'sine', 0.06, 0.07);
     setTimeout(() => this.playTone(1900, 'sine', 0.14, 0.05), 60);
+  }
+
+  playGameSfx(id) {
+    const players = {
+      PUNCH_LIGHT: () => this.playCombatHit(),
+      WEB_SHOOT: () => this.playWebAction(),
+      GADGET_DEPLOY: () => this.playGadgetAction(),
+      ALLY_CALL: () => this.playAllyCall(),
+      ULTIMATE: () => this.playHeavyImpact()
+    };
+    players[id]?.();
   }
 }

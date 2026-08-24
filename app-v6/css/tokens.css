@@ -62,6 +62,23 @@
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.25s ease;
+
+  /* Canonical action-RPG semantic tokens */
+  --game-bg: #071426;
+  --panel-bg: #0b2034;
+  --panel-border: #397c9b;
+  --hero-primary: #f0645c;
+  --hero-secondary: #54b6d0;
+  --hp: #83b96b;
+  --energy: #54b6d0;
+  --xp: #9ed9e7;
+  --ultimate: #f2c06b;
+  --boss-hp: #f0645c;
+  --stagger: #f2c06b;
+  --rarity-common: #d9e0df;
+  --rarity-rare: #54b6d0;
+  --rarity-epic: #b88ae6;
+  --rarity-legendary: #f2c06b;
 }
 
 *, *::before, *::after {
