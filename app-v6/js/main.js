@@ -1,26 +1,26 @@
 /* WEB OPS TRACKER V6 - MAIN APPLICATION BOOTSTRAPPER */
 
 import { EventBus } from './core/EventBus.js';
-import { StateStore } from './core/StateStore.js?v=tracker-audio-1';
-import { SoundController } from './core/SoundController.js?v=tracker-audio-1';
-import { MapEngine } from './map/MapEngine.js?v=map-resize-2';
-import { MarkerLayer } from './map/MarkerLayer.js?v=spidey-assets-1';
+import { StateStore } from './core/StateStore.js?build=classic-tracker';
+import { SoundController } from './core/SoundController.js?build=classic-tracker';
+import { MapEngine } from './map/MapEngine.js?build=classic-tracker';
+import { MarkerLayer } from './map/MarkerLayer.js?build=classic-tracker';
 import { GeolocationController } from './map/GeolocationController.js';
 import { GeocoderAdapter } from './map/GeocoderAdapter.js';
 import { MapEntryRepository } from './data/MapEntryRepository.js';
 import { GeoJsonTransfer } from './data/GeoJsonTransfer.js';
 import { NotionAdapter } from './integrations/notion/NotionAdapter.js';
-import { TrackerFrame } from './ui/TrackerFrame.js?v=map-first-1';
+import { TrackerFrame } from './ui/TrackerFrame.js?build=classic-tracker';
 import { SearchPanel } from './ui/SearchPanel.js';
 import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
 import { MarkerDossier } from './ui/MarkerDossier.js';
-import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?v=spidey-allies-1';
-import { HubOverlayPanels } from './ui/HubOverlayPanels.js?v=map-first-1';
+import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=classic-tracker';
+import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=classic-tracker';
 import { MapGuideModal } from './ui/MapGuideModal.js';
-import { HeroAnimationController } from './game/HeroAnimationController.js?v=phase-a-2';
-import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?v=phase-a-2';
-import { ActionRpgController } from './ui/ActionRpgController.js?v=phase-a-2';
+import { HeroAnimationController } from './game/HeroAnimationController.js?build=classic-tracker';
+import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=classic-tracker';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=classic-tracker';
 
 class App {
   constructor() {

@@ -21,11 +21,12 @@
   <link rel="stylesheet" href="./css/map.css" />
   <link rel="stylesheet" href="./css/panels.css" />
   <link rel="stylesheet" href="./css/mobile.css" />
-  <link rel="stylesheet" href="./css/spidey-hub.css?v=image-free-audio-1" />
-  <link rel="stylesheet" href="./css/minimal-tracker.css?v=map-first-1" />
-  <link rel="stylesheet" href="./css/action-rpg.css?v=locked-frame-1" />
+  <link rel="stylesheet" href="./css/spidey-hub.css" />
+  <link rel="stylesheet" href="./css/minimal-tracker.css" />
+  <link rel="stylesheet" href="./css/action-rpg.css" />
+  <link rel="stylesheet" href="./css/classic-tracker.css" />
 </head>
-<body data-game-mode="ARENA" data-game-theme="DEFAULT">
+<body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
     <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
     <symbol id="icon-spider" viewBox="0 0 24 24"><path d="M9 5 6 2M15 5l3-3M8 9 3 6m13-6 5 6M8 13l-5 4m13-4 5 4M9 17l-3 5m9-5 3 5"/><ellipse cx="12" cy="9" rx="3" ry="4"/><ellipse cx="12" cy="16" rx="4" ry="5"/></symbol>
@@ -53,11 +54,11 @@
         </button>
 
         <div class="brand-plaque" aria-label="Spidey Life Tracker">
-          <strong class="tracker-wordmark">SPIDEY LIFE // ACTION RPG</strong>
-          <span class="brand-subtitle"><span id="hud-district-header">MANHATTAN ROOFTOP</span> <span id="live-clock">00:00:00</span></span>
+          <strong class="tracker-wordmark">SPIDEY TRACKER</strong>
+          <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
         </div>
 
-        <button class="sound-toggle header-sound-toggle" id="btn-sound-toggle" aria-label="Bật hoặc tắt âm thanh" aria-pressed="true"><svg><use href="#icon-sound"></use></svg><span>SFX ON</span></button>
+        <div class="system-signal" aria-label="Hệ thống trực tuyến"><i></i><span>ONLINE</span></div>
       </header>
 
       <main class="frame-main-content" id="tracker-main">
@@ -78,12 +79,10 @@
           </div>
           <div class="quest-directive"><span>MAIN QUEST</span><strong id="hud-main-quest">THE GOBLIN SIGNAL</strong><em id="hud-quest-progress">WAVE 1 / 5</em></div>
           <div class="action-combat-stage" id="action-combat-stage">
-            <div class="city-layer city-layer--sky"></div><div class="city-layer city-layer--far"></div><div class="city-layer city-layer--near"></div><div class="city-rain"></div>
             <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
             <div class="combat-location"><strong id="combat-district">MANHATTAN ROOFTOP</strong><span id="combat-weather">NIGHT // LIGHT RAIN</span></div>
-            <div class="arena-fighter arena-fighter--hero action-fighter--hero"><button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác Spider tiếp theo"><i class="hero-sprite-actor" aria-hidden="true"></i></button><span>SPIDER HERO</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
-            <div class="combat-center-mark">VS</div>
-            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><img id="combat-enemy-image" src="./assets/brand/goblin-rival-pixel-v1.png" alt="Current enemy" /><span id="combat-enemy-short">THUG</span></div>
+            <div class="arena-fighter arena-fighter--hero action-fighter--hero"><button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác hero tiếp theo"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></button><span>HERO SLOT</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
+            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div class="combat-placeholder combat-placeholder--enemy" id="combat-enemy-image" role="img" aria-label="Enemy placeholder"><b>FOE</b></div><span id="combat-enemy-short">THUG</span></div>
             <aside class="combat-info-panel" aria-label="Combat information">
               <small id="enemy-tier">TIER 1</small><strong id="enemy-name">STREET THUG</strong>
               <label>HP <span id="enemy-hp-text">85 / 85</span><i><b id="enemy-hp-fill"></b></i></label>
@@ -176,6 +175,12 @@
         </div>
 
       </main>
+
+      <footer class="frame-bottom-bar">
+        <div class="tracker-corner-operative" aria-label="Vị trí nhân vật góc — ảnh tạm"><i></i><b>HERO</b></div>
+        <div class="ticker-display" aria-live="polite"><span class="ticker-prefix">WEB-WIRE</span><strong id="frame-status-ticker">MISSION SYSTEMS ONLINE // READY TO SWING</strong></div>
+        <button class="sound-toggle bottom-sound-toggle" id="btn-sound-toggle" aria-label="Bật hoặc tắt âm thanh" aria-pressed="true"><svg><use href="#icon-sound"></use></svg><span>SFX ON</span></button>
+      </footer>
 
     </div>
   </div>
@@ -378,6 +383,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?v=life-notion-1"></script>
+  <script type="module" src="./js/main.js?build=classic-tracker"></script>
 </body>
 </html>

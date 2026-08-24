@@ -179,7 +179,7 @@ export class ActionRpgController {
   renderVerse() {
     const d = this.engine.data;
     if (this.panelTab === 'TEAM') return `<div class="game-card"><small>ACTIVE TEAM // 2 MEMBERS</small><h3>PETER + MILES</h3><p>Main Hero: ${d.hero.name}<br>Assist: ${d.ally.name} — ${d.ally.skill}</p><footer>SPIDER-VERSE SYNERGY // ${d.ally.bonus}</footer></div>`;
-    return `<div class="game-card-grid"><article class="game-card roster-card"><span class="roster-sprite" style="background-position:0 0"></span><div><small>MAIN HERO</small><h3>${d.hero.name}</h3><p>${d.hero.variant} // ${d.hero.rank}</p></div></article><article class="game-card roster-card"><span class="roster-sprite" style="background-position:11.11% 0"></span><div><small>ACTIVE ALLY</small><h3>${d.ally.name}</h3><p>${d.ally.skill}</p><footer>${d.ally.bonus}</footer></div></article></div>`;
+    return `<div class="game-card-grid"><article class="game-card roster-card"><span class="roster-placeholder" aria-label="Hero image placeholder"><b>HERO</b></span><div><small>MAIN HERO</small><h3>${d.hero.name}</h3><p>${d.hero.variant} // ${d.hero.rank}</p></div></article><article class="game-card roster-card"><span class="roster-placeholder roster-placeholder--ally" aria-label="Ally image placeholder"><b>ALLY</b></span><div><small>ACTIVE ALLY</small><h3>${d.ally.name}</h3><p>${d.ally.skill}</p><footer>${d.ally.bonus}</footer></div></article></div>`;
   }
 
   renderHero() {
