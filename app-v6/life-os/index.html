@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./life-os.css" />
+  <link rel="stylesheet" href="./life-os.css?v=notion-cloud-1" />
 </head>
 <body>
   <div class="web-atmosphere" aria-hidden="true"></div>
@@ -25,20 +25,20 @@
 
   <main class="os-shell">
     <aside class="system-rail" aria-label="Ứng dụng đời sống">
-      <button class="system-nav active" data-view="today"><span>✓</span><b>Hôm nay</b><small>Quick tasks</small></button>
+      <button class="system-nav active" data-view="today"><span>✓</span><b>Hôm nay</b><small>Notion missions</small></button>
       <button class="system-nav" data-view="routine"><span>◉</span><b>Nhịp sinh học</b><small>Routine cloud</small></button>
       <button class="system-nav" data-view="dopamine"><span>⚡</span><b>Dopamine</b><small>Menu cloud</small></button>
-      <button class="system-nav" data-view="timetable"><span>◷</span><b>Timetable</b><small>24h live</small></button>
-      <button class="system-nav" data-view="habits"><span>⌁</span><b>Thói quen</b><small>Daily streak</small></button>
-      <button class="system-nav" data-view="journal"><span>✎</span><b>Nhật ký</b><small>Chronicle</small></button>
-      <button class="system-nav" data-view="gym"><span>◆</span><b>Gym OS</b><small>Train & log</small></button>
+      <button class="system-nav" data-view="timetable"><span>◷</span><b>Timetable</b><small>Notion city clock</small></button>
+      <button class="system-nav" data-view="habits"><span>⌁</span><b>Thói quen</b><small>Notion tracker</small></button>
+      <button class="system-nav" data-view="journal"><span>✎</span><b>Nhật ký</b><small>Notion chronicle</small></button>
+      <button class="system-nav" data-view="gym"><span>◆</span><b>Gym OS</b><small>Notion training</small></button>
     </aside>
 
     <section class="system-stage">
       <div class="stage-topline"><span id="view-kicker">TODAY // QUICK CAPTURE</span><span id="today-label"></span></div>
 
       <section class="os-view active" data-panel="today">
-        <div class="hero-copy"><div><small>HABIT HÔM NAY</small><h1>Việc nhỏ.<br><em>Nhịp lớn.</em></h1></div><p>Chốt những việc cần làm trước khi thành phố đổi nhịp. Mỗi lần hoàn thành là một tín hiệu rõ ràng, không phải một danh sách vô tận.</p></div>
+        <div class="hero-copy"><div><small>HABIT HÔM NAY // <span data-notion-status>NOTION CONNECTING</span></small><h1>Việc nhỏ.<br><em>Nhịp lớn.</em></h1></div><p>Mission lấy trực tiếp từ Notion. Hoàn thành ở đây sẽ cập nhật lại cùng một nguồn, không tạo danh sách riêng cho thiết bị này.</p></div>
         <div class="metric-strip" id="today-metrics"></div>
         <form class="quick-form" id="task-form"><input id="task-input" maxlength="100" placeholder="Việc tiếp theo là gì?" required /><select id="task-area"><option>Cá nhân</option><option>Công việc</option><option>Học tập</option><option>Sức khỏe</option></select><button>THÊM NHIỆM VỤ</button></form>
         <div class="mission-list" id="task-list"></div>
@@ -60,7 +60,7 @@
       </section>
 
       <section class="os-view" data-panel="timetable">
-        <div class="hero-copy compact"><div><small>TIMETABLE // 24H LIVE</small><h1>Thành phố<br><em>đang chuyển động.</em></h1></div><button class="sense-button small" id="spin-schedule">◉ QUAY NHIỆM VỤ</button></div>
+        <div class="hero-copy compact"><div><small>TIMETABLE // <span data-notion-status>NOTION CONNECTING</span></small><h1>Thành phố<br><em>đang chuyển động.</em></h1></div><button class="sense-button small" id="spin-schedule">◉ SPIDER-SENSE PICK</button></div>
         <div class="time-command">
           <div class="clock-orbit"><div class="clock-web"></div><div class="clock-hand" id="clock-hand"></div><div class="clock-core"><span id="clock-time">00:00</span><small id="clock-period">CURRENT SIGNAL</small></div></div>
           <div class="active-slot" id="active-slot"></div>
@@ -69,18 +69,18 @@
       </section>
 
       <section class="os-view" data-panel="habits">
-        <div class="hero-copy compact"><div><small>HABIT TRACKER // DAILY</small><h1>Xây chuỗi.<br><em>Giữ bản sắc.</em></h1></div><div class="score-ring"><strong id="habit-score">0%</strong><small>HÔM NAY</small></div></div>
+        <div class="hero-copy compact"><div><small>HABIT TRACKER // <span data-notion-status>NOTION CONNECTING</span></small><h1>Xây chuỗi.<br><em>Giữ bản sắc.</em></h1></div><div class="score-ring"><strong id="habit-score">0%</strong><small>HÔM NAY</small></div></div>
         <div class="habit-section"><div class="section-label">DIGITAL LIMITS</div><div class="habit-grid" id="limit-grid"></div></div>
         <div class="habit-section"><div class="section-label">GOOD SIGNALS</div><div class="habit-grid" id="habit-grid"></div></div>
       </section>
 
       <section class="os-view" data-panel="journal">
-        <div class="hero-copy compact"><div><small>LIFE CHRONICLE</small><h1>Ghi lại điều<br><em>đáng nhớ.</em></h1></div><button class="sense-button small" id="new-entry">＋ ENTRY MỚI</button></div>
+        <div class="hero-copy compact"><div><small>LIFE CHRONICLE // <span data-notion-status>NOTION CONNECTING</span></small><h1>Ghi lại điều<br><em>đáng nhớ.</em></h1></div></div>
         <div class="journal-layout"><div class="journal-feed" id="journal-feed"></div><form class="journal-editor" id="journal-form"><label>TÂM TRẠNG<select id="journal-mood"><option>😊</option><option>🙂</option><option>😐</option><option>😔</option><option>😤</option></select></label><label>TIÊU ĐỀ<input id="journal-title" maxlength="100" placeholder="Điều gì nổi bật?" required /></label><label>NỘI DUNG<textarea id="journal-content" rows="9" placeholder="Viết rõ điều đã xảy ra và điều bạn nhận ra…" required></textarea></label><div class="editor-foot"><span id="word-count">0 từ</span><button>LƯU CHRONICLE</button></div></form></div>
       </section>
 
       <section class="os-view" data-panel="gym">
-        <div class="hero-copy compact"><div><small>GYM OS // TRAIN & LOG</small><h1>Lift. Log.<br><em>Grow.</em></h1></div><button class="sense-button small" id="log-workout">＋ LOG SESSION</button></div>
+        <div class="hero-copy compact"><div><small>GYM OS // <span data-notion-status>NOTION CONNECTING</span></small><h1>Lift. Log.<br><em>Grow.</em></h1></div></div>
         <div class="gym-stats" id="gym-stats"></div>
         <div class="gym-layout"><div><div class="section-label">ROUTINE DECK</div><div class="routine-deck" id="gym-routines"></div></div><div><div class="section-label">RECENT ACTIVITY</div><div class="workout-feed" id="workout-feed"></div></div></div>
       </section>
@@ -88,6 +88,6 @@
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="./life-os.js"></script>
+  <script type="module" src="./life-os.js?v=notion-cloud-1"></script>
 </body>
 </html>

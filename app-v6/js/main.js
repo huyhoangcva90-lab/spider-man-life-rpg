@@ -3,7 +3,7 @@
 import { EventBus } from './core/EventBus.js';
 import { StateStore } from './core/StateStore.js?v=tracker-audio-1';
 import { SoundController } from './core/SoundController.js?v=tracker-audio-1';
-import { MapEngine } from './map/MapEngine.js?v=spidey-allies-1';
+import { MapEngine } from './map/MapEngine.js?v=map-resize-2';
 import { MarkerLayer } from './map/MarkerLayer.js?v=spidey-assets-1';
 import { GeolocationController } from './map/GeolocationController.js';
 import { GeocoderAdapter } from './map/GeocoderAdapter.js';
