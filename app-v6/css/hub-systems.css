@@ -1,0 +1,192 @@
+/* Five live systems inside the clawed SpideyTracker shell. */
+
+.system-signal { cursor: pointer; }
+.system-signal:focus-visible,
+.pixel-orb:focus-visible,
+.ticker-wrap:focus-visible,
+.footer-console-btn:focus-visible { outline: 4px solid #f2c06b; outline-offset: 2px; }
+
+.frame-bottom-bar {
+  grid-template-columns: minmax(180px, 527px) 42px 42px;
+  gap: 4px;
+  padding-left: 66px;
+}
+
+.ticker-wrap {
+  display: block;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ticker-wrap:hover .ticker-content { color: #fff2df; }
+.ticker-wrap:active { transform: translateY(2px); }
+
+.footer-console-btn {
+  display: grid;
+  width: 42px;
+  min-width: 42px;
+  height: 41px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background:
+    url('../assets/spideytracker/hub-ui/btn-white-1.png') left / 9px 41px no-repeat,
+    url('../assets/spideytracker/hub-ui/btn-white-3.png') right / 9px 41px no-repeat,
+    url('../assets/spideytracker/hub-ui/btn-white-2.png') center / 72px 41px repeat-x;
+  color: #05070b;
+  cursor: pointer;
+}
+
+.footer-console-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+.footer-console-btn--send { color: #a92326; }
+.footer-console-btn:hover { filter: brightness(1.16); transform: translateY(-1px); }
+.footer-console-btn:active { transform: translateY(2px); }
+
+.spidey-head-turn-sprite {
+  left: 12px;
+  bottom: 1px;
+  width: 46px;
+  height: 74px;
+  background: url('../assets/spideytracker/SpiderMan_HeadTurn.png') no-repeat 0 0 / 3496px 74px;
+  animation: spidey-head-turn 6.35s steps(76) infinite;
+  will-change: background-position;
+}
+
+.hanging-spidey {
+  animation: spidey-web-drop 6.4s steps(77) infinite;
+  will-change: background-position;
+}
+
+@keyframes spidey-head-turn { to { background-position-x: -3496px; } }
+@keyframes spidey-web-drop { to { background-position-x: -5467px; } }
+
+.game-primary-nav { align-items: end; }
+.game-primary-nav__arena,
+.game-mode-btn--arena { transform: none !important; }
+.game-primary-nav button { position: relative; overflow: hidden; }
+.game-primary-nav button::after { content: ''; position: absolute; inset: auto 8px 3px; height: 2px; background: currentColor; opacity: .18; }
+.game-primary-nav button.active::after { opacity: 1; }
+
+.game-panel { width: min(1040px, calc(100vw - 96px)); height: min(790px, calc(100vh - 110px)); }
+.game-panel-content { min-height: 0; }
+.game-panel-content:has(.embedded-life-shell) { overflow: hidden; padding: 8px; }
+
+.quest-source-banner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+  padding: 8px 10px;
+  border: 3px solid #05070b;
+  background: #102c45;
+  box-shadow: inset 0 0 0 2px #397c9b;
+}
+.quest-source-banner span { padding: 6px; background: #f0645c; color: #05070b; font: 700 7px/1 'Press Start 2P', monospace; }
+.quest-source-banner strong { color: #fff2df; font: 700 9px/1.3 'Press Start 2P', monospace; }
+.quest-source-banner small { color: #9ed9e7; font: 700 7px/1.4 'Silkscreen', monospace; }
+
+.embedded-life-shell {
+  display: grid;
+  grid-template-rows: 28px minmax(0, 1fr);
+  height: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  border: 3px solid #05070b;
+  background: #06101e;
+  box-shadow: inset 0 0 0 2px #397c9b;
+}
+.quest-source-banner + .embedded-life-shell { height: calc(100% - 61px); }
+.spider-cinema-cast + .embedded-life-shell { height: calc(100% - 76px); }
+.embedded-life-status { display: flex; align-items: center; gap: 7px; padding: 0 9px; border-bottom: 2px solid #05070b; background: #0d253a; font: 700 7px/1 'Silkscreen', monospace; }
+.embedded-life-status i { width: 8px; height: 8px; border: 2px solid #05070b; border-radius: 50%; background: #83b96b; box-shadow: 0 0 7px #83b96b; }
+.embedded-life-status span { color: #fff2df; }
+.embedded-life-status b { margin-left: auto; color: #83b96b; }
+.life-os-frame { display: block; width: 100%; height: 100%; border: 0; background: #06101e; }
+
+.spider-cinema-cast { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; height: 68px; margin-bottom: 7px; }
+.spider-cinema-cast article { display: flex; align-items: center; gap: 8px; overflow: hidden; border: 3px solid #05070b; background: #102c45; box-shadow: inset 0 0 0 2px #397c9b; }
+.spider-cinema-cast article:nth-child(2) { background: #572a35; box-shadow: inset 0 0 0 2px #f0645c; }
+.spider-cinema-cast article:nth-child(3) { background: #25483d; box-shadow: inset 0 0 0 2px #83b96b; }
+.cinema-spider { flex: 0 0 58px; width: 58px; height: 58px; background-image: url('../assets/spideytracker/spider-allies-sheet.png'); background-repeat: no-repeat; background-size: 1000% 1000%; image-rendering: pixelated; }
+.cinema-spider--tobey { background-position: 33.33% 0; }
+.cinema-spider--andrew { background-position: 44.44% 0; }
+.cinema-spider--tom { background-position: 66.67% 0; }
+.spider-cinema-cast b,.spider-cinema-cast small { display: block; }
+.spider-cinema-cast b { color: #fff2df; font: 700 9px/1 'Press Start 2P', monospace; }
+.spider-cinema-cast small { margin-top: 5px; color: #9ed9e7; font: 700 6px/1.35 'Silkscreen', monospace; }
+
+.verse-level-track { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 7px; min-height: 330px; align-items: stretch; }
+.verse-level { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 300px; padding: 12px 10px; overflow: hidden; border: 4px solid #05070b; background: linear-gradient(180deg, #173b55 0 45%, #091522 45%); box-shadow: inset 0 0 0 3px #397c9b, 4px 5px 0 rgba(0,0,0,.55); }
+.verse-level::before { content: ''; position: absolute; inset: 0; opacity: .18; background: repeating-radial-gradient(circle at 50% 28%, transparent 0 16px, #9ed9e7 17px 18px); }
+.verse-level > * { position: relative; }
+.verse-level span { margin-bottom: auto; color: #54b6d0; font: 700 7px/1 'Press Start 2P', monospace; }
+.verse-level strong { color: #fff2df; font: 700 11px/1.45 'Press Start 2P', monospace; }
+.verse-level small { margin: 7px 0 12px; color: #9ed9e7; font: 700 7px/1 'Silkscreen', monospace; }
+.verse-level b { padding: 7px 5px; background: #83b96b; color: #05070b; text-align: center; font: 700 7px/1 'Silkscreen', monospace; }
+.verse-level.locked { filter: grayscale(.85); opacity: .58; }
+.verse-level.locked b { background: #69727c; }
+.verse-level:nth-child(5) { background: linear-gradient(180deg,#5a2736 0 45%,#150912 45%); box-shadow: inset 0 0 0 3px #f0645c,4px 5px 0 rgba(0,0,0,.55); }
+
+.chat-center {
+  position: fixed;
+  z-index: 1200;
+  right: max(12px, calc((100vw - 1420px) / 2 + 25px));
+  bottom: 67px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(430px, calc(100vw - 28px));
+  height: min(520px, calc(100vh - 105px));
+  overflow: hidden;
+  border: 5px solid #05070b;
+  background: #0a1929;
+  box-shadow: inset 0 0 0 3px #397c9b, 9px 10px 0 rgba(0,0,0,.62);
+  transform: translateY(14px) scale(.98);
+  opacity: 0;
+  transition: opacity .16s steps(3), transform .16s steps(3);
+}
+.chat-center.active { transform: none; opacity: 1; }
+.chat-center[hidden] { display: none; }
+.chat-center > header { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 4px solid #05070b; background: #54b6d0; color: #05070b; }
+.chat-center > header small,.chat-center > header strong { display: block; }
+.chat-center > header small { font: 700 6px/1 'Silkscreen', monospace; }
+.chat-center > header strong { margin-top: 6px; font: 700 12px/1 'Press Start 2P', monospace; }
+.chat-center > header button { width: 34px; height: 34px; border: 3px solid #05070b; background: #fff2df; font-weight: 900; cursor: pointer; }
+.chat-thread-list { display: flex; flex-direction: column; gap: 8px; padding: 10px; overflow: auto; }
+.chat-message { display: grid; grid-template-columns: 38px 1fr; gap: 8px; padding: 8px; border: 3px solid #05070b; background: #102c45; box-shadow: inset 0 0 0 2px #397c9b; }
+.chat-message--own { background: #512733; box-shadow: inset 0 0 0 2px #f0645c; }
+.chat-avatar { display: grid; width: 36px; height: 36px; place-items: center; border: 3px solid #05070b; background: #f0645c; color: #05070b; font: 700 7px/1 'Press Start 2P', monospace; }
+.chat-message--green .chat-avatar { background: #83b96b; }.chat-message--amber .chat-avatar { background: #f2c06b; }
+.chat-message header { display: flex; justify-content: space-between; gap: 8px; color: #9ed9e7; font: 700 7px/1 'Silkscreen', monospace; }
+.chat-message p { margin: 7px 0 0; color: #fff2df; font: 600 11px/1.45 'Be Vietnam Pro', sans-serif; }
+.chat-composer { display: grid; grid-template-columns: 1fr 45px; gap: 5px; padding: 8px; border-top: 4px solid #05070b; background: #102c45; }
+.chat-composer input { min-width: 0; border: 3px solid #05070b; background: #050b12; color: #fff2df; padding: 0 10px; font: 600 11px 'Be Vietnam Pro', sans-serif; }
+.chat-composer button { display: grid; height: 42px; place-items: center; border: 3px solid #05070b; background: #f2c06b; color: #05070b; cursor: pointer; }
+.chat-composer svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+@media (max-width: 768px) {
+  .frame-bottom-bar { grid-template-columns: minmax(120px, 1fr) 34px 34px; padding-left: 44px; gap: 2px; }
+  .footer-console-btn { width: 34px; min-width: 34px; height: 33px; background-size: 7px 33px,7px 33px,58px 33px; }
+  .footer-console-btn svg { width: 16px; height: 16px; }
+  .spidey-head-turn-sprite { left: 1px; bottom: 0; width: 34px; height: 55px; background-size: 2584px 55px; transform: none; }
+  .game-panel { width: calc(100vw - 22px); height: calc(100vh - 78px); }
+  .quest-source-banner { grid-template-columns: 1fr; gap: 5px; }
+  .quest-source-banner small { display: none; }
+  .quest-source-banner + .embedded-life-shell { height: calc(100% - 75px); }
+  .spider-cinema-cast { height: 59px; gap: 3px; }
+  .cinema-spider { flex-basis: 48px; width: 48px; height: 48px; }
+  .spider-cinema-cast small { display: none; }
+  .spider-cinema-cast b { font-size: 6px; }
+  .verse-level-track { grid-template-columns: 1fr; min-height: 0; }
+  .verse-level { min-height: 116px; }
+  .chat-center { right: 8px; bottom: 52px; width: calc(100vw - 16px); height: min(510px, calc(100vh - 76px)); }
+}
+
+@media (max-width: 768px) { @keyframes spidey-head-turn { to { background-position-x: -2584px; } } }
+
+@media (prefers-reduced-motion: reduce) {
+  .spidey-head-turn-sprite,
+  .hanging-spidey { animation: none !important; }
+  .chat-center { transition: none; }
+}

@@ -1,8 +1,8 @@
 /* WEB OPS TRACKER V6 - MAIN APPLICATION BOOTSTRAPPER */
 
 import { EventBus } from './core/EventBus.js';
-import { StateStore } from './core/StateStore.js?build=static-spiders-nav';
-import { SoundController } from './core/SoundController.js?build=static-spiders-nav';
+import { StateStore } from './core/StateStore.js?build=hub-systems-1';
+import { SoundController } from './core/SoundController.js?build=hub-systems-1';
 import { MapEngine } from './map/MapEngine.js?build=static-spiders-nav';
 import { MarkerLayer } from './map/MarkerLayer.js?build=static-spiders-nav';
 import { GeolocationController } from './map/GeolocationController.js';
@@ -10,17 +10,18 @@ import { GeocoderAdapter } from './map/GeocoderAdapter.js';
 import { MapEntryRepository } from './data/MapEntryRepository.js';
 import { GeoJsonTransfer } from './data/GeoJsonTransfer.js';
 import { NotionAdapter } from './integrations/notion/NotionAdapter.js';
-import { TrackerFrame } from './ui/TrackerFrame.js?build=static-spiders-nav';
+import { TrackerFrame } from './ui/TrackerFrame.js?build=hub-systems-1';
 import { SearchPanel } from './ui/SearchPanel.js';
 import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
 import { MarkerDossier } from './ui/MarkerDossier.js';
 import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=static-spiders-nav';
-import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=static-spiders-nav';
+import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=hub-systems-1';
 import { MapGuideModal } from './ui/MapGuideModal.js';
 import { HeroAnimationController } from './game/HeroAnimationController.js?build=static-spiders-nav';
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=static-spiders-nav';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=static-spiders-nav';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=hub-systems-1';
+import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
 
 class App {
   constructor() {
@@ -49,6 +50,7 @@ class App {
     this.mapGuide = new MapGuideModal(this.state, this.bus, this.sound, GeoJsonTransfer, this.repo);
     this.heroAnimation = new HeroAnimationController(this.bus, this.sound);
     this.actionRpg = new ActionRpgController(this.bus, this.campaign, this.sound, this.mapEngine);
+    this.chatCenter = new ChatCenter(this.sound);
   }
 
   async init() {
@@ -65,6 +67,7 @@ class App {
     this.mapGuide.init();
     this.heroAnimation.init();
     this.actionRpg.init();
+    this.chatCenter.init();
     this.sound.playBootSound();
 
     // 2. Initialize Map Engine (Defaults to HCMC fallback: lng 106.7009, lat 10.7769)

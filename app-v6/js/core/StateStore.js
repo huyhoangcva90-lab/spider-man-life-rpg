@@ -7,6 +7,11 @@ export class StateStore {
     try {
       const savedSound = localStorage.getItem('spidey-sfx-enabled');
       soundEnabled = savedSound === null ? true : savedSound === '1';
+      if (localStorage.getItem('spidey-welcome-audio-v2') !== '1') {
+        soundEnabled = true;
+        localStorage.setItem('spidey-sfx-enabled', '1');
+        localStorage.setItem('spidey-welcome-audio-v2', '1');
+      }
     } catch { /* default to sound on */ }
     this.state = {
       activeFilter: 'ALL',          // 'ALL' | 'MEETING' | 'PERSON' | 'PLAN' | 'LEISURE' | 'ERRAND' | 'WORK' | 'NOTION_MISSION'

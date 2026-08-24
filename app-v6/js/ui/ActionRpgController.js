@@ -22,7 +22,7 @@ export class ActionRpgController {
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
       if (section === 'CITY') return this.selectSection('CITY');
       this.panelSection = section;
-      this.panelTab = tab || (section === 'QUESTS' ? 'MAIN' : section === 'VERSE' ? 'ROSTER' : 'PROFILE');
+      this.panelTab = tab || this.defaultTab(section);
       document.body.dataset.gameMode = 'ARENA';
       this.setActiveNav(section);
       const panel = document.getElementById('game-panel-backdrop'); panel?.removeAttribute('hidden'); panel?.removeAttribute('inert');
@@ -138,7 +138,7 @@ export class ActionRpgController {
 
   openPanel(section) {
     this.panelSection = section;
-    this.panelTab = section === 'QUESTS' ? 'MAIN' : section === 'SETTINGS' ? 'GAME' : section;
+    this.panelTab = this.defaultTab(section);
     const panel = document.getElementById('game-panel-backdrop');
     panel?.removeAttribute('hidden'); panel?.removeAttribute('inert');
     this.renderPanel();
@@ -155,14 +155,59 @@ export class ActionRpgController {
     const tabs = document.getElementById('game-panel-tabs');
     const content = document.getElementById('game-panel-content');
     if (!title || !tabs || !content) return;
-    title.textContent = this.panelSection === 'QUESTS' ? 'NHIỆM VỤ' : this.panelSection === 'VERSE' ? 'SPIDER-VERSE' : this.panelSection === 'SETTINGS' ? 'GAME SETTINGS / SAVE' : 'HERO / BUILD';
-    const tabNames = this.panelSection === 'QUESTS' ? ['MAIN','SIDE','DAILY','COMPLETED'] : this.panelSection === 'VERSE' ? ['ROSTER','TEAM'] : this.panelSection === 'SETTINGS' ? ['GAME','SAVE'] : ['PROFILE','SKILLS','GADGETS','INVENTORY'];
+    const titles = { QUESTS: 'MISSIONS // GAMBIT', TIMETABLE: 'TIMETABLE // SPIDER PATROL', VERSE: 'SPIDER-VERSE // 5 LEVELS', LIFE: 'LIFE SYSTEMS', SETTINGS: 'GAME SETTINGS / SAVE', HERO: 'HERO / BUILD' };
+    title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
+    const tabMap = {
+      QUESTS: ['MAIN','DAILY'],
+      TIMETABLE: ['SCHEDULE'],
+      VERSE: ['CHALLENGE','TEAM','SKILLS','GADGETS'],
+      LIFE: ['DOPAMINE','RHYTHM','JOURNAL','GYM'],
+      SETTINGS: ['GAME','SAVE'],
+      HERO: ['PROFILE','SKILLS','GADGETS','INVENTORY']
+    };
+    const tabNames = tabMap[this.panelSection] || ['PROFILE'];
     if (!tabNames.includes(this.panelTab)) this.panelTab = tabNames[0];
     tabs.innerHTML = tabNames.map((tab) => `<button class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab}</button>`).join('');
     tabs.querySelectorAll('button').forEach((button) => button.addEventListener('click', () => { this.sound.playSelect(); this.panelTab = button.dataset.gamePanelTab; this.renderPanel(); }));
-    content.innerHTML = this.panelSection === 'QUESTS' ? this.renderQuests() : this.panelSection === 'VERSE' ? this.renderVerse() : this.panelSection === 'SETTINGS' ? this.renderSettings() : this.renderHero();
+    content.innerHTML = this.renderSection();
     content.querySelector('[data-open-real-mission]')?.addEventListener('click', () => { this.closePanel(); this.bus.emit('OPEN_EDITOR', { type: 'WORK', status: 'PLANNED' }); });
     this.bindSettings(content);
+  }
+
+  defaultTab(section) {
+    return ({ QUESTS: 'MAIN', TIMETABLE: 'SCHEDULE', VERSE: 'CHALLENGE', LIFE: 'DOPAMINE', SETTINGS: 'GAME', HERO: 'PROFILE' })[section] || 'PROFILE';
+  }
+
+  renderSection() {
+    if (this.panelSection === 'QUESTS') return this.renderMissionApp();
+    if (this.panelSection === 'TIMETABLE') return this.renderTimetableApp();
+    if (this.panelSection === 'VERSE') return this.renderVerse();
+    if (this.panelSection === 'LIFE') return this.renderLifeApp();
+    if (this.panelSection === 'SETTINGS') return this.renderSettings();
+    return this.renderHero();
+  }
+
+  renderLifeFrame(view, label) {
+    return `<div class="embedded-life-shell"><div class="embedded-life-status"><i></i><span>${label}</span><b>NOTION + SHARED CLOUD</b></div><iframe class="life-os-frame" src="./life-os/?embed=1#${view}" title="${label}" loading="eager"></iframe></div>`;
+  }
+
+  renderMissionApp() {
+    const isDaily = this.panelTab === 'DAILY';
+    return `<div class="quest-source-banner"><span>${isDaily ? 'DAILY QUEST' : 'MAIN QUEST'}</span><strong>${isDaily ? 'HABITS TỪ GAMBIT / NOTION' : 'TODO TỪ GAMBIT / NOTION'}</strong><small>Một nguồn dữ liệu online — không tạo list local riêng.</small></div>${this.renderLifeFrame(isDaily ? 'habits' : 'today', isDaily ? 'HABIT TODAY' : 'MAIN TODO')}`;
+  }
+
+  renderTimetableApp() {
+    return `<div class="spider-cinema-cast" aria-label="Ba Spider-Man patrol profiles">
+      <article><i class="cinema-spider cinema-spider--tobey"></i><span><b>TOBEY</b><small>EARTH-96283 // ENDURANCE</small></span></article>
+      <article><i class="cinema-spider cinema-spider--andrew"></i><span><b>ANDREW</b><small>EARTH-120703 // AGILITY</small></span></article>
+      <article><i class="cinema-spider cinema-spider--tom"></i><span><b>TOM</b><small>EARTH-199999 // TECH</small></span></article>
+    </div>${this.renderLifeFrame('timetable', 'CITY CLOCK / 3-SPIDER PATROL')}`;
+  }
+
+  renderLifeApp() {
+    const routes = { DOPAMINE: ['dopamine', 'DOPAMINE DICE'], RHYTHM: ['routine', 'CIRCADIAN RHYTHM'], JOURNAL: ['journal', 'LIFE CHRONICLE'], GYM: ['gym', 'GYM OS'] };
+    const [view, label] = routes[this.panelTab] || routes.DOPAMINE;
+    return this.renderLifeFrame(view, label);
   }
 
   renderQuests() {
@@ -177,9 +222,23 @@ export class ActionRpgController {
   }
 
   renderVerse() {
+    const s = this.engine.snapshot();
     const d = this.engine.data;
-    if (this.panelTab === 'TEAM') return `<div class="game-card"><small>ACTIVE TEAM // 2 MEMBERS</small><h3>PETER + MILES</h3><p>Main Hero: ${d.hero.name}<br>Assist: ${d.ally.name} — ${d.ally.skill}</p><footer>SPIDER-VERSE SYNERGY // ${d.ally.bonus}</footer></div>`;
-    return `<div class="game-card-grid"><article class="game-card roster-card"><span class="roster-placeholder" aria-label="Hero image placeholder"><b>HERO</b></span><div><small>MAIN HERO</small><h3>${d.hero.name}</h3><p>${d.hero.variant} // ${d.hero.rank}</p></div></article><article class="game-card roster-card"><span class="roster-placeholder roster-placeholder--ally" aria-label="Ally image placeholder"><b>ALLY</b></span><div><small>ACTIVE ALLY</small><h3>${d.ally.name}</h3><p>${d.ally.skill}</p><footer>${d.ally.bonus}</footer></div></article></div>`;
+    if (this.panelTab === 'TEAM') return `<div class="game-card-grid"><article class="game-card"><small>ACTIVE TEAM // 3 SPIDER-MEN</small><h3>TOBEY + ANDREW + TOM</h3><p>Chọn đội hình theo Endurance, Agility hoặc Tech trước mỗi ải.</p><footer>ASSIST SLOT // ${d.ally.name} — ${d.ally.skill}</footer></article><article class="game-card"><small>TEAM SYNERGY</small><h3>THREE GENERATIONS</h3><p>${d.ally.bonus}</p><footer>ULTIMATE: WEB OF DESTINY</footer></article></div>`;
+    if (this.panelTab === 'SKILLS') return this.renderHeroTab('SKILLS');
+    if (this.panelTab === 'GADGETS') return this.renderHeroTab('GADGETS');
+    const levels = [
+      ['1', 'STREET SIGNAL', 'GRUNTS', 1], ['2', 'ROOFTOP HUNT', 'ELITES', 2], ['3', 'OSCORP BREACH', 'MINI BOSS', 3], ['4', 'SINISTER GATE', 'BOSS RUSH', 4], ['5', 'WEB OF DESTINY', 'MULTIVERSE BOSS', 5]
+    ];
+    return `<div class="verse-level-track">${levels.map(([level, name, foe, required]) => { const unlocked = s.hero.level >= required; return `<article class="verse-level ${unlocked ? 'unlocked' : 'locked'}"><span>LEVEL ${level}</span><strong>${name}</strong><small>${foe}</small><b>${unlocked ? 'READY' : `LOCKED // HERO LV ${required}`}</b></article>`; }).join('')}</div>`;
+  }
+
+  renderHeroTab(tab) {
+    const previous = this.panelTab;
+    this.panelTab = tab;
+    const html = this.renderHero();
+    this.panelTab = previous;
+    return html;
   }
 
   renderHero() {

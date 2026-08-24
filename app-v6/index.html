@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#071426" />
   <title>SPIDEY LIFE TRACKER — Mission Hub</title>
+  <link rel="icon" type="image/png" href="./assets/spideytracker/favicon.png" />
   
   <!-- MapLibre GL JS Engine -->
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" />
@@ -25,6 +26,7 @@
   <link rel="stylesheet" href="./css/spidey-hub.css" />
   <link rel="stylesheet" href="./css/current-content-overrides.css?build=static-spiders-nav" />
   <link rel="stylesheet" href="./css/clawed-hub.css?build=hub-slices-1" />
+  <link rel="stylesheet" href="./css/hub-systems.css?build=hub-systems-1" />
 </head>
 <body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
@@ -44,6 +46,9 @@
     <symbol id="icon-arena" viewBox="0 0 24 24"><path d="m5 4 14 16M19 4 5 20M8 3l3 3-5 5-3-3 5-5Zm8 0-3 3 5 5 3-3-5-5Z"/><path d="M8 18h8v3H8z"/></symbol>
     <symbol id="icon-web-map" viewBox="0 0 24 24"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Z"/><path d="M9 3v16m6-14v16"/></symbol>
     <symbol id="icon-missions" viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M9 8h6m-6 4h6m-6 4h4"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></symbol>
+    <symbol id="icon-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="8" cy="8" r="1"/><circle cx="16" cy="8" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/></symbol>
+    <symbol id="icon-send" viewBox="0 0 24 24"><path d="m3 11 18-8-7 18-3-7-8-3Z"/><path d="m11 14 4-4"/></symbol>
   </svg>
 
   <div class="tracker-viewport">
@@ -65,7 +70,7 @@
           <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
         </div>
 
-        <div class="system-signal" aria-label="Hệ thống trực tuyến"><i></i><span>ONLINE</span></div>
+        <button class="system-signal" id="btn-map-mode" aria-label="Mở bản đồ nhiệm vụ" title="CITY MAP"><i></i><span>ONLINE</span></button>
       </header>
 
       <main class="frame-main-content" id="tracker-main">
@@ -139,11 +144,11 @@
         </div>
 
         <nav class="game-primary-nav" aria-label="Màn hình game chính">
-          <button data-game-section="QUESTS"><svg><use href="#icon-missions"></use></svg><span>NHIỆM VỤ</span></button>
-          <button data-game-section="VERSE"><svg><use href="#icon-spider"></use></svg><span>SPIDER-VERSE</span></button>
+          <button data-game-section="QUESTS"><svg><use href="#icon-missions"></use></svg><span>MISSIONS</span></button>
+          <button data-game-section="TIMETABLE"><svg><use href="#icon-clock"></use></svg><span>TIMETABLE</span></button>
           <button class="game-primary-nav__arena active" data-game-section="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>ARENA</span></button>
-          <button data-game-section="CITY"><svg><use href="#icon-web-map"></use></svg><span>THÀNH PHỐ</span></button>
-          <button data-game-section="HERO"><svg><use href="#icon-mask"></use></svg><span>HERO</span></button>
+          <button data-game-section="VERSE"><svg><use href="#icon-spider"></use></svg><span>SPIDER-VERSE</span></button>
+          <button data-game-section="LIFE"><svg><use href="#icon-dice"></use></svg><span>LIFE SYSTEMS</span></button>
         </nav>
         <div class="game-panel-backdrop" id="game-panel-backdrop" hidden inert><section class="game-panel" aria-modal="true" role="dialog" aria-labelledby="game-panel-title"><header><div><small id="game-panel-kicker">SPIDEY LIFE</small><h2 id="game-panel-title">MISSIONS</h2></div><button id="game-panel-close" aria-label="Đóng">✕</button></header><nav id="game-panel-tabs" aria-label="Game panel tabs"></nav><div class="game-panel-content" id="game-panel-content"></div></section></div>
 
@@ -186,17 +191,24 @@
 
       <footer class="frame-bottom-bar">
         <div class="spidey-head-turn-sprite" aria-hidden="true"></div>
-        <div class="ticker-wrap">
+        <button class="ticker-wrap" id="btn-chat-list" type="button" aria-label="Mở Message Center">
           <div class="ticker-content">
-            <span class="ticker-status-tag">SYS // ONLINE</span>
-            MAP YOUR REAL-LIFE MISSIONS <span id="ticker-gps-readout">• GPS: STANDBY</span> • ONE LIFE, ONE SOURCE OF TRUTH
+            <span class="ticker-status-tag">MESSAGE CENTER</span>
+            TAP TO OPEN CHAT LIST <span id="ticker-gps-readout">• GPS: STANDBY</span> • YOUR FRIENDLY NEIGHBORHOOD IS ONLINE
           </div>
-        </div>
-        <button class="sound-toggle" id="btn-sound-toggle" aria-label="Bật hoặc tắt âm thanh" aria-pressed="true"><svg><use href="#icon-sound"></use></svg><span>SFX ON</span></button>
+        </button>
+        <button class="footer-console-btn footer-console-btn--send" id="btn-chat-compose" aria-label="Soạn tin nhắn" title="Gửi tin nhắn"><svg><use href="#icon-send"></use></svg></button>
+        <button class="footer-console-btn footer-console-btn--settings" id="btn-footer-settings" aria-label="Mở cài đặt" title="Settings"><svg><use href="#icon-gear"></use></svg></button>
       </footer>
 
     </div>
   </div>
+
+  <aside class="chat-center" id="chat-center" hidden inert aria-label="Message Center">
+    <header><div><small>SPIDEY NETWORK // ONLINE</small><strong>MESSAGE CENTER</strong></div><button id="chat-center-close" aria-label="Đóng">✕</button></header>
+    <div class="chat-thread-list" id="chat-thread-list"></div>
+    <form class="chat-composer" id="chat-composer"><input id="chat-message-input" maxlength="180" placeholder="Nhắn cho Spider-Team…" autocomplete="off" required /><button aria-label="Gửi"><svg><use href="#icon-send"></use></svg></button></form>
+  </aside>
 
   <!-- MODAL 1: ENTRY EDITOR (CREATE / EDIT) -->
   <div class="panel-backdrop" id="editor-modal-backdrop" hidden inert>
@@ -396,6 +408,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=hub-slices-1"></script>
+  <script type="module" src="./js/main.js?build=hub-systems-1"></script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 import { SoundController } from '../js/core/SoundController.js?v=tracker-audio-1';
 import { LifeDataGateway } from './LifeDataGateway.js?v=notion-cloud-1';
 
+if (new URLSearchParams(location.search).get('embed') === '1') document.body.classList.add('is-embedded');
+
 const CLOUD_ORIGIN = document.documentElement.dataset.cloudOrigin || location.origin;
 const CLOUD_KEYS = { routine: 'spidery-routine-v1', dopamine: 'spidery-dopamine-v1' };
 const cloudUrl = (key) => `${CLOUD_ORIGIN.replace(/\/$/, '')}/api/cloud?key=${encodeURIComponent(CLOUD_KEYS[key])}`;

@@ -96,7 +96,10 @@ export class SoundController {
     const played = await this.playTrackerJingle();
     if (!played && !this.entryFallbackBound) {
       this.entryFallbackBound = true;
-      window.addEventListener('pointerdown', () => this.playTrackerJingle(), { once: true, capture: true });
+      window.addEventListener('pointerdown', () => {
+        this.audioCtx?.resume?.();
+        this.playTrackerJingle();
+      }, { once: true, capture: true });
     }
   }
 

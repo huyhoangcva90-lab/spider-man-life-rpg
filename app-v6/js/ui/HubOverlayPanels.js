@@ -43,6 +43,8 @@ export class HubOverlayPanels {
     const apps = [
       ['QUESTS:MAIN', 'STORY', 'Chapter và Main Quest', '◆', 'red'],
       ['QUESTS:DAILY', 'QUEST LOG', 'Main · Side · Daily', '✓', 'cyan'],
+      ['TIMETABLE:SCHEDULE', 'TIMETABLE', 'Tobey · Andrew · Tom patrol', '◷', 'cyan'],
+      ['LIFE:DOPAMINE', 'LIFE SYSTEMS', 'Dopamine · Nhịp sinh học', '⚡', 'green'],
       ['VERSE:ROSTER', 'SPIDER-VERSE', 'Hero, Ally và Team', '◉', 'amber'],
       ['HERO:SKILLS', 'SKILL TREE', 'Combat · Web · Spider-Sense', '⚡', 'cyan'],
       ['HERO:GADGETS', 'GADGETS', 'Impact Web · Drone · EMP', '⌁', 'green'],

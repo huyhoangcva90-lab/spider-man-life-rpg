@@ -120,6 +120,16 @@ export class TrackerFrame {
       if (!current) this.sound.playTrackerJingle();
     });
 
+    document.getElementById('btn-map-mode')?.addEventListener('click', () => {
+      this.sound.playSelect();
+      this.bus.emit('GAME_MENU_TARGET', { section: 'CITY' });
+    });
+
+    document.getElementById('btn-footer-settings')?.addEventListener('click', () => {
+      this.sound.playSelect();
+      this.bus.emit('GAME_MENU_TARGET', { section: 'SETTINGS', tab: 'GAME' });
+    });
+
     // Activity Log Button
     document.getElementById('btn-activity-log')?.addEventListener('click', () => {
       this.sound.playClick();
