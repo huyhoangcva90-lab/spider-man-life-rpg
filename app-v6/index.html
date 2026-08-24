@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="./css/panels.css" />
   <link rel="stylesheet" href="./css/mobile.css" />
   <link rel="stylesheet" href="./css/spidey-hub.css?v=image-free-audio-1" />
+  <link rel="stylesheet" href="./css/minimal-tracker.css?v=map-first-1" />
+  <link rel="stylesheet" href="./css/action-rpg.css?v=phase-one-1" />
 </head>
 <body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
@@ -51,11 +53,11 @@
         </button>
 
         <div class="brand-plaque" aria-label="Spidey Life Tracker">
-          <strong class="tracker-wordmark">SPIDEY TRACKER</strong>
-          <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
+          <strong class="tracker-wordmark">SPIDEY LIFE // ACTION RPG</strong>
+          <span class="brand-subtitle"><span id="hud-district-header">MANHATTAN ROOFTOP</span> <span id="live-clock">00:00:00</span></span>
         </div>
 
-        <div class="system-signal" aria-label="Hệ thống trực tuyến"><i></i><span>ONLINE</span></div>
+        <button class="sound-toggle header-sound-toggle" id="btn-sound-toggle" aria-label="Bật hoặc tắt âm thanh" aria-pressed="true"><svg><use href="#icon-sound"></use></svg><span>SFX ON</span></button>
       </header>
 
       <main class="frame-main-content" id="tracker-main">
@@ -63,92 +65,80 @@
         <div class="map-dark-filter map-mode-only"></div>
         <div class="map-scanlines map-mode-only" aria-hidden="true"></div>
 
-        <section class="arena-mode-screen" id="arena-mode-screen" aria-label="Spider Life Arena">
-          <div class="arena-stat-bar">
-            <div class="arena-level-badge"><span>LV</span><strong id="arena-level">1</strong></div>
-            <div class="arena-xp"><span>OPERATIVE XP</span><div class="arena-meter"><i id="arena-xp-fill"></i></div><b id="arena-xp-text">0 / 100</b></div>
-            <div class="arena-currency"><span>WEB COINS</span><strong id="arena-coins">0</strong></div>
-            <div class="arena-streak"><span>STREAK</span><strong><b id="arena-streak">0</b>D</strong></div>
-          </div>
-          <div class="arena-contract-strip">
-            <span>ACTIVE RAID</span><strong id="arena-raid-name">GREEN GOBLIN // RAID 1</strong><em id="arena-weakness">WEAK: FOCUS</em>
-          </div>
-          <div class="arena-stage">
-            <div class="arena-web-grid" aria-hidden="true"></div>
-            <div class="arena-fighter arena-fighter--hero">
-              <div class="combat-sigil combat-sigil--operative" aria-hidden="true"><b>OPS</b><i></i></div>
-              <span>OPERATIVE</span>
+        <section class="action-rpg-screen" id="action-rpg-screen" aria-label="Spider-Man Action Arena">
+          <div class="game-hud-strip">
+            <div class="hud-avatar"><span class="hud-mask">◉</span><div><small>HERO</small><strong>PETER // CLASSIC</strong><em id="hud-rank">FRIENDLY NEIGHBORHOOD</em></div></div>
+            <div class="hud-stat hud-stat--level"><small>LV</small><strong id="hud-level">1</strong></div>
+            <div class="hud-bars">
+              <label>EXP <span id="hud-xp-text">0 / 100</span><i><b id="hud-xp-fill"></b></i></label>
+              <label>HP <span id="hud-hp-text">120 / 120</span><i><b id="hud-hp-fill"></b></i></label>
+              <label>WEB <span id="hud-web-text">100 / 100</span><i><b id="hud-web-fill"></b></i></label>
             </div>
-            <div class="arena-versus">VS</div>
-            <div class="arena-fighter arena-fighter--villain"><div class="combat-sigil combat-sigil--threat" aria-hidden="true"><b>!</b><i></i></div><span>THREAT</span></div>
+            <div class="hud-economy"><span><small>WEB COINS</small><b id="hud-coins">0</b></span><span><small>STREAK</small><b><i id="hud-streak">0</i>D</b></span></div>
           </div>
-          <div class="arena-boss-panel">
-            <div class="arena-boss-heading"><strong id="arena-boss-label">GREEN GOBLIN</strong><span id="arena-boss-hp-text">900 / 900 HP</span></div>
-            <div class="arena-hp-meter"><i id="arena-boss-hp-fill"></i></div>
-            <p id="arena-status-text">HOÀN THÀNH NHIỆM VỤ ĐỂ TUNG ĐÒN</p>
+          <div class="quest-directive"><span>MAIN QUEST</span><strong id="hud-main-quest">THE GOBLIN SIGNAL</strong><em id="hud-quest-progress">WAVE 1 / 5</em></div>
+          <div class="action-combat-stage" id="action-combat-stage">
+            <div class="city-layer city-layer--sky"></div><div class="city-layer city-layer--far"></div><div class="city-layer city-layer--near"></div><div class="city-rain"></div>
+            <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
+            <div class="combat-location"><strong id="combat-district">MANHATTAN ROOFTOP</strong><span id="combat-weather">NIGHT // LIGHT RAIN</span></div>
+            <div class="arena-fighter arena-fighter--hero action-fighter--hero"><button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác Spider tiếp theo"><i class="hero-sprite-actor" aria-hidden="true"></i></button><span>SPIDER HERO</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
+            <div class="combat-center-mark">VS</div>
+            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><img id="combat-enemy-image" src="./assets/brand/goblin-rival-pixel-v1.png" alt="Current enemy" /><span id="combat-enemy-short">THUG</span></div>
+            <aside class="combat-info-panel" aria-label="Combat information">
+              <small id="enemy-tier">TIER 1</small><strong id="enemy-name">STREET THUG</strong>
+              <label>HP <span id="enemy-hp-text">85 / 85</span><i><b id="enemy-hp-fill"></b></i></label>
+              <label>STAGGER <span id="enemy-stagger-text">0%</span><i><b id="enemy-stagger-fill"></b></i></label>
+              <dl><div><dt>WEAK</dt><dd id="enemy-weakness">WEB</dd></div><div><dt>RESIST</dt><dd id="enemy-resistance">NONE</dd></div><div><dt>PHASE</dt><dd id="enemy-phase">1</dd></div></dl>
+              <p id="combat-log-line">PATROL STARTED // MANHATTAN ROOFTOP</p>
+            </aside>
           </div>
-          <button class="arena-battle-btn" id="arena-battle-btn"><svg><use href="#icon-arena"></use></svg><span>START MISSION</span><small>REAL-LIFE ACTION = DAMAGE</small></button>
-          <div class="arena-quick-actions" aria-label="Thao tác nhanh">
-            <button id="btn-add-entry"><svg><use href="#icon-plus"></use></svg><span>NEW MISSION</span></button>
-            <button id="btn-activity-log"><svg><use href="#icon-book"></use></svg><span>CHRONICLE</span></button>
-            <button id="btn-unlocated-missions"><svg><use href="#icon-database"></use></svg><span>NOTION <b id="unlocated-count-badge">0</b></span></button>
+          <div class="combat-action-bar" aria-label="Combat actions">
+            <button data-combat-action="attack"><svg><use href="#icon-arena"></use></svg><strong>COMBO</strong><small>READY</small></button>
+            <button data-combat-action="web"><svg><use href="#icon-web-map"></use></svg><strong>WEB SHOT</strong><small id="cooldown-web">18 WEB</small></button>
+            <button data-combat-action="gadget"><svg><use href="#icon-gear"></use></svg><strong>GADGET</strong><small id="cooldown-gadget">3 CHARGES</small></button>
+            <button data-combat-action="ally"><svg><use href="#icon-mask"></use></svg><strong>CALL MILES</strong><small id="cooldown-ally">READY</small></button>
+            <button class="combat-action--ultimate" data-combat-action="ultimate"><svg><use href="#icon-bolt"></use></svg><strong>ULTIMATE</strong><small id="ultimate-charge">0%</small></button>
           </div>
+          <div class="ultimate-meter"><span>ULTIMATE</span><i><b id="ultimate-fill"></b></i><button id="btn-next-patrol" hidden>NEXT PATROL →</button></div>
         </section>
 
         <div class="map-status-card map-mode-only" aria-live="polite">
-          <span class="map-status-kicker">DIRECT VICINITY</span>
-          <strong><span id="visible-mission-count">0</span> NHIỆM VỤ ĐANG HIỆN</strong>
+          <span class="map-status-kicker">MISSION MAP</span>
+          <strong><span id="visible-mission-count">0</span> NHIỆM VỤ</strong>
           <span id="gps-status-text">GPS CHƯA BẬT</span>
         </div>
 
         <aside class="rail-left map-mode-only" aria-label="Bộ lọc bản đồ">
-          <button class="filter-btn active filter-btn--asset" data-filter="ALL" style="--filter-color:#f2c06b" aria-label="Hiện tất cả"><img src="./assets/spideytracker/filter_white.png" alt="" /><span class="filter-label">ALL</span><span class="filter-count">0</span></button>
-          <button class="filter-btn filter-btn--asset" data-filter="WORK" style="--filter-color:#f0645c" aria-label="Công việc"><img src="./assets/spideytracker/filter_red.png" alt="" /><span class="filter-label">WORK</span><span class="filter-count">0</span></button>
-          <button class="filter-btn filter-btn--asset" data-filter="NOTION_MISSION" style="--filter-color:#83b96b" aria-label="Nhiệm vụ Notion"><img src="./assets/spideytracker/filter_green.png" alt="" /><span class="filter-label">NOTION</span><span class="filter-count">0</span></button>
-          <button class="filter-btn rail-more" data-filter="MEETING" style="--filter-color:#d9e0df" aria-label="Cuộc họp"><svg><use href="#icon-mask"></use></svg><span class="filter-label">MEET</span><span class="filter-count">0</span></button>
-          <button class="filter-btn rail-more" data-filter="PLAN" style="--filter-color:#54b6d0" aria-label="Kế hoạch"><svg><use href="#icon-compass"></use></svg><span class="filter-label">PLAN</span><span class="filter-count">0</span></button>
-          <button class="filter-btn rail-more" data-filter="LEISURE" style="--filter-color:#9ac66f" aria-label="Phục hồi"><svg><use href="#icon-home"></use></svg><span class="filter-label">REST</span><span class="filter-count">0</span></button>
-          <button class="filter-btn rail-more" data-filter="ERRAND" style="--filter-color:#e2a658" aria-label="Việc vặt"><svg><use href="#icon-bolt"></use></svg><span class="filter-label">ERRAND</span><span class="filter-count">0</span></button>
-          <button class="filter-btn rail-more" data-filter="PERSON" style="--filter-color:#bd8ed1" aria-label="Con người"><svg><use href="#icon-mask"></use></svg><span class="filter-label">PEOPLE</span><span class="filter-count">0</span></button>
+          <button class="filter-btn active" data-filter="ALL" style="--filter-color:#f2c06b" aria-label="Hiện tất cả"><svg><use href="#icon-target"></use></svg><span class="filter-label">ALL</span><span class="filter-count">0</span></button>
+          <button class="filter-btn" data-filter="WORK" style="--filter-color:#f0645c" aria-label="Công việc"><svg><use href="#icon-missions"></use></svg><span class="filter-label">WORK</span><span class="filter-count">0</span></button>
+          <button class="filter-btn" data-filter="NOTION_MISSION" style="--filter-color:#83b96b" aria-label="Nhiệm vụ Notion"><svg><use href="#icon-database"></use></svg><span class="filter-label">NOTION</span><span class="filter-count">0</span></button>
         </aside>
 
         <aside class="rail-right map-mode-only" aria-label="Điều khiển bản đồ">
           <button class="map-control-btn" id="btn-zoom-in" title="Phóng to" aria-label="Phóng to"><svg><use href="#icon-plus"></use></svg></button>
           <button class="map-control-btn" id="btn-zoom-out" title="Thu nhỏ" aria-label="Thu nhỏ"><span class="minus-glyph"></span></button>
-          <button class="map-control-btn map-control-btn--asset map-control-btn--accent" id="btn-center-gps" title="Vị trí của tôi" aria-label="Căn giữa vị trí của tôi"><img src="./assets/spideytracker/map_center.png" alt="" /></button>
-          <button class="map-control-btn map-control-btn--asset" id="btn-reset-north" title="Đưa bản đồ về hướng Bắc" aria-label="Đưa bản đồ về hướng Bắc"><img src="./assets/spideytracker/globe_btn.png" alt="" /></button>
-          <button class="map-control-btn" id="btn-track-toggle" title="Bám theo GPS" aria-label="Bám theo GPS"><svg><use href="#icon-bolt"></use></svg></button>
-          <button class="map-control-btn" id="btn-map-guide" title="Hệ thống bản đồ" aria-label="Hướng dẫn và dữ liệu bản đồ"><svg><use href="#icon-gear"></use></svg></button>
+          <button class="map-control-btn map-control-btn--accent" id="btn-center-gps" title="Vị trí của tôi" aria-label="Căn giữa vị trí của tôi"><svg><use href="#icon-compass"></use></svg></button>
         </aside>
 
         <div class="frame-search-row map-mode-only">
           <div class="search-panel">
             <div class="search-input-wrap">
               <svg class="search-leading-icon"><use href="#icon-search"></use></svg>
-              <input type="search" id="search-input" class="form-input search-input-field" aria-label="Tìm địa điểm" placeholder="TÌM ĐỊA ĐIỂM / NHIỆM VỤ..." />
-              <button class="search-submit-btn" id="search-submit-btn" title="Tìm kiếm"><span class="search-btn-text">SCAN</span></button>
+              <input type="search" id="search-input" class="form-input search-input-field" aria-label="Tìm địa điểm" placeholder="TÌM ĐỊA ĐIỂM HOẶC NHIỆM VỤ" />
+              <button class="search-submit-btn" id="search-submit-btn" title="Tìm kiếm"><span class="search-btn-text">TÌM</span></button>
             </div>
             <div id="search-results-dropdown" class="search-dropdown-menu"></div>
           </div>
         </div>
 
-        <nav class="game-mode-dock" aria-label="Chế độ Spider Life">
-          <button class="game-mode-btn" data-mode="MISSIONS"><svg><use href="#icon-missions"></use></svg><span>MISSIONS</span></button>
-          <button class="game-mode-btn game-mode-btn--arena active" data-mode="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>ARENA</span></button>
-          <button class="game-mode-btn" data-mode="MAP"><svg><use href="#icon-web-map"></use></svg><span>MAP</span></button>
-          <button class="game-mode-btn" data-mode="PROFILE"><svg><use href="#icon-target"></use></svg><span>PROFILE</span></button>
+        <nav class="game-primary-nav" aria-label="Màn hình game chính">
+          <button data-game-section="QUESTS"><svg><use href="#icon-missions"></use></svg><span>NHIỆM VỤ</span></button>
+          <button data-game-section="VERSE"><svg><use href="#icon-spider"></use></svg><span>SPIDER-VERSE</span></button>
+          <button class="game-primary-nav__arena active" data-game-section="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>ARENA</span></button>
+          <button data-game-section="CITY"><svg><use href="#icon-web-map"></use></svg><span>THÀNH PHỐ</span></button>
+          <button data-game-section="HERO"><svg><use href="#icon-mask"></use></svg><span>HERO</span></button>
         </nav>
-
-        <!-- WEB OPERATIVE CHARACTER CALLOUT DIALOG OVERLAY -->
-        <div class="operative-callout hidden" id="operative-callout" hidden inert>
-          <div class="callout-bubble">
-            <div class="callout-close-btn" id="callout-close-btn">✕</div>
-            <div class="callout-title">WEB OPERATIVE INSTRUCTION</div>
-            <div class="callout-text">
-              Chào Đặc Vụ! Bản đồ là một <strong>MAP MODE</strong> để quan sát và điều hướng. Muốn tạo nhiệm vụ, hãy dùng nút <strong>+ NEW MISSION</strong>.
-            </div>
-          </div>
-        </div>
+        <div class="game-panel-backdrop" id="game-panel-backdrop" hidden inert><section class="game-panel" aria-modal="true" role="dialog" aria-labelledby="game-panel-title"><header><div><small id="game-panel-kicker">SPIDEY LIFE</small><h2 id="game-panel-title">MISSIONS</h2></div><button id="game-panel-close" aria-label="Đóng">✕</button></header><nav id="game-panel-tabs" aria-label="Game panel tabs"></nav><div class="game-panel-content" id="game-panel-content"></div></section></div>
 
         <!-- SIDE DRAWER: ACTIVITY LOG -->
         <div class="side-drawer-panel" id="activity-log-drawer" hidden inert>
@@ -186,16 +176,6 @@
         </div>
 
       </main>
-
-      <footer class="frame-bottom-bar">
-        <div class="ticker-wrap">
-          <div class="ticker-content">
-            <span class="ticker-status-tag">SYS // ONLINE</span>
-            MAP YOUR REAL-LIFE MISSIONS <span id="ticker-gps-readout">• GPS: STANDBY</span> • ONE LIFE, ONE SOURCE OF TRUTH
-          </div>
-        </div>
-        <button class="sound-toggle" id="btn-sound-toggle" aria-label="Bật hoặc tắt âm thanh" aria-pressed="true"><svg><use href="#icon-sound"></use></svg><span>SFX ON</span></button>
-      </footer>
 
     </div>
   </div>
@@ -340,18 +320,12 @@
     </div>
   </div>
 
-  <!-- MODAL 3: LIFE RPG HUB -->
+  <!-- LIFE OS LAUNCHER -->
   <div class="panel-backdrop" id="hub-overlay-backdrop" hidden inert>
     <div class="pixel-modal hub-modal-shell" style="max-width: 860px;">
       <div class="modal-header">
-        <span class="modal-title">SPIDEY LIFE // COMMAND CENTER</span>
+        <span class="modal-title">SPIDEY LIFE // GAME MENU</span>
         <button class="modal-close-btn" id="hub-modal-close">✕</button>
-      </div>
-      <div class="hub-tab-strip" role="tablist" aria-label="Các khu vực Life RPG">
-        <button class="hub-tab-btn active" data-tab="HOME" role="tab"><svg><use href="#icon-home"></use></svg><span>HOME</span></button>
-        <button class="hub-tab-btn" data-tab="LIFE_OS" role="tab"><svg><use href="#icon-database"></use></svg><span>LIFE OS</span></button>
-        <button class="hub-tab-btn" data-tab="RPG" role="tab"><svg><use href="#icon-mask"></use></svg><span>RPG</span></button>
-        <button class="hub-tab-btn" data-tab="CHRONICLE" role="tab"><svg><use href="#icon-book"></use></svg><span>LOG</span></button>
       </div>
       <div class="modal-body" id="hub-tab-content"></div>
     </div>
@@ -404,6 +378,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?v=combat-vfx-1"></script>
+  <script type="module" src="./js/main.js?v=phase-one-1"></script>
 </body>
 </html>

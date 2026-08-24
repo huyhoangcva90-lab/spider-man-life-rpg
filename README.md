@@ -25,6 +25,15 @@ Các nút không có nội dung đã được loại bỏ. Giao diện không d�
 
 Hero Arena dùng sprite sheet hành động với 17 state từ `idle` tới `victory`. Mission hoàn thành sẽ tự chạy combo/skill/ultimate phù hợp, kèm VFX truyện tranh `THWIP!`, `POW!`, `KRAK!` và impact shake. Có thể bấm trực tiếp vào hero để duyệt thử từng state.
 
+## Phase 1 action-RPG vertical slice
+
+- Một district chơi được: Manhattan Rooftop, nền thành phố nhiều lớp và mưa đêm.
+- Encounter chain: Street Thug → Tech Gunner → Shield Enemy → Hunter Captain → Green Goblin.
+- Combat thực: Combo, Web Shot, Impact Web, Call Miles, Ultimate/Finisher; có HP, Web Energy, cooldown, charges, stagger, weakness, resistance và boss phase.
+- Main/Side/Daily quest, reward, inventory, skill tree nhỏ, ba gadget và Spider-Verse team bonus đều đọc từ module dữ liệu thay vì hard-code trong HTML.
+- Hoàn thành nhiệm vụ đời thật là trigger chính cho animation, damage, XP, Web Coins, daily progress và loot.
+- Ba sample audio gốc được giữ nguyên: `spidey_jingle` cho Arena/victory, `another_day_another_sighting` cho crime/wave mới, `calling_all_webheads` cho Ally Call.
+
 ## Chạy local
 
 Đây là ứng dụng HTML/CSS/JavaScript module không cần build step. Vì trình duyệt chặn ES modules khi mở bằng `file://`, hãy phục vụ thư mục bằng một static server, ví dụ:

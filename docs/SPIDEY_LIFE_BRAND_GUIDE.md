@@ -59,6 +59,12 @@ The Arena hero uses the supplied `combat-actions-sheet.png` through a sprite-she
 5. One battle action linked to real-life missions.
 6. Functional modes: Missions, Allies, Arena, Map, Profile.
 
+## Gameplay-first rule
+
+The default screen is a live action-RPG vertical slice—not a productivity dashboard. Real-life tasks remain an input into the loop: `Quest complete → animation → combat action → enemy damage → reward → next encounter`. Phase 1 includes one district, one hero, one ally, three standard enemies, one elite, one boss, three gadgets, a compact skill tree, and Main/Side/Daily quests.
+
+The three retained audio samples have fixed semantic roles: Arena/victory jingle, crime/wave alert, and Spider-Verse ally call. Combat hit, web, dodge, and gadget micro-SFX are synthesized and always respect the global sound toggle.
+
 ## Generated project assets
 
 - `app-v6/assets/brand/spidey-life-brand-board-v1.png`: project-bound design reference.

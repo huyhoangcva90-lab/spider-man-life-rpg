@@ -23,7 +23,6 @@ export class SoundController {
       window.addEventListener('pointerdown', () => {
         if (!this.isEnabled()) return;
         this.audioCtx?.resume?.();
-        this.playTrackerJingle();
       }, { once: true, capture: true });
     }
   }
@@ -47,6 +46,10 @@ export class SoundController {
   playTrackerJingle() { this.playSample('jingle', 0.58); }
   playActivityVoice() { this.playSample('activity', 0.78); }
   playFreshSightingVoice() { this.playSample('fresh', 0.78); }
+  playArenaIntro() { this.playSample('jingle', 0.52); }
+  playCrimeAlert() { this.playSample('activity', 0.72); }
+  playAllyCall() { this.playSample('fresh', 0.72); }
+  playVictoryCue() { this.playSample('jingle', 0.62); }
 
   isEnabled() {
     return this.stateStore.get('soundEnabled');
@@ -106,5 +109,30 @@ export class SoundController {
   playWarning() {
     this.playTone(300, 'sawtooth', 0.15, 0.08);
     setTimeout(() => this.playTone(220, 'sawtooth', 0.2, 0.08), 120);
+  }
+
+  playCombatHit() {
+    this.playTone(150, 'square', 0.06, 0.1);
+    setTimeout(() => this.playTone(82, 'sawtooth', 0.08, 0.07), 36);
+  }
+
+  playHeavyImpact() {
+    this.playTone(96, 'sawtooth', 0.14, 0.14);
+    setTimeout(() => this.playTone(58, 'square', 0.18, 0.1), 45);
+  }
+
+  playWebAction() {
+    this.playTone(1180, 'sine', 0.05, 0.06);
+    setTimeout(() => this.playTone(420, 'triangle', 0.12, 0.07), 48);
+  }
+
+  playGadgetAction() {
+    this.playTone(360, 'square', 0.05, 0.06);
+    setTimeout(() => this.playTone(760, 'square', 0.1, 0.08), 62);
+  }
+
+  playPerfectDodge() {
+    this.playTone(1450, 'sine', 0.06, 0.07);
+    setTimeout(() => this.playTone(1900, 'sine', 0.14, 0.05), 60);
   }
 }

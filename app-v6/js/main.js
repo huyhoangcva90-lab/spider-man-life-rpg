@@ -10,23 +10,24 @@ import { GeocoderAdapter } from './map/GeocoderAdapter.js';
 import { MapEntryRepository } from './data/MapEntryRepository.js';
 import { GeoJsonTransfer } from './data/GeoJsonTransfer.js';
 import { NotionAdapter } from './integrations/notion/NotionAdapter.js';
-import { BootSequence } from './ui/BootSequence.js';
-import { TrackerFrame } from './ui/TrackerFrame.js?v=tracker-audio-1';
+import { TrackerFrame } from './ui/TrackerFrame.js?v=map-first-1';
 import { SearchPanel } from './ui/SearchPanel.js';
 import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
 import { MarkerDossier } from './ui/MarkerDossier.js';
 import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?v=spidey-allies-1';
-import { HubOverlayPanels } from './ui/HubOverlayPanels.js?v=life-rpg-1';
+import { HubOverlayPanels } from './ui/HubOverlayPanels.js?v=map-first-1';
 import { MapGuideModal } from './ui/MapGuideModal.js';
-import { LifeRpgEngine } from './game/LifeRpgEngine.js?v=life-rpg-1';
-import { GameModeController } from './ui/GameModeController.js?v=arena-hub-1';
+import { HeroAnimationController } from './game/HeroAnimationController.js?v=phase-one-1';
+import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?v=phase-one-1';
+import { ActionRpgController } from './ui/ActionRpgController.js?v=phase-one-1';
 
 class App {
   constructor() {
     this.bus = new EventBus();
     this.state = new StateStore(this.bus);
     this.sound = new SoundController(this.state);
+    this.campaign = new PhaseOneGameEngine(this.bus);
     
     this.repo = new MapEntryRepository(this.bus);
     this.geocoder = new GeocoderAdapter();
@@ -35,18 +36,16 @@ class App {
     this.mapEngine = new MapEngine(this.bus, this.sound);
     this.markerLayer = new MarkerLayer(this.mapEngine, this.bus, this.sound);
     this.geolocation = new GeolocationController(this.state, this.sound);
-    this.lifeRpg = new LifeRpgEngine(this.bus);
-
     this.trackerFrame = new TrackerFrame(this.state, this.bus, this.sound);
     this.searchPanel = new SearchPanel(this.geocoder, this.bus, this.sound);
     this.entryEditor = new EntryEditor(this.repo, this.bus, this.sound, this.geocoder);
     this.activityLog = new ActivityLog(this.repo, this.state, this.bus, this.sound);
     this.markerDossier = new MarkerDossier(this.repo, this.state, this.bus, this.sound);
     this.unlocatedQueue = new UnlocatedMissionQueue(this.notion, this.bus, this.sound);
-    this.hubOverlay = new HubOverlayPanels(this.state, this.bus, this.sound, this.repo, this.lifeRpg);
+    this.hubOverlay = new HubOverlayPanels(this.state, this.bus, this.sound);
     this.mapGuide = new MapGuideModal(this.state, this.bus, this.sound, GeoJsonTransfer, this.repo);
-    this.gameModes = new GameModeController(this.bus, this.sound, this.mapEngine, this.lifeRpg);
-    this.bootSequence = new BootSequence(this.sound);
+    this.heroAnimation = new HeroAnimationController(this.bus, this.sound);
+    this.actionRpg = new ActionRpgController(this.bus, this.campaign, this.sound, this.mapEngine);
   }
 
   async init() {
@@ -61,10 +60,12 @@ class App {
     this.unlocatedQueue.init();
     this.hubOverlay.init();
     this.mapGuide.init();
-    this.gameModes.init();
+    this.heroAnimation.init();
+    this.actionRpg.init();
 
     // 2. Initialize Map Engine (Defaults to HCMC fallback: lng 106.7009, lat 10.7769)
-    await this.mapEngine.init('map', 'CARTO_DARK');
+    await this.mapEngine.init('map', 'OSM_RASTER');
+    window.requestAnimationFrame(() => this.mapEngine.resize());
 
     // 3. Load Notion snapshot & update Notion queue & badge immediately
     await this.notion.loadSnapshot();
@@ -80,10 +81,6 @@ class App {
     // NOTE: GPS is NOT requested automatically on boot per requirements.
     // Geolocation must be initiated from a user gesture (e.g. clicking Center GPS / Track button).
 
-    // 6. Run Onboarding Boot Sequence
-    this.bootSequence.run(() => {
-      console.log('[App] Boot sequence finished.');
-    });
   }
 
   bindCoreEvents() {
@@ -96,8 +93,6 @@ class App {
           this.markerDossier.close();
         } else if (document.getElementById('hub-overlay-backdrop')?.classList.contains('active')) {
           this.hubOverlay.close();
-        } else if (document.getElementById('ally-selector-backdrop')?.classList.contains('active')) {
-          this.allySelector.close();
         } else if (document.getElementById('map-guide-modal-backdrop')?.classList.contains('active')) {
           this.mapGuide.close();
         } else if (document.getElementById('activity-log-drawer')?.classList.contains('active')) {
@@ -120,9 +115,9 @@ class App {
     this.bus.on('ENTRY_UPDATED', refreshUI);
     this.bus.on('ENTRY_DELETED', refreshUI);
 
-    // Canonical Life RPG trigger: reward each entry once, only after it reaches DONE.
-    this.bus.on('ENTRY_CREATED', (entry) => this.lifeRpg.completeEntry(entry));
-    this.bus.on('ENTRY_UPDATED', (entry) => this.lifeRpg.completeEntry(entry));
+    // Real-life completion is the canonical trigger for game combat and rewards.
+    this.bus.on('ENTRY_CREATED', (entry) => this.campaign.completeRealQuest(entry));
+    this.bus.on('ENTRY_UPDATED', (entry) => this.campaign.completeRealQuest(entry));
 
     // Filter change
     this.bus.on('FILTER_CHANGED', (filter) => {

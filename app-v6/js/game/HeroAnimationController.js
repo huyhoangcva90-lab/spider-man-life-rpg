@@ -52,8 +52,15 @@ export class HeroAnimationController {
   }
 
   async playCombatResult(result = {}) {
+    if (result.blocked) return;
+    if (result.heroKo) return this.sequence(['hurt', 'KO', 'combat_idle']);
+    if (result.perfectDodge) return this.sequence(['dodge', 'attack_02', 'combat_idle']);
     if (result.victory) return this.sequence(['attack_03', 'victory']);
     if (result.finisher) return this.sequence(['jump', 'ultimate', 'combat_idle']);
+    if (result.animation) {
+      const animation = result.animation === 'ally_call' ? 'skill_02' : result.animation;
+      if (HERO_ANIMATIONS.includes(animation)) return this.sequence([animation, 'combat_idle']);
+    }
     if (result.weaknessMatch) {
       const skill = ['skill_01', 'skill_02', 'skill_03'][this.attackIndex++ % 3];
       return this.sequence([skill, 'combat_idle']);
@@ -110,11 +117,11 @@ export class HeroAnimationController {
     effect.className = `comic-vfx comic-vfx--${type}`;
     effect.innerHTML = `<i></i><b>${word}</b><span></span>`;
     layer.appendChild(effect);
-    document.querySelector('.arena-stage')?.classList.add('combat-impact');
+    document.querySelector('.arena-stage, .action-combat-stage')?.classList.add('combat-impact');
     document.querySelector('.arena-fighter--villain')?.classList.add('villain-hit');
     window.setTimeout(() => {
       effect.remove();
-      document.querySelector('.arena-stage')?.classList.remove('combat-impact');
+      document.querySelector('.arena-stage, .action-combat-stage')?.classList.remove('combat-impact');
       document.querySelector('.arena-fighter--villain')?.classList.remove('villain-hit');
     }, 760);
   }

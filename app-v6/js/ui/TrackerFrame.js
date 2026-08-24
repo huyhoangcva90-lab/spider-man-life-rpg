@@ -13,7 +13,6 @@ export class TrackerFrame {
     this.bindFilters();
     this.bindRightControls();
     this.bindTopControls();
-    this.bindCallout();
     this.updateGpsStatusDisplay();
     this.updateSoundBtn(this.state.get('soundEnabled'));
 
@@ -150,7 +149,7 @@ export class TrackerFrame {
     // Hub Overlay Menu
     document.getElementById('btn-hub-menu')?.addEventListener('click', () => {
       this.sound.playClick();
-      this.bus.emit('OPEN_HUB_PANEL', 'HOME');
+      this.bus.emit('OPEN_HUB_PANEL', 'LIFE_OS');
     });
   }
 
@@ -201,29 +200,5 @@ export class TrackerFrame {
     }
   }
 
-  updateGpsLocationDisplay(location) {
-    const tickerGps = document.getElementById('ticker-gps-readout');
-    const status = this.state.get('gpsStatus');
-    if (!tickerGps) return;
-
-    if (status === 'ACTIVE' && location) {
-      tickerGps.textContent = `• GPS FIX: ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)} (±${location.accuracy}m)`;
-    } else if (status === 'DENIED') {
-      tickerGps.textContent = `• GPS FIX: GPS bị từ chối`;
-    } else if (status === 'UNAVAILABLE') {
-      tickerGps.textContent = `• GPS FIX: GPS không khả dụng`;
-    } else if (status === 'ACQUIRING') {
-      tickerGps.textContent = `• GPS FIX: Đang xin quyền...`;
-    } else {
-      tickerGps.textContent = `• GPS FIX: GPS chưa bật (Vị trí mặc định — bật GPS để định vị chính xác)`;
-    }
-  }
-
-  bindCallout() {
-    const closeBtn = document.getElementById('callout-close-btn');
-    const callout = document.getElementById('operative-callout');
-    closeBtn?.addEventListener('click', () => {
-      callout?.classList.add('hidden');
-    });
-  }
+  updateGpsLocationDisplay() {}
 }

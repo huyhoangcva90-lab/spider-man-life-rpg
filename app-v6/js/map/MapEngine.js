@@ -41,6 +41,7 @@ export class MapEngine {
 
       this.map.on('load', () => {
         this.isLoaded = true;
+        document.querySelector('.offline-grid-banner')?.remove();
         console.log('[MapEngine] MapLibre GL initialized successfully');
       });
 
@@ -70,7 +71,7 @@ export class MapEngine {
     if (!notice) {
       notice = document.createElement('div');
       notice.className = 'offline-grid-banner';
-      notice.innerHTML = `⚠️ MẠNG BẢN ĐỒ GIỚI HẠN - CHẾ ĐỘ THỜI TRỰC KHÔNG KHẢ DỤNG`;
+      notice.textContent = 'Không tải được bản đồ. Kiểm tra kết nối rồi tải lại.';
       document.querySelector('.frame-main-content')?.appendChild(notice);
     }
   }
@@ -114,5 +115,9 @@ export class MapEngine {
 
   zoomOut() {
     if (this.map) this.map.zoomOut();
+  }
+
+  resize() {
+    if (this.map) this.map.resize();
   }
 }
