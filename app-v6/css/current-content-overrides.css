@@ -14,30 +14,18 @@
 
 .hanging-spidey {
   position: absolute;
-  z-index: 65;
+  z-index: 11;
   top: 0;
-  left: 50%;
+  right: 76px;
+  left: auto;
   width: 71px;
   height: 105px;
   pointer-events: none;
   image-rendering: pixelated;
   background: url('../assets/spideytracker/SpiderMan_web.png') no-repeat 0 0 / 5467px 105px;
   filter: drop-shadow(3px 4px 0 rgba(0,0,0,.55));
-  transform: translateX(-50%);
-}
-
-.hanging-spidey--entry {
-  animation: spidey-entry-web 4.2s steps(77) 1 both, spidey-entry-hide .01s linear 4.25s forwards;
-}
-
-@keyframes spidey-entry-web {
-  from { background-position-x: 0; }
-  to { background-position-x: -5396px; }
-}
-
-@keyframes spidey-entry-hide {
-  from { opacity: 1; }
-  to { opacity: 0; visibility: hidden; }
+  transform: none;
+  animation: none;
 }
 
 .frame-bottom-bar {
@@ -52,13 +40,11 @@
   left: 12px;
   bottom: 1px;
   background: url('../assets/spideytracker/SpiderMan_HeadTurn.png') no-repeat 0 0 / 3492px 74px;
-  animation: spidey-corner-head-turn 5.6s steps(76) infinite;
+  animation: none;
 }
 
-@keyframes spidey-corner-head-turn {
-  from { background-position-x: 0; }
-  to { background-position-x: -3446px; }
-}
+.game-primary-nav { z-index: 55; pointer-events: auto !important; }
+.game-primary-nav button { pointer-events: auto !important; touch-action: manipulation; }
 
 .ticker-wrap {
   height: 34px;
@@ -148,7 +134,7 @@
   .ticker-wrap { height: 32px; }
   .frame-bottom-bar .sound-toggle { width: 48px; min-width: 48px; height: 32px; }
   .frame-bottom-bar .sound-toggle span { display: none; }
-  .hanging-spidey { transform: translateX(-50%) scale(.82); transform-origin: top center; }
+  .hanging-spidey { right: 52px; transform: scale(.82); transform-origin: top right; }
   .action-rpg-screen { inset: 0 0 66px; }
 }
 
@@ -158,6 +144,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hanging-spidey { background-position-x: -5396px; animation: spidey-entry-hide .01s linear 2s forwards; }
+  .hanging-spidey,
   .spidey-head-turn-sprite { animation: none; }
 }

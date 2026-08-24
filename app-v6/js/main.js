@@ -1,26 +1,26 @@
 /* WEB OPS TRACKER V6 - MAIN APPLICATION BOOTSTRAPPER */
 
 import { EventBus } from './core/EventBus.js';
-import { StateStore } from './core/StateStore.js?build=webclaw-assets';
-import { SoundController } from './core/SoundController.js?build=webclaw-assets';
-import { MapEngine } from './map/MapEngine.js?build=webclaw-assets';
-import { MarkerLayer } from './map/MarkerLayer.js?build=webclaw-assets';
+import { StateStore } from './core/StateStore.js?build=static-spiders-nav';
+import { SoundController } from './core/SoundController.js?build=static-spiders-nav';
+import { MapEngine } from './map/MapEngine.js?build=static-spiders-nav';
+import { MarkerLayer } from './map/MarkerLayer.js?build=static-spiders-nav';
 import { GeolocationController } from './map/GeolocationController.js';
 import { GeocoderAdapter } from './map/GeocoderAdapter.js';
 import { MapEntryRepository } from './data/MapEntryRepository.js';
 import { GeoJsonTransfer } from './data/GeoJsonTransfer.js';
 import { NotionAdapter } from './integrations/notion/NotionAdapter.js';
-import { TrackerFrame } from './ui/TrackerFrame.js?build=webclaw-assets';
+import { TrackerFrame } from './ui/TrackerFrame.js?build=static-spiders-nav';
 import { SearchPanel } from './ui/SearchPanel.js';
 import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
 import { MarkerDossier } from './ui/MarkerDossier.js';
-import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=webclaw-assets';
-import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=webclaw-assets';
+import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=static-spiders-nav';
+import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=static-spiders-nav';
 import { MapGuideModal } from './ui/MapGuideModal.js';
-import { HeroAnimationController } from './game/HeroAnimationController.js?build=webclaw-assets';
-import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=webclaw-assets';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=webclaw-assets';
+import { HeroAnimationController } from './game/HeroAnimationController.js?build=static-spiders-nav';
+import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=static-spiders-nav';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=static-spiders-nav';
 
 class App {
   constructor() {
