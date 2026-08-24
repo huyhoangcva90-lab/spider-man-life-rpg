@@ -95,17 +95,27 @@ export class HubOverlayPanels {
   }
 
   renderLifeOs() {
+    const apps = [
+      ['today', 'HABIT HÔM NAY', 'Quick capture', '✓', 'red'],
+      ['routine', 'NHỊP SINH HỌC', 'Routine · Cloud sync', '◉', 'cyan'],
+      ['dopamine', 'DOPAMINE MENU', 'Intentional reward · Cloud sync', '⚡', 'amber'],
+      ['timetable', 'TIMETABLE', '24h live city clock', '◷', 'cyan'],
+      ['habits', 'THÓI QUEN', 'Daily streak system', '⌁', 'green'],
+      ['journal', 'NHẬT KÝ', 'Life chronicle', '✎', 'paper'],
+      ['gym', 'GYM OS', 'Train · Log · Grow', '◆', 'red']
+    ];
     return `
       <section class="hub-panel-inner">
-        <div class="hub-panel-heading">LIFE OS // SYSTEMS <span>ONE SYSTEM, ONE TRUTH</span></div>
-        <div class="hub-grid">
-          ${this.zone('GOALS + PLANNING', 'Mục tiêu, dự án và các mốc tiến độ.', 'red')}
-          ${this.zone('PRODUCTIVITY', 'Task, lịch hôm nay và next action.', 'amber')}
-          ${this.zone('HABITS + HEALTH', 'Thói quen, vận động và phục hồi.', 'green')}
-          ${this.zone('KNOWLEDGE', 'Học tập, ghi chú và recall queue.')}
-          ${this.zone('FINANCE', 'Quyết định tiền bạc và cảnh báo ngân sách.', 'amber')}
-          ${this.zone('REVIEW + ALERTS', 'Daily / weekly review và việc cần chú ý.', 'red')}
+        <div class="hub-panel-heading">SPIDER LIFE OS // DAILY SYSTEMS <span>ONE WEB, ONE SIGNAL</span></div>
+        <div class="life-os-launcher">
+          ${apps.map(([id, title, copy, icon, tone]) => `
+            <a class="life-os-app life-os-app--${tone}" href="./life-os/#${id}">
+              <span class="life-os-app-icon">${icon}</span>
+              <span><strong>${title}</strong><small>${copy}</small></span>
+              <b>OPEN →</b>
+            </a>`).join('')}
         </div>
+        <div class="life-os-cloud-note"><i></i><strong>DOPAMINE + NHỊP SINH HỌC</strong><span>Lưu online trên Gambit Cloud; không còn tách dữ liệu theo từng trình duyệt.</span></div>
       </section>`;
   }
 
@@ -143,10 +153,6 @@ export class HubOverlayPanels {
           <div><span>STREAK</span><strong>${streak.current}D</strong></div>
         </div>
         <div class="rpg-xp-track" aria-label="Tiến độ XP ${xpPercent}%"><i style="--value:${xpPercent}%"></i></div>
-        <div class="combat-sprite-stage" aria-label="Combat sprite library preview">
-          <div class="combat-sprite-actor combat-sprite-actor--strike" aria-hidden="true"></div>
-          <div class="combat-sprite-actor combat-sprite-actor--swing" aria-hidden="true"></div>
-        </div>
         <article class="boss-raid-card ${boss.status === 'DEFEATED' ? 'boss-raid-card--defeated' : ''}">
           <div class="boss-raid-header">
             <div><span>RAID ${boss.raid} // ${boss.status}</span><strong>${boss.name}</strong></div>

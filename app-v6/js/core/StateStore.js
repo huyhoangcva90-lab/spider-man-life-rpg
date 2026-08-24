@@ -3,13 +3,18 @@
 export class StateStore {
   constructor(eventBus) {
     this.bus = eventBus;
+    let soundEnabled = true;
+    try {
+      const savedSound = localStorage.getItem('spidey-sfx-enabled');
+      soundEnabled = savedSound === null ? true : savedSound === '1';
+    } catch { /* default to sound on */ }
     this.state = {
       activeFilter: 'ALL',          // 'ALL' | 'MEETING' | 'PERSON' | 'PLAN' | 'LEISURE' | 'ERRAND' | 'WORK' | 'NOTION_MISSION'
       selectedEntryId: null,
       userLocation: null,           // { lat, lng, accuracy, timestamp }
       gpsStatus: 'STANDBY',        // 'STANDBY' | 'ACQUIRING' | 'ACTIVE' | 'DENIED' | 'UNSUPPORTED'
       trackingMode: false,          // Auto-center map on GPS updates
-      soundEnabled: false,
+      soundEnabled,
       activeDrawer: null,           // null | 'ACTIVITY_LOG' | 'UNLOCATED_QUEUE'
       activeModal: null,            // null | 'DOSSIER' | 'EDITOR' | 'HUB_OVERLAY' | 'MAP_GUIDE' | 'SETTINGS'
       activeHubTab: 'HOME',         // 'HOME' | 'LIFE_OS' | 'ARENAS' | 'RPG' | 'CHRONICLE'
@@ -45,6 +50,7 @@ export class StateStore {
       this.bus.emit('GPS_STATUS_CHANGED', this.state.gpsStatus);
     }
     if (updates.soundEnabled !== undefined && updates.soundEnabled !== prevState.soundEnabled) {
+      try { localStorage.setItem('spidey-sfx-enabled', this.state.soundEnabled ? '1' : '0'); } catch { /* state remains usable */ }
       this.bus.emit('SOUND_TOGGLED', this.state.soundEnabled);
     }
   }

@@ -154,7 +154,7 @@ svg {
 .identity-ally-sprite {
   width: 54px;
   height: 54px;
-  background-image: url('../assets/spideytracker/spider-allies-sheet.png');
+  background-image: none;
   background-repeat: no-repeat;
   background-size: 1000% 1000%;
   image-rendering: pixelated;
@@ -306,7 +306,7 @@ svg {
   right: 76px;
   pointer-events: none;
   image-rendering: pixelated;
-  background: url('../assets/spideytracker/SpiderMan_web.png') no-repeat 0 0 / 5467px 105px;
+  background: none;
   animation: spidey-web-cycle 4.2s steps(77) infinite;
   filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, .55));
 }
@@ -763,7 +763,7 @@ svg {
   bottom: 3px;
   pointer-events: none;
   image-rendering: pixelated;
-  background: url('../assets/spideytracker/SpiderMan_HeadTurn.png') no-repeat 0 0 / 4484px 95px;
+  background: none;
   animation: spidey-head-turn-cycle 5.6s steps(76) infinite;
   filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, .45));
 }
@@ -1084,7 +1084,7 @@ svg {
   position: absolute;
   top: 12px;
   image-rendering: pixelated;
-  background-image: url('../assets/spideytracker/combat-actions-sheet.png');
+  background-image: none;
   background-repeat: no-repeat;
   background-size: 1120px 713px;
   filter: drop-shadow(4px 5px 0 rgba(0, 0, 0, .55));
@@ -1161,7 +1161,7 @@ svg {
   position: relative;
   overflow: hidden;
   background-color: #fff;
-  background-image: url('../assets/spideytracker/spider-allies-sheet.png');
+  background-image: none;
   background-repeat: no-repeat;
   background-size: 1000% 1000%;
   border: 3px solid var(--tracker-outline);
@@ -1722,7 +1722,7 @@ body[data-game-mode="MAP"] .arena-mode-screen { display: none; }
   width: 86px;
   height: 32px;
   margin: 0 auto 39px;
-  background: url('../assets/spideytracker/combat-actions-sheet.png') -4px -31px / 1120px 713px no-repeat;
+  background: none;
   image-rendering: pixelated;
   filter: drop-shadow(5px 5px 0 rgba(0,0,0,.55));
   transform: scale(2);
@@ -1858,7 +1858,7 @@ body[data-game-mode="MAP"] .arena-mode-screen { display: none; }
   border: 0;
   outline: 0;
   background-color: transparent;
-  background-image: url('../assets/spideytracker/combat-actions-sheet.png');
+  background-image: none;
   background-repeat: no-repeat;
   background-size: 2688px 1711px;
   background-position: var(--sprite-x) var(--sprite-y);
@@ -2021,7 +2021,7 @@ body[data-game-mode="MAP"] .arena-mode-screen { display: none; }
   position: absolute;
   inset: 0;
   display: block;
-  background-image: url('../assets/spideytracker/combat-actions-sheet.png');
+  background-image: none;
   background-repeat: no-repeat;
   background-size: 2688px 1711px;
   background-position: var(--sprite-x) var(--sprite-y);
@@ -2049,4 +2049,92 @@ body[data-game-mode="MAP"] .arena-mode-screen { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-sprite-actor { animation: none !important; }
+}
+
+/* Image-free shell: typography and live system signals replace cropped character art. */
+.tracker-wordmark {
+  display: block;
+  color: var(--tracker-paper);
+  text-align: center;
+  text-shadow: 4px 4px 0 var(--tracker-outline);
+  font: 700 clamp(13px, 2.4vw, 25px)/1.1 'Press Start 2P', monospace;
+}
+
+.system-signal {
+  justify-self: end;
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-content: center;
+  gap: 6px;
+  color: var(--tracker-outline);
+  text-align: center;
+  background: var(--tracker-green);
+  border: 4px solid var(--tracker-outline);
+  box-shadow: inset 0 0 0 4px #c8e6b5, 4px 4px 0 rgba(0, 0, 0, .35);
+}
+
+.system-signal i {
+  width: 12px;
+  height: 12px;
+  margin: auto;
+  border-radius: 50%;
+  background: var(--tracker-paper);
+  box-shadow: 0 0 0 3px rgba(7, 20, 38, .25), 0 0 14px var(--tracker-paper);
+  animation: marker-blink 1.2s steps(2, end) infinite;
+}
+
+.system-signal span { font: 700 7px var(--font-terminal); }
+
+.combat-sigil {
+  position: relative;
+  display: grid;
+  width: 118px;
+  height: 118px;
+  margin: 0 auto 7px;
+  place-items: center;
+  color: var(--tracker-outline);
+  background: var(--tracker-cyan);
+  border: 5px solid var(--tracker-outline);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, .25), 7px 7px 0 rgba(0, 0, 0, .45);
+  clip-path: polygon(50% 0, 92% 22%, 100% 68%, 72% 100%, 28% 100%, 0 68%, 8% 22%);
+}
+
+.combat-sigil::before,
+.combat-sigil::after,
+.combat-sigil i {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  border: 3px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.combat-sigil::after { inset: 31px; transform: rotate(0); }
+.combat-sigil i { inset: 43px 13px; border-width: 2px 0; transform: rotate(0); }
+.combat-sigil b { position: relative; z-index: 2; font: 700 14px var(--font-terminal); }
+.combat-sigil--threat { color: var(--tracker-paper); background: var(--tracker-red); }
+.combat-sigil--threat b { font-size: 35px; }
+
+.sound-toggle svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.operative-callout { max-width: 430px; }
+.frame-bottom-bar { padding-left: 16px; }
+.game-mode-dock { grid-template-columns: repeat(4, minmax(72px, 1fr)); }
+
+@media (max-width: 820px) {
+  .system-signal { width: 50px; height: 50px; }
+  .frame-bottom-bar { padding-left: 8px; }
+  .combat-sigil { width: 92px; height: 92px; }
+}
+
+@media (max-width: 600px) {
+  .game-mode-dock { grid-template-columns: repeat(4, 1fr); }
+  .combat-sigil { width: 80px; height: 80px; }
 }

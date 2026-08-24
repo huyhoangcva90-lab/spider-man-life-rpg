@@ -118,17 +118,20 @@ export class TrackerFrame {
     soundBtn?.addEventListener('click', () => {
       const current = this.state.get('soundEnabled');
       this.state.setState({ soundEnabled: !current });
+      if (!current) this.sound.playTrackerJingle();
     });
 
     // Activity Log Button
     document.getElementById('btn-activity-log')?.addEventListener('click', () => {
       this.sound.playClick();
+      window.setTimeout(() => this.sound.playActivityVoice(), 420);
       this.bus.emit('TOGGLE_DRAWER', 'ACTIVITY_LOG');
     });
 
     // Unlocated Missions Button
     document.getElementById('btn-unlocated-missions')?.addEventListener('click', () => {
       this.sound.playClick();
+      window.setTimeout(() => this.sound.playFreshSightingVoice(), 420);
       this.bus.emit('TOGGLE_DRAWER', 'UNLOCATED_QUEUE');
     });
 

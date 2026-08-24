@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="./css/map.css" />
   <link rel="stylesheet" href="./css/panels.css" />
   <link rel="stylesheet" href="./css/mobile.css" />
-  <link rel="stylesheet" href="./css/spidey-hub.css?v=combat-vfx-1" />
+  <link rel="stylesheet" href="./css/spidey-hub.css?v=image-free-audio-1" />
 </head>
 <body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
@@ -51,22 +51,17 @@
         </button>
 
         <div class="brand-plaque" aria-label="Spidey Life Tracker">
-          <img class="tracker-logo-image" src="./assets/spideytracker/tracker_logo3.png" alt="Spidey Tracker" />
+          <strong class="tracker-wordmark">SPIDEY TRACKER</strong>
           <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
         </div>
 
-        <button class="identity-tile" id="avatar-trigger" aria-label="Chọn Spider-Man đồng minh">
-          <div class="identity-ally-sprite" id="selected-ally-preview" aria-hidden="true"></div>
-          <span>ALLY</span>
-        </button>
+        <div class="system-signal" aria-label="Hệ thống trực tuyến"><i></i><span>ONLINE</span></div>
       </header>
 
       <main class="frame-main-content" id="tracker-main">
         <div id="map" aria-label="Bản đồ nhiệm vụ đời thực"></div>
         <div class="map-dark-filter map-mode-only"></div>
         <div class="map-scanlines map-mode-only" aria-hidden="true"></div>
-        <div class="hanging-spidey map-mode-only" aria-hidden="true"></div>
-        <img class="map-radar-image map-mode-only" src="./assets/spideytracker/radar.png" alt="" aria-hidden="true" />
 
         <section class="arena-mode-screen" id="arena-mode-screen" aria-label="Spider Life Arena">
           <div class="arena-stat-bar">
@@ -80,14 +75,12 @@
           </div>
           <div class="arena-stage">
             <div class="arena-web-grid" aria-hidden="true"></div>
-            <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
             <div class="arena-fighter arena-fighter--hero">
-              <button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác Spider tiếp theo" title="Bấm để thử 17 động tác"><i class="hero-sprite-actor" aria-hidden="true"></i></button>
-              <span>SPIDEY</span>
-              <output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output>
+              <div class="combat-sigil combat-sigil--operative" aria-hidden="true"><b>OPS</b><i></i></div>
+              <span>OPERATIVE</span>
             </div>
             <div class="arena-versus">VS</div>
-            <div class="arena-fighter arena-fighter--villain"><img src="./assets/brand/goblin-rival-pixel-v1.png" alt="Green Goblin pixel rival" /><span>GOBLIN</span></div>
+            <div class="arena-fighter arena-fighter--villain"><div class="combat-sigil combat-sigil--threat" aria-hidden="true"><b>!</b><i></i></div><span>THREAT</span></div>
           </div>
           <div class="arena-boss-panel">
             <div class="arena-boss-heading"><strong id="arena-boss-label">GREEN GOBLIN</strong><span id="arena-boss-hp-text">900 / 900 HP</span></div>
@@ -141,17 +134,13 @@
 
         <nav class="game-mode-dock" aria-label="Chế độ Spider Life">
           <button class="game-mode-btn" data-mode="MISSIONS"><svg><use href="#icon-missions"></use></svg><span>MISSIONS</span></button>
-          <button class="game-mode-btn" data-mode="ALLIES"><svg><use href="#icon-mask"></use></svg><span>ALLIES</span></button>
           <button class="game-mode-btn game-mode-btn--arena active" data-mode="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>ARENA</span></button>
           <button class="game-mode-btn" data-mode="MAP"><svg><use href="#icon-web-map"></use></svg><span>MAP</span></button>
-          <button class="game-mode-btn" data-mode="PROFILE"><svg><use href="#icon-spider"></use></svg><span>PROFILE</span></button>
+          <button class="game-mode-btn" data-mode="PROFILE"><svg><use href="#icon-target"></use></svg><span>PROFILE</span></button>
         </nav>
 
         <!-- WEB OPERATIVE CHARACTER CALLOUT DIALOG OVERLAY -->
         <div class="operative-callout hidden" id="operative-callout" hidden inert>
-          <div class="callout-avatar">
-            <img src="./assets/characters/web-operative-v1.png" onError="this.src='../app-v4/assets/characters/web-operative-v1.png'" alt="Operative Avatar" />
-          </div>
           <div class="callout-bubble">
             <div class="callout-close-btn" id="callout-close-btn">✕</div>
             <div class="callout-title">WEB OPERATIVE INSTRUCTION</div>
@@ -199,14 +188,13 @@
       </main>
 
       <footer class="frame-bottom-bar">
-        <div class="spidey-head-turn-sprite" aria-hidden="true"></div>
         <div class="ticker-wrap">
           <div class="ticker-content">
             <span class="ticker-status-tag">SYS // ONLINE</span>
             MAP YOUR REAL-LIFE MISSIONS <span id="ticker-gps-readout">• GPS: STANDBY</span> • ONE LIFE, ONE SOURCE OF TRUTH
           </div>
         </div>
-        <button class="sound-toggle" id="btn-sound-toggle" aria-label="Bật hoặc tắt âm thanh" aria-pressed="false"><img src="./assets/spideytracker/sound_off.png" alt="" /><span>SFX OFF</span></button>
+        <button class="sound-toggle" id="btn-sound-toggle" aria-label="Bật hoặc tắt âm thanh" aria-pressed="true"><svg><use href="#icon-sound"></use></svg><span>SFX ON</span></button>
       </footer>
 
     </div>
@@ -370,24 +358,6 @@
   </div>
 
   <!-- MODAL 4: MAP GUIDE & SETTINGS -->
-  <div class="panel-backdrop" id="ally-selector-backdrop" hidden inert>
-    <div class="pixel-modal ally-selector-modal">
-      <div class="modal-header">
-        <span class="modal-title">SPIDER-VERSE // CHỌN ĐỒNG MINH</span>
-        <button class="modal-close-btn" id="ally-selector-close" aria-label="Đóng bộ chọn đồng minh">✕</button>
-      </div>
-      <div class="modal-body ally-selector-body">
-        <div class="ally-selector-readout">
-          <span>ACTIVE PARTNER</span>
-          <strong id="selected-ally-name">SPIDER ALLY 01</strong>
-          <small>Chọn một nhân vật. Lựa chọn được lưu trên thiết bị này.</small>
-        </div>
-        <div class="ally-roster-grid" id="ally-roster-grid" role="listbox" aria-label="Danh sách Spider-Man đồng minh"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL 5: MAP GUIDE & SETTINGS -->
   <div class="panel-backdrop" id="map-guide-modal-backdrop" hidden inert>
     <div class="pixel-modal">
       <div class="modal-header">

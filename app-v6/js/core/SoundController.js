@@ -4,13 +4,49 @@ export class SoundController {
   constructor(stateStore) {
     this.stateStore = stateStore;
     this.audioCtx = null;
+    this.samples = new Map();
+    this.sampleUrls = {
+      jingle: new URL('../../assets/audio/spidey_jingle.mp3', import.meta.url).href,
+      activity: new URL('../../assets/audio/another_day_another_sighting.mp3', import.meta.url).href,
+      fresh: new URL('../../assets/audio/calling_all_webheads.mp3', import.meta.url).href
+    };
+    this.unlocked = false;
   }
 
   init() {
-    if (!this.audioCtx && typeof window.AudioContext !== 'undefined') {
-      this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!this.audioCtx && AudioContextClass) {
+      this.audioCtx = new AudioContextClass();
+    }
+    if (!this.unlocked) {
+      this.unlocked = true;
+      window.addEventListener('pointerdown', () => {
+        if (!this.isEnabled()) return;
+        this.audioCtx?.resume?.();
+        this.playTrackerJingle();
+      }, { once: true, capture: true });
     }
   }
+
+  playSample(name, volume = 0.72) {
+    if (!this.isEnabled() || !this.sampleUrls[name]) return;
+    try {
+      let audio = this.samples.get(name);
+      if (!audio) {
+        audio = new Audio(this.sampleUrls[name]);
+        audio.preload = 'auto';
+        this.samples.set(name, audio);
+      }
+      audio.pause();
+      audio.currentTime = 0;
+      audio.volume = volume;
+      audio.play().catch(() => {});
+    } catch { /* audio remains optional */ }
+  }
+
+  playTrackerJingle() { this.playSample('jingle', 0.58); }
+  playActivityVoice() { this.playSample('activity', 0.78); }
+  playFreshSightingVoice() { this.playSample('fresh', 0.78); }
 
   isEnabled() {
     return this.stateStore.get('soundEnabled');
@@ -45,11 +81,8 @@ export class SoundController {
   }
 
   playBootSound() {
-    if (!this.isEnabled()) return;
-    const notes = [440, 554, 659, 880];
-    notes.forEach((freq, idx) => {
-      setTimeout(() => this.playTone(freq, 'triangle', 0.12, 0.08), idx * 100);
-    });
+    this.init();
+    this.playTrackerJingle();
   }
 
   playClick() {
