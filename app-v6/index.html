@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="./css/map.css" />
   <link rel="stylesheet" href="./css/panels.css" />
   <link rel="stylesheet" href="./css/mobile.css" />
-  <link rel="stylesheet" href="./css/spidey-hub.css?v=arena-hub-1" />
+  <link rel="stylesheet" href="./css/spidey-hub.css?v=combat-vfx-1" />
 </head>
 <body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
@@ -80,7 +80,12 @@
           </div>
           <div class="arena-stage">
             <div class="arena-web-grid" aria-hidden="true"></div>
-            <div class="arena-fighter arena-fighter--hero"><div class="arena-hero-sprite" aria-hidden="true"></div><span>SPIDEY</span></div>
+            <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
+            <div class="arena-fighter arena-fighter--hero">
+              <button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác Spider tiếp theo" title="Bấm để thử 17 động tác"><i class="hero-sprite-actor" aria-hidden="true"></i></button>
+              <span>SPIDEY</span>
+              <output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output>
+            </div>
             <div class="arena-versus">VS</div>
             <div class="arena-fighter arena-fighter--villain"><img src="./assets/brand/goblin-rival-pixel-v1.png" alt="Green Goblin pixel rival" /><span>GOBLIN</span></div>
           </div>
@@ -356,6 +361,7 @@
       </div>
       <div class="hub-tab-strip" role="tablist" aria-label="Các khu vực Life RPG">
         <button class="hub-tab-btn active" data-tab="HOME" role="tab"><svg><use href="#icon-home"></use></svg><span>HOME</span></button>
+        <button class="hub-tab-btn" data-tab="LIFE_OS" role="tab"><svg><use href="#icon-database"></use></svg><span>LIFE OS</span></button>
         <button class="hub-tab-btn" data-tab="RPG" role="tab"><svg><use href="#icon-mask"></use></svg><span>RPG</span></button>
         <button class="hub-tab-btn" data-tab="CHRONICLE" role="tab"><svg><use href="#icon-book"></use></svg><span>LOG</span></button>
       </div>
@@ -428,6 +434,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?v=arena-hub-1"></script>
+  <script type="module" src="./js/main.js?v=combat-vfx-1"></script>
 </body>
 </html>

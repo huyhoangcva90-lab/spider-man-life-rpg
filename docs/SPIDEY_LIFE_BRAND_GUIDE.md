@@ -40,6 +40,16 @@ SPIDEY LIFE turns completed real-life missions into attacks against an active vi
 - Arena action copy uses comic feedback such as `THWIP!`, `POW!`, `K.O.!`, and `WEB FINISHER` sparingly.
 - Map is navigation-only. A click on the map never creates a mission.
 
+## Hero animation contract
+
+The Arena hero uses the supplied `combat-actions-sheet.png` through a sprite-sheet state machine. Required states are: `idle`, `combat_idle`, `run`, `jump`, `dodge`, `attack_01`, `attack_02`, `attack_03`, `ranged_attack`, `skill_01`, `skill_02`, `skill_03`, `ultimate`, `hurt`, `knockback`, `KO`, and `victory`.
+
+- Real mission completion rotates through melee/ranged attacks.
+- Matching a boss weakness triggers one of three skills.
+- Maximum stagger triggers `ultimate`; boss defeat resolves into `victory`.
+- Tapping the hero previews the next state, so every required animation remains directly testable.
+- Attack VFX use hard-edged comic bursts, web/electric trails, impact shake, and short onomatopoeia—not particle noise across the whole interface.
+
 ## Screen hierarchy
 
 1. Account progress: level, XP, Web Coins, streak.

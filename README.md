@@ -23,6 +23,8 @@
 
 Các nút không có nội dung đã được loại bỏ. Giao diện không dùng rương/lootbox; phần thưởng đến từ mission thật.
 
+Hero Arena dùng sprite sheet hành động với 17 state từ `idle` tới `victory`. Mission hoàn thành sẽ tự chạy combo/skill/ultimate phù hợp, kèm VFX truyện tranh `THWIP!`, `POW!`, `KRAK!` và impact shake. Có thể bấm trực tiếp vào hero để duyệt thử từng state.
+
 ## Chạy local
 
 Đây là ứng dụng HTML/CSS/JavaScript module không cần build step. Vì trình duyệt chặn ES modules khi mở bằng `file://`, hãy phục vụ thư mục bằng một static server, ví dụ:

@@ -1509,6 +1509,94 @@ svg {
   }
 }
 
+/* Spider Life OS launcher — the seven Gambit daily systems share one web. */
+.life-os-launcher {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.life-os-app {
+  --app-accent: var(--tracker-cyan);
+  display: grid;
+  grid-template-columns: 45px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 72px;
+  padding: 9px 12px;
+  color: var(--tracker-paper);
+  text-decoration: none;
+  background: #102c45;
+  border: 3px solid var(--tracker-outline);
+  box-shadow: inset 0 0 0 2px #397c9b, 4px 4px 0 rgba(5, 11, 18, .9);
+  clip-path: var(--frame-cut);
+  transition: transform 120ms steps(2, end), background 120ms ease;
+}
+
+.life-os-app:hover,
+.life-os-app:focus-visible {
+  z-index: 2;
+  outline: 2px solid var(--tracker-amber);
+  outline-offset: 1px;
+  transform: translate(-2px, -2px);
+  background: #173b57;
+}
+
+.life-os-app--red { --app-accent: var(--tracker-red); }
+.life-os-app--amber { --app-accent: var(--tracker-amber); }
+.life-os-app--green { --app-accent: var(--tracker-green); }
+.life-os-app--paper { --app-accent: var(--tracker-paper); }
+
+.life-os-app-icon {
+  display: grid;
+  width: 42px;
+  aspect-ratio: 1;
+  place-items: center;
+  color: var(--tracker-outline);
+  background: var(--app-accent);
+  border: 3px solid var(--tracker-outline);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .25);
+  font: 700 18px var(--font-terminal);
+}
+
+.life-os-app strong,
+.life-os-app small { display: block; }
+.life-os-app strong { color: var(--app-accent); font: 700 9px/1.5 var(--font-terminal); }
+.life-os-app small { margin-top: 3px; color: #a9c2cc; font-size: 9px; }
+.life-os-app > b { color: var(--tracker-amber); font: 700 7px var(--font-terminal); }
+
+.life-os-cloud-note {
+  display: grid;
+  grid-template-columns: 12px auto 1fr;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  color: #b8cbd2;
+  background: #071426;
+  border: 2px solid #397c9b;
+  font-size: 9px;
+}
+
+.life-os-cloud-note i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--tracker-green);
+  box-shadow: 0 0 10px var(--tracker-green);
+  animation: marker-blink 1.4s steps(2, end) infinite;
+}
+
+.life-os-cloud-note strong { color: var(--tracker-green); font: 700 7px var(--font-terminal); }
+
+@media (max-width: 600px) {
+  .life-os-launcher { grid-template-columns: 1fr; }
+  .life-os-app { min-height: 64px; grid-template-columns: 40px minmax(0, 1fr) auto; }
+  .life-os-app-icon { width: 38px; }
+  .life-os-cloud-note { grid-template-columns: 10px 1fr; }
+  .life-os-cloud-note span { grid-column: 1 / 3; }
+}
+
 /* V7 GAME HUB: Arena is the home screen; Map remains a dedicated mode. */
 body:not([data-game-mode="MAP"]) .map-mode-only { display: none !important; }
 body[data-game-mode="MAP"] .arena-mode-screen { display: none; }
@@ -1755,4 +1843,210 @@ body[data-game-mode="MAP"] .arena-mode-screen { display: none; }
   .game-mode-dock { bottom: 6px; width: calc(100% - 12px); grid-template-columns: repeat(5, 1fr); gap: 3px; }
   .game-mode-btn { min-width: 0; min-height: 52px; padding: 3px 1px; border-width: 2px; font-size: 6px; }
   .game-mode-btn svg { width: 21px; height: 21px; }
+}
+
+/* COMBAT ACTION ATLAS + COMIC IMPACT VFX */
+.arena-hero-sprite {
+  --sprite-x: -15px;
+  --sprite-y: -189px;
+  display: block;
+  width: 140px;
+  height: 104px;
+  margin: 0 auto -2px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+  background-image: url('../assets/spideytracker/combat-actions-sheet.png');
+  background-repeat: no-repeat;
+  background-size: 2688px 1711px;
+  background-position: var(--sprite-x) var(--sprite-y);
+  image-rendering: pixelated;
+  filter: drop-shadow(5px 5px 0 rgba(0,0,0,.55));
+  transform: none;
+  transform-origin: 50% 80%;
+  cursor: pointer;
+}
+
+.arena-hero-sprite:focus-visible {
+  outline: 0;
+  filter: drop-shadow(5px 5px 0 rgba(0,0,0,.55)) drop-shadow(0 0 5px #f2c06b);
+}
+
+.hero-animation-state {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: 4px auto 0;
+  padding: 3px 5px;
+  color: #54b6d0;
+  background: #050b12;
+  font: 700 6px/1 "Silkscreen", monospace;
+  letter-spacing: .06em;
+}
+
+.arena-hero-sprite[data-motion="breathe"] { animation: hero-breathe 1.2s steps(2) infinite; }
+.arena-hero-sprite[data-motion="guard"] { animation: hero-guard .75s steps(2) infinite; }
+.arena-hero-sprite[data-motion="run"] { animation: hero-run .42s steps(4); }
+.arena-hero-sprite[data-motion="jump"] { animation: hero-jump .46s steps(4); }
+.arena-hero-sprite[data-motion="dodge"] { animation: hero-dodge .34s steps(3); }
+.arena-hero-sprite[data-motion="strike"] { animation: hero-strike .32s steps(3); }
+.arena-hero-sprite[data-motion="uppercut"] { animation: hero-uppercut .34s steps(3); }
+.arena-hero-sprite[data-motion="spin"] { animation: hero-spin .4s steps(4); }
+.arena-hero-sprite[data-motion="recoil"] { animation: hero-recoil .36s steps(3); }
+.arena-hero-sprite[data-motion="skill"] { animation: hero-skill .44s steps(4); }
+.arena-hero-sprite[data-motion="ultimate"] { animation: hero-ultimate .55s steps(5); }
+.arena-hero-sprite[data-motion="hurt"] { animation: hero-hurt .36s steps(3); }
+.arena-hero-sprite[data-motion="knockback"] { animation: hero-knockback .48s steps(4); }
+.arena-hero-sprite[data-motion="ko"] { animation: hero-ko .48s steps(4) forwards; }
+.arena-hero-sprite[data-motion="victory"] { animation: hero-victory .8s steps(4) infinite; }
+
+@keyframes hero-breathe { 50% { transform: translateY(-3px); } }
+@keyframes hero-guard { 50% { transform: translate(-2px,-2px) rotate(-1deg); } }
+@keyframes hero-run { 50% { transform: translateX(42px) skewX(-7deg); } }
+@keyframes hero-jump { 45% { transform: translate(38px,-38px) rotate(-10deg); } }
+@keyframes hero-dodge { 45% { transform: translateX(-38px) scaleX(.78); opacity: .65; } }
+@keyframes hero-strike { 62% { transform: translateX(86px) scaleX(1.08); } }
+@keyframes hero-uppercut { 62% { transform: translate(70px,-22px) rotate(-8deg); } }
+@keyframes hero-spin { 50% { transform: translateX(72px) rotate(-22deg); } }
+@keyframes hero-recoil { 45% { transform: translateX(-9px) rotate(-5deg); } }
+@keyframes hero-skill { 55% { transform: translateX(34px) scale(1.12); filter: drop-shadow(0 0 9px #54b6d0); } }
+@keyframes hero-ultimate { 35% { transform: translateY(-48px) scale(1.18); filter: brightness(1.7) drop-shadow(0 0 15px #f2c06b); } 72% { transform: translateX(92px) scale(1.22); } }
+@keyframes hero-hurt { 35% { transform: translateX(-18px) rotate(-8deg); filter: sepia(1) saturate(4); } }
+@keyframes hero-knockback { 100% { transform: translate(-70px,12px) rotate(-18deg); opacity: .65; } }
+@keyframes hero-ko { 100% { transform: translateY(27px) rotate(-75deg); filter: grayscale(.7); } }
+@keyframes hero-victory { 50% { transform: translateY(-16px) rotate(4deg); filter: drop-shadow(0 0 9px #f2c06b); } }
+
+.combat-vfx-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.comic-vfx {
+  position: absolute;
+  left: 55%;
+  top: 45%;
+  width: 1px;
+  height: 1px;
+  animation: comic-vfx-pop .76s steps(5) forwards;
+}
+
+.comic-vfx i,
+.comic-vfx span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 126px;
+  height: 126px;
+  transform: translate(-50%,-50%);
+}
+
+.comic-vfx i {
+  background: #f2c06b;
+  clip-path: polygon(50% 0,58% 35%,78% 8%,72% 40%,100% 28%,76% 51%,100% 65%,68% 62%,76% 100%,53% 69%,38% 100%,39% 66%,4% 81%,30% 55%,0 42%,35% 42%,21% 11%,45% 35%);
+  filter: drop-shadow(5px 5px 0 #050b12);
+}
+
+.comic-vfx span {
+  width: 172px;
+  height: 5px;
+  border-block: 3px solid #d9e0df;
+  transform: translate(-50%,-50%) rotate(-14deg);
+  box-shadow: 0 -15px 0 -1px #54b6d0, 0 15px 0 -1px #54b6d0;
+}
+
+.comic-vfx b {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  min-width: max-content;
+  transform: translate(-50%,-50%) rotate(-8deg);
+  color: #071426;
+  -webkit-text-stroke: 1px #071426;
+  text-shadow: 3px 3px 0 #d9e0df;
+  font: 700 clamp(13px,2.4vw,26px)/1 "Press Start 2P", monospace;
+}
+
+.comic-vfx--web i { background: #d9e0df; }
+.comic-vfx--electric i { background: #54b6d0; }
+.comic-vfx--hurt i,
+.comic-vfx--ko i { background: #f0645c; }
+.comic-vfx--victory i { background: #83b96b; }
+.comic-vfx--ultimate { left: 50%; top: 42%; }
+.comic-vfx--ultimate i { width: 190px; height: 190px; background: #f2c06b; }
+.comic-vfx--ultimate b { color: #f0645c; }
+
+@keyframes comic-vfx-pop {
+  0% { transform: scale(.15) rotate(-12deg); opacity: 0; }
+  25% { transform: scale(1.18) rotate(5deg); opacity: 1; }
+  72% { transform: scale(.96) rotate(0); opacity: 1; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.combat-impact { animation: combat-screen-hit .3s steps(3); }
+.villain-hit { animation: villain-hit .42s steps(4); }
+@keyframes combat-screen-hit { 33% { transform: translateX(-4px); filter: brightness(1.45); } 66% { transform: translateX(5px); } }
+@keyframes villain-hit { 35% { transform: translateX(12px); filter: brightness(2) saturate(.3); } 70% { transform: translateX(-7px); opacity: .65; } }
+
+@media (max-width: 600px) {
+  .arena-hero-sprite { width: 120px; height: 90px; margin-bottom: -1px; }
+  .hero-animation-state { font-size: 5px; }
+  .comic-vfx i { width: 96px; height: 96px; }
+  .comic-vfx span { width: 128px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arena-hero-sprite,
+  .hero-sprite-actor,
+  .comic-vfx,
+  .combat-impact,
+  .villain-hit { animation: none !important; }
+}
+
+/* Keep the hit target still while the sprite actor moves inside it. */
+.arena-hero-sprite {
+  position: relative;
+  background-image: none;
+  filter: none;
+  transform: none;
+  animation: none !important;
+}
+
+.hero-sprite-actor {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background-image: url('../assets/spideytracker/combat-actions-sheet.png');
+  background-repeat: no-repeat;
+  background-size: 2688px 1711px;
+  background-position: var(--sprite-x) var(--sprite-y);
+  image-rendering: pixelated;
+  filter: drop-shadow(5px 5px 0 rgba(0,0,0,.55));
+  transform-origin: 50% 80%;
+}
+
+.arena-hero-sprite:focus-visible { box-shadow: 0 0 0 3px #f2c06b; }
+.arena-hero-sprite[data-motion="breathe"] .hero-sprite-actor { animation: hero-breathe 1.2s steps(2) infinite; }
+.arena-hero-sprite[data-motion="guard"] .hero-sprite-actor { animation: hero-guard .75s steps(2) infinite; }
+.arena-hero-sprite[data-motion="run"] .hero-sprite-actor { animation: hero-run .42s steps(4); }
+.arena-hero-sprite[data-motion="jump"] .hero-sprite-actor { animation: hero-jump .46s steps(4); }
+.arena-hero-sprite[data-motion="dodge"] .hero-sprite-actor { animation: hero-dodge .34s steps(3); }
+.arena-hero-sprite[data-motion="strike"] .hero-sprite-actor { animation: hero-strike .32s steps(3); }
+.arena-hero-sprite[data-motion="uppercut"] .hero-sprite-actor { animation: hero-uppercut .34s steps(3); }
+.arena-hero-sprite[data-motion="spin"] .hero-sprite-actor { animation: hero-spin .4s steps(4); }
+.arena-hero-sprite[data-motion="recoil"] .hero-sprite-actor { animation: hero-recoil .36s steps(3); }
+.arena-hero-sprite[data-motion="skill"] .hero-sprite-actor { animation: hero-skill .44s steps(4); }
+.arena-hero-sprite[data-motion="ultimate"] .hero-sprite-actor { animation: hero-ultimate .55s steps(5); }
+.arena-hero-sprite[data-motion="hurt"] .hero-sprite-actor { animation: hero-hurt .36s steps(3); }
+.arena-hero-sprite[data-motion="knockback"] .hero-sprite-actor { animation: hero-knockback .48s steps(4); }
+.arena-hero-sprite[data-motion="ko"] .hero-sprite-actor { animation: hero-ko .48s steps(4) forwards; }
+.arena-hero-sprite[data-motion="victory"] .hero-sprite-actor { animation: hero-victory .8s steps(4) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-sprite-actor { animation: none !important; }
 }

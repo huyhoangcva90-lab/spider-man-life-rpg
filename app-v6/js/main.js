@@ -22,6 +22,7 @@ import { MapGuideModal } from './ui/MapGuideModal.js';
 import { AllySelector } from './ui/AllySelector.js?v=spidey-allies-1';
 import { LifeRpgEngine } from './game/LifeRpgEngine.js?v=life-rpg-1';
 import { GameModeController } from './ui/GameModeController.js?v=arena-hub-1';
+import { HeroAnimationController } from './game/HeroAnimationController.js?v=combat-vfx-1';
 
 class App {
   constructor() {
@@ -37,6 +38,7 @@ class App {
     this.markerLayer = new MarkerLayer(this.mapEngine, this.bus, this.sound);
     this.geolocation = new GeolocationController(this.state, this.sound);
     this.lifeRpg = new LifeRpgEngine(this.bus);
+    this.heroAnimation = new HeroAnimationController(this.bus, this.sound);
 
     this.trackerFrame = new TrackerFrame(this.state, this.bus, this.sound);
     this.searchPanel = new SearchPanel(this.geocoder, this.bus, this.sound);
@@ -65,6 +67,7 @@ class App {
     this.mapGuide.init();
     this.allySelector.init();
     this.gameModes.init();
+    this.heroAnimation.init();
 
     // 2. Initialize Map Engine (Defaults to HCMC fallback: lng 106.7009, lat 10.7769)
     await this.mapEngine.init('map', 'CARTO_DARK');

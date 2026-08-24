@@ -65,7 +65,8 @@ export class GameModeController {
       this.lifeRpg.executeFinisher();
       return;
     }
-    this.bus.emit('OPEN_EDITOR', { type: 'WORK', status: 'TODO' });
+    this.bus.emit('HERO_PREPARE_MISSION');
+    window.setTimeout(() => this.bus.emit('OPEN_EDITOR', { type: 'WORK', status: 'TODO' }), 520);
   }
 
   render(result = null) {
