@@ -1,0 +1,247 @@
+/* Clawed from the public SpideyTracker fifteen-slice hub geometry. */
+
+.tracker-viewport {
+  padding: 5px 15px 0;
+  background: #02060b;
+}
+
+.tracker-device-frame {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  grid-template-rows: 36px minmax(0, 1fr) 19px 50px 7px;
+  width: min(100%, 1420px);
+  height: min(100%, 920px);
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  clip-path: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.tracker-device-frame::before { display: none; }
+
+.claw-slice-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  grid-template-rows: 36px minmax(0, 1fr) 19px 50px 7px;
+  pointer-events: none;
+}
+
+.claw-slice-frame i { display: block; background-repeat: no-repeat; image-rendering: pixelated; }
+.frame-r1c1 { grid-area: 1/1; background-image: url('../assets/spideytracker/frame/frame1-1.png'); background-size: 36px 36px; }
+.frame-r1c2 { grid-area: 1/2; background-image: url('../assets/spideytracker/frame/frame1-2.png'); background-size: 92px 36px; background-repeat: repeat-x !important; }
+.frame-r1c3 { grid-area: 1/3; background-image: url('../assets/spideytracker/frame/frame1-3.png'); background-size: 36px 36px; }
+.frame-r2c1 { grid-area: 2/1; background-image: url('../assets/spideytracker/frame/frame2-1.png'); background-size: 36px 100px; background-repeat: repeat-y !important; }
+.frame-r2c3 { grid-area: 2/3; background-image: url('../assets/spideytracker/frame/frame2-3.png'); background-size: 36px 100px; background-repeat: repeat-y !important; }
+.frame-r3c1 { grid-area: 3/1; background-image: url('../assets/spideytracker/frame/frame3-1.png'); background-size: 36px 19px; }
+.frame-r3c2 { grid-area: 3/2; background-image: url('../assets/spideytracker/frame/frame3-2.png'); background-size: 52px 19px; background-repeat: repeat-x !important; }
+.frame-r3c3 { grid-area: 3/3; background-image: url('../assets/spideytracker/frame/frame3-3.png'); background-size: 36px 19px; }
+.frame-r4c1 { grid-area: 4/1; background-image: url('../assets/spideytracker/frame/frame4-1.png'); background-size: 36px 50px; }
+.frame-r4c2 { grid-area: 4/2; background-image: url('../assets/spideytracker/frame/frame4-2.png'); background-size: 95px 50px; background-repeat: repeat-x !important; }
+.frame-r4c3 { grid-area: 4/3; background-image: url('../assets/spideytracker/frame/frame4-3.png'); background-size: 36px 50px; }
+.frame-r5c1 { grid-area: 5/1; background-image: url('../assets/spideytracker/frame/frame5-1.png'); background-size: 36px 7px; }
+.frame-r5c2 { grid-area: 5/2; background-image: url('../assets/spideytracker/frame/frame5-2.png'); background-size: 27px 7px; background-repeat: repeat-x !important; }
+.frame-r5c3 { grid-area: 5/3; background-image: url('../assets/spideytracker/frame/frame5-3.png'); background-size: 36px 7px; }
+
+.frame-top-bar {
+  position: absolute;
+  inset: 0;
+  z-index: 400;
+  display: block;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.pixel-orb {
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  width: 62px;
+  height: 64px;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: url('../assets/spideytracker/hub-ui/spidey_head_spritesheet.png') no-repeat 0 0 / auto 64px;
+  box-shadow: none;
+  image-rendering: pixelated;
+  pointer-events: auto;
+}
+
+.pixel-orb::before,
+.pixel-orb::after,
+.pixel-orb svg { display: none; }
+.pixel-orb:hover { border: 0; background-color: transparent; filter: brightness(1.08); }
+
+.brand-plaque {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 280px;
+  max-width: none;
+  padding: 0;
+  transform: translateX(-50%);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  clip-path: none;
+  pointer-events: none;
+}
+
+.tracker-logo-image { width: 280px; max-width: none; }
+.brand-subtitle { display: none; }
+
+.system-signal {
+  position: absolute;
+  top: 13px;
+  right: 23px;
+  width: 64px;
+  height: 64px;
+  margin: 0;
+  border: 0;
+  background: url('../assets/spideytracker/hub-ui/alert_btn_white.png') center / 64px 64px no-repeat;
+  box-shadow: none;
+  pointer-events: auto;
+}
+
+.system-signal i,
+.system-signal span,
+.system-signal svg { display: none; }
+
+.frame-main-content {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #000;
+  box-shadow: none;
+  contain: layout paint;
+}
+
+.frame-bottom-bar {
+  grid-column: 2;
+  grid-row: 4;
+  position: relative;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: minmax(0, 527px) 62px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  height: 50px;
+  min-height: 0;
+  padding: 5px;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ticker-wrap {
+  position: relative;
+  width: 100%;
+  height: 41px;
+  padding: 0 9px;
+  overflow: hidden;
+  border: 0;
+  background: url('../assets/spideytracker/ticker/ticker1-2.png') repeat-x center / 72px 41px;
+  box-shadow: none;
+}
+
+.ticker-wrap::before,
+.ticker-wrap::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  width: 9px;
+  height: 41px;
+  background-repeat: no-repeat;
+  background-size: 9px 41px;
+}
+.ticker-wrap::before { left: 0; background-image: url('../assets/spideytracker/ticker/ticker1-1.png'); }
+.ticker-wrap::after { right: 0; background-image: url('../assets/spideytracker/ticker/ticker1-3.png'); }
+
+.ticker-content {
+  height: 41px;
+  color: #96e0f7;
+  font-size: 12px;
+  line-height: 41px;
+}
+
+.frame-bottom-bar .sound-toggle {
+  width: 62px;
+  min-width: 62px;
+  height: 41px;
+  border: 0;
+  border-radius: 0;
+  background:
+    url('../assets/spideytracker/hub-ui/btn-white-1.png') left / 9px 41px no-repeat,
+    url('../assets/spideytracker/hub-ui/btn-white-3.png') right / 9px 41px no-repeat,
+    url('../assets/spideytracker/hub-ui/btn-white-2.png') center / 72px 41px repeat-x;
+  box-shadow: none;
+  color: #000;
+}
+
+.frame-bottom-bar .sound-toggle span { display: none; }
+.frame-bottom-bar .sound-toggle svg { width: 20px; height: 20px; }
+
+.spidey-head-turn-sprite {
+  position: absolute;
+  z-index: 35;
+  left: -35px;
+  bottom: -5px;
+  width: 64px;
+  height: 64px;
+  background: url('../assets/spideytracker/SpiderMan_HeadTurn.png') no-repeat 0 0 / 4864px 64px;
+  filter: drop-shadow(3px 3px 0 rgba(0,0,0,.5));
+}
+
+.action-rpg-screen { inset: 0 0 72px; }
+.game-primary-nav { bottom: 5px; }
+
+@media (max-width: 768px) {
+  .tracker-viewport { padding: 2px 2px 0; }
+  .tracker-device-frame,
+  .claw-slice-frame {
+    grid-template-columns: 27px minmax(0, 1fr) 27px;
+    grid-template-rows: 27px minmax(0, 1fr) 14px 40px 5px;
+  }
+  .frame-r1c1,.frame-r1c3 { background-size: 27px 27px; }
+  .frame-r1c2 { background-size: 68px 27px; }
+  .frame-r2c1,.frame-r2c3 { background-size: 27px 76px; }
+  .frame-r3c1,.frame-r3c3 { background-size: 27px 14px; }
+  .frame-r3c2 { background-size: 40px 14px; }
+  .frame-r4c1,.frame-r4c3 { background-size: 27px 40px; }
+  .frame-r4c2 { background-size: 72px 40px; }
+  .frame-r5c1,.frame-r5c3 { background-size: 27px 5px; }
+  .frame-r5c2 { background-size: 21px 5px; }
+  .pixel-orb { top: 11px; left: 10px; width: 50px; height: 51px; background-size: auto 51px; }
+  .brand-plaque { top: 16px; width: 180px; }
+  .tracker-logo-image { width: 180px; }
+  .system-signal { top: 14px; right: 12px; width: 48px; height: 48px; background-size: 48px 48px; }
+  .frame-bottom-bar { grid-template-columns: minmax(0, 338px) 44px; height: 40px; gap: 3px; padding: 4px 2px 2px; }
+  .ticker-wrap { height: 33px; padding-inline: 7px; background-size: 58px 33px; }
+  .ticker-wrap::before,.ticker-wrap::after { width: 7px; height: 33px; background-size: 7px 33px; }
+  .ticker-content { height: 33px; font-size: 9px; line-height: 33px; }
+  .frame-bottom-bar .sound-toggle { width: 44px; min-width: 44px; height: 33px; background-size: 7px 33px,7px 33px,58px 33px; }
+  .spidey-head-turn-sprite { left: -26px; bottom: 0; width: 39px; height: 40px; background-size: 2964px 40px; }
+  .hanging-spidey { right: 52px; }
+  .action-rpg-screen { inset: 0 0 66px; }
+}

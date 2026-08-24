@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="./css/action-rpg.css" />
   <link rel="stylesheet" href="./css/spidey-hub.css" />
   <link rel="stylesheet" href="./css/current-content-overrides.css?build=static-spiders-nav" />
+  <link rel="stylesheet" href="./css/clawed-hub.css?build=hub-slices-1" />
 </head>
 <body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
@@ -47,6 +48,13 @@
 
   <div class="tracker-viewport">
     <div class="tracker-device-frame">
+      <div class="claw-slice-frame" aria-hidden="true">
+        <i class="frame-r1c1"></i><i class="frame-r1c2"></i><i class="frame-r1c3"></i>
+        <i class="frame-r2c1"></i><i class="frame-r2c3"></i>
+        <i class="frame-r3c1"></i><i class="frame-r3c2"></i><i class="frame-r3c3"></i>
+        <i class="frame-r4c1"></i><i class="frame-r4c2"></i><i class="frame-r4c3"></i>
+        <i class="frame-r5c1"></i><i class="frame-r5c2"></i><i class="frame-r5c3"></i>
+      </div>
       <header class="frame-top-bar">
         <button class="pixel-orb pixel-orb--menu" id="btn-hub-menu" aria-label="Mở trung tâm điều khiển">
           <svg><use href="#icon-menu"></use></svg>
@@ -388,6 +396,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=static-spiders-nav"></script>
+  <script type="module" src="./js/main.js?build=hub-slices-1"></script>
 </body>
 </html>
