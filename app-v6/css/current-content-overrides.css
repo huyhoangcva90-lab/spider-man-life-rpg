@@ -1,5 +1,84 @@
 /* Current gameplay additions layered inside the untouched 03637370 tracker shell. */
 
+.tracker-device-frame { grid-template-rows: 78px minmax(0, 1fr) 52px; }
+
+.tracker-logo-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.brand-plaque { width: 330px; max-width: calc(100% - 20px); padding: 3px 10px 2px; }
+.brand-subtitle { margin-top: 1px; }
+
+.hanging-spidey {
+  position: absolute;
+  z-index: 65;
+  top: 0;
+  left: 50%;
+  width: 71px;
+  height: 105px;
+  pointer-events: none;
+  image-rendering: pixelated;
+  background: url('../assets/spideytracker/SpiderMan_web.png') no-repeat 0 0 / 5467px 105px;
+  filter: drop-shadow(3px 4px 0 rgba(0,0,0,.55));
+  transform: translateX(-50%);
+}
+
+.hanging-spidey--entry {
+  animation: spidey-entry-web 4.2s steps(77) 1 both, spidey-entry-hide .01s linear 4.25s forwards;
+}
+
+@keyframes spidey-entry-web {
+  from { background-position-x: 0; }
+  to { background-position-x: -5396px; }
+}
+
+@keyframes spidey-entry-hide {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+.frame-bottom-bar {
+  min-height: 0;
+  padding: 5px 10px 5px 66px;
+  gap: 8px;
+}
+
+.spidey-head-turn-sprite {
+  width: 46px;
+  height: 74px;
+  left: 12px;
+  bottom: 1px;
+  background: url('../assets/spideytracker/SpiderMan_HeadTurn.png') no-repeat 0 0 / 3492px 74px;
+  animation: spidey-corner-head-turn 5.6s steps(76) infinite;
+}
+
+@keyframes spidey-corner-head-turn {
+  from { background-position-x: 0; }
+  to { background-position-x: -3446px; }
+}
+
+.ticker-wrap {
+  height: 34px;
+  padding: 0 10px;
+  border-width: 3px;
+}
+
+.ticker-content { font-size: 7px; }
+
+.frame-bottom-bar .sound-toggle {
+  width: 92px;
+  height: 34px;
+  min-width: 92px;
+  border-width: 3px;
+  box-shadow: inset 0 0 0 2px #c8e6b5, 2px 2px 0 rgba(0,0,0,.35);
+}
+
+.frame-bottom-bar .sound-toggle svg { width: 18px; height: 18px; }
+.frame-bottom-bar .sound-toggle span { font-size: 6px; }
+
 .action-rpg-screen {
   inset: 0 0 72px;
   background: #050d18;
@@ -62,10 +141,23 @@
 .roster-placeholder--ally { background: #83b96b !important; }
 
 @media (max-width: 800px) {
+  .tracker-device-frame { grid-template-rows: 64px minmax(0, 1fr) 46px; }
+  .brand-plaque { width: 230px; }
+  .frame-bottom-bar { padding: 4px 6px 4px 48px; }
+  .spidey-head-turn-sprite { left: 1px; bottom: -1px; transform: scale(.74); transform-origin: bottom left; }
+  .ticker-wrap { height: 32px; }
+  .frame-bottom-bar .sound-toggle { width: 48px; min-width: 48px; height: 32px; }
+  .frame-bottom-bar .sound-toggle span { display: none; }
+  .hanging-spidey { transform: translateX(-50%) scale(.82); transform-origin: top center; }
   .action-rpg-screen { inset: 0 0 66px; }
 }
 
 @media (max-width: 500px) {
   .action-fighter--hero .hero-sprite-actor,
   .combat-placeholder { width: 64px; height: 64px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hanging-spidey { background-position-x: -5396px; animation: spidey-entry-hide .01s linear 2s forwards; }
+  .spidey-head-turn-sprite { animation: none; }
 }

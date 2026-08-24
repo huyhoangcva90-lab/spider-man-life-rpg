@@ -30,7 +30,7 @@ export class SoundController {
   }
 
   playSample(name, volume = 0.72) {
-    if (!this.isEnabled() || !this.sampleUrls[name]) return;
+    if (!this.isEnabled() || !this.sampleUrls[name]) return Promise.resolve(false);
     try {
       let audio = this.samples.get(name);
       if (!audio) {
@@ -41,11 +41,11 @@ export class SoundController {
       audio.pause();
       audio.currentTime = 0;
       audio.volume = Math.max(0, Math.min(1, volume * this.masterVolume));
-      audio.play().catch(() => {});
-    } catch { /* audio remains optional */ }
+      return audio.play().then(() => true).catch(() => false);
+    } catch { return Promise.resolve(false); }
   }
 
-  playTrackerJingle() { this.playSample('jingle', 0.58); }
+  playTrackerJingle() { return this.playSample('jingle', 0.58); }
   playActivityVoice() { this.playSample('activity', 0.78); }
   playFreshSightingVoice() { this.playSample('fresh', 0.78); }
   playArenaIntro() { if (this.musicEnabled) this.playSample('jingle', 0.52); }
@@ -91,9 +91,13 @@ export class SoundController {
     }
   }
 
-  playBootSound() {
+  async playBootSound() {
     this.init();
-    this.playTrackerJingle();
+    const played = await this.playTrackerJingle();
+    if (!played && !this.entryFallbackBound) {
+      this.entryFallbackBound = true;
+      window.addEventListener('pointerdown', () => this.playTrackerJingle(), { once: true, capture: true });
+    }
   }
 
   playClick() {

@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="./css/mobile.css" />
   <link rel="stylesheet" href="./css/action-rpg.css" />
   <link rel="stylesheet" href="./css/spidey-hub.css" />
-  <link rel="stylesheet" href="./css/current-content-overrides.css" />
+  <link rel="stylesheet" href="./css/current-content-overrides.css?build=webclaw-assets" />
 </head>
 <body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
@@ -53,7 +53,7 @@
         </button>
 
         <div class="brand-plaque" aria-label="Spidey Life Tracker">
-          <strong class="tracker-wordmark">SPIDEY TRACKER</strong>
+          <img class="tracker-logo-image" src="./assets/spideytracker/tracker_logo3.png" alt="Spidey Tracker" />
           <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
         </div>
 
@@ -64,6 +64,7 @@
         <div id="map" aria-label="Bản đồ nhiệm vụ đời thực"></div>
         <div class="map-dark-filter map-mode-only"></div>
         <div class="map-scanlines map-mode-only" aria-hidden="true"></div>
+        <div class="hanging-spidey hanging-spidey--entry" aria-hidden="true"></div>
 
         <section class="action-rpg-screen" id="action-rpg-screen" aria-label="Spider-Man Action Arena">
           <div class="game-hud-strip">
@@ -176,6 +177,7 @@
       </main>
 
       <footer class="frame-bottom-bar">
+        <div class="spidey-head-turn-sprite" aria-hidden="true"></div>
         <div class="ticker-wrap">
           <div class="ticker-content">
             <span class="ticker-status-tag">SYS // ONLINE</span>
@@ -386,6 +388,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=classic-tracker"></script>
+  <script type="module" src="./js/main.js?build=webclaw-assets"></script>
 </body>
 </html>
