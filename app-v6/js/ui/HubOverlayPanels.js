@@ -1,38 +1,32 @@
-/* WEB OPS TRACKER V6 - HUB OVERLAY PANELS (V5 SYSTEMS REUSE) */
+/* SPIDEY LIFE TRACKER — contextual hub projections over canonical map entries */
 
 export class HubOverlayPanels {
-  constructor(stateStore, eventBus, soundController, entryRepo) {
+  constructor(stateStore, eventBus, soundController, entryRepo, lifeRpg) {
     this.state = stateStore;
     this.bus = eventBus;
     this.sound = soundController;
     this.repo = entryRepo;
+    this.lifeRpg = lifeRpg;
     this.modalEl = null;
   }
 
   init() {
     this.modalEl = document.getElementById('hub-overlay-backdrop');
     if (!this.modalEl) return;
-
-    this.bindEvents();
-
-    this.bus.on('OPEN_HUB_PANEL', (tabName) => this.open(tabName));
-  }
-
-  bindEvents() {
-    const closeBtn = document.getElementById('hub-modal-close');
-    closeBtn?.addEventListener('click', () => this.close());
-
-    const tabs = this.modalEl.querySelectorAll('.hub-tab-btn');
-    tabs.forEach(tab => {
+    document.getElementById('hub-modal-close')?.addEventListener('click', () => this.close());
+    this.modalEl.querySelectorAll('.hub-tab-btn').forEach((tab) => {
       tab.addEventListener('click', () => {
-        const name = tab.getAttribute('data-tab');
         this.sound.playClick();
-        this.switchTab(name);
+        this.switchTab(tab.dataset.tab);
       });
+    });
+    this.bus.on('OPEN_HUB_PANEL', (tabName) => this.open(tabName));
+    this.bus.on('RPG_UPDATED', () => {
+      if (this.state.get('activeHubTab') === 'RPG') this.switchTab('RPG');
     });
   }
 
-  open(tabName = 'MISSIONS') {
+  open(tabName = 'HOME') {
     if (!this.modalEl) return;
     this.switchTab(tabName);
     this.modalEl.removeAttribute('hidden');
@@ -41,143 +35,185 @@ export class HubOverlayPanels {
   }
 
   close() {
-    if (this.modalEl) {
-      this.modalEl.classList.remove('active');
-      this.modalEl.setAttribute('hidden', '');
-      this.modalEl.setAttribute('inert', '');
-    }
+    if (!this.modalEl) return;
+    this.modalEl.classList.remove('active');
+    this.modalEl.setAttribute('hidden', '');
+    this.modalEl.setAttribute('inert', '');
   }
 
-  switchTab(tabName) {
-    const tabs = this.modalEl.querySelectorAll('.hub-tab-btn');
-    tabs.forEach(t => {
-      if (t.getAttribute('data-tab') === tabName) {
-        t.classList.add('active');
-      } else {
-        t.classList.remove('active');
-      }
+  switchTab(tabName = 'HOME') {
+    const supportedTabs = new Set(['HOME', 'LIFE_OS', 'ARENAS', 'RPG', 'CHRONICLE']);
+    const nextTab = supportedTabs.has(tabName) ? tabName : 'HOME';
+    this.state.setState({ activeHubTab: nextTab });
+    this.modalEl.querySelectorAll('.hub-tab-btn').forEach((tab) => {
+      const selected = tab.dataset.tab === nextTab;
+      tab.classList.toggle('active', selected);
+      tab.setAttribute('aria-selected', String(selected));
     });
 
     const contentBox = document.getElementById('hub-tab-content');
     if (!contentBox) return;
-
-    switch (tabName) {
-      case 'OPERATIVE':
-        contentBox.innerHTML = this.renderOperativeTab();
-        break;
-      case 'HIDEOUT':
-        contentBox.innerHTML = this.renderHideoutTab();
-        break;
-      case 'CHRONICLE':
-        contentBox.innerHTML = this.renderChronicleTab();
-        break;
-      case 'MISSIONS':
-      default:
-        contentBox.innerHTML = this.renderMissionsTab();
-        break;
-    }
+    const renderers = {
+      HOME: () => this.renderHome(),
+      LIFE_OS: () => this.renderLifeOs(),
+      ARENAS: () => this.renderArenas(),
+      RPG: () => this.renderRpg(),
+      CHRONICLE: () => this.renderChronicle()
+    };
+    contentBox.innerHTML = renderers[nextTab]();
+    if (nextTab === 'RPG') this.bindRpgActions(contentBox);
   }
 
-  renderMissionsTab() {
+  getStats() {
     const entries = this.repo.getAll();
-    const confirmedCount = entries.filter(e => e.status === 'CONFIRMED').length;
-    const doneCount = entries.filter(e => e.status === 'DONE').length;
-
-    return `
-      <div class="hub-panel-inner">
-        <h3 style="font-family: var(--font-pixel); font-size: 11px; color: var(--cyan-bright); margin-bottom: 12px;">
-          🎯 BẢNG NHIỆM VỤ & TỔNG QUAN TẬP TRUNG
-        </h3>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;">
-          <div style="background: var(--bg-card); border: 1px solid var(--cyan-mid); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-family: var(--font-pixel); font-size: 14px; color: var(--cyan-bright);">${entries.length}</div>
-            <div style="font-size: 10px; color: var(--text-muted);">Tổng địa điểm</div>
-          </div>
-          <div style="background: var(--bg-card); border: 1px solid var(--amber-gold); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-family: var(--font-pixel); font-size: 14px; color: var(--amber-gold);">${confirmedCount}</div>
-            <div style="font-size: 10px; color: var(--text-muted);">Đã xác nhận</div>
-          </div>
-          <div style="background: var(--bg-card); border: 1px solid var(--color-leisure); padding: 10px; border-radius: 4px; text-align: center;">
-            <div style="font-family: var(--font-pixel); font-size: 14px; color: var(--color-leisure);">${doneCount}</div>
-            <div style="font-size: 10px; color: var(--text-muted);">Hoàn thành</div>
-          </div>
-        </div>
-        <p style="font-size: 12px; color: var(--text-main); line-height: 1.5;">
-          Tất cả nhiệm vụ và địa điểm được kết nối trực tiếp với Bản đồ Thực tế V6. Bạn có thể thêm cuộc họp, công việc, việc vặt hoặc đồng bộ trực tiếp từ Notion snapshot.
-        </p>
-      </div>
-    `;
+    return {
+      entries,
+      active: entries.filter((entry) => !['DONE', 'CANCELLED'].includes(entry.status)),
+      confirmed: entries.filter((entry) => entry.status === 'CONFIRMED'),
+      done: entries.filter((entry) => entry.status === 'DONE'),
+      notion: entries.filter((entry) => entry.type === 'NOTION_MISSION')
+    };
   }
 
-  renderOperativeTab() {
+  renderHome() {
+    const stats = this.getStats();
+    const completion = stats.entries.length ? Math.round((stats.done.length / stats.entries.length) * 100) : 0;
     return `
-      <div class="hub-panel-inner" style="display: flex; gap: 16px;">
-        <div style="width: 110px; height: 110px; background: #000; border: 2px solid var(--cyan-bright); border-radius: 4px; overflow: hidden; flex-shrink: 0;">
-          <img src="./assets/characters/web-operative-v1.png" onError="this.src='../app-v4/assets/characters/web-operative-v1.png'" style="width: 100%; height: 100%; object-fit: cover;" />
+      <section class="hub-panel-inner">
+        <div class="hub-panel-heading">WHAT MATTERS RIGHT NOW? <span>MAP DATA // LIVE</span></div>
+        <div class="hub-grid">
+          ${this.stat('ACTIVE', stats.active.length, 'Nhiệm vụ có thể hành động')}
+          ${this.stat('CONFIRMED', stats.confirmed.length, 'Đã chốt thời gian / địa điểm')}
+          ${this.stat('COMPLETE', `${completion}%`, `${stats.done.length} mission đã kết thúc`)}
         </div>
-        <div style="flex: 1;">
-          <h3 style="font-family: var(--font-pixel); font-size: 12px; color: var(--cyan-bright);">ĐẶC VỤ WEB OPERATIVE V6</h3>
-          <div style="font-size: 11px; color: var(--amber-gold); margin-bottom: 8px;">Cấp độ: LEVEL 60 • TRẠM TRẬN THỰC TẾ</div>
-          <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">
-            Được trang bị hệ thống định vị GNSS độ chính xác cao, bộ lọc MapLibre GL và kết nối dữ liệu Notion.
-          </p>
-          <div style="font-family: var(--font-pixel); font-size: 9px; color: var(--cyan-bright);">
-            ⚡ KĨ NĂNG: GEOLOCATION • HA VERSINE ROUTING • NOTION SYNC
-          </div>
+        <div class="hub-grid">
+          ${this.zone('NOW', 'Chọn một marker đỏ trên bản đồ hoặc tạo mission mới để bắt đầu hành động.', 'red')}
+          ${this.zone('STATUS', `${stats.notion.length} mission từ Notion đang dùng chung nguồn dữ liệu với tracker.`, 'green')}
+          ${this.zone('ALERTS', stats.active.length ? `${stats.active.length} mission vẫn cần chú ý.` : 'Không có cảnh báo đang mở.', 'amber')}
         </div>
-      </div>
-    `;
+      </section>`;
   }
 
-  renderHideoutTab() {
+  renderLifeOs() {
     return `
-      <div class="hub-panel-inner">
-        <h3 style="font-family: var(--font-pixel); font-size: 11px; color: var(--cyan-bright); margin-bottom: 12px;">
-          🛠️ CĂN CỨ TRANG BỊ & THIẾT BỊ ĐỊNH VỊ
-        </h3>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-          <div style="background: var(--bg-card); border: 1px solid var(--steel-border); padding: 10px; border-radius: 4px;">
-            <div style="font-weight: bold; color: var(--cyan-bright); font-size: 12px;">📡 Cảm biến GPS GNSS V6</div>
-            <div style="font-size: 10px; color: var(--text-muted);">Theo dõi độ chính xác thời thực dưới 15m.</div>
-          </div>
-          <div style="background: var(--bg-card); border: 1px solid var(--steel-border); padding: 10px; border-radius: 4px;">
-            <div style="font-weight: bold; color: var(--color-notion); font-size: 12px;">📝 Trạm dữ liệu Notion API</div>
-            <div style="font-size: 10px; color: var(--text-muted);">Đồng bộ master calendar và inbox.</div>
-          </div>
-          <div style="background: var(--bg-card); border: 1px solid var(--steel-border); padding: 10px; border-radius: 4px;">
-            <div style="font-weight: bold; color: var(--amber-gold); font-size: 12px;">🗺️ Máy quét MapLibre GL</div>
-            <div style="font-size: 10px; color: var(--text-muted);">Renderer vector tốc độ cao, hỗ trợ GeoJSON.</div>
-          </div>
-          <div style="background: var(--bg-card); border: 1px solid var(--steel-border); padding: 10px; border-radius: 4px;">
-            <div style="font-weight: bold; color: var(--color-leisure); font-size: 12px;">🔊 Trạm âm thanh Synth 8-bit</div>
-            <div style="font-size: 10px; color: var(--text-muted);">Tổng hợp hiệu ứng Web Audio API.</div>
-          </div>
+      <section class="hub-panel-inner">
+        <div class="hub-panel-heading">LIFE OS // SYSTEMS <span>ONE SYSTEM, ONE TRUTH</span></div>
+        <div class="hub-grid">
+          ${this.zone('GOALS + PLANNING', 'Mục tiêu, dự án và các mốc tiến độ.', 'red')}
+          ${this.zone('PRODUCTIVITY', 'Task, lịch hôm nay và next action.', 'amber')}
+          ${this.zone('HABITS + HEALTH', 'Thói quen, vận động và phục hồi.', 'green')}
+          ${this.zone('KNOWLEDGE', 'Học tập, ghi chú và recall queue.')}
+          ${this.zone('FINANCE', 'Quyết định tiền bạc và cảnh báo ngân sách.', 'amber')}
+          ${this.zone('REVIEW + ALERTS', 'Daily / weekly review và việc cần chú ý.', 'red')}
         </div>
-      </div>
-    `;
+      </section>`;
   }
 
-  renderChronicleTab() {
-    const entries = this.repo.getAll();
-    const doneEntries = entries.filter(e => e.status === 'DONE');
-
+  renderArenas() {
     return `
-      <div class="hub-panel-inner">
-        <h3 style="font-family: var(--font-pixel); font-size: 11px; color: var(--cyan-bright); margin-bottom: 12px;">
-          📜 NHẬT KÝ HOẠT ĐỘNG THỰC TẾ
-        </h3>
-        <div style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;">
-          ${doneEntries.length === 0
-            ? '<div style="color: var(--text-muted); font-size: 11px;">Chưa có địa điểm nào hoàn thành trong nhật ký.</div>'
-            : doneEntries.map(e => `
-                <div style="background: var(--bg-card); border-left: 3px solid var(--color-leisure); padding: 8px 10px; border-radius: 3px;">
-                  <div style="font-weight: bold; color: #fff; font-size: 12px;">${e.title}</div>
-                  <div style="font-size: 10px; color: var(--text-muted);">Hoàn thành lúc: ${new Date(e.updatedAt).toLocaleString('vi-VN')} • ${e.address}</div>
-                </div>
-              `).join('')
-          }
+      <section class="hub-panel-inner">
+        <div class="hub-panel-heading">SELECT ARENA <span>CONTEXT CHANGES, DATA DOES NOT</span></div>
+        <div class="hub-grid">
+          ${this.zone('BLACK ROOM', 'FOCUS // Thực thi current task, timer và next action.', 'red')}
+          ${this.zone('CAFE HOUSE', 'STUDY // Learn → Note → Recall → Apply.', 'amber')}
+          ${this.zone('WHITE ROOM', 'GROWTH // Check-in → Train → Reflect.')}
+          ${this.zone('GREEN HOUSE', 'RECOVERY // Nghỉ, sleep signal và nervous-system reset.', 'green')}
+          ${this.zone('GOLDEN VAULT', 'FINANCE // Record → Review → Decide.', 'amber')}
+          ${this.zone("HERO'S VISION", 'IDENTITY // Tầm nhìn, life areas và future self.', 'red')}
         </div>
-      </div>
-    `;
+      </section>`;
+  }
+
+  renderRpg() {
+    const attributes = ['AGILITY', 'POWER', 'INTELLECT', 'FOCUS', 'DISCIPLINE', 'WILLPOWER'];
+    const rpg = this.lifeRpg.getSnapshot();
+    const { character, boss, streak, inventory } = rpg;
+    const xpPercent = Math.min(100, Math.round((character.xp / character.xpToNext) * 100));
+    const hpPercent = Math.max(0, Math.round((boss.currentHp / boss.maxHp) * 100));
+    const staggerPercent = Math.min(100, Math.round((boss.stagger / boss.maxStagger) * 100));
+    const finisherReady = boss.status === 'ACTIVE' && boss.stagger >= boss.maxStagger;
+    const lastLoot = inventory.loot[0]?.name || 'NO RAID LOOT YET';
+    return `
+      <section class="hub-panel-inner">
+        <div class="hub-panel-heading">OPERATIVE PROFILE <span>MISSION DATA // LIVE</span></div>
+        <div class="rpg-summary-grid">
+          <div><span>LEVEL</span><strong>${character.level}</strong></div>
+          <div><span>XP</span><strong>${character.xp}/${character.xpToNext}</strong></div>
+          <div><span>WEB COINS</span><strong>${character.gold}</strong></div>
+          <div><span>STREAK</span><strong>${streak.current}D</strong></div>
+        </div>
+        <div class="rpg-xp-track" aria-label="Tiến độ XP ${xpPercent}%"><i style="--value:${xpPercent}%"></i></div>
+        <div class="combat-sprite-stage" aria-label="Combat sprite library preview">
+          <div class="combat-sprite-actor combat-sprite-actor--strike" aria-hidden="true"></div>
+          <div class="combat-sprite-actor combat-sprite-actor--swing" aria-hidden="true"></div>
+        </div>
+        <article class="boss-raid-card ${boss.status === 'DEFEATED' ? 'boss-raid-card--defeated' : ''}">
+          <div class="boss-raid-header">
+            <div><span>RAID ${boss.raid} // ${boss.status}</span><strong>${boss.name}</strong></div>
+            <b>WEAKNESS: ${boss.weakness}</b>
+          </div>
+          <div class="boss-meter"><span>HP</span><div><i style="--value:${hpPercent}%"></i></div><b>${boss.currentHp}/${boss.maxHp}</b></div>
+          <div class="boss-meter boss-meter--stagger"><span>STAGGER</span><div><i style="--value:${staggerPercent}%"></i></div><b>${boss.stagger}/${boss.maxStagger}</b></div>
+          <div class="boss-raid-footer">
+            <small>${boss.combatLog[0] ? this.escapeHtml(boss.combatLog[0].text) : 'Hoàn thành mission để tấn công Boss.'}</small>
+            ${boss.status === 'DEFEATED'
+              ? '<button class="btn-primary rpg-action-btn" id="rpg-next-raid-btn">START NEXT RAID</button>'
+              : `<button class="btn-danger rpg-action-btn" id="rpg-finisher-btn" ${finisherReady ? '' : 'disabled'}>⚡ FINISHER ${finisherReady ? 'READY' : 'LOCKED'}</button>`}
+          </div>
+        </article>
+        ${attributes.map((name) => `
+          <div class="attribute-row">
+            <span>${name}</span>
+            <div class="attribute-track"><i style="--value:${Math.min(100, Math.round((character.attrXp[name] / this.lifeRpg.getAttrXpThreshold(character.stats[name])) * 100))}%"></i></div>
+            <b>${character.stats[name]}</b>
+          </div>`).join('')}
+        <div class="hub-grid">
+          ${this.zone('REWARD LOOP', 'Mission DONE → XP, Web Coins và thuộc tính theo loại nhiệm vụ.', 'red')}
+          ${this.zone('BEST STREAK', `${streak.best} ngày liên tiếp. Mỗi ngày chỉ tăng streak một lần.`, 'green')}
+          ${this.zone('LATEST LOOT', this.escapeHtml(lastLoot), 'amber')}
+        </div>
+      </section>`;
+  }
+
+  bindRpgActions(contentBox) {
+    contentBox.querySelector('#rpg-finisher-btn')?.addEventListener('click', () => {
+      const result = this.lifeRpg.executeFinisher();
+      if (result) this.sound.playSuccess();
+    });
+    contentBox.querySelector('#rpg-next-raid-btn')?.addEventListener('click', () => {
+      if (this.lifeRpg.startNextRaid()) this.sound.playSelect();
+    });
+  }
+
+  renderChronicle() {
+    const { done } = this.getStats();
+    return `
+      <section class="hub-panel-inner">
+        <div class="hub-panel-heading">LIFE CHRONICLE <span>${done.length} COMPLETED</span></div>
+        <div class="hub-log-list">
+          ${done.length === 0
+            ? '<div class="hub-log-entry"><strong>NO COMPLETIONS YET</strong><small>Hoàn thành mission trên map để ghi sự kiện đầu tiên.</small></div>'
+            : done.map((entry) => `
+                <div class="hub-log-entry">
+                  <strong>${this.escapeHtml(entry.title)}</strong>
+                  <small>${new Date(entry.updatedAt).toLocaleString('vi-VN')} // ${this.escapeHtml(entry.address || 'Chưa có địa chỉ')}</small>
+                </div>`).join('')}
+        </div>
+      </section>`;
+  }
+
+  stat(label, value, description) {
+    return `<div class="hub-stat"><strong>${value}</strong><span>${label}<br>${description}</span></div>`;
+  }
+
+  zone(title, copy, tone = '') {
+    const toneClass = tone ? ` hub-zone--${tone}` : '';
+    return `<article class="hub-zone${toneClass}"><h4>${title}</h4><p>${copy}</p></article>`;
+  }
+
+  escapeHtml(value) {
+    const node = document.createElement('div');
+    node.textContent = String(value ?? '');
+    return node.innerHTML;
   }
 }

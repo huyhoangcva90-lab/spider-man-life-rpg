@@ -1,81 +1,50 @@
-# 🕷️ Spider-Man Life RPG Engine (Marvel Snap & Notion Style)
+# SPIDEY LIFE — Arena Mission Hub
 
-> **Gamify Your Life with Spider-Man RPG Mechanics!**  
-> Biến hành động cuộc sống hàng ngày (thói quen, mục tiêu, dự án) thành game nhập vai Siêu Anh Hùng Spider-Man hành động thời gian thực lấy cảm hứng từ *Marvel Snap*, *Solo Leveling System*, *LifeReset: 66 Day Habit* và *Notion Life RPG*.
+Ứng dụng Life RPG local-first biến nhiệm vụ đời thực thành sát thương trong trận đấu Spider hero vs villain.
 
-🌐 **Live Demo Trải Nghiệm Trực Tuyến:** [https://huyhoangcva90-lab.github.io/spider-man-life-rpg/](https://huyhoangcva90-lab.github.io/spider-man-life-rpg/)  
-📦 **GitHub Repository:** [https://github.com/huyhoangcva90-lab/spider-man-life-rpg](https://github.com/huyhoangcva90-lab/spider-man-life-rpg)
+- Live: <https://huyhoangcva90-lab.github.io/spider-man-life-rpg/>
+- Repository: <https://github.com/huyhoangcva90-lab/spider-man-life-rpg>
+- Brand guide: [`docs/SPIDEY_LIFE_BRAND_GUIDE.md`](docs/SPIDEY_LIFE_BRAND_GUIDE.md)
 
----
+## Luồng chính
 
-## 🌟 Tính Năng Nổi Bật (Key Features)
+1. Tạo một mission thật trong Arena hoặc Map.
+2. Chuyển mission sang `DONE`.
+3. Nhận XP, Web Coins, điểm thuộc tính, streak và gây damage lên raid boss.
+4. Đánh đầy stagger để mở `WEB FINISHER`; hạ boss để sang raid kế tiếp.
 
-### 1. 🦾 Hệ Thống 6 Thuộc Tính Siêu Anh Hùng (Core Attributes)
-- **⚡ Agility (Nhanh Nhẹn):** Thể chất, tập luyện, thể thao.
-- **🦾 Power (Sức Mạnh):** Đột phá giới hạn, nhiệm vụ nặng.
-- **🧠 Intellect (Trí Tuệ):** Học tập, đọc sách, lập trình, nghiên cứu.
-- **🧘 Focus (Tập Trung):** Deep Work, thiền định, loại bỏ xao nhãng.
-- **🛡️ Discipline (Kỷ Luật):** Thói quen lành mạnh, thức dậy đúng giờ, ăn uống healthy.
-- **💎 Willpower (Ý Chí):** Vượt khó khăn, từ chối cám dỗ.
+## Các mode có chức năng
 
-### 2. 🦹 Boss Raid & Weakness System (Phó Bản Phản Diện)
-- Mỗi **Dự án lớn (Project)** gắn liền với một Siêu Phản Diện (Doctor Octopus, Green Goblin, Venom, Mysterio, Kraven, Lizard).
-- **Cơ chế Điểm Yếu (Weakness Match):** Khi thực hiện hành động đúng hệ thuộc tính điểm yếu của Boss, bạn gây **1.5x Damage & Stagger**!
-- **Hệ thống Choáng & Đòn Kết Liễu (Stagger & Finisher):** Đạt 100% Stagger mở khóa `⚡ EXECUTE FINISHER (+350 Critical Damage)`.
+- **Arena:** màn hình mặc định, Spider đấu villain, boss HP và battle action.
+- **Missions:** nhật ký nhiệm vụ, tìm kiếm và lọc trạng thái.
+- **Allies:** chọn một trong 100 Spider ally pixel.
+- **Map:** mode bản đồ CARTO/MapLibre để tìm, lọc và điều hướng; bấm nền map không tự tạo dữ liệu.
+- **Profile:** level, 6 thuộc tính, streak, raid, combat log và loot đã nhận.
 
-### 3. 🍱 Bento Grid UI & 3D Card Parallax Tilt
-- Giao diện thiết kế theo ngôn ngữ **Bento Box Grid** hiện đại với hiệu ứng kính mờ **Glassmorphism**.
-- **Hiệu ứng Thẻ bài 3D Marvel Snap:** Thẻ bài nghiêng 3D mượt mà theo góc con trỏ chuột (`Card3DTiltEngine`) cùng ánh kim 7 màu **Holographic Foil Shimmer**.
+Các nút không có nội dung đã được loại bỏ. Giao diện không dùng rương/lootbox; phần thưởng đến từ mission thật.
 
-### 4. 🕸️ Spider Web Hexagon Radar Chart & Dynamic Particles
-- Biểu đồ mạng nhện 6 góc vẽ động bằng HTML5 Canvas trực quan hóa cấp độ thuộc tính của Peter Parker.
-- Mạng tơ nhện neon tự co giãn và kết nối theo con trỏ chuột trên nền Halftone Comic.
+## Chạy local
 
-### 5. ⚡ Spider-Sense QTE Reaction Minigame
-- Minigame phản xạ Quick-Time Event: Bấm đúng khoảnh khắc vòng tròn thu nhỏ chạm mốc vàng để tung đòn **+500 OVERKILL DAMAGE** rung chuyển màn hình (`Screen Shake Impact FX`)!
+Đây là ứng dụng HTML/CSS/JavaScript module không cần build step. Vì trình duyệt chặn ES modules khi mở bằng `file://`, hãy phục vụ thư mục bằng một static server, ví dụ:
 
-### 6. 📊 Notion-Style Kanban Board
-- Quản lý công việc 3 cột chuẩn Notion: `⚪ TO DO` ➔ `🕸️ WEB SLINGING` ➔ `✓ BOSS DAMAGED`.
+```bash
+python -m http.server 4173
+```
 
-### 7. 🔧 360° Radial Gadget Wheel & 🌌 Multiverse Rift
-- Vòng xoay thiết bị 360° (Web-Shooter, Impact Web, Web Bomb, Spider-Drone) tung chiêu phụ trợ.
-- Cánh cổng Đa Vũ Trụ Multiverse Rift mang tới viện trợ ngẫu nhiên từ Spider-Ham, Spider-Man 2099 & Spider-Noir.
+Sau đó mở <http://127.0.0.1:4173/>. Root tự chuyển sang `app-v6/`, cũng là ứng dụng được GitHub Pages phục vụ.
 
-### 8. 🥋 Dynamic Suit Themes & 🎶 Synthwave Lo-Fi Audio Synthesizer
-- Đổi Suit (Advanced White, Symbiote Black, Iron Spider Gold, Miles Black/Red) lập tức biến đổi toàn bộ màu sắc, hiệu ứng neon & âm thanh.
-- Nhạc nền Lo-Fi Synthwave và giọng nói Siêu Anh Hùng (`Speech Synthesis API`) hô vang khẩu hiệu chiến đấu.
+## Dữ liệu và âm thanh
 
-### 9. 💾 Local-First & 1-Click JSON Backup
-- Dữ liệu lưu trữ an toàn ngay trên trình duyệt (Local Storage).
-- Nút **📥 EXPORT** và **📤 IMPORT** JSON 1-click giúp sao lưu hoặc chuyển đổi dữ liệu dễ dàng.
+- Dữ liệu Life RPG, missions và ally được lưu trong LocalStorage của trình duyệt.
+- Âm thanh mặc định là `OFF` và chỉ bật sau thao tác của người dùng.
+- App không tự xin quyền GPS khi khởi động.
 
----
+## Công nghệ
 
-## 🚀 Hướng Dẫn Sử Dụng (Quick Start)
+- Vanilla HTML, CSS và JavaScript ES modules
+- MapLibre GL + CARTO Dark Matter + OpenStreetMap data
+- LocalStorage, Web Audio, Geolocation (chỉ khi người dùng bật)
 
-Ứng dụng hoàn toàn **Local-First / Zero Dependencies**: Không cần cài đặt Node.js hay Build tool phức tạp!
+## License
 
-1. **Clone repository về máy:**
-   ```bash
-   git clone https://github.com/huyhoangcva90-lab/spider-man-life-rpg.git
-   cd spider-man-life-rpg
-   ```
-2. **Mở ứng dụng:**
-   - Nhấp đúp mở trực tiếp file `index.html` trên bất kỳ trình duyệt nào (Chrome, Edge, Brave, Safari, Firefox), hoặc:
-   - Dùng Live Server (VS Code Extension) / `npx serve .`
-
----
-
-## 🛠️ Công Nghệ Sử Dụng (Tech Stack)
-
-- **Frontend:** Vanilla HTML5, CSS3 Modern Glassmorphism & Bento Grid, JavaScript (ES6+ Modules).
-- **Graphics & Animation:** HTML5 Canvas Particle Engine, 3D CSS Transforms, Canvas-Confetti.
-- **Audio & Speech:** Web Audio API Sound Synthesizer, Web Speech Synthesis API.
-- **Storage:** LocalStorage API với Data Importer/Exporter JSON.
-
----
-
-## 📜 License
-
-Dự án được phân phối dưới giấy phép **MIT License**.
-Phát triển với niềm đam mê dành cho vũ trụ Spider-Man & phương pháp phát triển bản thân Gamification! 🕸️❤️
+MIT. Các asset brand trong `app-v6/assets/brand/` được tạo riêng cho dự án SPIDEY LIFE.

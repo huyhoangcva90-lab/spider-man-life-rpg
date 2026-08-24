@@ -1,24 +1,27 @@
 /* WEB OPS TRACKER V6 - MAIN APPLICATION BOOTSTRAPPER */
 
 import { EventBus } from './core/EventBus.js';
-import { StateStore } from './core/StateStore.js';
+import { StateStore } from './core/StateStore.js?v=spidey-assets-1';
 import { SoundController } from './core/SoundController.js';
-import { MapEngine } from './map/MapEngine.js';
-import { MarkerLayer } from './map/MarkerLayer.js';
+import { MapEngine } from './map/MapEngine.js?v=spidey-allies-1';
+import { MarkerLayer } from './map/MarkerLayer.js?v=spidey-assets-1';
 import { GeolocationController } from './map/GeolocationController.js';
 import { GeocoderAdapter } from './map/GeocoderAdapter.js';
 import { MapEntryRepository } from './data/MapEntryRepository.js';
 import { GeoJsonTransfer } from './data/GeoJsonTransfer.js';
 import { NotionAdapter } from './integrations/notion/NotionAdapter.js';
 import { BootSequence } from './ui/BootSequence.js';
-import { TrackerFrame } from './ui/TrackerFrame.js';
+import { TrackerFrame } from './ui/TrackerFrame.js?v=spidey-allies-1';
 import { SearchPanel } from './ui/SearchPanel.js';
 import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
 import { MarkerDossier } from './ui/MarkerDossier.js';
-import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js';
-import { HubOverlayPanels } from './ui/HubOverlayPanels.js';
+import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?v=spidey-allies-1';
+import { HubOverlayPanels } from './ui/HubOverlayPanels.js?v=life-rpg-1';
 import { MapGuideModal } from './ui/MapGuideModal.js';
+import { AllySelector } from './ui/AllySelector.js?v=spidey-allies-1';
+import { LifeRpgEngine } from './game/LifeRpgEngine.js?v=life-rpg-1';
+import { GameModeController } from './ui/GameModeController.js?v=arena-hub-1';
 
 class App {
   constructor() {
@@ -33,6 +36,7 @@ class App {
     this.mapEngine = new MapEngine(this.bus, this.sound);
     this.markerLayer = new MarkerLayer(this.mapEngine, this.bus, this.sound);
     this.geolocation = new GeolocationController(this.state, this.sound);
+    this.lifeRpg = new LifeRpgEngine(this.bus);
 
     this.trackerFrame = new TrackerFrame(this.state, this.bus, this.sound);
     this.searchPanel = new SearchPanel(this.geocoder, this.bus, this.sound);
@@ -40,8 +44,10 @@ class App {
     this.activityLog = new ActivityLog(this.repo, this.state, this.bus, this.sound);
     this.markerDossier = new MarkerDossier(this.repo, this.state, this.bus, this.sound);
     this.unlocatedQueue = new UnlocatedMissionQueue(this.notion, this.bus, this.sound);
-    this.hubOverlay = new HubOverlayPanels(this.state, this.bus, this.sound, this.repo);
+    this.hubOverlay = new HubOverlayPanels(this.state, this.bus, this.sound, this.repo, this.lifeRpg);
     this.mapGuide = new MapGuideModal(this.state, this.bus, this.sound, GeoJsonTransfer, this.repo);
+    this.allySelector = new AllySelector(this.sound);
+    this.gameModes = new GameModeController(this.bus, this.sound, this.mapEngine, this.lifeRpg);
     this.bootSequence = new BootSequence(this.sound);
   }
 
@@ -57,6 +63,8 @@ class App {
     this.unlocatedQueue.init();
     this.hubOverlay.init();
     this.mapGuide.init();
+    this.allySelector.init();
+    this.gameModes.init();
 
     // 2. Initialize Map Engine (Defaults to HCMC fallback: lng 106.7009, lat 10.7769)
     await this.mapEngine.init('map', 'CARTO_DARK');
@@ -91,6 +99,8 @@ class App {
           this.markerDossier.close();
         } else if (document.getElementById('hub-overlay-backdrop')?.classList.contains('active')) {
           this.hubOverlay.close();
+        } else if (document.getElementById('ally-selector-backdrop')?.classList.contains('active')) {
+          this.allySelector.close();
         } else if (document.getElementById('map-guide-modal-backdrop')?.classList.contains('active')) {
           this.mapGuide.close();
         } else if (document.getElementById('activity-log-drawer')?.classList.contains('active')) {
@@ -113,6 +123,10 @@ class App {
     this.bus.on('ENTRY_UPDATED', refreshUI);
     this.bus.on('ENTRY_DELETED', refreshUI);
 
+    // Canonical Life RPG trigger: reward each entry once, only after it reaches DONE.
+    this.bus.on('ENTRY_CREATED', (entry) => this.lifeRpg.completeEntry(entry));
+    this.bus.on('ENTRY_UPDATED', (entry) => this.lifeRpg.completeEntry(entry));
+
     // Filter change
     this.bus.on('FILTER_CHANGED', (filter) => {
       this.updateMarkers();
@@ -127,21 +141,6 @@ class App {
     // Map fly-to
     this.bus.on('FLY_TO_LOCATION', ({ lat, lng, zoom }) => {
       this.mapEngine.flyTo(lat, lng, zoom || 15);
-    });
-
-    // Map click -> open add editor if not assigning unlocated item
-    this.bus.on('MAP_CLICK', async (coords) => {
-      const isAssigning = document.getElementById('unlocated-queue-drawer')?.hasAttribute('data-assigning-id');
-      if (!isAssigning) {
-        this.sound.playClick();
-        const address = await this.geocoder.reverseGeocode(coords.lat, coords.lng);
-        this.bus.emit('OPEN_EDITOR', {
-          lat: coords.lat,
-          lng: coords.lng,
-          address,
-          source: 'MAP_CLICK'
-        });
-      }
     });
 
     // Map camera controls

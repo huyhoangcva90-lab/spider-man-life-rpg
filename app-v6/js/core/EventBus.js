@@ -31,7 +31,6 @@ export class EventBus {
 }
 
 export const events = {
-  MAP_CLICK: 'MAP_CLICK',
   ENTRY_CREATED: 'ENTRY_CREATED',
   ENTRY_UPDATED: 'ENTRY_UPDATED',
   ENTRY_DELETED: 'ENTRY_DELETED',

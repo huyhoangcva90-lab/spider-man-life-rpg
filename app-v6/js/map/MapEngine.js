@@ -55,13 +55,7 @@ export class MapEngine {
         this.showOfflineGridNotice();
       });
 
-      // Map background click event
-      this.map.on('click', (e) => {
-        this.bus.emit('MAP_CLICK', {
-          lat: parseFloat(e.lngLat.lat.toFixed(6)),
-          lng: parseFloat(e.lngLat.lng.toFixed(6))
-        });
-      });
+      // MAP MODE is navigation-only. A background tap must not create or assign data.
 
       return true;
     } catch (err) {

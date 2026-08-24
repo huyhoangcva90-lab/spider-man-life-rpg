@@ -9,13 +9,13 @@ export class StateStore {
       userLocation: null,           // { lat, lng, accuracy, timestamp }
       gpsStatus: 'STANDBY',        // 'STANDBY' | 'ACQUIRING' | 'ACTIVE' | 'DENIED' | 'UNSUPPORTED'
       trackingMode: false,          // Auto-center map on GPS updates
-      soundEnabled: true,
+      soundEnabled: false,
       activeDrawer: null,           // null | 'ACTIVITY_LOG' | 'UNLOCATED_QUEUE'
       activeModal: null,            // null | 'DOSSIER' | 'EDITOR' | 'HUB_OVERLAY' | 'MAP_GUIDE' | 'SETTINGS'
-      activeHubTab: 'MISSIONS',     // 'MISSIONS' | 'OPERATIVE' | 'HIDEOUT' | 'CHRONICLE'
+      activeHubTab: 'HOME',         // 'HOME' | 'LIFE_OS' | 'ARENAS' | 'RPG' | 'CHRONICLE'
       unlocatedNotionItem: null,    // Item waiting for pin drop assignment
       searchQuery: '',
-      mapProvider: 'CARTO_DARK'     // 'CARTO_DARK' | 'OSM_RASTER' | 'MAPTILER'
+      mapProvider: 'OSM_RASTER'     // 'CARTO_DARK' | 'OSM_RASTER' | 'MAPTILER'
     };
   }
 

@@ -2,8 +2,9 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>WEB OPS TRACKER — V6 Accurate Real-Map Tracker Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#071426" />
+  <title>SPIDEY LIFE TRACKER — Mission Hub</title>
   
   <!-- MapLibre GL JS Engine -->
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" />
@@ -20,142 +21,126 @@
   <link rel="stylesheet" href="./css/map.css" />
   <link rel="stylesheet" href="./css/panels.css" />
   <link rel="stylesheet" href="./css/mobile.css" />
+  <link rel="stylesheet" href="./css/spidey-hub.css?v=arena-hub-1" />
 </head>
-<body>
+<body data-game-mode="ARENA">
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="icon-spider" viewBox="0 0 24 24"><path d="M9 5 6 2M15 5l3-3M8 9 3 6m13-6 5 6M8 13l-5 4m13-4 5 4M9 17l-3 5m9-5 3 5"/><ellipse cx="12" cy="9" rx="3" ry="4"/><ellipse cx="12" cy="16" rx="4" ry="5"/></symbol>
+    <symbol id="icon-mask" viewBox="0 0 24 24"><path d="M4 5c5-3 11-3 16 0v8c0 5-4 8-8 9-4-1-8-4-8-9V5Z"/><path d="m7 10 3 1-3 3m10-4-3 1 3 3"/></symbol>
+    <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/></symbol>
+    <symbol id="icon-book" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H4V4Zm16 0h-4a3 3 0 0 0-3 3v13a3 3 0 0 1 3-3h4V4Z"/></symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+    <symbol id="icon-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15 9-2 4-4 2 2-4 4-2Z"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></symbol>
+    <symbol id="icon-sound" viewBox="0 0 24 24"><path d="M4 10h4l5-4v12l-5-4H4v-4Zm13-2c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/></symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></symbol>
+    <symbol id="icon-bolt" viewBox="0 0 24 24"><path d="m13 2-8 12h6l-1 8 8-12h-6l1-8Z"/></symbol>
+    <symbol id="icon-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v7c0 2 4 3 8 3s8-1 8-3V5M4 12v7c0 2 4 3 8 3s8-1 8-3v-7"/></symbol>
+    <symbol id="icon-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M19 5l-2 2M7 17l-2 2"/></symbol>
+    <symbol id="icon-arena" viewBox="0 0 24 24"><path d="m5 4 14 16M19 4 5 20M8 3l3 3-5 5-3-3 5-5Zm8 0-3 3 5 5 3-3-5-5Z"/><path d="M8 18h8v3H8z"/></symbol>
+    <symbol id="icon-web-map" viewBox="0 0 24 24"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Z"/><path d="M9 3v16m6-14v16"/></symbol>
+    <symbol id="icon-missions" viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M9 8h6m-6 4h6m-6 4h4"/></symbol>
+  </svg>
 
-  <!-- Tracker Device Viewport Outer Frame -->
   <div class="tracker-viewport">
     <div class="tracker-device-frame">
-
-      <!-- TOP HEADER BAR -->
       <header class="frame-top-bar">
-        <!-- Left: Operative Avatar Control -->
-        <div class="avatar-control-box" id="avatar-trigger" title="Mở Hồ Sơ Đặc Vụ V6">
-          <div class="avatar-img-frame">
-            <img src="./assets/characters/web-operative-v1.png" onError="this.src='../app-v4/assets/characters/web-operative-v1.png'" alt="Web Operative" />
-          </div>
-          <div class="avatar-info">
-            <span class="avatar-title">WEB OPERATIVE</span>
-            <div class="avatar-status-badge">
-              <span class="status-dot"></span>
-              <span id="gps-status-text">ĐANG KHỞI ĐỘNG...</span>
-            </div>
-          </div>
+        <button class="pixel-orb pixel-orb--menu" id="btn-hub-menu" aria-label="Mở trung tâm điều khiển">
+          <svg><use href="#icon-menu"></use></svg>
+        </button>
+
+        <div class="brand-plaque" aria-label="Spidey Life Tracker">
+          <img class="tracker-logo-image" src="./assets/spideytracker/tracker_logo3.png" alt="Spidey Tracker" />
+          <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
         </div>
 
-        <!-- Center: Brand Plaque -->
-        <div class="brand-plaque">
-          <span class="brand-title">WEB OPS TRACKER</span>
-          <span class="brand-subtitle">V6 ACCURATE REAL-MAP HUB • <span id="live-clock">00:00:00</span></span>
-        </div>
-
-        <!-- Action Row Controls -->
-        <div class="frame-action-bar">
-          <button class="btn-pixel-icon" id="btn-add-entry" title="Thêm Địa Điểm Mới">
-            ➕ <span>THÊM</span>
-          </button>
-          <button class="btn-pixel-icon" id="btn-activity-log" title="Mở Nhật Ký Hoạt Động">
-            📜 <span>NHẬT KÝ</span>
-          </button>
-          <button class="btn-pixel-icon" id="btn-unlocated-missions" title="Nhiệm Vụ Notion Chưa Định Vị">
-            📝 <span>NOTION (<span id="unlocated-count-badge">0</span>)</span>
-          </button>
-          <button class="btn-pixel-icon" id="btn-map-guide" title="Hướng Dẫn & Nhập/Xuất GeoJSON">
-            ⚙️ <span>HƯỚNG DẪN</span>
-          </button>
-        </div>
-
-        <!-- Utility Controls (Sound & Menu) -->
-        <div class="top-right-controls">
-          <button class="btn-pixel-icon" id="btn-sound-toggle" title="Bật/Tắt Âm Thanh 8-bit" aria-label="Bật hoặc tắt âm thanh">
-            🔊 SFX
-          </button>
-          <button class="btn-pixel-icon" id="btn-hub-menu" title="Mở Bảng Trung Tâm V5" aria-label="Mở menu trung tâm">
-            ☰ MENU
-          </button>
-        </div>
+        <button class="identity-tile" id="avatar-trigger" aria-label="Chọn Spider-Man đồng minh">
+          <div class="identity-ally-sprite" id="selected-ally-preview" aria-hidden="true"></div>
+          <span>ALLY</span>
+        </button>
       </header>
 
-      <!-- SEARCH ROW CONTAINER -->
-      <div class="frame-search-row">
-        <div class="search-panel">
-          <div class="search-input-wrap">
-            <input type="text" id="search-input" class="form-input search-input-field" placeholder="🔍 Tìm kiếm vị trí thực tế (Nhấn Enter để tìm)..." />
-            <button class="btn-primary search-submit-btn" id="search-submit-btn" title="Tìm kết quả">
-              <span class="search-btn-icon">🔍</span>
-              <span class="search-btn-text">TÌM KẾT QUẢ</span>
-            </button>
+      <main class="frame-main-content" id="tracker-main">
+        <div id="map" aria-label="Bản đồ nhiệm vụ đời thực"></div>
+        <div class="map-dark-filter map-mode-only"></div>
+        <div class="map-scanlines map-mode-only" aria-hidden="true"></div>
+        <div class="hanging-spidey map-mode-only" aria-hidden="true"></div>
+        <img class="map-radar-image map-mode-only" src="./assets/spideytracker/radar.png" alt="" aria-hidden="true" />
+
+        <section class="arena-mode-screen" id="arena-mode-screen" aria-label="Spider Life Arena">
+          <div class="arena-stat-bar">
+            <div class="arena-level-badge"><span>LV</span><strong id="arena-level">1</strong></div>
+            <div class="arena-xp"><span>OPERATIVE XP</span><div class="arena-meter"><i id="arena-xp-fill"></i></div><b id="arena-xp-text">0 / 100</b></div>
+            <div class="arena-currency"><span>WEB COINS</span><strong id="arena-coins">0</strong></div>
+            <div class="arena-streak"><span>STREAK</span><strong><b id="arena-streak">0</b>D</strong></div>
           </div>
-          <!-- Search Dropdown Results -->
-          <div id="search-results-dropdown" class="search-dropdown-menu"></div>
+          <div class="arena-contract-strip">
+            <span>ACTIVE RAID</span><strong id="arena-raid-name">GREEN GOBLIN // RAID 1</strong><em id="arena-weakness">WEAK: FOCUS</em>
+          </div>
+          <div class="arena-stage">
+            <div class="arena-web-grid" aria-hidden="true"></div>
+            <div class="arena-fighter arena-fighter--hero"><div class="arena-hero-sprite" aria-hidden="true"></div><span>SPIDEY</span></div>
+            <div class="arena-versus">VS</div>
+            <div class="arena-fighter arena-fighter--villain"><img src="./assets/brand/goblin-rival-pixel-v1.png" alt="Green Goblin pixel rival" /><span>GOBLIN</span></div>
+          </div>
+          <div class="arena-boss-panel">
+            <div class="arena-boss-heading"><strong id="arena-boss-label">GREEN GOBLIN</strong><span id="arena-boss-hp-text">900 / 900 HP</span></div>
+            <div class="arena-hp-meter"><i id="arena-boss-hp-fill"></i></div>
+            <p id="arena-status-text">HOÀN THÀNH NHIỆM VỤ ĐỂ TUNG ĐÒN</p>
+          </div>
+          <button class="arena-battle-btn" id="arena-battle-btn"><svg><use href="#icon-arena"></use></svg><span>START MISSION</span><small>REAL-LIFE ACTION = DAMAGE</small></button>
+          <div class="arena-quick-actions" aria-label="Thao tác nhanh">
+            <button id="btn-add-entry"><svg><use href="#icon-plus"></use></svg><span>NEW MISSION</span></button>
+            <button id="btn-activity-log"><svg><use href="#icon-book"></use></svg><span>CHRONICLE</span></button>
+            <button id="btn-unlocated-missions"><svg><use href="#icon-database"></use></svg><span>NOTION <b id="unlocated-count-badge">0</b></span></button>
+          </div>
+        </section>
+
+        <div class="map-status-card map-mode-only" aria-live="polite">
+          <span class="map-status-kicker">DIRECT VICINITY</span>
+          <strong><span id="visible-mission-count">0</span> NHIỆM VỤ ĐANG HIỆN</strong>
+          <span id="gps-status-text">GPS CHƯA BẬT</span>
         </div>
-      </div>
 
-      <!-- FILTER ROW CONTAINER -->
-      <div class="frame-filter-row">
-        <aside class="rail-left">
-          <button class="filter-btn active" data-filter="ALL" style="--filter-color: var(--cyan-bright)">
-            <span class="filter-icon">🌐</span>
-            <span>Tất cả</span>
-            <span class="filter-count">0</span>
-          </button>
-          <button class="filter-btn" data-filter="MEETING" style="--filter-color: var(--color-meeting)">
-            <span class="filter-icon">🤝</span>
-            <span>Cuộc họp</span>
-            <span class="filter-count">0</span>
-          </button>
-          <button class="filter-btn" data-filter="PERSON" style="--filter-color: var(--color-person)">
-            <span class="filter-icon">👤</span>
-            <span>Người</span>
-            <span class="filter-count">0</span>
-          </button>
-          <button class="filter-btn" data-filter="PLAN" style="--filter-color: var(--color-plan)">
-            <span class="filter-icon">📅</span>
-            <span>Kế hoạch</span>
-            <span class="filter-count">0</span>
-          </button>
-          <button class="filter-btn" data-filter="LEISURE" style="--filter-color: var(--color-leisure)">
-            <span class="filter-icon">☕</span>
-            <span>Giải trí</span>
-            <span class="filter-count">0</span>
-          </button>
-          <button class="filter-btn" data-filter="ERRAND" style="--filter-color: var(--color-errand)">
-            <span class="filter-icon">🛒</span>
-            <span>Việc vặt</span>
-            <span class="filter-count">0</span>
-          </button>
-          <button class="filter-btn" data-filter="WORK" style="--filter-color: var(--color-work)">
-            <span class="filter-icon">💼</span>
-            <span>Công việc</span>
-            <span class="filter-count">0</span>
-          </button>
-          <button class="filter-btn" data-filter="NOTION_MISSION" style="--filter-color: var(--color-notion)">
-            <span class="filter-icon">📝</span>
-            <span>Notion</span>
-            <span class="filter-count">0</span>
-          </button>
+        <aside class="rail-left map-mode-only" aria-label="Bộ lọc bản đồ">
+          <button class="filter-btn active filter-btn--asset" data-filter="ALL" style="--filter-color:#f2c06b" aria-label="Hiện tất cả"><img src="./assets/spideytracker/filter_white.png" alt="" /><span class="filter-label">ALL</span><span class="filter-count">0</span></button>
+          <button class="filter-btn filter-btn--asset" data-filter="WORK" style="--filter-color:#f0645c" aria-label="Công việc"><img src="./assets/spideytracker/filter_red.png" alt="" /><span class="filter-label">WORK</span><span class="filter-count">0</span></button>
+          <button class="filter-btn filter-btn--asset" data-filter="NOTION_MISSION" style="--filter-color:#83b96b" aria-label="Nhiệm vụ Notion"><img src="./assets/spideytracker/filter_green.png" alt="" /><span class="filter-label">NOTION</span><span class="filter-count">0</span></button>
+          <button class="filter-btn rail-more" data-filter="MEETING" style="--filter-color:#d9e0df" aria-label="Cuộc họp"><svg><use href="#icon-mask"></use></svg><span class="filter-label">MEET</span><span class="filter-count">0</span></button>
+          <button class="filter-btn rail-more" data-filter="PLAN" style="--filter-color:#54b6d0" aria-label="Kế hoạch"><svg><use href="#icon-compass"></use></svg><span class="filter-label">PLAN</span><span class="filter-count">0</span></button>
+          <button class="filter-btn rail-more" data-filter="LEISURE" style="--filter-color:#9ac66f" aria-label="Phục hồi"><svg><use href="#icon-home"></use></svg><span class="filter-label">REST</span><span class="filter-count">0</span></button>
+          <button class="filter-btn rail-more" data-filter="ERRAND" style="--filter-color:#e2a658" aria-label="Việc vặt"><svg><use href="#icon-bolt"></use></svg><span class="filter-label">ERRAND</span><span class="filter-count">0</span></button>
+          <button class="filter-btn rail-more" data-filter="PERSON" style="--filter-color:#bd8ed1" aria-label="Con người"><svg><use href="#icon-mask"></use></svg><span class="filter-label">PEOPLE</span><span class="filter-count">0</span></button>
         </aside>
-      </div>
 
-      <!-- MAIN CONTENT AREA (MAP + OVERLAYS) -->
-      <main class="frame-main-content">
-        
-        <!-- MAPLIBRE MAP CONTAINER -->
-        <div id="map"></div>
-        <div class="map-dark-filter"></div>
-
-        <!-- RIGHT CAMERA & GPS CONTROLS RAIL -->
-        <aside class="rail-right">
-          <div class="map-control-group">
-            <button class="map-control-btn" id="btn-zoom-in" title="Phóng to">+</button>
-            <button class="map-control-btn" id="btn-zoom-out" title="Thu nhỏ">-</button>
-          </div>
-          <div class="map-control-group">
-            <button class="map-control-btn" id="btn-center-gps" title="Căn giữa vị trí GPS của bạn">🎯</button>
-            <button class="map-control-btn" id="btn-reset-north" title="Căn chỉnh Hướng Bắc">🌐</button>
-            <button class="map-control-btn" id="btn-track-toggle" title="Tự động bám theo GPS (Auto-track)">📡</button>
-          </div>
+        <aside class="rail-right map-mode-only" aria-label="Điều khiển bản đồ">
+          <button class="map-control-btn" id="btn-zoom-in" title="Phóng to" aria-label="Phóng to"><svg><use href="#icon-plus"></use></svg></button>
+          <button class="map-control-btn" id="btn-zoom-out" title="Thu nhỏ" aria-label="Thu nhỏ"><span class="minus-glyph"></span></button>
+          <button class="map-control-btn map-control-btn--asset map-control-btn--accent" id="btn-center-gps" title="Vị trí của tôi" aria-label="Căn giữa vị trí của tôi"><img src="./assets/spideytracker/map_center.png" alt="" /></button>
+          <button class="map-control-btn map-control-btn--asset" id="btn-reset-north" title="Đưa bản đồ về hướng Bắc" aria-label="Đưa bản đồ về hướng Bắc"><img src="./assets/spideytracker/globe_btn.png" alt="" /></button>
+          <button class="map-control-btn" id="btn-track-toggle" title="Bám theo GPS" aria-label="Bám theo GPS"><svg><use href="#icon-bolt"></use></svg></button>
+          <button class="map-control-btn" id="btn-map-guide" title="Hệ thống bản đồ" aria-label="Hướng dẫn và dữ liệu bản đồ"><svg><use href="#icon-gear"></use></svg></button>
         </aside>
+
+        <div class="frame-search-row map-mode-only">
+          <div class="search-panel">
+            <div class="search-input-wrap">
+              <svg class="search-leading-icon"><use href="#icon-search"></use></svg>
+              <input type="search" id="search-input" class="form-input search-input-field" aria-label="Tìm địa điểm" placeholder="TÌM ĐỊA ĐIỂM / NHIỆM VỤ..." />
+              <button class="search-submit-btn" id="search-submit-btn" title="Tìm kiếm"><span class="search-btn-text">SCAN</span></button>
+            </div>
+            <div id="search-results-dropdown" class="search-dropdown-menu"></div>
+          </div>
+        </div>
+
+        <nav class="game-mode-dock" aria-label="Chế độ Spider Life">
+          <button class="game-mode-btn" data-mode="MISSIONS"><svg><use href="#icon-missions"></use></svg><span>MISSIONS</span></button>
+          <button class="game-mode-btn" data-mode="ALLIES"><svg><use href="#icon-mask"></use></svg><span>ALLIES</span></button>
+          <button class="game-mode-btn game-mode-btn--arena active" data-mode="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>ARENA</span></button>
+          <button class="game-mode-btn" data-mode="MAP"><svg><use href="#icon-web-map"></use></svg><span>MAP</span></button>
+          <button class="game-mode-btn" data-mode="PROFILE"><svg><use href="#icon-spider"></use></svg><span>PROFILE</span></button>
+        </nav>
 
         <!-- WEB OPERATIVE CHARACTER CALLOUT DIALOG OVERLAY -->
         <div class="operative-callout hidden" id="operative-callout" hidden inert>
@@ -166,7 +151,7 @@
             <div class="callout-close-btn" id="callout-close-btn">✕</div>
             <div class="callout-title">WEB OPERATIVE INSTRUCTION</div>
             <div class="callout-text">
-              Chào Đặc Vụ! Bấm <strong>+ THÊM</strong> hoặc click trực tiếp lên Bản Đồ Thực Tế để tạo điểm hẹn, cuộc họp hoặc định vị nhiệm vụ Notion.
+              Chào Đặc Vụ! Bản đồ là một <strong>MAP MODE</strong> để quan sát và điều hướng. Muốn tạo nhiệm vụ, hãy dùng nút <strong>+ NEW MISSION</strong>.
             </div>
           </div>
         </div>
@@ -200,7 +185,7 @@
           </div>
           <div class="drawer-body">
             <p style="font-size: 11px; color: var(--text-muted);">
-              Các nhiệm vụ trong Notion chưa có tọa độ địa lý. Bấm <strong>📍 Chọn vị trí</strong> để gán tọa độ thực tế trên bản đồ.
+              Các nhiệm vụ Notion chưa có tọa độ được liệt kê tại đây. MAP MODE không tạo hoặc gán dữ liệu khi chạm lên bản đồ.
             </p>
             <div id="unlocated-queue-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
           </div>
@@ -208,14 +193,15 @@
 
       </main>
 
-      <!-- BOTTOM TICKER STRIP -->
       <footer class="frame-bottom-bar">
+        <div class="spidey-head-turn-sprite" aria-hidden="true"></div>
         <div class="ticker-wrap">
           <div class="ticker-content">
-            <span class="ticker-status-tag">[SYS_OK]</span>
-            WEB OPS TRACKER V6 • ACCURATE REAL-MAP ENGINE RUNNING • MAPLIBRE GL JS ACTIVE <span id="ticker-gps-readout">• GPS FIX: STANDBY</span> • GEOLOCATION HIGH ACCURACY ENABLED
+            <span class="ticker-status-tag">SYS // ONLINE</span>
+            MAP YOUR REAL-LIFE MISSIONS <span id="ticker-gps-readout">• GPS: STANDBY</span> • ONE LIFE, ONE SOURCE OF TRUTH
           </div>
         </div>
+        <button class="sound-toggle" id="btn-sound-toggle" aria-label="Bật hoặc tắt âm thanh" aria-pressed="false"><img src="./assets/spideytracker/sound_off.png" alt="" /><span>SFX OFF</span></button>
       </footer>
 
     </div>
@@ -361,24 +347,41 @@
     </div>
   </div>
 
-  <!-- MODAL 3: HUB OVERLAY PANELS (V5 SYSTEMS REUSE) -->
+  <!-- MODAL 3: LIFE RPG HUB -->
   <div class="panel-backdrop" id="hub-overlay-backdrop" hidden inert>
-    <div class="pixel-modal" style="max-width: 620px;">
+    <div class="pixel-modal hub-modal-shell" style="max-width: 860px;">
       <div class="modal-header">
-        <span class="modal-title">🛡️ BẢNG TRUNG TÂM V5 REUSED OVERLAY</span>
+        <span class="modal-title">SPIDEY LIFE // COMMAND CENTER</span>
         <button class="modal-close-btn" id="hub-modal-close">✕</button>
       </div>
-      <div style="display: flex; background: #070e1b; border-bottom: 2px solid var(--cyan-mid);">
-        <button class="hub-tab-btn active btn-secondary" data-tab="MISSIONS" style="flex: 1; border-radius: 0;">🎯 NHIỆM VỤ</button>
-        <button class="hub-tab-btn btn-secondary" data-tab="OPERATIVE" style="flex: 1; border-radius: 0;">👤 ĐẶC VỤ</button>
-        <button class="hub-tab-btn btn-secondary" data-tab="HIDEOUT" style="flex: 1; border-radius: 0;">🛠️ CĂN CỨ</button>
-        <button class="hub-tab-btn btn-secondary" data-tab="CHRONICLE" style="flex: 1; border-radius: 0;">📜 NHẬT KÝ</button>
+      <div class="hub-tab-strip" role="tablist" aria-label="Các khu vực Life RPG">
+        <button class="hub-tab-btn active" data-tab="HOME" role="tab"><svg><use href="#icon-home"></use></svg><span>HOME</span></button>
+        <button class="hub-tab-btn" data-tab="RPG" role="tab"><svg><use href="#icon-mask"></use></svg><span>RPG</span></button>
+        <button class="hub-tab-btn" data-tab="CHRONICLE" role="tab"><svg><use href="#icon-book"></use></svg><span>LOG</span></button>
       </div>
       <div class="modal-body" id="hub-tab-content"></div>
     </div>
   </div>
 
   <!-- MODAL 4: MAP GUIDE & SETTINGS -->
+  <div class="panel-backdrop" id="ally-selector-backdrop" hidden inert>
+    <div class="pixel-modal ally-selector-modal">
+      <div class="modal-header">
+        <span class="modal-title">SPIDER-VERSE // CHỌN ĐỒNG MINH</span>
+        <button class="modal-close-btn" id="ally-selector-close" aria-label="Đóng bộ chọn đồng minh">✕</button>
+      </div>
+      <div class="modal-body ally-selector-body">
+        <div class="ally-selector-readout">
+          <span>ACTIVE PARTNER</span>
+          <strong id="selected-ally-name">SPIDER ALLY 01</strong>
+          <small>Chọn một nhân vật. Lựa chọn được lưu trên thiết bị này.</small>
+        </div>
+        <div class="ally-roster-grid" id="ally-roster-grid" role="listbox" aria-label="Danh sách Spider-Man đồng minh"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: MAP GUIDE & SETTINGS -->
   <div class="panel-backdrop" id="map-guide-modal-backdrop" hidden inert>
     <div class="pixel-modal">
       <div class="modal-header">
@@ -425,6 +428,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/main.js?v=arena-hub-1"></script>
 </body>
 </html>

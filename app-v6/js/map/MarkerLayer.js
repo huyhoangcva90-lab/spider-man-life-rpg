@@ -24,17 +24,10 @@ export class MarkerLayer {
     }
   }
 
-  getCategoryIcon(type) {
-    switch (type) {
-      case 'MEETING': return '🤝';
-      case 'PERSON': return '👤';
-      case 'PLAN': return '📅';
-      case 'LEISURE': return '☕';
-      case 'ERRAND': return '🛒';
-      case 'WORK': return '💼';
-      case 'NOTION_MISSION': return '📝';
-      default: return '📍';
-    }
+  getMarkerAsset(entry) {
+    if (entry.status === 'DONE') return 'green_pin.png';
+    if (entry.status === 'PLANNED') return 'white_pin.png';
+    return 'red_pin.png';
   }
 
   renderEntries(entries, activeFilter = 'ALL', selectedEntryId = null) {
@@ -99,7 +92,7 @@ export class MarkerLayer {
 
   updateMarkerElement(el, entry, isSelected) {
     const color = this.getCategoryColor(entry.type);
-    const icon = this.getCategoryIcon(entry.type);
+    const pinAsset = this.getMarkerAsset(entry);
 
     el.style.setProperty('--marker-color', color);
     if (isSelected) {
@@ -111,7 +104,9 @@ export class MarkerLayer {
     el.innerHTML = `
       <div class="marker-pin-body">
         ${isSelected ? '<div class="marker-selected-ring"></div>' : ''}
-        <div class="marker-icon-box">${icon}</div>
+        <div class="marker-icon-box marker-icon-box--asset">
+          <img src="./assets/spideytracker/${pinAsset}" alt="" aria-hidden="true" />
+        </div>
         <div class="marker-pin-tip"></div>
       </div>
     `;

@@ -5,6 +5,7 @@ export class TrackerFrame {
     this.state = stateStore;
     this.bus = eventBus;
     this.sound = soundController;
+    this.filterCounts = {};
   }
 
   init() {
@@ -14,6 +15,7 @@ export class TrackerFrame {
     this.bindTopControls();
     this.bindCallout();
     this.updateGpsStatusDisplay();
+    this.updateSoundBtn(this.state.get('soundEnabled'));
 
     this.bus.on('GPS_STATUS_CHANGED', () => this.updateGpsStatusDisplay());
     this.bus.on('GPS_UPDATED', (loc) => this.updateGpsLocationDisplay(loc));
@@ -52,6 +54,8 @@ export class TrackerFrame {
         btn.classList.remove('active');
       }
     });
+    const visibleCount = document.getElementById('visible-mission-count');
+    if (visibleCount) visibleCount.textContent = this.filterCounts[activeFilter] ?? 0;
   }
 
   updateFilterCounts(entries) {
@@ -65,11 +69,16 @@ export class TrackerFrame {
       WORK: entries.filter(e => e.type === 'WORK').length,
       NOTION_MISSION: entries.filter(e => e.type === 'NOTION_MISSION').length
     };
+    this.filterCounts = counts;
 
     Object.keys(counts).forEach(key => {
       const countEl = document.querySelector(`.filter-btn[data-filter="${key}"] .filter-count`);
       if (countEl) countEl.textContent = counts[key];
     });
+
+    const activeFilter = this.state.get('activeFilter');
+    const visibleCount = document.getElementById('visible-mission-count');
+    if (visibleCount) visibleCount.textContent = counts[activeFilter] ?? counts.ALL;
   }
 
   bindRightControls() {
@@ -104,12 +113,6 @@ export class TrackerFrame {
   }
 
   bindTopControls() {
-    // Avatar profile / Operative Hub
-    document.getElementById('avatar-trigger')?.addEventListener('click', () => {
-      this.sound.playClick();
-      this.bus.emit('OPEN_HUB_PANEL', 'OPERATIVE');
-    });
-
     // Sound toggle
     const soundBtn = document.getElementById('btn-sound-toggle');
     soundBtn?.addEventListener('click', () => {
@@ -144,15 +147,18 @@ export class TrackerFrame {
     // Hub Overlay Menu
     document.getElementById('btn-hub-menu')?.addEventListener('click', () => {
       this.sound.playClick();
-      this.bus.emit('OPEN_HUB_PANEL', 'MISSIONS');
+      this.bus.emit('OPEN_HUB_PANEL', 'HOME');
     });
   }
 
   updateSoundBtn(enabled) {
     const btn = document.getElementById('btn-sound-toggle');
     if (btn) {
-      btn.innerHTML = enabled ? '🔊 SFX' : '🔇 MUTE';
       btn.classList.toggle('active', enabled);
+      btn.setAttribute('aria-pressed', String(enabled));
+      const label = btn.querySelector('span');
+      if (label) label.textContent = enabled ? 'SFX ON' : 'SFX OFF';
+      btn.title = enabled ? 'Tắt âm thanh' : 'Bật âm thanh';
     }
   }
 

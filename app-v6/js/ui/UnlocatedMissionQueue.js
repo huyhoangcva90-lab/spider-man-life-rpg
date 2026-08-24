@@ -33,19 +33,6 @@ export class UnlocatedMissionQueue {
     this.bus.on('ENTRY_CREATED', updateQueueUI);
     this.bus.on('ENTRY_DELETED', updateQueueUI);
 
-    this.bus.on('MAP_CLICK', (coords) => {
-      const activeAssign = this.drawerEl.getAttribute('data-assigning-id');
-      if (activeAssign) {
-        this.sound.playSuccess();
-        const entry = this.notion.assignLocation(activeAssign, coords.lat, coords.lng);
-        this.drawerEl.removeAttribute('data-assigning-id');
-        this.render();
-        if (entry) {
-          this.bus.emit('FLY_TO_LOCATION', { lat: entry.lat, lng: entry.lng, zoom: 16 });
-          this.bus.emit('OPEN_DOSSIER', entry);
-        }
-      }
-    });
   }
 
   bindEvents() {
@@ -110,8 +97,8 @@ export class UnlocatedMissionQueue {
         </div>
         <div class="activity-card-time">📅 ${item.date ? new Date(item.date).toLocaleDateString('vi-VN') : 'Không có ngày'} • Độ ưu tiên: ${item.priority}</div>
         <div style="display: flex; gap: 8px; margin-top: 8px;">
-          <button class="btn-primary assign-pin-btn" data-id="${item.id}" style="font-size: 9px; padding: 6px 10px;">
-            📍 Chọn vị trí trên Bản đồ
+          <button class="btn-secondary" disabled style="font-size: 9px; padding: 6px 10px; opacity:.6;">
+            MAP MODE // CHỈ XEM
           </button>
           <a href="${item.sourceUrl}" target="_blank" class="btn-secondary" style="font-size: 9px; padding: 6px 10px; text-decoration: none;">
             🔗 Xem Notion
@@ -119,15 +106,5 @@ export class UnlocatedMissionQueue {
         </div>
       </div>
     `).join('');
-
-    container.querySelectorAll('.assign-pin-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        this.sound.playClick();
-        this.drawerEl.setAttribute('data-assigning-id', id);
-        alert('👉 Vui lòng nhấp vào bất kỳ vị trí nào trên Bản đồ thực tế để gán tọa độ cho nhiệm vụ này!');
-        this.close();
-      });
-    });
   }
 }
