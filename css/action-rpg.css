@@ -270,3 +270,247 @@ body[data-game-mode="MAP"] .map-status-card {
 }
 
 @media (prefers-reduced-motion:reduce) { .city-rain,.combat-action--ultimate.ready,.combat-toast { animation:none!important; } }
+
+/* Single-version polish pass: keep the tracker identity, tighten the arena composition. */
+.action-rpg-screen {
+  gap: 8px;
+  padding: 10px 14px 8px;
+  grid-template-rows: auto auto minmax(300px, 1fr) auto auto;
+}
+
+.game-hud-strip {
+  grid-template-columns: minmax(230px, .95fr) 62px minmax(320px, 1.6fr) minmax(200px, .8fr);
+  gap: 8px;
+}
+
+.quest-directive {
+  min-height: 26px;
+}
+
+.action-combat-stage {
+  min-height: 330px;
+  background:
+    radial-gradient(circle at 36% 54%, rgba(84,182,208,.11), transparent 19%),
+    radial-gradient(circle at 70% 58%, rgba(240,100,92,.1), transparent 18%),
+    linear-gradient(#02060b 0 58%, #050d18 58% 100%);
+}
+
+.action-fighter--hero {
+  left: 13%;
+  bottom: 34px;
+  width: 27%;
+}
+
+.action-fighter--enemy {
+  right: 25%;
+  bottom: 34px;
+  width: 24%;
+}
+
+.action-fighter--hero .arena-hero-sprite {
+  width: 176px;
+  height: 130px;
+}
+
+.combat-sigil {
+  width: 138px;
+  height: 138px;
+}
+
+.combat-sigil--threat {
+  width: 126px;
+  height: 126px;
+}
+
+.combat-info-panel {
+  width: 232px;
+}
+
+.combat-action-bar {
+  gap: 8px;
+}
+
+.combat-action-bar button,
+.game-primary-nav button {
+  min-width: 0;
+}
+
+.game-primary-nav {
+  bottom: 11px;
+}
+
+@media (max-width: 800px) {
+  .action-rpg-screen {
+    inset: 0 0 66px;
+    padding: 6px 7px 6px;
+    gap: 6px;
+    grid-template-rows: auto auto minmax(330px, 1fr) auto auto;
+  }
+
+  .game-hud-strip {
+    grid-template-columns: minmax(92px, 1fr) 48px minmax(128px, 1.35fr);
+    gap: 5px;
+    min-height: 50px;
+  }
+
+  .hud-avatar {
+    gap: 6px;
+    padding: 4px 5px;
+  }
+
+  .hud-avatar strong {
+    max-width: 68px;
+    font-size: 6px;
+  }
+
+  .hud-avatar small,
+  .hud-stat small {
+    font-size: 6px;
+  }
+
+  .hud-bars label {
+    grid-template-columns: 28px 1fr auto;
+    gap: 4px;
+    font-size: 5px;
+  }
+
+  .quest-directive {
+    grid-template-columns: 1fr auto;
+    min-height: 24px;
+    padding: 5px 7px;
+  }
+
+  .quest-directive span {
+    display: none;
+  }
+
+  .quest-directive strong {
+    text-align: left;
+    font-size: 7px;
+    line-height: 1.25;
+  }
+
+  .quest-directive em {
+    font-size: 6px;
+    white-space: nowrap;
+  }
+
+  .action-combat-stage {
+    min-height: 330px;
+  }
+
+  .combat-location {
+    left: 10px;
+    top: 9px;
+  }
+
+  .combat-location strong {
+    font-size: 7px;
+  }
+
+  .action-fighter--hero {
+    left: 4%;
+    bottom: 68px;
+    width: 42%;
+  }
+
+  .action-fighter--enemy {
+    right: 7%;
+    bottom: 66px;
+    width: 37%;
+  }
+
+  .action-fighter--hero .arena-hero-sprite {
+    width: 144px;
+    height: 108px;
+  }
+
+  .combat-sigil {
+    width: 108px;
+    height: 108px;
+  }
+
+  .combat-sigil--threat {
+    width: 94px;
+    height: 94px;
+  }
+
+  .combat-info-panel {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    min-height: 38px;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .combat-info-panel > small {
+    align-self: center;
+  }
+
+  .combat-action-bar {
+    gap: 4px;
+  }
+
+  .combat-action-bar button {
+    min-height: 50px;
+  }
+
+  .ultimate-meter {
+    min-height: 22px;
+    padding-block: 4px;
+  }
+
+  .game-primary-nav {
+    bottom: 6px;
+  }
+}
+
+@media (max-width: 500px) {
+  .action-rpg-screen {
+    grid-template-rows: auto auto minmax(340px, 1fr) auto auto;
+  }
+
+  .action-combat-stage {
+    min-height: 340px;
+  }
+
+  .hud-mask {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+
+  .hud-avatar strong {
+    max-width: 54px;
+  }
+
+  .action-fighter--hero {
+    left: 1%;
+    bottom: 72px;
+  }
+
+  .action-fighter--enemy {
+    right: 3%;
+    bottom: 72px;
+  }
+
+  .action-fighter--hero .arena-hero-sprite {
+    width: 136px;
+    height: 102px;
+  }
+
+  .combat-sigil {
+    width: 98px;
+    height: 98px;
+  }
+
+  .combat-sigil--threat {
+    width: 84px;
+    height: 84px;
+  }
+
+  .combat-action-bar strong {
+    font-size: 5px;
+  }
+}

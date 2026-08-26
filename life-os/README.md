@@ -1,6 +1,6 @@
 # Spider Life OS
 
-The seven daily systems are available at `app-v6/life-os/` and can be opened
+The seven daily systems are available at `life-os/` and can be opened
 directly with hash routes such as `#routine`, `#dopamine`, and `#timetable`.
 
 ## Data ownership

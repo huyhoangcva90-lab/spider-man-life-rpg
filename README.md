@@ -27,7 +27,7 @@ Các nút không có nội dung đã được loại bỏ. Giao diện không d�
 
 Hero Arena dùng sprite sheet hành động với 17 state từ `idle` tới `victory`. Mission hoàn thành sẽ tự chạy combo/skill/ultimate phù hợp, kèm VFX truyện tranh `THWIP!`, `POW!`, `KRAK!` và impact shake. Có thể bấm trực tiếp vào hero để duyệt thử từng state.
 
-## Phase 1 action-RPG vertical slice
+## Action-RPG vertical slice
 
 - Một district chơi được: Manhattan Rooftop, nền thành phố nhiều lớp và mưa đêm.
 - Encounter chain: Street Thug → Tech Gunner → Shield Enemy → Hunter Captain → Green Goblin.
@@ -36,7 +36,7 @@ Hero Arena dùng sprite sheet hành động với 17 state từ `idle` tới `vi
 - Hoàn thành nhiệm vụ đời thật là trigger chính cho animation, damage, XP, Web Coins, daily progress và loot.
 - Ba sample audio gốc được giữ nguyên: `spidey_jingle` cho Arena/victory, `another_day_another_sighting` cho crime/wave mới, `calling_all_webheads` cho Ally Call.
 
-## Kiến trúc Phase A
+## Kiến trúc hiện tại
 
 - Content được tách thành registry có ID kebab-case và validation khi boot: actions, heroes, allies, enemies, quests, rewards, districts và zones.
 - `QuestEngine`, `DamageEngine`, `CombatEngine` và `RewardEngine` không phụ thuộc DOM; `PhaseOneGameEngine` chỉ điều phối state/event.
@@ -46,7 +46,7 @@ Hero Arena dùng sprite sheet hành động với 17 state từ `idle` tới `vi
 
 ## Test
 
-Mở `app-v6/tests/domain-tests.html` qua static server. Bộ test browser-native kiểm tra 11 rule quan trọng: reward-once, HP clamp, boss phase, Finisher, cooldown, unique loot, save/load, migration, difficulty, ally cooldown và Ultimate cap.
+Mở `tests/domain-tests.html` qua static server. Bộ test browser-native kiểm tra 11 rule quan trọng: reward-once, HP clamp, boss phase, Finisher, cooldown, unique loot, save/load, migration, difficulty, ally cooldown và Ultimate cap.
 
 ## Chạy local
 
@@ -56,7 +56,7 @@ Mở `app-v6/tests/domain-tests.html` qua static server. Bộ test browser-nativ
 python -m http.server 4173
 ```
 
-Sau đó mở <http://127.0.0.1:4173/>. Root tự chuyển sang `app-v6/`, cũng là ứng dụng được GitHub Pages phục vụ.
+Sau đó mở <http://127.0.0.1:4173/>. Đây là bản app chính duy nhất và cũng là bản GitHub Pages phục vụ.
 
 ## Dữ liệu và âm thanh
 
@@ -72,4 +72,4 @@ Sau đó mở <http://127.0.0.1:4173/>. Root tự chuyển sang `app-v6/`, cũng
 
 ## License
 
-MIT. Các asset brand trong `app-v6/assets/brand/` được tạo riêng cho dự án SPIDEY LIFE.
+MIT. Các asset brand trong `assets/brand/` được tạo riêng cho dự án SPIDEY LIFE.
