@@ -24,6 +24,10 @@ export class HubOverlayPanels {
         this.sound.playSelect();
         const [section, tab] = button.dataset.gameMenuTarget.split(':');
         this.close();
+        if (section === 'NATIVE') {
+          window.location.href = './life-reset/index.html';
+          return;
+        }
         this.bus.emit('GAME_MENU_TARGET', { section, tab });
       }));
     }
@@ -41,16 +45,21 @@ export class HubOverlayPanels {
 
   renderApps() {
     const apps = [
-      ['QUESTS:MAIN', 'STORY', 'Chapter và Main Quest', '◆', 'red'],
-      ['QUESTS:DAILY', 'QUEST LOG', 'Main · Side · Daily', '✓', 'cyan'],
-      ['TIMETABLE:SCHEDULE', 'TIMETABLE', 'Tobey · Andrew · Tom patrol', '◷', 'cyan'],
-      ['LIFE:DOPAMINE', 'LIFE SYSTEMS', 'Dopamine · Nhịp sinh học', '⚡', 'green'],
-      ['VERSE:ROSTER', 'SPIDER-VERSE', 'Hero, Ally và Team', '◉', 'amber'],
+      ['QUESTS:TODO', 'NOTION QUESTS', 'Todo & Nhiệm vụ đời thực từ Notion', '✓', 'cyan'],
+      ['QUESTS:HABITS', 'HABITS & STREAK', 'Kỷ luật hàng ngày & Hồi phục HP', '🔥', 'red'],
+      ['QUESTS:PATROL', 'PATROL SCHEDULE', 'Ca tuần tra Tobey · Andrew · Tom', '◷', 'cyan'],
+      ['HERO:SUITS', 'SUITS WARDROBE', 'Tủ đồ thời trang & đổi Skin', '👕', 'amber'],
+      ['HERO:ROSTER', 'SPIDER-VERSE', '77 Biến thể Nhện đa vũ trụ', '🕷️', 'red'],
       ['HERO:SKILLS', 'SKILL TREE', 'Combat · Web · Spider-Sense', '⚡', 'cyan'],
       ['HERO:GADGETS', 'GADGETS', 'Impact Web · Drone · EMP', '⌁', 'green'],
-      ['CITY', 'CITY', 'District và Random Crime', '▦', 'paper'],
-      ['HERO:INVENTORY', 'INVENTORY', 'Material và unlock', '▣', 'amber'],
-      ['SETTINGS', 'SETTINGS', 'Map, data và âm thanh', '⚙', 'paper']
+      ['ARCHIVE:BESTIARY', 'BESTIARY', 'Thư viện Kẻ thù Bosses & Minions', '👹', 'red'],
+      ['ARCHIVE:BACKPACKS', 'BACKPACKS', '55 Ba lô kỷ niệm Peter Parker', '🎒', 'amber'],
+      ['ARCHIVE:BADGES', 'BADGES', '37 Huy hiệu danh dự lịch sử', '🎖️', 'amber'],
+      ['CHRONICLE:RHYTHM', 'CIRCADIAN RHYTHM', 'Đồng hồ nhịp sinh học 24H', '⏰', 'green'],
+      ['CHRONICLE:JOURNAL', 'PETER JOURNAL', 'Sổ tay nhật ký & bài học mỗi ngày', '📓', 'paper'],
+      ['CHRONICLE:GYM', 'GYM OS', 'Rèn thể lực tăng vĩnh viễn ATK/DEF', '💪', 'red'],
+      ['CITY', 'CITY MAP', 'Bản đồ thực địa & Định vị GPS', '▦', 'paper'],
+      ['SETTINGS', 'GAME SETTINGS', 'Âm thanh, hiệu ứng, sao lưu save', '⚙', 'paper']
     ];
 
     return `<section class="hub-panel-inner hub-panel-inner--apps">

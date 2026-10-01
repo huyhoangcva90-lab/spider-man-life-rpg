@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>66 日間 - Life Reset: 66 Day Habit</title>
+  <link rel="stylesheet" href="css/reset-app.css" />
+  <link rel="icon" type="image/png" href="assets/images/house_ember.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+  
+  <!-- Outer Wrapper with Top Japanese Brand Banner (Image 2) -->
+  <div class="desktop-screen-wrapper">
+
+    <!-- Iconic Orange '66 日間' Branding Banner from Image 2 -->
+    <div class="brand-top-banner">
+      <div class="brand-66-logo">
+        <span class="logo-66-num">66</span>
+        <div class="logo-kanji-box">
+          <span class="kanji-text">日</span>
+          <span class="kanji-text">間</span>
+        </div>
+        <div class="logo-stripes">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- iPhone 15 Pro Hardware Frame -->
+    <div class="phone-frame">
+
+      <!-- Dynamic Island & iOS Status Bar -->
+      <div class="ios-status-bar">
+        <span class="status-time">9:41</span>
+        <div class="dynamic-island">
+          <span class="island-camera"></span>
+          <span class="island-sensor"></span>
+        </div>
+        <div class="status-icons">
+          <svg class="status-signal" width="17" height="11" viewBox="0 0 17 11" fill="white">
+            <rect x="0" y="8" width="3" height="3" rx="0.8"/>
+            <rect x="4.5" y="5.5" width="3" height="5.5" rx="0.8"/>
+            <rect x="9" y="3" width="3" height="8" rx="0.8"/>
+            <rect x="13.5" y="0" width="3" height="11" rx="0.8"/>
+          </svg>
+          <svg class="status-wifi" width="15" height="11" viewBox="0 0 15 11" fill="white">
+            <path d="M0 2.5C2.1 0.9 4.7 0 7.5 0C10.3 0 12.9 0.9 15 2.5L13.3 4.2C11.7 2.9 9.7 2.2 7.5 2.2C5.3 2.2 3.3 2.9 1.7 4.2L0 2.5ZM3.8 6.3C4.8 5.5 6.1 5 7.5 5C8.9 5 10.2 5.5 11.2 6.3L7.5 10L3.8 6.3Z"/>
+          </svg>
+          <div class="status-battery">
+            <div class="battery-body">
+              <div class="battery-level"></div>
+            </div>
+            <div class="battery-cap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Scrollable Views -->
+      <main class="app-main-content">
+
+        <!-- ═══════════════════════════════════════
+             TAB 1: TODAY (EXACT USER IMAGE 1 & 2)
+             ═══════════════════════════════════════ -->
+        <section id="tab-today" class="view-tab-pane active">
+
+          <!-- Top Header Stats Row (🔥 14, 🏆 2, ✨ 2,592, ⚙️) -->
+          <div class="today-top-stats-row">
+            <div class="stats-pills-cluster">
+              <div class="header-pill pill-flame">
+                <span class="pill-emoji">🔥</span>
+                <span id="streak-header-num" class="pill-val">14</span>
+              </div>
+              <div class="header-pill pill-trophy">
+                <span class="pill-emoji">🏆</span>
+                <span id="trophy-header-num" class="pill-val">2</span>
+              </div>
+              <div class="header-pill pill-xp">
+                <span class="pill-emoji">✨</span>
+                <span id="xp-header-num" class="pill-val">2,592</span>
+              </div>
+            </div>
+            <div class="top-buttons-cluster">
+              <button id="btn-settings-gear" class="gear-square-btn" title="Settings">⚙️</button>
+              <a href="../index.html" class="gear-square-btn spider-hub-link" title="Spider Hub">🕷️</a>
+            </div>
+          </div>
+
+          <!-- Progress since day 1 sub-ticker (Image 1) -->
+          <div class="ticker-ribbon">
+            <span>✦ Progress since day 1 ✦ <strong id="ribbon-ticker-text">12L water drank</strong> ✦</span>
+          </div>
+
+          <!-- Hero Day Row: DAY 14 /66 [ < ] [ > ] -->
+          <div class="hero-day-block">
+            <div class="hero-day-row">
+              <h1 class="hero-day-title">
+                DAY <span id="current-day-number">14</span><span class="total-days-suffix">/66</span>
+              </h1>
+              <div class="day-arrows-box">
+                <button id="btn-day-left" class="day-arrow-box" aria-label="Previous day">‹</button>
+                <button id="btn-day-right" class="day-arrow-box" aria-label="Next day">›</button>
+              </div>
+            </div>
+            <p id="hero-day-quote" class="hero-day-quote">You're doing great. Keep going!</p>
+          </div>
+
+          <!-- Notion Zeus Live Sync Ribbon -->
+          <div class="notion-sync-ribbon">
+            <div class="notion-sync-left">
+              <span class="notion-status-dot online"></span>
+              <span class="notion-status-label" id="notion-status-text">Notion Zeus: Connected</span>
+            </div>
+            <button id="btn-sync-notion-now" class="notion-sync-btn" title="Sync live with Notion Workspace Zeus">
+              <span class="sync-icon">🔄</span>
+              <span>Sync</span>
+            </button>
+          </div>
+
+          <!-- Habit Source Segmented Switcher: 66 Core vs Notion Habits vs Notion Tasks -->
+          <div class="source-segmented-strip">
+            <button class="source-seg-btn active" data-source="anime">
+              <span>🥋 66 Core Habits</span>
+            </button>
+            <button class="source-seg-btn" data-source="notion-habits">
+              <span>⚡ Zeus Habits</span>
+              <span class="source-badge" id="badge-notion-habits-count">14</span>
+            </button>
+            <button class="source-seg-btn" data-source="notion-tasks">
+              <span>📅 Tasks</span>
+              <span class="source-badge" id="badge-notion-tasks-count">15</span>
+            </button>
+          </div>
+
+          <!-- Filter Pills: To-dos (7) | Done (1) | Skipped (0) | [+] -->
+          <div class="todos-filter-strip">
+            <div class="filter-capsule-list">
+              <button class="filter-capsule-btn active" data-filter="todos">
+                To-dos <span id="count-badge-todos">7</span>
+              </button>
+              <button class="filter-capsule-btn" data-filter="done">
+                Done <span id="count-badge-done">1</span>
+              </button>
+              <button class="filter-capsule-btn" data-filter="skipped">
+                Skipped <span id="count-badge-skipped">0</span>
+              </button>
+            </div>
+            <button id="btn-add-habit" class="plus-habit-btn" title="Add Habit">＋</button>
+          </div>
+
+          <!-- Habits Feed (Renders either Anime 66 habits or Notion habits or Notion tasks) -->
+          <div id="anime-habits-feed" class="anime-habits-feed">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════
+             TAB 2: HELLO HABIT (TRACKER & REPORTS - EXACT USER IMAGE 4)
+             ═══════════════════════════════════════ -->
+        <section id="tab-reports" class="view-tab-pane">
+
+          <!-- Sub-View Navigation Switcher (Habit Tracker vs Habit Reports) -->
+          <div class="hello-habit-nav-bar">
+            <div class="sub-nav-segmented">
+              <button class="sub-nav-btn active" data-subview="tracker">Habit Tracker</button>
+              <button class="sub-nav-btn" data-subview="reports">Habit Reports</button>
+            </div>
+            <button id="btn-hello-menu" class="hello-menu-btn" title="Options">•••</button>
+          </div>
+
+          <!-- SUB-VIEW 1: HABIT TRACKER (Left Side of User Image 4) -->
+          <div id="subview-tracker-content" class="subview-section active">
+
+            <!-- Subview 1 Native Header from Image 4: [Sliders] [...] [Habits] [+] -->
+            <div class="hello-tracker-header">
+              <div class="tracker-header-left">
+                <button class="t-icon-btn" id="btn-tracker-filter" title="Filter">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                </button>
+                <button class="t-icon-btn" id="btn-tracker-dots" title="More Options">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="1.8" fill="currentColor"></circle><circle cx="6" cy="12" r="1.8" fill="currentColor"></circle><circle cx="18" cy="12" r="1.8" fill="currentColor"></circle></svg>
+                </button>
+              </div>
+              <h2 class="tracker-header-title">Habits</h2>
+              <button class="t-plus-round-btn" id="btn-hello-add-goal" title="Add Goal">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </button>
+            </div>
+
+            <!-- Calendar Horizontal Week Slider (Thu 10 ... Wed 16 from Image 4) -->
+            <div class="week-calendar-strip" id="hello-week-strip">
+              <div class="cal-day-cell" data-day="Thu 10"><span class="cal-day-name">Thu</span><span class="cal-day-num">10</span></div>
+              <div class="cal-day-cell" data-day="Fri 11"><span class="cal-day-name">Fri</span><span class="cal-day-num">11</span></div>
+              <div class="cal-day-cell" data-day="Sat 12"><span class="cal-day-name">Sat</span><span class="cal-day-num">12</span></div>
+              <div class="cal-day-cell" data-day="Sun 13"><span class="cal-day-name">Sun</span><span class="cal-day-num">13</span></div>
+              <div class="cal-day-cell" data-day="Mon 14"><span class="cal-day-name">Mon</span><span class="cal-day-num">14</span></div>
+              <div class="cal-day-cell" data-day="Tue 15"><span class="cal-day-name">Tue</span><span class="cal-day-num">15</span></div>
+              <div class="cal-day-cell active" data-day="Wed 16"><span class="cal-day-name">Wed</span><span class="cal-day-num">16</span></div>
+            </div>
+
+            <!-- Daily Goals (Split Color Tiles from Image 4) -->
+            <div class="goals-group-container" id="group-daily-goals">
+              <div class="goals-group-header" id="header-daily-goals">
+                <div class="group-header-label">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                  <span>Daily Goals</span>
+                </div>
+                <button class="collapse-circle-btn" aria-label="Toggle section">
+                  <span class="collapse-arrow">▾</span>
+                </button>
+              </div>
+              <div class="split-cards-container" id="daily-split-cards">
+                <!-- Populated dynamically with exact Image 4 pastel split cards -->
+              </div>
+            </div>
+
+            <!-- Weekly Goals (Split Color Tiles from Image 4) -->
+            <div class="goals-group-container" id="group-weekly-goals">
+              <div class="goals-group-header" id="header-weekly-goals">
+                <div class="group-header-label">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  <span>Weekly Goals</span>
+                </div>
+                <button class="collapse-circle-btn" aria-label="Toggle section">
+                  <span class="collapse-arrow">▾</span>
+                </button>
+              </div>
+              <div class="split-cards-container" id="weekly-split-cards">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-VIEW 2: HABIT REPORTS (Right Side of User Image 4) -->
+          <div id="subview-reports-content" class="subview-section">
+
+            <!-- Subview 2 Native Header from Image 4: [✕] [Habit Reports] [☰] -->
+            <div class="hello-reports-header">
+              <button class="r-icon-btn" id="btn-close-reports" title="Close Reports">✕</button>
+              <h2 class="reports-header-title">Habit Reports</h2>
+              <button class="r-icon-btn" id="btn-reports-menu" title="Menu">☰</button>
+            </div>
+
+            <!-- Granularity: [Week] [Month] [Year] (Image 4) -->
+            <div class="time-capsule-selector">
+              <button class="time-btn" data-period="week">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <span>Week</span>
+              </button>
+              <button class="time-btn" data-period="month">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>Month</span>
+              </button>
+              <button class="time-btn active" data-period="year">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="5" height="5"></rect><rect x="9.5" y="2" width="5" height="5"></rect><rect x="17" y="2" width="5" height="5"></rect><rect x="2" y="9.5" width="5" height="5"></rect><rect x="9.5" y="9.5" width="5" height="5"></rect><rect x="17" y="9.5" width="5" height="5"></rect><rect x="2" y="17" width="5" height="5"></rect><rect x="9.5" y="17" width="5" height="5"></rect><rect x="17" y="17" width="5" height="5"></rect></svg>
+                <span>Year</span>
+              </button>
+            </div>
+
+            <!-- Year Picker: [2026] [<] [Today] [>] (Image 4) -->
+            <div class="year-navigator-bar">
+              <span class="year-tag-pill" id="hello-current-year">2026</span>
+              <div class="year-controls-cluster">
+                <button class="year-ctrl-btn" id="btn-year-prev">‹</button>
+                <button class="year-ctrl-btn year-today-btn" id="btn-year-today">Today</button>
+                <button class="year-ctrl-btn" id="btn-year-next">›</button>
+              </div>
+            </div>
+
+            <!-- Heatmap Contribution Matrices (52 cols x 4 rows) -->
+            <div id="heatmaps-list-container" class="heatmaps-list">
+              <!-- Rendered dynamically with GitHub square matrices -->
+            </div>
+
+            <!-- Export Buttons Row (Save Image & Share Report - Image 4) -->
+            <div class="hello-export-bar">
+              <button id="btn-export-save" class="hello-action-btn btn-save-img">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                <span>Save Image</span>
+              </button>
+              <button id="btn-export-share" class="hello-action-btn btn-share-rep">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                <span>Share Report</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════
+             TAB 3: THE 8 CORE HABITS (EXACT USER IMAGE 3)
+             ═══════════════════════════════════════ -->
+        <section id="tab-core-habits" class="view-tab-pane">
+
+          <!-- Sunburst Icon & Title -->
+          <div class="core-habits-header-block">
+            <div class="sunburst-icon-wrap">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FB6900" stroke-width="2.6">
+                <circle cx="12" cy="12" r="4.5"/>
+                <line x1="12" y1="1" x2="12" y2="4"/>
+                <line x1="12" y1="20" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+                <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="4" y2="12"/>
+                <line x1="20" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+                <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+              </svg>
+            </div>
+            <h2 class="core-title-text">The 8 core habits</h2>
+            <p class="core-subtitle-text">
+              Studies shows that to reset your life, you need the below <span style="color: #FB6900; font-weight: 800;">8 core habits</span>.
+            </p>
+          </div>
+
+          <!-- 2x4 Grid of 8 Core Habits (Exact Match to Image 3) -->
+          <div class="core-8-grid" id="core-8-grid">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Footer Explainer & Continue CTA -->
+          <div class="core-cta-footer">
+            <p class="core-footer-note">Here's how your life will change as you build these habits for 66 days:</p>
+            <button id="btn-core-continue" class="core-continue-btn">
+              <span>➜ Continue</span>
+            </button>
+          </div>
+
+          <!-- 66-Day Matrix Pathway -->
+          <div class="pathway-card">
+            <div class="pathway-head">
+              <h3>66-DAY AUTOMATICITY PATHWAY</h3>
+              <span class="pathway-badge">Active</span>
+            </div>
+            <div id="pathway-grid" class="pathway-grid"></div>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════
+             TAB 4: TOOLS & ROADMAP
+             ═══════════════════════════════════════ -->
+        <section id="tab-tools" class="view-tab-pane">
+
+          <!-- Guided Voice Meditation -->
+          <div class="tool-feature-box">
+            <div class="feature-head">
+              <img src="assets/images/tool_meditate_icon.png" class="feature-ico" alt="" />
+              <div>
+                <h3>Guided Voice Meditation</h3>
+                <span>Real vocal coaching tracks</span>
+              </div>
+            </div>
+            <div class="feature-pills">
+              <button class="fpill active" data-track="2min">2m Reset</button>
+              <button class="fpill" data-track="5min">5m Focus</button>
+              <button class="fpill" data-track="10min">10m Deep</button>
+            </div>
+            <div class="player-bar">
+              <button id="btn-play-meditate" class="play-round-btn">▶</button>
+              <div class="progress-bar-wrap">
+                <input type="range" id="med-seeker" class="med-seeker" min="0" max="100" value="0"/>
+                <div class="times-display">
+                  <span id="med-cur-time">0:00</span>
+                  <span id="med-tot-time">2:00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Box Breathing 4-4-4-4 -->
+          <div class="tool-feature-box">
+            <div class="feature-head">
+              <img src="assets/images/tool_breath_icon.png" class="feature-ico" alt="" />
+              <div>
+                <h3>Box Breathing (4-4-4-4)</h3>
+                <span>Vagus nerve stimulation</span>
+              </div>
+            </div>
+            <div class="breath-visual-zone">
+              <div id="breath-circle-element" class="breath-circle-element">
+                <span id="breath-phase-text">READY</span>
+                <span id="breath-count-number">4</span>
+              </div>
+              <button id="btn-breath-start" class="btn-full-action">START 4-4-4-4</button>
+            </div>
+          </div>
+
+          <!-- Pomodoro Deep Work -->
+          <div class="tool-feature-box">
+            <div class="feature-head">
+              <img src="assets/images/tool_focus_icon.png" class="feature-ico" alt="" />
+              <div>
+                <h3>Pomodoro Focus Timer</h3>
+                <span>Cognitive deep work</span>
+              </div>
+            </div>
+            <div class="pomodoro-zone">
+              <div id="pomodoro-clock" class="pomodoro-clock">25:00</div>
+              <div class="preset-chips-row">
+                <button class="pchip active" data-mins="25">25m</button>
+                <button class="pchip" data-mins="45">45m</button>
+                <button class="pchip" data-mins="60">60m</button>
+              </div>
+              <button id="btn-pomodoro-start" class="btn-full-action">START DEEP WORK</button>
+            </div>
+          </div>
+
+          <!-- Stoic & Wisdom Cards Vault -->
+          <div class="tool-feature-box">
+            <div class="feature-head">
+              <span style="font-size: 26px;">🃏</span>
+              <div>
+                <h3>Stoic Wisdom Cards</h3>
+                <span>8,000+ daily cards</span>
+              </div>
+            </div>
+            <div class="wisdom-quote-card">
+              <span class="wisdom-category-tag">DAILY MANTRA</span>
+              <p id="vault-quote-display">"You do not rise to the level of your goals. You fall to the level of your systems."</p>
+              <div class="wisdom-attribution-row">
+                <strong id="vault-author-display">— James Clear</strong>
+                <span id="vault-source-display">Atomic Habits</span>
+              </div>
+            </div>
+            <button id="btn-next-wisdom" class="btn-full-action" style="margin-top: 10px;">DRAW NEW CARD 🎲</button>
+          </div>
+        </section>
+      </main>
+
+      <!-- ═══════════════════════════════════════
+           BOTTOM NAVIGATION DOCK (4 Icons - Exact to Image 1 & 4)
+           ═══════════════════════════════════════ -->
+      <nav class="curved-bottom-dock">
+        <!-- 1. Rising Sun / Today -->
+        <button class="dock-item-btn active" data-tab="today" aria-label="Today">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <circle cx="12" cy="12" r="4"/>
+          </svg>
+        </button>
+
+        <!-- 2. Bar Chart / Reports (Hello Habit) -->
+        <button class="dock-item-btn" data-tab="reports" aria-label="Reports">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </button>
+
+        <!-- 3. The 8 Core Habits / Book -->
+        <button class="dock-item-btn" data-tab="core-habits" aria-label="Core Habits">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+        </button>
+
+        <!-- 4. Tools & Settings (...) -->
+        <button class="dock-item-btn" data-tab="tools" aria-label="Tools">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="1.5"/>
+            <circle cx="19" cy="12" r="1.5"/>
+            <circle cx="5" cy="12" r="1.5"/>
+          </svg>
+        </button>
+      </nav>
+
+      <!-- ═══════════════════════════════════════
+           FOCUSED ACTION SHEET (Slide-Up Bottom Sheet)
+           ═══════════════════════════════════════ -->
+      <div id="focused-action-sheet" class="sheet-curtain-overlay">
+        <div class="sheet-curtain-backdrop"></div>
+        <div class="sheet-curtain-dialog">
+          <div class="sheet-top-handle"></div>
+          <div class="sheet-banner-cover" id="sheet-banner-cover">
+            <div class="sheet-flame-tag" id="sheet-flame-tag">🔥 10 days</div>
+            <h2 id="sheet-card-title">20 push-ups</h2>
+            <p id="sheet-card-subtitle">Build raw upper-body push strength</p>
+          </div>
+          <div class="sheet-content-body">
+            <div class="sheet-metrics-grid">
+              <div class="metric-cell">
+                <span class="metric-label">DIFFICULTY</span>
+                <strong id="sheet-diff-stars">✦ ✦ ✦ ✧ ✧ Medium</strong>
+              </div>
+              <div class="metric-cell">
+                <span class="metric-label">REPEAT</span>
+                <strong id="sheet-repeat-pattern">Daily</strong>
+              </div>
+            </div>
+            <div class="sheet-neuro-guidance">
+              <strong>Neuro Science Protocol:</strong>
+              <p id="sheet-neuro-text">Consistent daily resistance movement triggers neuromuscular adaptation and releases BDNF to consolidate habit automaticity.</p>
+            </div>
+            <button id="btn-sheet-mark-done" class="btn-sheet-complete-action">
+              <span>MARK AS COMPLETED</span>
+              <span>✓</span>
+            </button>
+          </div>
+          <button id="btn-sheet-close-x" class="sheet-dismiss-btn">✕</button>
+        </div>
+      </div>
+
+      <!-- Spider-Man RPG Comic Combo Toast (Integration with Game) -->
+      <div id="spidey-rpg-toast" class="spidey-rpg-toast">
+        <div class="toast-spider-icon">🕷️</div>
+        <div class="toast-body">
+          <div class="toast-header-row">
+            <strong class="toast-title" id="toast-rpg-title">SPIDEY COMBO!</strong>
+            <span class="toast-xp-pill" id="toast-rpg-xp">+35 XP</span>
+          </div>
+          <p class="toast-desc" id="toast-rpg-desc">Habit synced! Green Goblin took 38 DMG.</p>
+        </div>
+      </div>
+
+      <!-- Heatmap Cell Popover Tooltip -->
+      <div id="heatmap-popover-tooltip" class="heatmap-popover-tooltip">
+        <strong id="hm-tip-date">Wed, Oct 14</strong>
+        <span id="hm-tip-status">Completed (Streak: 12d)</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

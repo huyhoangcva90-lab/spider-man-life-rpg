@@ -23,3 +23,7 @@ npm-debug.log*
 # Environment
 .env
 .env.local
+
+# Extracted APK assets
+tools/apk_unpacked/
+tools/xapk_extracted/

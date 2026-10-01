@@ -1,0 +1,2843 @@
+{
+    "startPageId": "age",
+    "pages": [
+        {
+            "id": "age",
+            "title": "How old are you?",
+            "type": "singleOption",
+            "userStateKey": "age",
+            "defaultNextPageId": "gender",
+            "showLanguageSelector": true,
+            "section": "trunk",
+            "options": [
+                {
+                    "id": "age_1",
+                    "text": "13 to 17",
+                    "value": 0,
+                    "subtitle": "Teen years. We keep it light and habit-focused."
+                },
+                {
+                    "id": "age_2",
+                    "text": "18 to 24",
+                    "value": 0,
+                    "subtitle": "Building the foundation. Systems over willpower."
+                },
+                {
+                    "id": "age_3",
+                    "text": "25 to 34",
+                    "value": 0,
+                    "subtitle": "Career and life balance. Most users are here."
+                },
+                {
+                    "id": "age_4",
+                    "text": "35 to 44",
+                    "value": 0,
+                    "subtitle": "Reset season. Reclaim energy and focus."
+                },
+                {
+                    "id": "age_5",
+                    "text": "45 to 54",
+                    "value": 0,
+                    "subtitle": "Sustainable strength. Build for the next decade."
+                },
+                {
+                    "id": "age_6",
+                    "text": "55 or above",
+                    "value": 0,
+                    "subtitle": "Longevity-first. Mobility, mind, and meaning."
+                }
+            ]
+        },
+        {
+            "id": "gender",
+            "title": "What's your gender?",
+            "type": "singleOption",
+            "userStateKey": "gender",
+            "defaultNextPageId": "heardFrom",
+            "showLanguageSelector": true,
+            "section": "trunk",
+            "options": [
+                {
+                    "id": "gender_1",
+                    "text": "Male",
+                    "value": 0
+                },
+                {
+                    "id": "gender_2",
+                    "text": "Female",
+                    "value": 0
+                },
+                {
+                    "id": "gender_3",
+                    "text": "Other",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "heardFrom",
+            "title": "Where did you hear about our app?",
+            "type": "singleOption",
+            "userStateKey": "heardFrom",
+            "defaultNextPageId": "lifeDescription",
+            "showLanguageSelector": false,
+            "section": "trunk",
+            "options": [
+                {
+                    "id": "heard_1",
+                    "text": "Instagram",
+                    "value": 0
+                },
+                {
+                    "id": "heard_2",
+                    "text": "Tiktok",
+                    "value": 0
+                },
+                {
+                    "id": "heard_3",
+                    "text": "Facebook",
+                    "value": 0
+                },
+                {
+                    "id": "heard_4",
+                    "text": "Youtube",
+                    "value": 0
+                },
+                {
+                    "id": "heard_5",
+                    "text": "Friends",
+                    "value": 0
+                },
+                {
+                    "id": "heard_6",
+                    "text": "App Store Search",
+                    "value": 0
+                },
+                {
+                    "id": "heard_7",
+                    "text": "Internet",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "lifeDescription",
+            "title": "How would you describe your current life?",
+            "type": "singleOption",
+            "userStateKey": "lifeDescription",
+            "defaultNextPageId": "primaryDomain",
+            "showLanguageSelector": false,
+            "section": "trunk",
+            "options": [
+                {
+                    "id": "life_1",
+                    "text": "I'm satisfied with my life now",
+                    "value": 0
+                },
+                {
+                    "id": "life_2",
+                    "text": "I'm alright and want to self-improve",
+                    "value": 0
+                },
+                {
+                    "id": "life_3",
+                    "text": "I'm doing okay, not good or bad",
+                    "value": 0
+                },
+                {
+                    "id": "life_4",
+                    "text": "I'm sad and rarely happy",
+                    "value": 0
+                },
+                {
+                    "id": "life_5",
+                    "text": "I'm at the lowest and need help",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "primaryDomain",
+            "title": "What areas of your life need the most attention right now?",
+            "subtitle": "Pick up to 3, most important first.",
+            "type": "multipleOption",
+            "userStateKey": "primaryDomain",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "trunk",
+            "maxSelections": 3,
+            "options": [
+                {
+                    "id": "domain_1",
+                    "text": "Health & fitness",
+                    "value": 0
+                },
+                {
+                    "id": "domain_2",
+                    "text": "Mental health & wellbeing",
+                    "value": 0
+                },
+                {
+                    "id": "domain_3",
+                    "text": "Career & productivity",
+                    "value": 0
+                },
+                {
+                    "id": "domain_4",
+                    "text": "Discipline & habits",
+                    "value": 0
+                },
+                {
+                    "id": "domain_5",
+                    "text": "Relationships & social life",
+                    "value": 0
+                },
+                {
+                    "id": "domain_6",
+                    "text": "Education & learning",
+                    "value": 0
+                },
+                {
+                    "id": "domain_7",
+                    "text": "Spiritual growth & purpose",
+                    "value": 0
+                },
+                {
+                    "id": "domain_8",
+                    "text": "Life crisis & rebuilding",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "health_goal",
+            "title": "What's your main health goal?",
+            "type": "singleOption",
+            "userStateKey": "health_goal",
+            "defaultNextPageId": "health_level",
+            "showLanguageSelector": false,
+            "section": "domain_health",
+            "options": [
+                {
+                    "id": "hg_1",
+                    "text": "Lose weight",
+                    "value": 0,
+                    "subtitle": "Sustainable fat loss through habits, not crash diets."
+                },
+                {
+                    "id": "hg_2",
+                    "text": "Build muscle & strength",
+                    "value": 0,
+                    "subtitle": "Progressive training and protein. The boring stuff that works."
+                },
+                {
+                    "id": "hg_3",
+                    "text": "Get fitter overall",
+                    "value": 0,
+                    "subtitle": "Cardio, strength, and mobility. A balanced base."
+                },
+                {
+                    "id": "hg_4",
+                    "text": "More energy & better sleep",
+                    "value": 0,
+                    "subtitle": "Fix the sleep, food, and stress loop first."
+                },
+                {
+                    "id": "hg_5",
+                    "text": "Look better & more confident",
+                    "value": 0,
+                    "subtitle": "Body, posture, and presence, from the inside out."
+                }
+            ]
+        },
+        {
+            "id": "health_level",
+            "title": "What describes your current fitness level?",
+            "type": "singleOption",
+            "userStateKey": "health_level",
+            "defaultNextPageId": "health_barrier",
+            "showLanguageSelector": false,
+            "section": "domain_health",
+            "options": [
+                {
+                    "id": "hl_1",
+                    "text": "Complete beginner",
+                    "value": 0
+                },
+                {
+                    "id": "hl_2",
+                    "text": "Tried but inconsistent",
+                    "value": 0
+                },
+                {
+                    "id": "hl_3",
+                    "text": "Exercise sometimes",
+                    "value": 0
+                },
+                {
+                    "id": "hl_4",
+                    "text": "Already active, want more",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "health_barrier",
+            "title": "What's the biggest thing stopping you?",
+            "type": "singleOption",
+            "userStateKey": "health_barrier",
+            "defaultNextPageId": "exerciseFunnel",
+            "showLanguageSelector": false,
+            "section": "domain_health",
+            "options": [
+                {
+                    "id": "hb_1",
+                    "text": "No time",
+                    "value": 0
+                },
+                {
+                    "id": "hb_2",
+                    "text": "No motivation",
+                    "value": 0
+                },
+                {
+                    "id": "hb_3",
+                    "text": "Don't know how to start",
+                    "value": 0
+                },
+                {
+                    "id": "hb_4",
+                    "text": "I always quit after a few days",
+                    "value": 0
+                },
+                {
+                    "id": "hb_5",
+                    "text": "Injury or health issue",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "exerciseFunnel",
+            "title": "Do any of these affect what your body can do right now?",
+            "type": "exerciseFunnel",
+            "userStateKey": "exerciseFunnel",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "domain_health"
+        },
+        {
+            "id": "mental_challenge",
+            "title": "What affects your mental health the most?",
+            "type": "singleOption",
+            "userStateKey": "mental_challenge",
+            "defaultNextPageId": "mental_coping",
+            "showLanguageSelector": false,
+            "section": "domain_mental",
+            "options": [
+                {
+                    "id": "mc_1",
+                    "text": "Anxiety & overthinking",
+                    "value": 0
+                },
+                {
+                    "id": "mc_2",
+                    "text": "Burnout & stress",
+                    "value": 0
+                },
+                {
+                    "id": "mc_3",
+                    "text": "Low mood & sadness",
+                    "value": 0
+                },
+                {
+                    "id": "mc_4",
+                    "text": "Loneliness & isolation",
+                    "value": 0
+                },
+                {
+                    "id": "mc_5",
+                    "text": "Anger & overwhelm",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "mental_coping",
+            "title": "How do you currently cope?",
+            "type": "singleOption",
+            "userStateKey": "mental_coping",
+            "defaultNextPageId": "mental_duration",
+            "showLanguageSelector": false,
+            "section": "domain_mental",
+            "options": [
+                {
+                    "id": "mco_1",
+                    "text": "No strategy at all",
+                    "value": 0
+                },
+                {
+                    "id": "mco_2",
+                    "text": "Scrolling phone & social media",
+                    "value": 0
+                },
+                {
+                    "id": "mco_3",
+                    "text": "Exercise or physical activity",
+                    "value": 0
+                },
+                {
+                    "id": "mco_4",
+                    "text": "Talking to someone",
+                    "value": 0
+                },
+                {
+                    "id": "mco_5",
+                    "text": "Substances or unhealthy habits",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "mental_duration",
+            "title": "How long have you been dealing with this?",
+            "type": "singleOption",
+            "userStateKey": "mental_duration",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "domain_mental",
+            "options": [
+                {
+                    "id": "md_1",
+                    "text": "Just a few weeks",
+                    "value": 0
+                },
+                {
+                    "id": "md_2",
+                    "text": "A few months",
+                    "value": 0
+                },
+                {
+                    "id": "md_3",
+                    "text": "About a year",
+                    "value": 0
+                },
+                {
+                    "id": "md_4",
+                    "text": "Multiple years",
+                    "value": 0
+                },
+                {
+                    "id": "md_5",
+                    "text": "As long as I can remember",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "career_situation",
+            "title": "Where are you in your career?",
+            "type": "singleOption",
+            "userStateKey": "career_situation",
+            "defaultNextPageId": "career_challenge",
+            "showLanguageSelector": false,
+            "section": "domain_career",
+            "options": [
+                {
+                    "id": "cs_1",
+                    "text": "Student",
+                    "value": 0,
+                    "subtitle": "Studying full or part time. Routine is your edge."
+                },
+                {
+                    "id": "cs_2",
+                    "text": "Early career",
+                    "value": 0,
+                    "subtitle": "First few years in. Building momentum and habits."
+                },
+                {
+                    "id": "cs_3",
+                    "text": "Mid-career and feeling stuck",
+                    "value": 0,
+                    "subtitle": "Plateaued or burnt out. Ready for a reset."
+                },
+                {
+                    "id": "cs_4",
+                    "text": "Entrepreneur or freelancer",
+                    "value": 0,
+                    "subtitle": "Self-directed. Your structure is up to you."
+                },
+                {
+                    "id": "cs_5",
+                    "text": "Between jobs",
+                    "value": 0,
+                    "subtitle": "In transition. Use this window intentionally."
+                }
+            ]
+        },
+        {
+            "id": "career_challenge",
+            "title": "What's your biggest career challenge?",
+            "type": "singleOption",
+            "userStateKey": "career_challenge",
+            "defaultNextPageId": "career_outcome",
+            "showLanguageSelector": false,
+            "section": "domain_career",
+            "options": [
+                {
+                    "id": "cc_1",
+                    "text": "Time management",
+                    "value": 0
+                },
+                {
+                    "id": "cc_2",
+                    "text": "Focus & distraction",
+                    "value": 0
+                },
+                {
+                    "id": "cc_3",
+                    "text": "Procrastination",
+                    "value": 0
+                },
+                {
+                    "id": "cc_4",
+                    "text": "Low energy throughout the day",
+                    "value": 0
+                },
+                {
+                    "id": "cc_5",
+                    "text": "Work-life balance",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "career_outcome",
+            "title": "What outcome matters most to you?",
+            "type": "singleOption",
+            "userStateKey": "career_outcome",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "domain_career",
+            "options": [
+                {
+                    "id": "co_1",
+                    "text": "Getting a promotion",
+                    "value": 0
+                },
+                {
+                    "id": "co_2",
+                    "text": "Building a side project",
+                    "value": 0
+                },
+                {
+                    "id": "co_3",
+                    "text": "Having more energy for work",
+                    "value": 0
+                },
+                {
+                    "id": "co_4",
+                    "text": "Taking control of my time",
+                    "value": 0
+                },
+                {
+                    "id": "co_5",
+                    "text": "Building new skills",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "discipline_habit",
+            "title": "What bad habit hurts you the most?",
+            "type": "singleOption",
+            "userStateKey": "discipline_habit",
+            "defaultNextPageId": "discipline_attempts",
+            "showLanguageSelector": false,
+            "section": "domain_discipline",
+            "options": [
+                {
+                    "id": "dh_1",
+                    "text": "Phone & social media",
+                    "value": 0
+                },
+                {
+                    "id": "dh_2",
+                    "text": "Pornography",
+                    "value": 0
+                },
+                {
+                    "id": "dh_3",
+                    "text": "Smoking or vaping",
+                    "value": 0
+                },
+                {
+                    "id": "dh_4",
+                    "text": "Gaming",
+                    "value": 0
+                },
+                {
+                    "id": "dh_5",
+                    "text": "Junk food",
+                    "value": 0
+                },
+                {
+                    "id": "dh_6",
+                    "text": "Alcohol",
+                    "value": 0
+                },
+                {
+                    "id": "dh_7",
+                    "text": "Procrastination",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "discipline_attempts",
+            "title": "How many times have you tried to change this?",
+            "type": "singleOption",
+            "userStateKey": "discipline_attempts",
+            "defaultNextPageId": "discipline_trigger",
+            "showLanguageSelector": false,
+            "section": "domain_discipline",
+            "options": [
+                {
+                    "id": "da_1",
+                    "text": "This is my first time",
+                    "value": 0
+                },
+                {
+                    "id": "da_2",
+                    "text": "1 to 2 times",
+                    "value": 0
+                },
+                {
+                    "id": "da_3",
+                    "text": "3 to 5 times",
+                    "value": 0
+                },
+                {
+                    "id": "da_4",
+                    "text": "I've lost count",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "discipline_trigger",
+            "title": "What triggers you to fall back?",
+            "type": "singleOption",
+            "userStateKey": "discipline_trigger",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "domain_discipline",
+            "options": [
+                {
+                    "id": "dt_1",
+                    "text": "Stress",
+                    "value": 0
+                },
+                {
+                    "id": "dt_2",
+                    "text": "Boredom",
+                    "value": 0
+                },
+                {
+                    "id": "dt_3",
+                    "text": "Being alone",
+                    "value": 0
+                },
+                {
+                    "id": "dt_4",
+                    "text": "Late at night",
+                    "value": 0
+                },
+                {
+                    "id": "dt_5",
+                    "text": "Social pressure",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "relationship_area",
+            "title": "Which area of relationships needs the most work?",
+            "type": "singleOption",
+            "userStateKey": "relationship_area",
+            "defaultNextPageId": "relationship_issue",
+            "showLanguageSelector": false,
+            "section": "domain_relationships",
+            "options": [
+                {
+                    "id": "ra_1",
+                    "text": "Making new friends",
+                    "value": 0
+                },
+                {
+                    "id": "ra_2",
+                    "text": "Romantic relationships",
+                    "value": 0
+                },
+                {
+                    "id": "ra_3",
+                    "text": "Family relationships",
+                    "value": 0
+                },
+                {
+                    "id": "ra_4",
+                    "text": "Social confidence",
+                    "value": 0
+                },
+                {
+                    "id": "ra_5",
+                    "text": "Setting boundaries",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "relationship_issue",
+            "title": "What's the core issue?",
+            "type": "singleOption",
+            "userStateKey": "relationship_issue",
+            "defaultNextPageId": "relationship_outcome",
+            "showLanguageSelector": false,
+            "section": "domain_relationships",
+            "options": [
+                {
+                    "id": "ri_1",
+                    "text": "Social anxiety",
+                    "value": 0
+                },
+                {
+                    "id": "ri_2",
+                    "text": "Trust issues",
+                    "value": 0
+                },
+                {
+                    "id": "ri_3",
+                    "text": "Isolation & loneliness",
+                    "value": 0
+                },
+                {
+                    "id": "ri_4",
+                    "text": "Toxic patterns",
+                    "value": 0
+                },
+                {
+                    "id": "ri_5",
+                    "text": "Low confidence around others",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "relationship_outcome",
+            "title": "What would progress look like for you?",
+            "type": "singleOption",
+            "userStateKey": "relationship_outcome",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "domain_relationships",
+            "options": [
+                {
+                    "id": "ro_1",
+                    "text": "Feeling comfortable being myself",
+                    "value": 0
+                },
+                {
+                    "id": "ro_2",
+                    "text": "Having a consistent friend group",
+                    "value": 0
+                },
+                {
+                    "id": "ro_3",
+                    "text": "Being able to express my needs clearly",
+                    "value": 0
+                },
+                {
+                    "id": "ro_4",
+                    "text": "Letting go of the past",
+                    "value": 0
+                },
+                {
+                    "id": "ro_5",
+                    "text": "Building real self-worth",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "education_situation",
+            "title": "What's your education situation?",
+            "type": "singleOption",
+            "userStateKey": "education_situation",
+            "defaultNextPageId": "education_challenge",
+            "showLanguageSelector": false,
+            "section": "domain_education",
+            "options": [
+                {
+                    "id": "es_1",
+                    "text": "High school",
+                    "value": 0
+                },
+                {
+                    "id": "es_2",
+                    "text": "University",
+                    "value": 0
+                },
+                {
+                    "id": "es_3",
+                    "text": "Exam preparation",
+                    "value": 0
+                },
+                {
+                    "id": "es_4",
+                    "text": "Self-learning",
+                    "value": 0
+                },
+                {
+                    "id": "es_5",
+                    "text": "Professional certification",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "education_challenge",
+            "title": "What's your biggest learning challenge?",
+            "type": "singleOption",
+            "userStateKey": "education_challenge",
+            "defaultNextPageId": "education_blocker",
+            "showLanguageSelector": false,
+            "section": "domain_education",
+            "options": [
+                {
+                    "id": "ec_1",
+                    "text": "Can't focus when studying",
+                    "value": 0
+                },
+                {
+                    "id": "ec_2",
+                    "text": "Procrastination",
+                    "value": 0
+                },
+                {
+                    "id": "ec_3",
+                    "text": "Feeling overwhelmed",
+                    "value": 0
+                },
+                {
+                    "id": "ec_4",
+                    "text": "Poor memory retention",
+                    "value": 0
+                },
+                {
+                    "id": "ec_5",
+                    "text": "No motivation to study",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "education_blocker",
+            "title": "What gets in the way the most?",
+            "type": "singleOption",
+            "userStateKey": "education_blocker",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "domain_education",
+            "options": [
+                {
+                    "id": "eb_1",
+                    "text": "Phone & social media",
+                    "value": 0
+                },
+                {
+                    "id": "eb_2",
+                    "text": "No study plan or structure",
+                    "value": 0
+                },
+                {
+                    "id": "eb_3",
+                    "text": "Bad study environment",
+                    "value": 0
+                },
+                {
+                    "id": "eb_4",
+                    "text": "Performance anxiety",
+                    "value": 0
+                },
+                {
+                    "id": "eb_5",
+                    "text": "Too tired to study",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "spiritual_meaning",
+            "title": "What does spiritual growth mean to you?",
+            "type": "singleOption",
+            "userStateKey": "spiritual_meaning",
+            "defaultNextPageId": "spiritual_consistency",
+            "showLanguageSelector": false,
+            "section": "domain_spiritual",
+            "options": [
+                {
+                    "id": "sm_1",
+                    "text": "Religious practice & worship",
+                    "value": 0
+                },
+                {
+                    "id": "sm_2",
+                    "text": "Inner peace & calm",
+                    "value": 0
+                },
+                {
+                    "id": "sm_3",
+                    "text": "Finding my life purpose",
+                    "value": 0
+                },
+                {
+                    "id": "sm_4",
+                    "text": "Gratitude & mindfulness",
+                    "value": 0
+                },
+                {
+                    "id": "sm_5",
+                    "text": "Connection to something greater",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "spiritual_consistency",
+            "title": "How consistent is your spiritual practice?",
+            "type": "singleOption",
+            "userStateKey": "spiritual_consistency",
+            "defaultNextPageId": "spiritual_barrier",
+            "showLanguageSelector": false,
+            "section": "domain_spiritual",
+            "options": [
+                {
+                    "id": "sc_1",
+                    "text": "I don't have one yet",
+                    "value": 0
+                },
+                {
+                    "id": "sc_2",
+                    "text": "I try but keep forgetting",
+                    "value": 0
+                },
+                {
+                    "id": "sc_3",
+                    "text": "A few times a week",
+                    "value": 0
+                },
+                {
+                    "id": "sc_4",
+                    "text": "Daily, but I want to go deeper",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "spiritual_barrier",
+            "title": "What makes consistency hard?",
+            "type": "singleOption",
+            "userStateKey": "spiritual_barrier",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "domain_spiritual",
+            "options": [
+                {
+                    "id": "sb_1",
+                    "text": "Life is too busy",
+                    "value": 0
+                },
+                {
+                    "id": "sb_2",
+                    "text": "Don't know where to start",
+                    "value": 0
+                },
+                {
+                    "id": "sb_3",
+                    "text": "I lose motivation quickly",
+                    "value": 0
+                },
+                {
+                    "id": "sb_4",
+                    "text": "Distractions keep pulling me away",
+                    "value": 0
+                },
+                {
+                    "id": "sb_5",
+                    "text": "Doubt and uncertainty",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "crisis_event",
+            "title": "What brought you to this point?",
+            "type": "singleOption",
+            "userStateKey": "crisis_event",
+            "defaultNextPageId": "crisis_stage",
+            "showLanguageSelector": false,
+            "section": "domain_crisis",
+            "options": [
+                {
+                    "id": "ce_1",
+                    "text": "A breakup or relationship ending",
+                    "value": 0,
+                    "subtitle": "Heartbreak as a hard reset. Grief plus rebuilding identity."
+                },
+                {
+                    "id": "ce_2",
+                    "text": "Loss of a loved one",
+                    "value": 0,
+                    "subtitle": "Grief reorders priorities. We will go gently."
+                },
+                {
+                    "id": "ce_3",
+                    "text": "Job loss or career collapse",
+                    "value": 0,
+                    "subtitle": "Identity-shaking. We rebuild routine first, then ambition."
+                },
+                {
+                    "id": "ce_4",
+                    "text": "Health scare",
+                    "value": 0,
+                    "subtitle": "A wake-up call. The plan adapts to your energy."
+                },
+                {
+                    "id": "ce_5",
+                    "text": "Rock bottom with addiction",
+                    "value": 0,
+                    "subtitle": "Recovery-aware. Daily structure that supports sobriety."
+                },
+                {
+                    "id": "ce_6",
+                    "text": "General breakdown — everything fell apart",
+                    "value": 0,
+                    "subtitle": "Multiple fronts at once. We triage what matters most."
+                }
+            ]
+        },
+        {
+            "id": "crisis_stage",
+            "title": "Where are you in your recovery?",
+            "type": "singleOption",
+            "userStateKey": "crisis_stage",
+            "defaultNextPageId": "crisis_need",
+            "showLanguageSelector": false,
+            "section": "domain_crisis",
+            "options": [
+                {
+                    "id": "cst_1",
+                    "text": "Still surviving day-to-day",
+                    "value": 0
+                },
+                {
+                    "id": "cst_2",
+                    "text": "Starting to stabilize",
+                    "value": 0
+                },
+                {
+                    "id": "cst_3",
+                    "text": "Ready to rebuild",
+                    "value": 0
+                },
+                {
+                    "id": "cst_4",
+                    "text": "Past the worst, looking forward",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "crisis_need",
+            "title": "What do you need most right now?",
+            "type": "singleOption",
+            "userStateKey": "crisis_need",
+            "defaultNextPageId": "proudOfYourself",
+            "showLanguageSelector": false,
+            "section": "domain_crisis",
+            "options": [
+                {
+                    "id": "cn_1",
+                    "text": "Daily structure and routine",
+                    "value": 0
+                },
+                {
+                    "id": "cn_2",
+                    "text": "Emotional processing",
+                    "value": 0
+                },
+                {
+                    "id": "cn_3",
+                    "text": "Physical health basics",
+                    "value": 0
+                },
+                {
+                    "id": "cn_4",
+                    "text": "A sense of purpose",
+                    "value": 0
+                },
+                {
+                    "id": "cn_5",
+                    "text": "Accountability and support",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "proudOfYourself",
+            "title": "When's the last time you felt proud of yourself?",
+            "type": "singleOption",
+            "userStateKey": "proudOfYourself",
+            "defaultNextPageId": "sleepSatisfaction",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "proud_1",
+                    "text": "Just today",
+                    "value": 0
+                },
+                {
+                    "id": "proud_2",
+                    "text": "Few days ago",
+                    "value": 0
+                },
+                {
+                    "id": "proud_3",
+                    "text": "Few weeks ago",
+                    "value": 0
+                },
+                {
+                    "id": "proud_4",
+                    "text": "Few months ago",
+                    "value": 0,
+                    "subtitle": "Three months. We are closing that gap. Day 0 ends with a finished thing, guaranteed."
+                },
+                {
+                    "id": "proud_5",
+                    "text": "Too long I can't remember",
+                    "value": 0,
+                    "subtitle": "No shame. We will give you a small, real win in the first 48 hours."
+                }
+            ]
+        },
+        {
+            "id": "sleepSatisfaction",
+            "title": "How would you describe your sleep right now?",
+            "type": "singleOption",
+            "userStateKey": "sleepSatisfaction",
+            "defaultNextPageId": "nutritionHabit",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "sleep_sat_1",
+                    "text": "I sleep well and wake up refreshed",
+                    "value": 0,
+                    "subtitle": "Solid foundation. We will protect it."
+                },
+                {
+                    "id": "sleep_sat_2",
+                    "text": "It's okay but could be better",
+                    "value": 0,
+                    "nextPageId": "sleepGoal",
+                    "subtitle": "Small wins compound: light, caffeine, and a fixed wake time."
+                },
+                {
+                    "id": "sleep_sat_3",
+                    "text": "I struggle with sleep regularly",
+                    "value": 0,
+                    "nextPageId": "sleepGoal",
+                    "subtitle": "We start by stabilising wake time and evening routine."
+                },
+                {
+                    "id": "sleep_sat_4",
+                    "text": "My schedule is all over the place",
+                    "value": 0,
+                    "nextPageId": "sleepGoal",
+                    "subtitle": "Anchor points first. Morning and evening before everything else."
+                }
+            ]
+        },
+        {
+            "id": "sleepGoal",
+            "title": "Would you like help building a sleep routine?",
+            "type": "singleOption",
+            "userStateKey": "sleepGoal",
+            "defaultNextPageId": "nutritionHabit",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "sg_1",
+                    "text": "Yes, help me wake up earlier",
+                    "value": 0,
+                    "nextPageId": "wakeUpTime"
+                },
+                {
+                    "id": "sg_2",
+                    "text": "Yes, help me get enough sleep hours",
+                    "value": 0
+                },
+                {
+                    "id": "sg_3",
+                    "text": "No, I'll focus on other things first",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "wakeUpTime",
+            "title": "What time would you like to start waking up?",
+            "type": "singleOption",
+            "userStateKey": "wakeUpTime",
+            "defaultNextPageId": "nutritionHabit",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "wt_1",
+                    "text": "5:00 – 6:00 AM (early riser)",
+                    "value": 5.5
+                },
+                {
+                    "id": "wt_2",
+                    "text": "6:00 – 7:00 AM",
+                    "value": 6.5
+                },
+                {
+                    "id": "wt_3",
+                    "text": "7:00 – 8:00 AM",
+                    "value": 7.5
+                },
+                {
+                    "id": "wt_4",
+                    "text": "8:00 AM or later",
+                    "value": 8.5
+                },
+                {
+                    "id": "wt_5",
+                    "text": "I work night shifts",
+                    "value": 0
+                },
+                {
+                    "id": "wt_6",
+                    "text": "I follow a split or rotating schedule",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "nutritionHabit",
+            "title": "How would you describe your eating habits?",
+            "type": "singleOption",
+            "userStateKey": "nutritionHabit",
+            "defaultNextPageId": "schedulePredictability",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "nut_1",
+                    "text": "I eat healthy most days",
+                    "value": 0
+                },
+                {
+                    "id": "nut_2",
+                    "text": "I try but it's inconsistent",
+                    "value": 0
+                },
+                {
+                    "id": "nut_3",
+                    "text": "I mostly eat convenience food",
+                    "value": 0
+                },
+                {
+                    "id": "nut_4",
+                    "text": "I barely think about nutrition",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "schedulePredictability",
+            "title": "How predictable are your days?",
+            "type": "singleOption",
+            "userStateKey": "schedulePredictability",
+            "defaultNextPageId": "restDayCount",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "sched_1",
+                    "text": "Very predictable — same routine daily",
+                    "value": 0,
+                    "subtitle": "Great. We can stack habits onto your existing rhythm."
+                },
+                {
+                    "id": "sched_2",
+                    "text": "Mostly predictable with some surprises",
+                    "value": 0,
+                    "subtitle": "Build the core routine; flex the rest."
+                },
+                {
+                    "id": "sched_3",
+                    "text": "Changes week to week",
+                    "value": 0,
+                    "subtitle": "Weekly planning beats daily. We will set that up."
+                },
+                {
+                    "id": "sched_4",
+                    "text": "Shift work or night schedule",
+                    "value": 0,
+                    "subtitle": "Anchor sleep and light timing to your shift, not the clock."
+                },
+                {
+                    "id": "sched_5",
+                    "text": "Very chaotic right now",
+                    "value": 0,
+                    "subtitle": "Start with one daily anchor. Everything else follows."
+                }
+            ]
+        },
+        {
+            "id": "restDayCount",
+            "title": "Want built-in rest days?",
+            "type": "singleOption",
+            "userStateKey": "restDayCount",
+            "defaultNextPageId": "readinessBaseline",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "restcount_0",
+                    "text": "No rest days, I want to show up every day",
+                    "value": 0,
+                    "nextPageId": "readinessBaseline"
+                },
+                {
+                    "id": "restcount_1",
+                    "text": "1 rest day a week",
+                    "value": 1,
+                    "nextPageId": "restDayWeekday1"
+                },
+                {
+                    "id": "restcount_2",
+                    "text": "2 rest days a week",
+                    "value": 2,
+                    "nextPageId": "restDayWeekday2"
+                }
+            ]
+        },
+        {
+            "id": "restDayWeekday1",
+            "title": "Which day is your rest day?",
+            "type": "singleOption",
+            "userStateKey": "restDayWeekday1",
+            "defaultNextPageId": "readinessBaseline",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "restwd1_sun",
+                    "text": "Sunday",
+                    "value": 0
+                },
+                {
+                    "id": "restwd1_sat",
+                    "text": "Saturday",
+                    "value": 6
+                },
+                {
+                    "id": "restwd1_wed",
+                    "text": "Wednesday",
+                    "value": 3
+                },
+                {
+                    "id": "restwd1_auto",
+                    "text": "Let the app choose for me",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "restDayWeekday2",
+            "title": "Which days are your rest days?",
+            "type": "singleOption",
+            "userStateKey": "restDayWeekday2",
+            "defaultNextPageId": "readinessBaseline",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "restwd2_weekend",
+                    "text": "Weekend (Saturday & Sunday)",
+                    "value": 0
+                },
+                {
+                    "id": "restwd2_wedsun",
+                    "text": "Wednesday & Sunday",
+                    "value": 0
+                },
+                {
+                    "id": "restwd2_auto",
+                    "text": "Let the app choose for me",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "readinessBaseline",
+            "title": "Which sounds most like you right now?",
+            "type": "singleOption",
+            "userStateKey": "readinessBaseline",
+            "defaultNextPageId": "identityFraming",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "ready_1",
+                    "text": "I struggle to start basic habits",
+                    "value": 0
+                },
+                {
+                    "id": "ready_2",
+                    "text": "I can do basics, but I need structure",
+                    "value": 0
+                },
+                {
+                    "id": "ready_3",
+                    "text": "I'm already disciplined — I want a sharper system",
+                    "value": 0
+                },
+                {
+                    "id": "ready_4",
+                    "text": "I want a high-performance plan",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "identityFraming",
+            "title": "Which feels more true to you?",
+            "subtitle": "There's no wrong answer — this helps us match your style.",
+            "type": "singleOption",
+            "userStateKey": "identityFraming",
+            "defaultNextPageId": "coreValues",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "identity_1",
+                    "text": "I want to become someone who lives with discipline",
+                    "value": 0,
+                    "_tag": "identity"
+                },
+                {
+                    "id": "identity_2",
+                    "text": "I want to hit my goals and see real results",
+                    "value": 0,
+                    "_tag": "outcome"
+                }
+            ]
+        },
+        {
+            "id": "coreValues",
+            "title": "What matters most to you right now?",
+            "subtitle": "Pick up to 3.",
+            "type": "multipleOption",
+            "userStateKey": "coreValues",
+            "defaultNextPageId": "downtimeEnvironment",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "maxSelections": 3,
+            "options": [
+                {
+                    "id": "val_1",
+                    "text": "Health & energy",
+                    "value": 0
+                },
+                {
+                    "id": "val_2",
+                    "text": "Peace of mind",
+                    "value": 0
+                },
+                {
+                    "id": "val_3",
+                    "text": "Achievement & success",
+                    "value": 0
+                },
+                {
+                    "id": "val_4",
+                    "text": "Freedom & independence",
+                    "value": 0
+                },
+                {
+                    "id": "val_5",
+                    "text": "Faith & purpose",
+                    "value": 0
+                },
+                {
+                    "id": "val_6",
+                    "text": "Connection & belonging",
+                    "value": 0
+                },
+                {
+                    "id": "val_7",
+                    "text": "Personal growth",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "downtimeEnvironment",
+            "title": "Where do you usually spend your downtime?",
+            "type": "singleOption",
+            "userStateKey": "downtimeEnvironment",
+            "defaultNextPageId": "confidenceRuler",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "env_1",
+                    "text": "Home alone",
+                    "value": 0,
+                    "subtitle": "Solo space. We will design rituals you actually keep."
+                },
+                {
+                    "id": "env_2",
+                    "text": "Home with family or roommates",
+                    "value": 0,
+                    "subtitle": "Shared space. Quieter habits that do not need privacy."
+                },
+                {
+                    "id": "env_3",
+                    "text": "Outside — café, gym, nature",
+                    "value": 0,
+                    "subtitle": "On-the-go. Phone-light habits and movement-based resets."
+                },
+                {
+                    "id": "env_4",
+                    "text": "At work or school",
+                    "value": 0,
+                    "subtitle": "Micro-habits between tasks. 90-second resets."
+                },
+                {
+                    "id": "env_5",
+                    "text": "It varies a lot",
+                    "value": 0,
+                    "subtitle": "We will build habits that travel with you."
+                }
+            ]
+        },
+        {
+            "id": "confidenceRuler",
+            "title": "How confident are you that you can stick with a daily routine for 7 days?",
+            "subtitle": "Be honest — there's no wrong answer.",
+            "type": "slider",
+            "userStateKey": "confidenceRuler",
+            "options": [],
+            "defaultNextPageId": "badHabits",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "sliderConfig": {
+                "min": 1,
+                "max": 10,
+                "default": 5,
+                "leftLabel": "Not confident",
+                "rightLabel": "Very confident",
+                "showValue": true
+            }
+        },
+        {
+            "id": "badHabits",
+            "title": "Are you addicted to any of these?",
+            "type": "multipleOption",
+            "userStateKey": "badHabits",
+            "defaultNextPageId": "progressionPreference",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "conditionalSkip": {
+                "ifAnswerKey": "primaryDomain",
+                "equalsAny": [
+                    "Discipline & habits"
+                ],
+                "skipToPageId": "progressionPreference"
+            },
+            "options": [
+                {
+                    "id": "bad_1",
+                    "text": "Smoking or vaping",
+                    "value": 0
+                },
+                {
+                    "id": "bad_2",
+                    "text": "Pornography",
+                    "value": 0
+                },
+                {
+                    "id": "bad_3",
+                    "text": "Alcohol",
+                    "value": 0
+                },
+                {
+                    "id": "bad_4",
+                    "text": "Video games",
+                    "value": 0
+                },
+                {
+                    "id": "bad_5",
+                    "text": "Junk food",
+                    "value": 0
+                },
+                {
+                    "id": "bad_6",
+                    "text": "None of the above",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "progressionPreference",
+            "title": "How do you like to be challenged?",
+            "type": "singleOption",
+            "userStateKey": "progressionPreference",
+            "defaultNextPageId": "testimonial",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": [
+                {
+                    "id": "prog_1",
+                    "text": "Don't push me — I need gentle steps",
+                    "value": 0
+                },
+                {
+                    "id": "prog_2",
+                    "text": "Steady growth — build up gradually",
+                    "value": 0
+                },
+                {
+                    "id": "prog_3",
+                    "text": "Push me — I can handle pressure",
+                    "value": 0
+                },
+                {
+                    "id": "prog_4",
+                    "text": "Go all in — I want maximum challenge",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": "testimonial",
+            "title": "",
+            "type": "testimonial",
+            "userStateKey": "",
+            "defaultNextPageId": "socialProofBreather",
+            "showLanguageSelector": false,
+            "section": "closing",
+            "options": []
+        },
+        {
+            "id": "socialProofBreather",
+            "title": "",
+            "type": "socialProofBreather",
+            "userStateKey": "",
+            "defaultNextPageId": "processingAnimation",
+            "showLanguageSelector": false,
+            "section": "post_survey",
+            "options": []
+        },
+        {
+            "id": "processingAnimation",
+            "title": "",
+            "type": "processingAnimation",
+            "userStateKey": "",
+            "defaultNextPageId": null,
+            "showLanguageSelector": false,
+            "section": "post_survey",
+            "options": []
+        }
+    ],
+    "taskDerivationRules": [
+        {
+            "conditions": {
+                "primaryDomain": "Health & fitness",
+                "health_goal": "Build muscle & strength"
+            },
+            "taskKeys": [
+                "gym",
+                "run"
+            ],
+            "priority": 10
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Health & fitness",
+                "health_goal": "Lose weight"
+            },
+            "taskKeys": [
+                "run",
+                "gym"
+            ],
+            "priority": 10
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Health & fitness",
+                "health_goal": "Get fitter overall"
+            },
+            "taskKeys": [
+                "run",
+                "gym"
+            ],
+            "priority": 10
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Health & fitness",
+                "health_goal": "More energy & better sleep"
+            },
+            "taskKeys": [
+                "meditate",
+                "shower"
+            ],
+            "priority": 10
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Health & fitness",
+                "health_goal": "Look better & more confident"
+            },
+            "taskKeys": [
+                "skincare",
+                "water"
+            ],
+            "priority": 10
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Health & fitness",
+                "health_barrier": "I always quit after a few days"
+            },
+            "taskKeys": [
+                "gym",
+                "run",
+                "journal"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Mental health & wellbeing"
+            },
+            "taskKeys": [
+                "meditate",
+                "journal",
+                "shower"
+            ],
+            "priority": 5
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Mental health & wellbeing",
+                "mental_coping": "Scrolling phone & social media"
+            },
+            "taskKeys": [
+                "meditate",
+                "journal",
+                "read"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Mental health & wellbeing",
+                "mental_challenge": "Low mood & sadness"
+            },
+            "taskKeys": [
+                "meditate",
+                "journal",
+                "run"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Mental health & wellbeing",
+                "mental_challenge": "Loneliness & isolation"
+            },
+            "taskKeys": [
+                "journal",
+                "meditate",
+                "run"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Mental health & wellbeing",
+                "mental_coping": "No strategy at all"
+            },
+            "taskKeys": [
+                "journal",
+                "meditate",
+                "shower"
+            ],
+            "priority": 18
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Mental health & wellbeing",
+                "mental_coping": "Substances or unhealthy habits"
+            },
+            "taskKeys": [
+                "meditate",
+                "run",
+                "journal"
+            ],
+            "priority": 20
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Career & productivity"
+            },
+            "taskKeys": [
+                "journal",
+                "read",
+                "meditate"
+            ],
+            "priority": 5
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Career & productivity",
+                "career_challenge": "Focus & distraction"
+            },
+            "taskKeys": [
+                "meditate",
+                "journal",
+                "read"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Career & productivity",
+                "career_challenge": "Low energy throughout the day"
+            },
+            "taskKeys": [
+                "run",
+                "meditate",
+                "journal"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Career & productivity",
+                "career_challenge": "Procrastination"
+            },
+            "taskKeys": [
+                "journal",
+                "cleaning",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits"
+            },
+            "taskKeys": [
+                "journal",
+                "cleaning",
+                "meditate"
+            ],
+            "priority": 3
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_habit": "Pornography"
+            },
+            "taskKeys": [
+                "fap",
+                "journal",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_habit": "Phone & social media"
+            },
+            "taskKeys": [
+                "journal",
+                "read",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_habit": "Smoking or vaping"
+            },
+            "taskKeys": [
+                "smoke",
+                "journal",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_habit": "Alcohol"
+            },
+            "taskKeys": [
+                "alcohol",
+                "journal",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_habit": "Junk food"
+            },
+            "taskKeys": [
+                "junkfood",
+                "journal",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_habit": "Gaming"
+            },
+            "taskKeys": [
+                "journal",
+                "read",
+                "run"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_habit": "Procrastination"
+            },
+            "taskKeys": [
+                "journal",
+                "cleaning",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_trigger": "Boredom",
+                "downtimeEnvironment": "Home alone"
+            },
+            "taskKeys": [
+                "run",
+                "journal",
+                "meditate"
+            ],
+            "priority": 20
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_trigger": "Late at night"
+            },
+            "taskKeys": [
+                "journal",
+                "read",
+                "shower"
+            ],
+            "priority": 18
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Relationships & social life"
+            },
+            "taskKeys": [
+                "journal",
+                "meditate",
+                "read"
+            ],
+            "priority": 10
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Relationships & social life",
+                "relationship_issue": "Social anxiety"
+            },
+            "taskKeys": [
+                "meditate",
+                "journal",
+                "run"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Relationships & social life",
+                "relationship_issue": "Isolation & loneliness"
+            },
+            "taskKeys": [
+                "journal",
+                "run",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Education & learning"
+            },
+            "taskKeys": [
+                "study",
+                "read",
+                "meditate"
+            ],
+            "priority": 10
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Education & learning",
+                "education_blocker": "Phone & social media"
+            },
+            "taskKeys": [
+                "study",
+                "meditate",
+                "read"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Education & learning",
+                "education_blocker": "Too tired to study"
+            },
+            "taskKeys": [
+                "study",
+                "run",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Education & learning",
+                "education_blocker": "Performance anxiety"
+            },
+            "taskKeys": [
+                "study",
+                "meditate",
+                "journal"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Spiritual growth & purpose"
+            },
+            "taskKeys": [
+                "meditate",
+                "pray",
+                "journal"
+            ],
+            "priority": 5
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Spiritual growth & purpose",
+                "spiritual_meaning": "Religious practice & worship"
+            },
+            "taskKeys": [
+                "pray",
+                "journal",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Spiritual growth & purpose",
+                "spiritual_meaning": "Gratitude & mindfulness"
+            },
+            "taskKeys": [
+                "meditate",
+                "journal",
+                "pray"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Spiritual growth & purpose",
+                "spiritual_meaning": "Finding my life purpose"
+            },
+            "taskKeys": [
+                "journal",
+                "meditate",
+                "read"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Life crisis & rebuilding"
+            },
+            "taskKeys": [
+                "journal",
+                "meditate",
+                "shower"
+            ],
+            "priority": 3
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Life crisis & rebuilding",
+                "crisis_need": "Daily structure and routine"
+            },
+            "taskKeys": [
+                "journal",
+                "shower",
+                "cleaning"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Life crisis & rebuilding",
+                "crisis_need": "Emotional processing"
+            },
+            "taskKeys": [
+                "journal",
+                "meditate",
+                "read"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Life crisis & rebuilding",
+                "crisis_need": "Physical health basics"
+            },
+            "taskKeys": [
+                "run",
+                "shower",
+                "skincare"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Life crisis & rebuilding",
+                "crisis_need": "A sense of purpose"
+            },
+            "taskKeys": [
+                "journal",
+                "read",
+                "meditate"
+            ],
+            "priority": 15
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Life crisis & rebuilding",
+                "crisis_event": "Rock bottom with addiction"
+            },
+            "taskKeys": [
+                "journal",
+                "meditate",
+                "run"
+            ],
+            "priority": 18
+        },
+        {
+            "conditions": {
+                "primaryDomain": "Life crisis & rebuilding",
+                "crisis_event": "A breakup or relationship ending"
+            },
+            "taskKeys": [
+                "journal",
+                "run",
+                "meditate"
+            ],
+            "priority": 18
+        }
+    ],
+    "badHabitTaskMapping": {
+        "Smoking or vaping": "smoke",
+        "Pornography": "fap",
+        "Alcohol": "alcohol",
+        "Video games": null,
+        "Junk food": "junkfood",
+        "None of the above": null
+    },
+    "crossReferenceInsightTriggers": [
+        {
+            "id": "HB-01",
+            "type": "hiddenBlocker",
+            "signalA": {
+                "key": "discipline_trigger",
+                "equals": "Boredom"
+            },
+            "signalB": {
+                "key": "schedulePredictability",
+                "contains": "chaotic"
+            },
+            "insightKey": "unstructured_downtime",
+            "priority": 100
+        },
+        {
+            "id": "HB-02",
+            "type": "hiddenBlocker",
+            "signalA": {
+                "key": "mental_coping",
+                "equals": "No strategy at all"
+            },
+            "signalB": {
+                "key": "mental_duration",
+                "equalsAny": [
+                    "Multiple years",
+                    "As long as I can remember"
+                ]
+            },
+            "insightKey": "chronic_no_tools",
+            "priority": 95
+        },
+        {
+            "id": "HB-03",
+            "type": "hiddenBlocker",
+            "signalA": {
+                "key": "health_barrier",
+                "equals": "I always quit after a few days"
+            },
+            "signalB": {
+                "key": "readinessBaseline",
+                "equals": "I struggle to start basic habits"
+            },
+            "insightKey": "starting_too_hard",
+            "priority": 90
+        },
+        {
+            "id": "HB-04",
+            "type": "hiddenBlocker",
+            "signalA": {
+                "key": "discipline_trigger",
+                "equals": "Late at night"
+            },
+            "signalB": {
+                "key": "schedulePredictability",
+                "containsAny": [
+                    "chaotic",
+                    "Shift work"
+                ]
+            },
+            "insightKey": "nighttime_vulnerability",
+            "priority": 88
+        },
+        {
+            "id": "HB-05",
+            "type": "hiddenBlocker",
+            "signalA": {
+                "key": "discipline_habit",
+                "equals": "Phone & social media"
+            },
+            "signalB": {
+                "key": "mental_coping",
+                "equals": "Scrolling phone & social media"
+            },
+            "insightKey": "phone_dual_role",
+            "priority": 92
+        },
+        {
+            "id": "VBG-01",
+            "type": "valuesBehaviorGap",
+            "signalA": {
+                "key": "coreValues",
+                "contains": "Peace of mind"
+            },
+            "signalB": {
+                "key": "primaryDomain",
+                "equals": "Career & productivity"
+            },
+            "insightKey": "peace_vs_productivity",
+            "priority": 85
+        },
+        {
+            "id": "VBG-02",
+            "type": "valuesBehaviorGap",
+            "signalA": {
+                "key": "coreValues",
+                "contains": "Health & energy"
+            },
+            "signalB": {
+                "key": "schedulePredictability",
+                "contains": "chaotic"
+            },
+            "insightKey": "health_value_no_structure",
+            "priority": 83
+        },
+        {
+            "id": "VBG-03",
+            "type": "valuesBehaviorGap",
+            "signalA": {
+                "key": "coreValues",
+                "contains": "Connection & belonging"
+            },
+            "signalB": {
+                "key": "downtimeEnvironment",
+                "equals": "Home alone"
+            },
+            "insightKey": "connection_value_isolation",
+            "priority": 82
+        },
+        {
+            "id": "CO-01",
+            "type": "contradiction",
+            "signalA": {
+                "key": "confidenceRuler",
+                "lessThanOrEqual": 3
+            },
+            "signalB": {
+                "key": "readinessBaseline",
+                "equals": "I want a high-performance plan"
+            },
+            "insightKey": "ambition_vs_belief",
+            "priority": 80
+        },
+        {
+            "id": "CO-02",
+            "type": "contradiction",
+            "signalA": {
+                "key": "progressionPreference",
+                "equals": "Go all in — I want maximum challenge"
+            },
+            "signalB": {
+                "key": "discipline_attempts",
+                "equals": "I've lost count"
+            },
+            "insightKey": "intensity_vs_history",
+            "priority": 78
+        },
+        {
+            "id": "CO-03",
+            "type": "contradiction",
+            "signalA": {
+                "key": "identityFraming",
+                "tagEquals": "identity"
+            },
+            "signalB": {
+                "key": "proudOfYourself",
+                "equals": "Too long I can't remember"
+            },
+            "insightKey": "identity_without_evidence",
+            "priority": 76
+        },
+        {
+            "id": "CD-01",
+            "type": "crossDomain",
+            "signalA": {
+                "key": "education_blocker",
+                "equals": "Phone & social media"
+            },
+            "signalB": {
+                "key": "badHabits",
+                "contains": "Pornography"
+            },
+            "insightKey": "phone_gateway",
+            "priority": 70
+        },
+        {
+            "id": "CD-02",
+            "type": "crossDomain",
+            "signalA": {
+                "key": "career_challenge",
+                "equals": "Low energy throughout the day"
+            },
+            "signalB": {
+                "key": "health_barrier",
+                "equals": "No motivation"
+            },
+            "insightKey": "energy_motivation_loop",
+            "priority": 68
+        },
+        {
+            "id": "EI-01",
+            "type": "environmental",
+            "signalA": {
+                "key": "downtimeEnvironment",
+                "equals": "Home alone"
+            },
+            "signalB": {
+                "key": "discipline_trigger",
+                "equals": "Being alone"
+            },
+            "insightKey": "solitude_trigger_loop",
+            "priority": 75
+        },
+        {
+            "id": "EI-02",
+            "type": "environmental",
+            "signalA": {
+                "key": "downtimeEnvironment",
+                "equals": "Home alone"
+            },
+            "signalB": {
+                "key": "discipline_trigger",
+                "equals": "Boredom"
+            },
+            "insightKey": "home_boredom_loop",
+            "priority": 73
+        },
+        {
+            "id": "RF-01",
+            "type": "reframe",
+            "signalA": {
+                "key": "lifeDescription",
+                "equals": "I'm at the lowest and need help"
+            },
+            "signalB": {
+                "key": "discipline_attempts",
+                "equalsAny": [
+                    "3 to 5 times",
+                    "I've lost count"
+                ]
+            },
+            "insightKey": "persistence_not_failure",
+            "priority": 65
+        },
+        {
+            "id": "RF-02",
+            "type": "reframe",
+            "signalA": {
+                "key": "proudOfYourself",
+                "equals": "Too long I can't remember"
+            },
+            "signalB": {
+                "key": "identityFraming",
+                "tagEquals": "outcome"
+            },
+            "insightKey": "disconnected_from_wins",
+            "priority": 63
+        },
+        {
+            "id": "RF-03",
+            "type": "reframe",
+            "signalA": {
+                "key": "health_barrier",
+                "equals": "I always quit after a few days"
+            },
+            "signalB": {
+                "key": "discipline_attempts",
+                "equalsAny": [
+                    "3 to 5 times",
+                    "I've lost count"
+                ]
+            },
+            "insightKey": "serial_starter_pattern",
+            "priority": 62
+        },
+        {
+            "id": "RC-01",
+            "type": "recognition",
+            "signalA": {
+                "key": "confidenceRuler",
+                "lessThanOrEqual": 4
+            },
+            "signalB": {
+                "key": "readinessBaseline",
+                "equalsAny": [
+                    "I struggle to start basic habits",
+                    "I can do basics, but I need structure"
+                ]
+            },
+            "insightKey": "low_confidence_start",
+            "priority": 55
+        },
+        {
+            "id": "RC-02",
+            "type": "recognition",
+            "signalA": {
+                "key": "schedulePredictability",
+                "containsAny": [
+                    "chaotic",
+                    "Shift work",
+                    "week to week"
+                ]
+            },
+            "insightKey": "chaos_proof_plan",
+            "priority": 58
+        },
+        {
+            "id": "RC-03",
+            "type": "recognition",
+            "signalA": {
+                "key": "sleepSatisfaction",
+                "containsAny": [
+                    "struggle with sleep",
+                    "all over the place"
+                ]
+            },
+            "insightKey": "sleep_debt_tax",
+            "priority": 56
+        },
+        {
+            "id": "RC-04",
+            "type": "recognition",
+            "signalA": {
+                "key": "proudOfYourself",
+                "equalsAny": [
+                    "Few months ago",
+                    "Too long I can't remember"
+                ]
+            },
+            "insightKey": "proud_drought",
+            "priority": 54
+        },
+        {
+            "id": "RC-05",
+            "type": "recognition",
+            "signalA": {
+                "key": "discipline_trigger",
+                "equals": "Stress"
+            },
+            "signalB": {
+                "key": "mental_challenge",
+                "equalsAny": [
+                    "Anxiety & overthinking",
+                    "Burnout & stress"
+                ]
+            },
+            "insightKey": "stress_relief_spiral",
+            "priority": 57
+        },
+        {
+            "id": "RC-06",
+            "type": "recognition",
+            "signalA": {
+                "key": "nutritionHabit",
+                "equalsAny": [
+                    "I mostly eat convenience food",
+                    "I barely think about nutrition"
+                ]
+            },
+            "insightKey": "crash_fuel_loop",
+            "priority": 53
+        }
+    ],
+    "archetypeRules": [
+        {
+            "id": "the_fighter",
+            "name": "The Fighter",
+            "icon": "fist",
+            "priority": 100,
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "discipline_attempts": {
+                    "equalsAny": [
+                        "3 to 5 times",
+                        "I've lost count"
+                    ]
+                },
+                "lifeDescription": {
+                    "equalsAny": [
+                        "I'm sad and rarely happy",
+                        "I'm at the lowest and need help"
+                    ]
+                }
+            },
+            "description": "You've been knocked down before and you got back up. Fighters don't need motivation — they need a strategy that matches their grit."
+        },
+        {
+            "id": "the_rebuilder",
+            "name": "The Rebuilder",
+            "icon": "phoenix",
+            "priority": 90,
+            "conditions": {
+                "_or": [
+                    {
+                        "primaryDomain": "Life crisis & rebuilding"
+                    },
+                    {
+                        "lifeDescription": "I'm at the lowest and need help"
+                    }
+                ]
+            },
+            "description": "You're not starting over — you're starting from experience. Rebuilders transform breakdown into breakthrough."
+        },
+        {
+            "id": "the_seeker",
+            "name": "The Seeker",
+            "icon": "compass",
+            "priority": 80,
+            "conditions": {
+                "_or": [
+                    {
+                        "primaryDomain": "Spiritual growth & purpose"
+                    },
+                    {
+                        "coreValues": {
+                            "containsAny": [
+                                "Peace of mind",
+                                "Faith & purpose"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "description": "You're looking for something deeper than habits — you want meaning. Seekers build lives aligned with what actually matters."
+        },
+        {
+            "id": "the_disciplined",
+            "name": "The Disciplined",
+            "icon": "shield",
+            "priority": 70,
+            "conditions": {
+                "primaryDomain": "Discipline & habits",
+                "readinessBaseline": {
+                    "equalsAny": [
+                        "I'm already disciplined — I want a sharper system",
+                        "I want a high-performance plan"
+                    ]
+                }
+            },
+            "description": "You already have the engine — you need the track. The Disciplined build systems that make consistency effortless."
+        },
+        {
+            "id": "the_optimizer",
+            "name": "The Optimizer",
+            "icon": "gear",
+            "priority": 60,
+            "conditions": {
+                "readinessBaseline": {
+                    "equalsAny": [
+                        "I'm already disciplined — I want a sharper system",
+                        "I want a high-performance plan"
+                    ]
+                },
+                "lifeDescription": {
+                    "equalsAny": [
+                        "I'm alright and want to self-improve",
+                        "I'm satisfied with my life now"
+                    ]
+                }
+            },
+            "description": "You're already ahead of most. Optimizers don't need basics — they need the 20% of tweaks that unlock the next level."
+        },
+        {
+            "id": "the_striver",
+            "name": "The Striver",
+            "icon": "mountain",
+            "priority": 50,
+            "conditions": {
+                "_or": [
+                    {
+                        "primaryDomain": {
+                            "equalsAny": [
+                                "Career & productivity",
+                                "Education & learning"
+                            ]
+                        }
+                    },
+                    {
+                        "identityFraming": {
+                            "tagEquals": "outcome"
+                        }
+                    }
+                ]
+            },
+            "description": "You see the gap between where you are and where you could be — and it drives you. Strivers convert ambition into daily action."
+        },
+        {
+            "id": "the_starter",
+            "name": "The Starter",
+            "icon": "seedling",
+            "priority": 0,
+            "conditions": {},
+            "description": "Every journey begins with one decision. You just made yours. Starters build the foundation everything else grows from."
+        }
+    ],
+    "toneAssignment": {
+        "modes": [
+            {
+                "id": "gentle",
+                "priority": 100,
+                "conditions": {
+                    "_or": [
+                        {
+                            "lifeDescription": "I'm at the lowest and need help"
+                        },
+                        {
+                            "primaryDomain": "Life crisis & rebuilding"
+                        },
+                        {
+                            "confidenceRuler": {
+                                "lessThanOrEqual": 3
+                            }
+                        },
+                        {
+                            "crisis_event": {
+                                "equalsAny": [
+                                    "Loss of a loved one",
+                                    "Rock bottom with addiction"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "id": "challenger",
+                "priority": 80,
+                "conditions": {
+                    "progressionPreference": "Go all in — I want maximum challenge",
+                    "identityFraming": {
+                        "tagEquals": "identity"
+                    },
+                    "gender": "Male",
+                    "age": {
+                        "equalsAny": [
+                            "18 to 24",
+                            "25 to 34"
+                        ]
+                    }
+                }
+            },
+            {
+                "id": "mentor",
+                "priority": 60,
+                "conditions": {
+                    "readinessBaseline": {
+                        "equalsAny": [
+                            "I'm already disciplined — I want a sharper system",
+                            "I want a high-performance plan"
+                        ]
+                    },
+                    "lifeDescription": {
+                        "equalsAny": [
+                            "I'm alright and want to self-improve",
+                            "I'm satisfied with my life now"
+                        ]
+                    }
+                }
+            },
+            {
+                "id": "direct",
+                "priority": 40,
+                "conditions": {
+                    "progressionPreference": {
+                        "equalsAny": [
+                            "Push me — I can handle pressure",
+                            "Go all in — I want maximum challenge"
+                        ]
+                    },
+                    "readinessBaseline": {
+                        "equalsAny": [
+                            "I'm already disciplined — I want a sharper system",
+                            "I want a high-performance plan"
+                        ]
+                    }
+                }
+            },
+            {
+                "id": "steady",
+                "priority": 0,
+                "conditions": {}
+            }
+        ]
+    },
+    "followThroughScoreWeights": {
+        "identityFraming": {
+            "weight": 0.25,
+            "scoring": {
+                "identity": 0.8,
+                "outcome": 0.4
+            }
+        },
+        "confidenceRuler": {
+            "weight": 0.2,
+            "scoring": {
+                "_note": "4-7 is optimal engagement zone",
+                "1-2": 0.2,
+                "3": 0.4,
+                "4-5": 0.8,
+                "6-7": 0.9,
+                "8-9": 0.6,
+                "10": 0.4
+            }
+        },
+        "readinessBaseline": {
+            "weight": 0.15,
+            "scoring": {
+                "struggle": 0.3,
+                "can do basics": 0.6,
+                "already disciplined": 0.8,
+                "high-performance": 0.7
+            }
+        },
+        "discipline_attempts": {
+            "weight": 0.15,
+            "_note": "More attempts = persistence signal = higher score",
+            "scoring": {
+                "first time": 0.4,
+                "1 to 2 times": 0.5,
+                "3 to 5 times": 0.7,
+                "lost count": 0.8
+            }
+        },
+        "schedulePredictability": {
+            "weight": 0.1,
+            "scoring": {
+                "very predictable": 0.9,
+                "mostly predictable": 0.7,
+                "changes weekly": 0.4,
+                "shift work": 0.3,
+                "chaotic": 0.2
+            }
+        },
+        "progressionPreference": {
+            "weight": 0.15,
+            "scoring": {
+                "gentle steps": 0.5,
+                "steady growth": 0.7,
+                "push me": 0.6,
+                "go all in": 0.4
+            }
+        },
+        "tiers": {
+            "tier1_highTouch": {
+                "max": 0.35
+            },
+            "tier2_standard": {
+                "min": 0.35,
+                "max": 0.65
+            },
+            "tier3_autonomy": {
+                "min": 0.65
+            }
+        }
+    }
+}

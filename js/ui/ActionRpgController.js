@@ -5,18 +5,36 @@ export class ActionRpgController {
     this.sound = soundController;
     this.mapEngine = mapEngine;
     this.panelSection = 'QUESTS';
-    this.panelTab = 'MAIN';
+    this.panelTab = 'TODO';
     this.introPlayed = false;
     this.autoTimer = null;
+
+    // Loaded game datasets from Notion / local cache
+    this.suits = [];
+    this.spiderVerse = [];
+    this.bosses = [];
+    this.minions = [];
+    this.backpacks = [];
+    this.badges = {};
+    this.notionTasks = [];
+    this.notionHabits = [];
+    this.journalEntries = JSON.parse(localStorage.getItem('spidey_journal_entries') || '[]');
   }
 
-  init() {
+  async init() {
     document.querySelectorAll('[data-game-section]').forEach((button) => button.addEventListener('click', () => this.selectSection(button.dataset.gameSection)));
     document.querySelectorAll('[data-combat-action]').forEach((button) => button.addEventListener('click', () => this.runAction(button.dataset.combatAction)));
     document.getElementById('game-panel-close')?.addEventListener('click', () => this.closePanel());
     document.getElementById('game-panel-backdrop')?.addEventListener('click', (event) => { if (event.target.id === 'game-panel-backdrop') this.closePanel(); });
     document.getElementById('btn-next-patrol')?.addEventListener('click', () => this.engine.startNextPatrol());
     document.getElementById('action-rpg-screen')?.addEventListener('pointerdown', () => this.playIntroOnce(), { once: true });
+    document.querySelector('.hud-avatar')?.addEventListener('click', () => this.selectSection('HERO'));
+    document.getElementById('btn-footer-settings')?.addEventListener('click', () => {
+      this.panelSection = 'SETTINGS';
+      this.panelTab = 'GAME';
+      this.openPanel('SETTINGS');
+    });
+
     document.addEventListener('visibilitychange', () => this.syncAutoCombat(this.engine.snapshot().settings));
     this.bus.on('CAMPAIGN_UPDATED', (result) => this.handleUpdate(result));
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
@@ -25,11 +43,45 @@ export class ActionRpgController {
       this.panelTab = tab || this.defaultTab(section);
       document.body.dataset.gameMode = 'ARENA';
       this.setActiveNav(section);
-      const panel = document.getElementById('game-panel-backdrop'); panel?.removeAttribute('hidden'); panel?.removeAttribute('inert');
+      const panel = document.getElementById('game-panel-backdrop'); 
+      panel?.removeAttribute('hidden'); 
+      panel?.removeAttribute('inert');
       this.renderPanel();
     });
+
+    // Load rich game datasets
+    await this.loadAllGameData();
+
     this.selectSection('ARENA', false);
     this.render();
+  }
+
+  async loadAllGameData() {
+    try {
+      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, snapRes] = await Promise.allSettled([
+        fetch('./data/suits.json').then(r => r.json()),
+        fetch('./data/spider-verse.json').then(r => r.json()),
+        fetch('./data/bosses.json').then(r => r.json()),
+        fetch('./data/minions.json').then(r => r.json()),
+        fetch('./data/backpacks.json').then(r => r.json()),
+        fetch('./data/badges.json').then(r => r.json()),
+        fetch('./data/notion-snapshot.json').then(r => r.json())
+      ]);
+
+      if (suitsRes.status === 'fulfilled') this.suits = suitsRes.value || [];
+      if (verseRes.status === 'fulfilled') this.spiderVerse = verseRes.value || [];
+      if (bossesRes.status === 'fulfilled') this.bosses = bossesRes.value || [];
+      if (minionsRes.status === 'fulfilled') this.minions = minionsRes.value || {};
+      if (backpacksRes.status === 'fulfilled') this.backpacks = backpacksRes.value || [];
+      if (badgesRes.status === 'fulfilled') this.badges = badgesRes.value?.rename_map || {};
+      
+      if (snapRes.status === 'fulfilled' && snapRes.value?.collections) {
+        this.notionTasks = snapRes.value.collections.masterCalendar || [];
+        this.notionHabits = snapRes.value.collections.habits || [];
+      }
+    } catch (e) {
+      console.warn('[ActionRpgController] Data load error, using fallbacks:', e);
+    }
   }
 
   selectSection(section, playSound = true) {
@@ -119,6 +171,7 @@ export class ActionRpgController {
     const enemyFighter = document.querySelector('.action-fighter--enemy');
     enemyFighter?.classList.toggle('enemy--grunt', snapshot.encounterIndex < 3);
     enemyFighter?.classList.toggle('enemy--elite', snapshot.encounterIndex === 3);
+    enemyFighter?.classList.toggle('enemy--boss', snapshot.encounterIndex >= 4 || enemy.tier === 'BOSS');
     document.querySelector('[data-combat-action="web"]')?.toggleAttribute('disabled', snapshot.cooldowns.web > 0 || hero.webEnergy < data.actions.web.energy || snapshot.storyComplete);
     document.querySelector('[data-combat-action="gadget"]')?.toggleAttribute('disabled', snapshot.cooldowns.gadget > 0 || snapshot.charges.gadget <= 0 || snapshot.storyComplete);
     document.querySelector('[data-combat-action="ally"]')?.toggleAttribute('disabled', snapshot.cooldowns.ally > 0 || snapshot.storyComplete);
@@ -140,115 +193,513 @@ export class ActionRpgController {
     this.panelSection = section;
     this.panelTab = this.defaultTab(section);
     const panel = document.getElementById('game-panel-backdrop');
-    panel?.removeAttribute('hidden'); panel?.removeAttribute('inert');
+    panel?.removeAttribute('hidden'); 
+    panel?.removeAttribute('inert');
     this.renderPanel();
   }
 
   closePanel() {
     const panel = document.getElementById('game-panel-backdrop');
-    panel?.setAttribute('hidden', ''); panel?.setAttribute('inert', '');
+    panel?.setAttribute('hidden', ''); 
+    panel?.setAttribute('inert', '');
     if (document.body.dataset.gameMode !== 'MAP') this.setActiveNav('ARENA');
+  }
+
+  defaultTab(section) {
+    const map = {
+      QUESTS: 'TODO',
+      HERO: 'SUITS',
+      ARCHIVE: 'BESTIARY',
+      CHRONICLE: 'RHYTHM',
+      SETTINGS: 'GAME'
+    };
+    return map[section] || 'TODO';
   }
 
   renderPanel() {
     const title = document.getElementById('game-panel-title');
+    const kicker = document.getElementById('game-panel-kicker');
     const tabs = document.getElementById('game-panel-tabs');
     const content = document.getElementById('game-panel-content');
     if (!title || !tabs || !content) return;
-    const titles = { QUESTS: 'MISSIONS // GAMBIT', TIMETABLE: 'TIMETABLE // SPIDER PATROL', VERSE: 'SPIDER-VERSE // 5 LEVELS', LIFE: 'LIFE SYSTEMS', SETTINGS: 'GAME SETTINGS / SAVE', HERO: 'HERO / BUILD' };
-    title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
-    const tabMap = {
-      QUESTS: ['MAIN','DAILY'],
-      TIMETABLE: ['SCHEDULE'],
-      VERSE: ['CHALLENGE','TEAM','SKILLS','GADGETS'],
-      LIFE: ['DOPAMINE','RHYTHM','JOURNAL','GYM'],
-      SETTINGS: ['GAME','SAVE'],
-      HERO: ['PROFILE','SKILLS','GADGETS','INVENTORY']
-    };
-    const tabNames = tabMap[this.panelSection] || ['PROFILE'];
-    if (!tabNames.includes(this.panelTab)) this.panelTab = tabNames[0];
-    tabs.innerHTML = tabNames.map((tab) => `<button class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab}</button>`).join('');
-    tabs.querySelectorAll('button').forEach((button) => button.addEventListener('click', () => { this.sound.playSelect(); this.panelTab = button.dataset.gamePanelTab; this.renderPanel(); }));
-    content.innerHTML = this.renderSection();
-    content.querySelector('[data-open-real-mission]')?.addEventListener('click', () => { this.closePanel(); this.bus.emit('OPEN_EDITOR', { type: 'WORK', status: 'PLANNED' }); });
-    this.bindSettings(content);
-  }
 
-  defaultTab(section) {
-    return ({ QUESTS: 'MAIN', TIMETABLE: 'SCHEDULE', VERSE: 'CHALLENGE', LIFE: 'DOPAMINE', SETTINGS: 'GAME', HERO: 'PROFILE' })[section] || 'PROFILE';
+    const titles = { 
+      QUESTS: 'QUEST BOARD // GAMBIT & NOTION', 
+      HERO: 'HERO WARDROBE & BUILD', 
+      ARCHIVE: 'SPIDEY ARCHIVE & BESTIARY', 
+      CHRONICLE: 'PETER PARKER CHRONICLE', 
+      SETTINGS: 'GAME SETTINGS & SAVE' 
+    };
+
+    if (kicker) kicker.textContent = 'SPIDEY LIFE // RPG HUB';
+    title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
+
+    const tabMap = {
+      QUESTS: ['TODO', 'HABITS', 'PATROL'],
+      HERO: ['SUITS', 'ROSTER', 'SKILLS', 'GADGETS'],
+      ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
+      CHRONICLE: ['RHYTHM', 'JOURNAL', 'GYM'],
+      SETTINGS: ['GAME', 'SAVE']
+    };
+
+    const tabNames = tabMap[this.panelSection] || ['TODO'];
+    if (!tabNames.includes(this.panelTab)) this.panelTab = tabNames[0];
+
+    tabs.innerHTML = tabNames.map((tab) => `<button class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab}</button>`).join('');
+    tabs.querySelectorAll('button').forEach((button) => button.addEventListener('click', () => { 
+      this.sound.playSelect(); 
+      this.panelTab = button.dataset.gamePanelTab; 
+      this.renderPanel(); 
+    }));
+
+    content.innerHTML = this.renderSection();
+    this.bindEvents(content);
   }
 
   renderSection() {
-    if (this.panelSection === 'QUESTS') return this.renderMissionApp();
-    if (this.panelSection === 'TIMETABLE') return this.renderTimetableApp();
-    if (this.panelSection === 'VERSE') return this.renderVerse();
-    if (this.panelSection === 'LIFE') return this.renderLifeApp();
-    if (this.panelSection === 'SETTINGS') return this.renderSettings();
-    return this.renderHero();
+    switch (this.panelSection) {
+      case 'QUESTS': return this.renderQuestsSection();
+      case 'HERO': return this.renderHeroSection();
+      case 'ARCHIVE': return this.renderArchiveSection();
+      case 'CHRONICLE': return this.renderChronicleSection();
+      case 'SETTINGS': return this.renderSettings();
+      default: return this.renderQuestsSection();
+    }
   }
 
-  renderLifeFrame(view, label) {
-    return `<div class="embedded-life-shell"><div class="embedded-life-status"><i></i><span>${label}</span><b>NOTION + SHARED CLOUD</b></div><iframe class="life-os-frame" src="./life-os/?embed=1#${view}" title="${label}" loading="eager"></iframe></div>`;
+  /* -------------------------------------------------------------
+     1. TAB [QUESTS]: TODO (NOTION), HABITS (STREAK), PATROL TIMETABLE
+  ------------------------------------------------------------- */
+  renderQuestsSection() {
+    if (this.panelTab === 'HABITS') {
+      return `
+        <div class="quest-source-banner">
+          <span>🔥 HABITS</span>
+          <strong>KỶ LUẬT HÀNG NGÀY & STREAK</strong>
+          <small>Check-in thói quen để hồi phục Máu (HP) & Tơ (Web Energy)</small>
+        </div>
+        <div class="pixel-card-grid">
+          ${this.notionHabits.map((habit, idx) => `
+            <article class="pixel-game-card ${habit.done || habit.today ? 'pixel-game-card--done' : 'pixel-game-card--gold'}">
+              <div class="pixel-card-header">
+                <span class="pixel-tag ${habit.category === 'Good' || habit.category?.includes('Good') ? 'pixel-tag--green' : 'pixel-tag--red'}">${habit.category || 'HABIT'}</span>
+                <span class="pixel-tag pixel-tag--gold">STREAK: ${this.engine.snapshot().hero.streak}D</span>
+              </div>
+              <h3 class="pixel-card-title">${habit.name || habit.title}</h3>
+              <p class="pixel-card-desc">${habit.description || habit.outcome || 'Thói quen duy trì kỷ luật bản thân.'}</p>
+              <div class="pixel-card-footer">
+                <small style="color: #f2c06b; font: 700 8px monospace;">${habit.timeBlock || 'Mỗi ngày'}</small>
+                <button class="pixel-action-btn ${habit.done || habit.today ? 'pixel-action-btn--disabled' : 'pixel-action-btn--green'}" 
+                        data-checkin-habit="${idx}" ${habit.done || habit.today ? 'disabled' : ''}>
+                  ${habit.done || habit.today ? '✓ ĐÃ XONG' : '⚡ CHECK-IN'}
+                </button>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    if (this.panelTab === 'PATROL') {
+      return `
+        <div class="spider-cinema-cast" aria-label="Ba Spider-Man patrol profiles">
+          <article><i class="cinema-spider cinema-spider--tobey"></i><span><b>TOBEY</b><small>CA SÁNG // SỨC BỀN & CÔNG VIỆC CHÍNH</small></span></article>
+          <article><i class="cinema-spider cinema-spider--andrew"></i><span><b>ANDREW</b><small>CA CHIỀU // TỐC ĐỘ & GẶP ĐỐI TÁC</small></span></article>
+          <article><i class="cinema-spider cinema-spider--tom"></i><span><b>TOM</b><small>CA TỐI // CÔNG NGHỆ, HỌC TẬP & HỒI PHỤC</small></span></article>
+        </div>
+        <div class="pixel-card-grid">
+          <article class="pixel-game-card">
+            <div class="pixel-card-header"><span class="pixel-tag">06:00 - 12:00</span><span class="pixel-tag pixel-tag--gold">TOBEY PATROL</span></div>
+            <h3 class="pixel-card-title">TUẦN TRA SÁNG: NỀN TẢNG & SỨC BỀN</h3>
+            <p class="pixel-card-desc">Thức dậy đúng giờ, ăn sáng nạp năng lượng, xử lý 3 việc khó nhất trong ngày (Deep Work).</p>
+          </article>
+          <article class="pixel-game-card">
+            <div class="pixel-card-header"><span class="pixel-tag pixel-tag--red">12:00 - 18:00</span><span class="pixel-tag pixel-tag--gold">ANDREW PATROL</span></div>
+            <h3 class="pixel-card-title">TUẦN TRA CHIỀU: LINH HOẠT & DI CHUYỂN</h3>
+            <p class="pixel-card-desc">Họp đối tác, giao tiếp, xử lý công việc phát sinh ngoài thực địa. Dẫn đường bản đồ GPS.</p>
+          </article>
+          <article class="pixel-game-card">
+            <div class="pixel-card-header"><span class="pixel-tag pixel-tag--green">18:00 - 23:00</span><span class="pixel-tag pixel-tag--gold">TOM PATROL</span></div>
+            <h3 class="pixel-card-title">TUẦN TRA TỐI: CÔNG NGHỆ & TỔNG KẾT</h3>
+            <p class="pixel-card-desc">Tập luyện thể thao (Gym OS), đọc sách, ghi chép nhật ký Peter Parker, ngủ trước 23h.</p>
+          </article>
+        </div>
+      `;
+    }
+
+    // Default: TODO
+    const uncompletedTasks = this.notionTasks.filter(t => !t.done);
+    return `
+      <div class="quest-source-banner">
+        <span>📜 NOTION QUESTS</span>
+        <strong>DANH SÁCH NHIỆM VỤ ĐỜI THỰC (${uncompletedTasks.length} VIỆC CẦN LÀM)</strong>
+        <small>Hoàn thành mỗi việc sẽ kích hoạt Hero tung Combo đập quái trong Arena!</small>
+      </div>
+      <div class="pixel-card-grid">
+        ${this.notionTasks.map((task, idx) => `
+          <article class="pixel-game-card ${task.done ? 'pixel-game-card--done' : ''}">
+            <div class="pixel-card-header">
+              <span class="pixel-tag ${task.priority?.includes('High') || task.priority?.includes('Critical') ? 'pixel-tag--red' : 'pixel-tag'}">${task.priority || 'Bình thường'}</span>
+              <span class="pixel-tag pixel-tag--green">+30 XP // +10 COINS</span>
+            </div>
+            <h3 class="pixel-card-title">${task.title || task.name}</h3>
+            <p class="pixel-card-desc">${task.date ? `Hạn chót: ${new Date(task.date).toLocaleDateString('vi-VN')}` : 'Nhiệm vụ hàng ngày từ Notion'}</p>
+            <div class="pixel-card-footer">
+              ${task.address ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${idx}">📍 BẢN ĐỒ</button>` : '<span></span>'}
+              <button class="pixel-action-btn ${task.done ? 'pixel-action-btn--disabled' : ''}" 
+                      data-complete-task="${idx}" ${task.done ? 'disabled' : ''}>
+                ${task.done ? '✓ ĐÃ XONG' : '⚔️ HOÀN THÀNH'}
+              </button>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+      <button class="game-panel-action" data-open-real-mission style="margin-top: 10px;">+ TẠO THÊM NHIỆM VỤ ĐỜI THẬT</button>
+    `;
   }
 
-  renderMissionApp() {
-    const isDaily = this.panelTab === 'DAILY';
-    return `<div class="quest-source-banner"><span>${isDaily ? 'DAILY QUEST' : 'MAIN QUEST'}</span><strong>${isDaily ? 'HABITS TỪ GAMBIT / NOTION' : 'TODO TỪ GAMBIT / NOTION'}</strong><small>Một nguồn dữ liệu online — không tạo list local riêng.</small></div>${this.renderLifeFrame(isDaily ? 'habits' : 'today', isDaily ? 'HABIT TODAY' : 'MAIN TODO')}`;
+  /* -------------------------------------------------------------
+     2. TAB [HERO]: SUITS (THỜI TRANG), ROSTER (77 SPIDER-VERSE), SKILLS, GADGETS
+  ------------------------------------------------------------- */
+  renderHeroSection() {
+    if (this.panelTab === 'ROSTER') {
+      return `
+        <div class="quest-source-banner">
+          <span>🕷️ SPIDER-VERSE</span>
+          <strong>77 BIẾN THỂ NHỆN ĐA VŨ TRỤ (NOTION CATALOG)</strong>
+          <small>Chọn đồng đội hỗ trợ (Ally Assist) để kích hoạt hiệu ứng Synergy!</small>
+        </div>
+        <div class="pixel-card-grid">
+          ${this.spiderVerse.slice(0, 40).map((spider, idx) => `
+            <article class="pixel-game-card pixel-game-card--hero">
+              <div class="pixel-card-header">
+                <span class="pixel-tag">${spider.Icon || '🕷️'} ${spider.Name?.split('(')[1]?.replace(')', '') || 'Multiverse'}</span>
+                <span class="pixel-tag pixel-tag--green">ALL-STAR</span>
+              </div>
+              ${spider.IiliUrl || spider.FandomSrc ? `
+                <div class="pixel-card-media">
+                  <img src="${spider.IiliUrl || spider.FandomSrc}" alt="${spider.Name}" loading="lazy" />
+                </div>
+              ` : ''}
+              <h3 class="pixel-card-title">${spider.Name?.split('—')[0] || spider.Name}</h3>
+              <p class="pixel-card-desc"><em>"${spider.Quote || 'With great power comes great responsibility.'}"</em></p>
+              <div class="pixel-card-footer">
+                <small style="color: #f2c06b; font: 700 8px monospace;">ASSIST HERO</small>
+                <button class="pixel-action-btn pixel-action-btn--gold" data-select-ally="${idx}">CHỌN ASSIST</button>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    if (this.panelTab === 'SKILLS') {
+      const s = this.engine.snapshot();
+      return `
+        <div class="quest-source-banner">
+          <span>⚡ SKILL TREE</span>
+          <strong>CÂY KỸ NĂNG CHIẾN ĐẤU & BẮN TƠ</strong>
+          <small>Điểm kỹ năng khả dụng: ${s.hero.skillPoints} SP</small>
+        </div>
+        <div class="pixel-card-grid">
+          ${s.data.skills.map((skill) => `
+            <article class="pixel-game-card ${skill.unlocked ? 'pixel-game-card--gold' : ''}">
+              <div class="pixel-card-header">
+                <span class="pixel-tag ${skill.unlocked ? 'pixel-tag--green' : 'pixel-tag--red'}">${skill.unlocked ? 'ĐÃ MỞ KHÓA' : 'CHƯA MỞ'}</span>
+                <span class="pixel-tag">CHIẾN ĐẤU</span>
+              </div>
+              <h3 class="pixel-card-title">${skill.name}</h3>
+              <p class="pixel-card-desc">${skill.unlocked ? 'Kỹ năng sẵn sàng kích hoạt trong Arena.' : 'Cần tiêu tốn 1 Skill Point để học kỹ năng này.'}</p>
+              <div class="pixel-card-footer">
+                <span style="color: #7fbfd2; font: 700 8px monospace;">${skill.unlocked ? 'ACTIVE' : 'COST: 1 SP'}</span>
+                <button class="pixel-action-btn ${skill.unlocked ? 'pixel-action-btn--disabled' : 'pixel-action-btn--green'}" 
+                        ${skill.unlocked || s.hero.skillPoints <= 0 ? 'disabled' : ''}>
+                  ${skill.unlocked ? 'ĐÃ HỌC' : 'NÂNG CẤP'}
+                </button>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    if (this.panelTab === 'GADGETS') {
+      const s = this.engine.snapshot();
+      return `
+        <div class="quest-source-banner">
+          <span>⌁ GADGETS</span>
+          <strong>THIẾT BỊ CÔNG NGHỆ PETER PARKER</strong>
+          <small>Sử dụng phím GADGET trong trận đấu để tiêu hao Charge</small>
+        </div>
+        <div class="pixel-card-grid">
+          ${s.data.gadgets.map((g) => `
+            <article class="pixel-game-card pixel-game-card--hero">
+              <div class="pixel-card-header">
+                <span class="pixel-tag">CẤP ${g.level}</span>
+                <span class="pixel-tag pixel-tag--green">${g.charges} LƯỢT DÙNG</span>
+              </div>
+              <h3 class="pixel-card-title">${g.name}</h3>
+              <p class="pixel-card-desc">${g.effect}</p>
+              <div class="pixel-card-footer">
+                <small style="color: #f2c06b; font: 700 8px monospace;">COOLDOWN: 12S</small>
+                <button class="pixel-action-btn pixel-action-btn--blue">NÂNG CẤP</button>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Default: SUITS (Thời trang)
+    const currentVariant = this.engine.data.hero.variant || 'Advanced Suit 2.0';
+    return `
+      <div class="quest-source-banner">
+        <span>👕 SUITS WARDROBE</span>
+        <strong>TỦ ĐỒ THỜI TRANG NGƯỜI NHỆN (${this.suits.length} BỘ SUITS)</strong>
+        <small>Mặc suit để nhận hiệu ứng buff nội tại và đổi Skin nhân vật!</small>
+      </div>
+      <div class="pixel-card-grid">
+        ${this.suits.map((suit, idx) => {
+          const isEquipped = suit.Suit === currentVariant;
+          return `
+            <article class="pixel-game-card ${isEquipped ? 'pixel-game-card--hero' : ''}">
+              <div class="pixel-card-header">
+                <span class="pixel-tag ${isEquipped ? 'pixel-tag--red' : ''}">${isEquipped ? '★ ĐANG MẶC' : 'LV ' + (suit.LevelReq || 1)}</span>
+                <span class="pixel-tag pixel-tag--gold">${suit.Owner || 'Peter Parker'}</span>
+              </div>
+              ${suit.ImageUrl ? `
+                <div class="pixel-card-media">
+                  <img src="${suit.ImageUrl}" alt="${suit.Suit}" loading="lazy" />
+                </div>
+              ` : ''}
+              <h3 class="pixel-card-title">${suit.Suit}</h3>
+              <p class="pixel-card-desc">${suit.GameEffect || suit.Notes || 'Bộ đồ chiến đấu bảo vệ Peter Parker.'}</p>
+              <div class="pixel-card-footer">
+                <small style="color: #7fbfd2; font: 700 7px monospace;">${suit.Cost || 'Sẵn sàng'}</small>
+                <button class="pixel-action-btn ${isEquipped ? 'pixel-action-btn--disabled' : 'pixel-action-btn--gold'}" 
+                        data-equip-suit="${idx}" ${isEquipped ? 'disabled' : ''}>
+                  ${isEquipped ? 'ĐANG DÙNG' : 'MẶC SUIT'}
+                </button>
+              </div>
+            </article>
+          `;
+        }).join('')}
+      </div>
+    `;
   }
 
-  renderTimetableApp() {
-    return `<div class="spider-cinema-cast" aria-label="Ba Spider-Man patrol profiles">
-      <article><i class="cinema-spider cinema-spider--tobey"></i><span><b>TOBEY</b><small>EARTH-96283 // ENDURANCE</small></span></article>
-      <article><i class="cinema-spider cinema-spider--andrew"></i><span><b>ANDREW</b><small>EARTH-120703 // AGILITY</small></span></article>
-      <article><i class="cinema-spider cinema-spider--tom"></i><span><b>TOM</b><small>EARTH-199999 // TECH</small></span></article>
-    </div>${this.renderLifeFrame('timetable', 'CITY CLOCK / 3-SPIDER PATROL')}`;
+  /* -------------------------------------------------------------
+     3. TAB [ARCHIVE]: BESTIARY (BOSS & MINION), BACKPACKS, BADGES
+  ------------------------------------------------------------- */
+  renderArchiveSection() {
+    if (this.panelTab === 'BACKPACKS') {
+      return `
+        <div class="quest-source-banner">
+          <span>🎒 SPIDEY BACKPACKS</span>
+          <strong>55 BA LÔ KỶ NIỆM PETER GIẤU QUANH NEW YORK</strong>
+          <small>Những mảnh ghép quá khứ và vật kỷ niệm của Người Nhện</small>
+        </div>
+        <div class="pixel-card-grid">
+          ${this.backpacks.map((bp) => `
+            <article class="pixel-game-card">
+              <div class="pixel-card-header">
+                <span class="pixel-tag">#${bp.Index}</span>
+                <span class="pixel-tag pixel-tag--gold">${bp.District || 'Manhattan'}</span>
+              </div>
+              <h3 class="pixel-card-title">${bp.TitleVi || bp.TitleEn}</h3>
+              <p class="pixel-card-desc">${bp.Notes || 'Vật phẩm kỷ niệm của Peter Parker.'}</p>
+              <div class="pixel-card-footer">
+                <small style="color: #83b96b; font: 700 8px monospace;">ĐÃ KHÁM PHÁ</small>
+                <span class="pixel-tag pixel-tag--green">COLLECTED</span>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    if (this.panelTab === 'BADGES') {
+      const badgeEntries = Object.entries(this.badges);
+      return `
+        <div class="quest-source-banner">
+          <span>🎖️ BADGES</span>
+          <strong>37 HUY HIỆU DANH DỰ LỊCH SỬ TRUYỆN TRANH</strong>
+          <small>Thành tích mở khóa khi vượt qua các mốc thử thách đời thực</small>
+        </div>
+        <div class="pixel-card-grid pixel-card-grid--compact">
+          ${badgeEntries.map(([originalName, badge]) => `
+            <article class="pixel-game-card pixel-game-card--gold">
+              <div class="pixel-card-header">
+                <span style="font-size: 20px;">${badge.icon || '🏅'}</span>
+                <span class="pixel-tag pixel-tag--gold">MEDAL</span>
+              </div>
+              <h3 class="pixel-card-title" style="font-size: 9px;">${badge.title || originalName}</h3>
+              <p class="pixel-card-desc" style="font-size: 9px;">${originalName}</p>
+              <div class="pixel-card-footer">
+                <span class="pixel-tag pixel-tag--green">UNLOCKED</span>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Default: BESTIARY (Boss & Minions)
+    const minionEntries = Object.entries(this.minions);
+    return `
+      <div class="quest-source-banner">
+        <span>👹 BESTIARY</span>
+        <strong>THƯ VIỆN KẺ THÙ: BOSSES & MINIONS</strong>
+        <small>Thông số, điểm yếu và hệ khắc chế trong các ải tuần tra</small>
+      </div>
+      <div class="pixel-card-grid">
+        ${this.bosses.map((boss) => `
+          <article class="pixel-game-card pixel-game-card--hero">
+            <div class="pixel-card-header">
+              <span class="pixel-tag pixel-tag--red">BOSS // ${boss.enemyClass || 'Elite'}</span>
+              <span class="pixel-tag pixel-tag--gold">HP: ${boss.hp}</span>
+            </div>
+            <h3 class="pixel-card-title">${boss.name}</h3>
+            <p class="pixel-card-desc">${boss.notes || 'Thủ lĩnh phản diện đối đầu Spider-Man.'}</p>
+            <div class="pixel-card-footer">
+              <small style="color: #f0645c; font: 700 8px monospace;">ATK: ${boss.atk} | DEF: ${boss.def}</small>
+              <span class="pixel-tag pixel-tag--red">CHAPTER BOSS</span>
+            </div>
+          </article>
+        `).join('')}
+        ${minionEntries.slice(0, 30).map(([name, desc]) => `
+          <article class="pixel-game-card">
+            <div class="pixel-card-header">
+              <span class="pixel-tag">MINION</span>
+              <span class="pixel-tag pixel-tag--green">TIER 1</span>
+            </div>
+            <h3 class="pixel-card-title">${name}</h3>
+            <p class="pixel-card-desc">${desc}</p>
+            <div class="pixel-card-footer">
+              <small style="color: #54b6d0; font: 700 8px monospace;">WEAK: WEB / THROW</small>
+              <span class="pixel-tag">GRUNT</span>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+    `;
   }
 
-  renderLifeApp() {
-    const routes = { DOPAMINE: ['dopamine', 'DOPAMINE DICE'], RHYTHM: ['routine', 'CIRCADIAN RHYTHM'], JOURNAL: ['journal', 'LIFE CHRONICLE'], GYM: ['gym', 'GYM OS'] };
-    const [view, label] = routes[this.panelTab] || routes.DOPAMINE;
-    return this.renderLifeFrame(view, label);
+  /* -------------------------------------------------------------
+     4. TAB [CHRONICLE]: RHYTHM (NHỊP SINH HỌC 24H), JOURNAL, GYM OS
+  ------------------------------------------------------------- */
+  renderChronicleSection() {
+    if (this.panelTab === 'JOURNAL') {
+      return `
+        <div class="quest-source-banner">
+          <span>📓 CHRONICLE</span>
+          <strong>NHẬT KÝ CHIẾN TÍCH PETER PARKER</strong>
+          <small>Ghi lại bài học và chiến công mỗi ngày để rèn giũa bản thân</small>
+        </div>
+        <div style="background: #091a2c; border: 2px solid #05070b; padding: 14px; margin-bottom: 12px; box-shadow: inset 0 0 0 1px #397c9b;">
+          <h3 style="font: 700 11px 'Press Start 2P', monospace; color: #f2c06b; margin-bottom: 8px;">VIẾT NHẬT KÝ HÔM NAY</h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="font: 700 8px 'Silkscreen', monospace; color: #9ed9e7;">1. BA ĐIỀU BIẾT ƠN HÔM NAY:</label>
+            <input type="text" id="journal-input-grateful" class="form-input" placeholder="Ví dụ: Hoàn thành dự án, gia đình bình an..." style="border: 2px solid #05070b; background: #050b12; color: #fff; padding: 6px;" />
+            
+            <label style="font: 700 8px 'Silkscreen', monospace; color: #9ed9e7;">2. BÀI HỌC LỚN NHẤT RÚT RA:</label>
+            <input type="text" id="journal-input-lesson" class="form-input" placeholder="Ví dụ: Đừng chần chừ, tập trung làm dứt điểm từng việc..." style="border: 2px solid #05070b; background: #050b12; color: #fff; padding: 6px;" />
+            
+            <label style="font: 700 8px 'Silkscreen', monospace; color: #9ed9e7;">3. CHIẾN CÔNG ĐẮC Ý NHẤT:</label>
+            <textarea id="journal-input-win" rows="2" class="form-textarea" placeholder="Hôm nay mình đã vượt qua được thói quen xấu nào?" style="border: 2px solid #05070b; background: #050b12; color: #fff; padding: 6px;"></textarea>
+            
+            <button class="pixel-action-btn pixel-action-btn--gold" id="btn-save-journal" style="align-self: flex-start; margin-top: 6px;">💾 LƯU NHẬT KÝ VÀO NOTION</button>
+          </div>
+        </div>
+        <div class="pixel-card-grid">
+          ${this.journalEntries.length ? this.journalEntries.map((entry) => `
+            <article class="pixel-game-card">
+              <div class="pixel-card-header"><span class="pixel-tag">${entry.date}</span><span class="pixel-tag pixel-tag--green">RECORDED</span></div>
+              <h3 class="pixel-card-title">${entry.win || 'Nhật ký ngày'}</h3>
+              <p class="pixel-card-desc"><strong>Biết ơn:</strong> ${entry.grateful}<br><strong>Bài học:</strong> ${entry.lesson}</p>
+            </article>
+          `).join('') : '<article class="pixel-game-card"><p class="pixel-card-desc">Chưa có nhật ký nào được ghi lại. Hãy viết trang đầu tiên hôm nay!</p></article>'}
+        </div>
+      `;
+    }
+
+    if (this.panelTab === 'GYM') {
+      const hero = this.engine.snapshot().hero;
+      return `
+        <div class="quest-source-banner">
+          <span>💪 GYM OS</span>
+          <strong>RÈN LUYỆN THỂ CHẤT THỰC TẾ</strong>
+          <small>Mỗi hiệp tập hoàn thành cộng chỉ số Sức Mạnh (ATK) hoặc Phòng Thủ (DEF) vĩnh viễn!</small>
+        </div>
+        <div class="pixel-card-grid">
+          <article class="pixel-game-card pixel-game-card--hero">
+            <div class="pixel-card-header"><span class="pixel-tag pixel-tag--red">STRENGTH</span><span class="pixel-tag pixel-tag--gold">+1 ATK</span></div>
+            <h3 class="pixel-card-title">HÍT ĐẤT (PUSH-UPS)</h3>
+            <p class="pixel-card-desc">Mục tiêu: 3 hiệp x 15 cái. Tăng sức bộc phát của cánh tay khi tung Combo đấm đá.</p>
+            <div class="pixel-card-footer">
+              <small style="color: #7fbfd2;">HERO ATK: ${65 + (hero.bonusAtk || 0)}</small>
+              <button class="pixel-action-btn pixel-action-btn--red" data-gym-train="atk">💪 HOÀN THÀNH (+1 ATK)</button>
+            </div>
+          </article>
+          <article class="pixel-game-card pixel-game-card--gold">
+            <div class="pixel-card-header"><span class="pixel-tag pixel-tag--green">ENDURANCE</span><span class="pixel-tag pixel-tag--gold">+1 DEF</span></div>
+            <h3 class="pixel-card-title">GẬP BỤNG / PLANK</h3>
+            <p class="pixel-card-desc">Mục tiêu: 3 phút Plank hoặc 50 cái gập bụng. Tăng độ vững cơ core và chống chịu.</p>
+            <div class="pixel-card-footer">
+              <small style="color: #7fbfd2;">HERO DEF: ${40 + (hero.bonusDef || 0)}</small>
+              <button class="pixel-action-btn pixel-action-btn--green" data-gym-train="def">🛡️ HOÀN THÀNH (+1 DEF)</button>
+            </div>
+          </article>
+          <article class="pixel-game-card">
+            <div class="pixel-card-header"><span class="pixel-tag pixel-tag--blue">CARDIO</span><span class="pixel-tag pixel-tag--gold">+20 HP MAX</span></div>
+            <h3 class="pixel-card-title">CHẠY BỘ (SPIDEY RUN)</h3>
+            <p class="pixel-card-desc">Mục tiêu: Chạy 2km - 5km ngoài trời. Mở rộng thanh sinh lực tối đa của Hero.</p>
+            <div class="pixel-card-footer">
+              <small style="color: #7fbfd2;">MAX HP: ${this.engine.data.hero.maxHp}</small>
+              <button class="pixel-action-btn pixel-action-btn--blue" data-gym-train="hp">🏃 HOÀN THÀNH (+20 HP)</button>
+            </div>
+          </article>
+        </div>
+      `;
+    }
+
+    // Default: RHYTHM (Nhịp sinh học 24h)
+    const now = new Date();
+    const currentHour = now.getHours();
+    return `
+      <div class="quest-source-banner">
+        <span>⏰ CIRCADIAN RHYTHM</span>
+        <strong>ĐỒNG HỒ NHỊP SINH HỌC 24H (GIỜ HIỆN TẠI: ${now.toLocaleTimeString('vi-VN')})</strong>
+        <small>Cân bằng hoạt động trong ngày theo nhịp sinh học tự nhiên của cơ thể</small>
+      </div>
+      <div class="rhythm-clock-container">
+        <div class="rhythm-phase-box ${currentHour >= 6 && currentHour < 10 ? 'active' : ''}">
+          <div class="pixel-card-header"><span class="pixel-tag">06:00 - 10:00</span><span class="pixel-tag pixel-tag--gold">${currentHour >= 6 && currentHour < 10 ? 'ĐANG DIỄN RA' : ''}</span></div>
+          <h3 class="pixel-card-title">GIAI ĐOẠN 1: KHỞI ĐỘNG & TỈNH TÁO</h3>
+          <p class="pixel-card-desc">Cortisol tăng tự nhiên. Tiếp xúc ánh sáng mặt trời, uống 500ml nước, tránh bấm mạng xã hội 60 phút đầu.</p>
+        </div>
+        <div class="rhythm-phase-box ${currentHour >= 10 && currentHour < 14 ? 'active' : ''}">
+          <div class="pixel-card-header"><span class="pixel-tag pixel-tag--red">10:00 - 14:00</span><span class="pixel-tag pixel-tag--gold">${currentHour >= 10 && currentHour < 14 ? 'ĐANG DIỄN RA' : ''}</span></div>
+          <h3 class="pixel-card-title">GIAI ĐOẠN 2: ĐỈNH CAO TẬP TRUNG (DEEP WORK)</h3>
+          <p class="pixel-card-desc">Khả năng nhận thức và tư duy logic đạt cực đại. Giải quyết các nhiệm vụ khó nhất (Main Quest).</p>
+        </div>
+        <div class="rhythm-phase-box ${currentHour >= 14 && currentHour < 18 ? 'active' : ''}">
+          <div class="pixel-card-header"><span class="pixel-tag pixel-tag--green">14:00 - 18:00</span><span class="pixel-tag pixel-tag--gold">${currentHour >= 14 && currentHour < 18 ? 'ĐANG DIỄN RA' : ''}</span></div>
+          <h3 class="pixel-card-title">GIAI ĐOẠN 3: THỂ LỰC VÀNG (WORKOUT PEAK)</h3>
+          <p class="pixel-card-desc">Nhiệt độ cơ thể và trương lực cơ bắp cao nhất. Thời điểm vàng để tập Gym, chạy bộ hoặc vận động.</p>
+        </div>
+        <div class="rhythm-phase-box ${currentHour >= 18 || currentHour < 6 ? 'active' : ''}">
+          <div class="pixel-card-header"><span class="pixel-tag pixel-tag--blue">18:00 - 23:00</span><span class="pixel-tag pixel-tag--gold">${currentHour >= 18 || currentHour < 6 ? 'ĐANG DIỄN RA' : ''}</span></div>
+          <h3 class="pixel-card-title">GIAI ĐOẠN 4: HỒI PHỤC & MELATONIN</h3>
+          <p class="pixel-card-desc">Giảm ánh sáng xanh, đọc sách, viết nhật ký Peter Parker, chuẩn bị giấc ngủ ngon để nạp lại thanh HP.</p>
+        </div>
+      </div>
+    `;
   }
 
-  renderQuests() {
-    const s = this.engine.snapshot();
-    if (this.panelTab === 'COMPLETED') return `<div class="game-card-grid">${s.defeated.length ? s.defeated.map((id) => `<article class="game-card"><small>ENEMY DEFEATED</small><h3>${id.replaceAll('-',' ').toUpperCase()}</h3><footer>RECORDED IN COMBAT LOG</footer></article>`).join('') : '<article class="game-card"><h3>NO CLEARS YET</h3><p>Hoàn thành nhiệm vụ thật hoặc chiến đấu trong Arena để tiến cốt truyện.</p></article>'}</div>`;
-    const type = this.panelTab;
-    const quests = s.data.quests.filter((quest) => quest.type === type);
-    return `<div class="game-card-grid">${quests.map((quest) => {
-      const progress = quest.metric ? s.daily.metrics?.[quest.metric] || 0 : s.daily.completed;
-      return `<article class="game-card"><small>${quest.type} QUEST</small><h3>${quest.title}</h3><p>${quest.copy}</p><footer>${quest.type === 'DAILY' ? `PROGRESS // ${Math.min(quest.target || 3, progress)} / ${quest.target || 3}<br>` : ''}REWARD // ${quest.reward}</footer></article>`;
-    }).join('')}</div><button class="game-panel-action" data-open-real-mission>+ TẠO NHIỆM VỤ ĐỜI THẬT</button>`;
-  }
-
-  renderVerse() {
-    const s = this.engine.snapshot();
-    const d = this.engine.data;
-    if (this.panelTab === 'TEAM') return `<div class="game-card-grid"><article class="game-card"><small>ACTIVE TEAM // 3 SPIDER-MEN</small><h3>TOBEY + ANDREW + TOM</h3><p>Chọn đội hình theo Endurance, Agility hoặc Tech trước mỗi ải.</p><footer>ASSIST SLOT // ${d.ally.name} — ${d.ally.skill}</footer></article><article class="game-card"><small>TEAM SYNERGY</small><h3>THREE GENERATIONS</h3><p>${d.ally.bonus}</p><footer>ULTIMATE: WEB OF DESTINY</footer></article></div>`;
-    if (this.panelTab === 'SKILLS') return this.renderHeroTab('SKILLS');
-    if (this.panelTab === 'GADGETS') return this.renderHeroTab('GADGETS');
-    const levels = [
-      ['1', 'STREET SIGNAL', 'GRUNTS', 1], ['2', 'ROOFTOP HUNT', 'ELITES', 2], ['3', 'OSCORP BREACH', 'MINI BOSS', 3], ['4', 'SINISTER GATE', 'BOSS RUSH', 4], ['5', 'WEB OF DESTINY', 'MULTIVERSE BOSS', 5]
-    ];
-    return `<div class="verse-level-track">${levels.map(([level, name, foe, required]) => { const unlocked = s.hero.level >= required; return `<article class="verse-level ${unlocked ? 'unlocked' : 'locked'}"><span>LEVEL ${level}</span><strong>${name}</strong><small>${foe}</small><b>${unlocked ? 'READY' : `LOCKED // HERO LV ${required}`}</b></article>`; }).join('')}</div>`;
-  }
-
-  renderHeroTab(tab) {
-    const previous = this.panelTab;
-    this.panelTab = tab;
-    const html = this.renderHero();
-    this.panelTab = previous;
-    return html;
-  }
-
-  renderHero() {
-    const s = this.engine.snapshot();
-    if (this.panelTab === 'SKILLS') return `<div class="game-card-grid">${s.data.skills.map((skill) => `<article class="game-card"><small>${skill.unlocked ? 'UNLOCKED' : 'LOCKED'}</small><h3>${skill.name}</h3><footer>${skill.unlocked ? 'READY FOR COMBAT' : 'REQUIRES SKILL POINT'}</footer></article>`).join('')}</div>`;
-    if (this.panelTab === 'GADGETS') return `<div class="game-card-grid">${s.data.gadgets.map((g) => `<article class="game-card"><small>LV ${g.level} // ${g.charges} CHARGES</small><h3>${g.name}</h3><p>${g.effect}</p></article>`).join('')}</div>`;
-    if (this.panelTab === 'INVENTORY') return `<div class="game-card-grid">${Object.keys(s.inventory).length ? Object.entries(s.inventory).map(([name,count]) => `<article class="game-card"><small>MATERIAL</small><h3>${name}</h3><footer>OWNED // ${count}</footer></article>`).join('') : '<article class="game-card"><h3>INVENTORY EMPTY</h3><p>Defeat enemies to collect upgrade materials.</p></article>'}</div>`;
-    return `<article class="game-card"><small>${s.data.hero.rank}</small><h3>${s.data.hero.name} // ${s.data.hero.variant}</h3><div class="game-stat-list"><span>LV ${s.hero.level}</span><span>HP ${s.hero.hp}</span><span>WEB ${s.hero.webEnergy}</span><span>ULT ${s.hero.ultimate}%</span><span>COINS ${s.hero.coins}</span><span>SKILL ${s.hero.skillPoints}</span><span>K.O. ${s.defeated.length}</span><span>STREAK ${s.hero.streak}</span></div></article>`;
-  }
-
+  /* -------------------------------------------------------------
+     5. SETTINGS SECTION
+  ------------------------------------------------------------- */
   renderSettings() {
     const settings = this.engine.snapshot().settings;
     if (this.panelTab === 'SAVE') return `<div class="game-save-tools">
@@ -264,6 +715,170 @@ export class ActionRpgController {
       <label class="game-setting-row"><span>DIFFICULTY</span><select data-setting="difficulty">${Object.keys(this.engine.content.difficulties).map((id) => `<option ${id === settings.difficulty ? 'selected' : ''}>${id}</option>`).join('')}</select></label>
       <label class="game-setting-row game-setting-row--wide"><span>MASTER VOLUME // ${Math.round(settings.volume * 100)}%</span><input type="range" min="0" max="1" step="0.1" value="${settings.volume}" data-setting="volume"></label>
     </div><p class="game-settings-note">Difficulty applies fully when the next enemy or patrol begins. Quest combat remains the only source of persistent progression.</p>`;
+  }
+
+  /* -------------------------------------------------------------
+     EVENT BINDINGS & NOTION 2-WAY SYNC
+  ------------------------------------------------------------- */
+  bindEvents(content) {
+    // 1. Task Completion -> Attack Enemy in Arena & Sync to Notion
+    content.querySelectorAll('[data-complete-task]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.completeTask, 10);
+        const task = this.notionTasks[idx];
+        if (!task || task.done) return;
+
+        task.done = true;
+        this.sound.playVictoryCue();
+
+        // Deal combat strike in Arena
+        this.engine.performAction('attack');
+        this.engine.state.hero.xp += 30;
+        this.engine.state.hero.coins += 10;
+        if (this.engine.state.hero.xp >= this.engine.state.hero.xpToNext) {
+          this.engine.levelUp();
+        }
+
+        this.toast(`QUEST DONE // PETER TUNG ĐÒN! +30 XP +10 COINS`);
+
+        // Send 2-way sync to Notion in background
+        if (task.id) {
+          fetch(`/api/notion?path=${encodeURIComponent('/v1/pages/' + task.id.replace(/-/g, ''))}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ properties: { Done: { checkbox: true } } })
+          }).catch(() => console.log('[NotionSync] Offline or queued'));
+        }
+
+        this.renderPanel();
+      });
+    });
+
+    // 2. Open map overlay for located tasks
+    content.querySelectorAll('[data-open-task-map]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        this.closePanel();
+        this.selectSection('CITY');
+      });
+    });
+
+    // 3. Habit Check-in -> Restore HP & Web + Sync
+    content.querySelectorAll('[data-checkin-habit]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.checkinHabit, 10);
+        const habit = this.notionHabits[idx];
+        if (!habit || habit.done || habit.today) return;
+
+        habit.done = true;
+        habit.today = true;
+        this.sound.playSelect();
+
+        // Restore Hero HP & Web Energy
+        this.engine.state.hero.hp = Math.min(this.engine.data.hero.maxHp, this.engine.state.hero.hp + 30);
+        this.engine.state.hero.webEnergy = this.engine.data.hero.maxWebEnergy;
+        this.engine.state.hero.streak += 1;
+
+        this.toast(`HABIT CHECKED // HỒI PHỤC HP & TƠ! STREAK +1`);
+
+        // Sync to Notion
+        if (habit.id) {
+          fetch(`/api/notion?path=${encodeURIComponent('/v1/pages/' + habit.id.replace(/-/g, ''))}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ properties: { Today: { checkbox: true } } })
+          }).catch(() => console.log('[NotionSync] Offline or queued'));
+        }
+
+        this.renderPanel();
+      });
+    });
+
+    // 4. Equip Suit
+    content.querySelectorAll('[data-equip-suit]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.equipSuit, 10);
+        const suit = this.suits[idx];
+        if (!suit) return;
+
+        this.engine.data.hero.variant = suit.Suit;
+        this.engine.data.hero.suitEffect = suit.GameEffect;
+        this.sound.playSelect();
+        this.toast(`SUIT EQUIPPED // ${suit.Suit.toUpperCase()}`);
+        this.renderPanel();
+      });
+    });
+
+    // 5. Select Ally
+    content.querySelectorAll('[data-select-ally]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.selectAlly, 10);
+        const spider = this.spiderVerse[idx];
+        if (!spider) return;
+
+        this.engine.data.ally.name = spider.Name.split('(')[0].trim();
+        this.engine.data.ally.skill = spider.Quote || 'Multiverse Web Strike';
+        this.sound.playSelect();
+        this.toast(`ALLY SELECTED // ${spider.Name.split('—')[0]}`);
+        this.renderPanel();
+      });
+    });
+
+    // 6. Gym Train
+    content.querySelectorAll('[data-gym-train]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.gymTrain;
+        if (type === 'atk') {
+          this.engine.state.hero.bonusAtk = (this.engine.state.hero.bonusAtk || 0) + 1;
+          this.toast(`WORKOUT DONE // HERO ATK +1!`);
+        } else if (type === 'def') {
+          this.engine.state.hero.bonusDef = (this.engine.state.hero.bonusDef || 0) + 1;
+          this.toast(`WORKOUT DONE // HERO DEF +1!`);
+        } else if (type === 'hp') {
+          this.engine.data.hero.maxHp += 20;
+          this.engine.state.hero.hp += 20;
+          this.toast(`CARDIO DONE // MAX HP +20!`);
+        }
+        this.sound.playVictoryCue();
+        this.renderPanel();
+      });
+    });
+
+    // 7. Save Journal
+    const btnSaveJournal = content.querySelector('#btn-save-journal');
+    if (btnSaveJournal) {
+      btnSaveJournal.addEventListener('click', () => {
+        const grateful = content.querySelector('#journal-input-grateful')?.value?.trim();
+        const lesson = content.querySelector('#journal-input-lesson')?.value?.trim();
+        const win = content.querySelector('#journal-input-win')?.value?.trim();
+
+        if (!grateful && !lesson && !win) {
+          this.toast('VUI LÒNG ĐIỀN NỘI DUNG NHẬT KÝ');
+          return;
+        }
+
+        const entry = {
+          date: new Date().toLocaleDateString('vi-VN'),
+          grateful: grateful || 'Một ngày bình an',
+          lesson: lesson || 'Tiếp tục rèn luyện',
+          win: win || 'Hoàn thành thử thách'
+        };
+
+        this.journalEntries.unshift(entry);
+        localStorage.setItem('spidey_journal_entries', JSON.stringify(this.journalEntries.slice(0, 30)));
+        this.sound.playVictoryCue();
+        this.toast('NHẬT KÝ ĐÃ LƯU!');
+        this.renderPanel();
+      });
+    }
+
+    // 8. Open Real Mission Editor
+    content.querySelector('[data-open-real-mission]')?.addEventListener('click', () => {
+      this.closePanel();
+      this.bus.emit('OPEN_EDITOR', { type: 'WORK', status: 'PLANNED' });
+    });
+
+    // 9. Bind Settings
+    this.bindSettings(content);
   }
 
   bindSettings(content) {
@@ -307,8 +922,13 @@ export class ActionRpgController {
 
   toast(message) {
     const host = document.getElementById('tracker-main');
-    const toast = document.createElement('div'); toast.className = 'combat-toast'; toast.textContent = message; host?.appendChild(toast); setTimeout(() => toast.remove(), 950);
+    const toast = document.createElement('div'); 
+    toast.className = 'combat-toast'; 
+    toast.textContent = message; 
+    host?.appendChild(toast); 
+    setTimeout(() => toast.remove(), 1200);
   }
+
   text(id, value) { const el = document.getElementById(id); if (el) el.textContent = String(value); }
   width(id, value) { const el = document.getElementById(id); if (el) el.style.width = `${Math.max(0,Math.min(100,value))}%`; }
 }

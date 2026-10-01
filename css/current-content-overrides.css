@@ -71,15 +71,33 @@
 }
 
 .action-combat-stage {
-  background: #000;
+  position: relative;
+  min-height: 330px;
+  background: 
+    radial-gradient(ellipse at 50% 15%, rgba(84, 182, 208, 0.15), transparent 60%),
+    radial-gradient(circle at 20% 70%, rgba(240, 100, 92, 0.12), transparent 30%),
+    linear-gradient(180deg, #02060c 0%, #071526 65%, #0e273f 65%, #050d18 70%, #03070d 100%) !important;
   box-shadow: inset 0 0 0 2px #397c9b;
+}
+
+/* Rooftop Ledge Line Visual Accent */
+.action-combat-stage::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 28%;
+  height: 3px;
+  background: linear-gradient(90deg, #1b3d5c 0%, #54b6d0 30%, #f2c06b 50%, #f0645c 75%, #1b3d5c 100%);
+  box-shadow: 0 0 10px rgba(84, 182, 208, 0.4);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .city-layer,
 .city-rain,
 .combat-center-mark { display: none !important; }
 
-.action-fighter--hero .hero-sprite-actor,
 .combat-placeholder,
 .roster-placeholder {
   position: relative;
@@ -95,7 +113,6 @@
   clip-path: polygon(50% 0, 88% 17%, 100% 55%, 78% 100%, 22% 100%, 0 55%, 12% 17%);
 }
 
-.action-fighter--hero .hero-sprite-actor::before,
 .combat-placeholder::before,
 .roster-placeholder::before {
   content: '';
@@ -105,12 +122,180 @@
   border-radius: 50%;
 }
 
-.hero-sprite-actor b,
 .combat-placeholder b,
 .roster-placeholder b {
   position: relative;
   z-index: 1;
   font: 700 7px/1 "Silkscreen", monospace;
+}
+
+/* Marvel Cosmic Invasion Spider-Man Hero Sprite - Perfectly Grounded */
+.action-fighter--hero {
+  position: absolute !important;
+  left: 14% !important;
+  bottom: 28% !important; /* Ground line alignment */
+  width: 160px !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  z-index: 6 !important;
+}
+
+.action-fighter--hero .arena-hero-sprite {
+  position: relative !important;
+  width: 160px !important;
+  height: 120px !important;
+  margin: 0 !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  overflow: visible !important;
+}
+
+.action-fighter--hero .hero-sprite-actor {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 0 !important;
+  width: 256px !important;
+  height: 256px !important;
+  margin-left: -128px !important;
+  margin-bottom: -18px !important; /* Calibrated foot contact with rooftop ledge */
+  display: block !important;
+  background-image: url('../assets/spideytracker/cosmic-spidey-sheet.png') !important;
+  background-repeat: no-repeat !important;
+  background-size: 2560px 2816px !important;
+  background-position: var(--sprite-x, 0px) var(--sprite-y, 0px) !important;
+  image-rendering: pixelated !important;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,.75)) !important;
+  transform-origin: 50% 87.5% !important;
+  border: none !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  pointer-events: none !important;
+}
+
+.action-fighter--hero .hero-sprite-actor b,
+.action-fighter--hero .hero-sprite-actor::before {
+  display: none !important;
+}
+
+/* Hide cluttering HERO SLOT text and float combat state above head */
+.action-fighter--hero > span {
+  display: none !important;
+}
+
+.action-fighter--hero .hero-animation-state {
+  position: absolute !important;
+  top: -24px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(7, 20, 38, 0.85) !important;
+  border: 1px solid #54b6d0 !important;
+  color: #54b6d0 !important;
+  font: 700 8px/1 "Press Start 2P", monospace !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  white-space: nowrap !important;
+  letter-spacing: 0.5px !important;
+  pointer-events: none !important;
+  opacity: 0.85 !important;
+}
+
+/* Precision Enemy Ground Positioning */
+.action-fighter--enemy {
+  position: absolute !important;
+  right: 22% !important;
+  bottom: 28% !important; /* Equal ground line with hero */
+  width: 140px !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  z-index: 5 !important;
+}
+
+.action-fighter--enemy span {
+  position: absolute !important;
+  top: -24px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  white-space: nowrap !important;
+}
+
+/* Marvel Cosmic Web Projectile VFX */
+.cosmic-web-shot {
+  position: absolute;
+  left: 18%;
+  top: 55%;
+  width: 58%;
+  height: 48px;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.cosmic-web-shot .web-beam {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 16px;
+  margin-top: -8px;
+  background-image: url('../assets/spideytracker/web-strand.png');
+  background-repeat: repeat-x;
+  background-size: 32px 16px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,.7));
+  animation: web-shoot-extend .25s ease-out forwards;
+}
+
+.cosmic-web-shot .web-ball {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  background-image: url('../assets/spideytracker/cosmic-web-vfx.png');
+  background-size: 512px 128px;
+  background-position: 0 0;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 8px #54b6d0);
+  animation: web-ball-fly .35s linear forwards;
+}
+
+.cosmic-web-shot .web-entangle {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 96px;
+  height: 96px;
+  background-image: url('../assets/spideytracker/cosmic-web-vfx.png');
+  background-size: 512px 128px;
+  background-position: -256px -64px;
+  image-rendering: pixelated;
+  opacity: 0;
+  animation: web-entangle-burst .45s ease-out .25s forwards;
+}
+
+@keyframes web-shoot-extend {
+  0% { width: 0; opacity: 0; }
+  40% { opacity: 1; }
+  100% { width: 95%; opacity: .9; }
+}
+
+@keyframes web-ball-fly {
+  0% { left: 0; transform: scale(.7) rotate(0deg); opacity: 1; }
+  75% { left: 85%; transform: scale(1.1) rotate(180deg); opacity: 1; }
+  100% { left: 95%; transform: scale(1.4) rotate(360deg); opacity: 0; }
+}
+
+@keyframes web-entangle-burst {
+  0% { transform: translateY(-50%) scale(.4) rotate(-15deg); opacity: 0; }
+  35% { transform: translateY(-50%) scale(1.2) rotate(10deg); opacity: 1; filter: brightness(1.6); }
+  70% { transform: translateY(-50%) scale(1) rotate(0deg); opacity: .9; }
+  100% { transform: translateY(-50%) scale(1.1); opacity: 0; }
 }
 
 .combat-placeholder--enemy {
@@ -121,8 +306,37 @@
   box-shadow: inset 0 0 0 4px #ffaaa2, 5px 6px 0 rgba(0,0,0,.6);
 }
 
-.action-fighter--enemy.enemy--grunt .combat-placeholder { transform: scale(.78); filter: saturate(.75); }
+.action-fighter--enemy.enemy--grunt .combat-placeholder {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto;
+  background: url('../assets/spideytracker/street-thug-minion.png') center bottom / contain no-repeat !important;
+  border: none !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+  image-rendering: pixelated !important;
+  filter: drop-shadow(4px 4px 0 rgba(0,0,0,.6));
+}
+.action-fighter--enemy.enemy--grunt .combat-placeholder b,
+.action-fighter--enemy.enemy--grunt .combat-placeholder::before {
+  display: none !important;
+}
 .action-fighter--enemy.enemy--elite .combat-placeholder { transform: scale(.92); filter: hue-rotate(14deg); }
+.action-fighter--enemy.enemy--boss .combat-placeholder {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto;
+  background: url('../assets/spideytracker/green-goblin-pixel.png') center bottom / contain no-repeat !important;
+  border: none !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+  image-rendering: pixelated !important;
+  filter: drop-shadow(4px 4px 0 rgba(0,0,0,.6));
+}
+.action-fighter--enemy.enemy--boss .combat-placeholder b,
+.action-fighter--enemy.enemy--boss .combat-placeholder::before {
+  display: none !important;
+}
 .roster-placeholder { width: 62px; height: 62px; background: #f0645c !important; }
 .roster-placeholder--ally { background: #83b96b !important; }
 
@@ -139,7 +353,6 @@
 }
 
 @media (max-width: 500px) {
-  .action-fighter--hero .hero-sprite-actor,
   .combat-placeholder { width: 64px; height: 64px; }
 }
 

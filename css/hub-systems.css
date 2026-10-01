@@ -190,3 +190,164 @@
   .hanging-spidey { animation: none !important; }
   .chat-center { transition: none; }
 }
+
+/* NATIVE PIXEL GAME CARDS & SECTIONS (NO IFRAMES) */
+.pixel-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 4px;
+}
+
+.pixel-card-grid--compact {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.pixel-game-card {
+  display: flex;
+  flex-direction: column;
+  background: #091a2c;
+  border: 2px solid #05070b;
+  box-shadow: inset 0 0 0 1px #397c9b, 2px 2px 0 #05070b;
+  padding: 10px;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pixel-game-card:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px #54b6d0, 2px 4px 0 #05070b;
+}
+
+.pixel-game-card--hero {
+  border-color: #f0645c;
+  box-shadow: inset 0 0 0 1px #f0645c, 2px 2px 0 #05070b;
+}
+
+.pixel-game-card--gold {
+  border-color: #f2c06b;
+  box-shadow: inset 0 0 0 1px #f2c06b, 2px 2px 0 #05070b;
+}
+
+.pixel-game-card--done {
+  opacity: 0.6;
+  filter: grayscale(0.6);
+  border-color: #83b96b;
+}
+
+.pixel-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 6px;
+}
+
+.pixel-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  font: 700 7px/1 'Press Start 2P', monospace;
+  background: #173b55;
+  color: #54b6d0;
+  border: 1px solid #05070b;
+}
+
+.pixel-tag--red { background: #572a35; color: #f0645c; }
+.pixel-tag--green { background: #25483d; color: #83b96b; }
+.pixel-tag--gold { background: #5a4520; color: #f2c06b; }
+
+.pixel-card-title {
+  font: 700 11px/1.3 'Press Start 2P', monospace;
+  color: #fff2df;
+  margin: 4px 0 6px;
+}
+
+.pixel-card-desc {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #9ed9e7;
+  margin: 0 0 10px;
+  flex: 1;
+}
+
+.pixel-card-media {
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  background: #040911;
+  border: 1px solid #1b3d5c;
+  margin-bottom: 8px;
+  display: grid;
+  place-items: center;
+}
+
+.pixel-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+}
+
+.pixel-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  gap: 6px;
+}
+
+.pixel-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 10px;
+  font: 700 8px/1 'Press Start 2P', monospace;
+  background: #f0645c;
+  color: #05070b;
+  border: 2px solid #05070b;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #05070b;
+  text-decoration: none;
+}
+
+.pixel-action-btn:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+.pixel-action-btn:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 #05070b;
+}
+
+.pixel-action-btn--green { background: #83b96b; }
+.pixel-action-btn--gold { background: #f2c06b; }
+.pixel-action-btn--blue { background: #54b6d0; }
+.pixel-action-btn--disabled { background: #3d4c53; color: #8899a6; cursor: default; }
+
+.rhythm-clock-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: #06101e;
+  border: 3px solid #05070b;
+  padding: 14px;
+}
+
+@media (max-width: 700px) {
+  .rhythm-clock-container { grid-template-columns: 1fr; }
+}
+
+.rhythm-phase-box {
+  background: #102c45;
+  border: 2px solid #05070b;
+  padding: 10px;
+  box-shadow: inset 0 0 0 1px #397c9b;
+}
+
+.rhythm-phase-box.active {
+  border-color: #f2c06b;
+  box-shadow: inset 0 0 0 2px #f2c06b;
+}

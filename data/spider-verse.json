@@ -1,0 +1,541 @@
+﻿[
+    {
+        "Name":  "Miles Morales (Earth-1610) — Ultimate Spider-Man",
+        "Icon":  "⚡",
+        "Quote":  "Everyone keeps telling me how my story is supposed to go. Nah. I\u0027mma do my own thing.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/3/39/Miles_Morales_Spider-Man_Vol_3_1_Textless.jpg/revision/latest?cb=20260421170022",
+        "IiliUrl":  "https://iili.io/nIKwB1I.webp"
+    },
+    {
+        "Name":  "Gwen Stacy (Earth-65) — Ghost-Spider",
+        "Icon":  "🌸",
+        "Quote":  "In this dimension, I\u0027m the only Spider-Woman.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/07/All-New_Spider-Gwen_The_Ghost-Spider_Vol_1_1_Textless.jpg/revision/latest?cb=20250726091838",
+        "IiliUrl":  "https://iili.io/nIKwkkg.webp"
+    },
+    {
+        "Name":  "Peter B. Parker (Earth-616B) — Mentor Spider-Man",
+        "Icon":  "☕",
+        "Quote":  "You\u0027re gonna be in a lot of pain. But you can do it.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/d/d3/Peter_Parker_%28Earth-616B%29_and_May_Parker_%28Earth-616B%29_from_Spider-Man_Across_the_Spider-Verse_002.png/revision/latest?cb=20260625231322",
+        "IiliUrl":  "https://iili.io/nIKNd37.webp"
+    },
+    {
+        "Name":  "Mayday Parker (Earth-616B)",
+        "Icon":  "👶",
+        "Quote":  "*Giggles and crawls on the ceiling while chewing on a web-shooter*",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/4/48/May_Parker_%28Earth-616B%29_from_Spider-Man_Across_the_Spider-Verse_001.png/revision/latest?cb=20230602191403",
+        "IiliUrl":  "https://iili.io/nIKNI3P.webp"
+    },
+    {
+        "Name":  "Miguel O\u0027Hara (Earth-928) — Spider-Man 2099",
+        "Icon":  "⏱️",
+        "Quote":  "Being Spider-Man is a sacrifice. That\u0027s the job. That\u0027s what you signed up for.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/4/49/Miguel_O%27Hara_%28Earth-928%29_from_Amazing_Spider-Man_Vol_5_36_001.png/revision/latest?cb=20250607155214",
+        "IiliUrl":  "https://iili.io/nIKNjtf.webp"
+    },
+    {
+        "Name":  "Hobie Brown (Earth-138) — Spider-Punk",
+        "Icon":  "🎸",
+        "Quote":  "I don\u0027t believe in consistency. Or rules. Or your badge.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/03/Edge_of_Spider-Geddon_Vol_1_1_Textless.jpg/revision/latest?cb=20180523051009",
+        "IiliUrl":  "https://iili.io/nIKNZKB.webp"
+    },
+    {
+        "Name":  "Pavitr Prabhakar (Earth-50101) — Spider-Man India",
+        "Icon":  "🪷",
+        "Quote":  "Being Spider-Man is so easy! Just chai tea, coconut water and traffic!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/d/d2/Pavitr_Prabhakar_%28Earth-50101%29_from_Spider-Man_India_Vol_2_5_New_Costume_Variant_001.jpg/revision/latest?cb=20240220050600",
+        "IiliUrl":  "https://iili.io/nIKOnNs.webp"
+    },
+    {
+        "Name":  "Margo Kess (Earth-22191) — Spider-Byte",
+        "Icon":  "💻",
+        "Quote":  "Logging onto the Spider-Society mainframe. Protocol Go-Home engaged.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/f/f1/Margo_Kess_%28Earth-22191%29_from_Edge_of_Spider-Verse_Vol_4_1_001.jpg/revision/latest?cb=20240229105530",
+        "IiliUrl":  "https://iili.io/nIKOZXf.webp"
+    },
+    {
+        "Name":  "Jessica Drew (Earth-404) — Spider-Woman (Bike)",
+        "Icon":  "🏍️",
+        "Quote":  "I\u0027ve been pregnant for five months and I can still do a 360 kick on a chopper.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/e/e8/Spider-Man_Across_the_Spider-Verse_poster_034_textless.jpg/revision/latest?cb=20230705141908",
+        "IiliUrl":  "https://iili.io/nIKeCrB.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-90214) — Spider-Man Noir",
+        "Icon":  "🕵️",
+        "Quote":  "Wherever I go, the wind follows. And the wind smells like rain.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/e/e4/Spider-Man_Noir_Vol_2_2_Textless.jpg/revision/latest?cb=20200124213038",
+        "IiliUrl":  "https://iili.io/nIKearN.webp"
+    },
+    {
+        "Name":  "Peter Porker (Earth-8311) — Spider-Ham",
+        "Icon":  "🐷",
+        "Quote":  "It CAN get weirder! I just pulled a giant wooden mallet out of my pocket!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/f/f6/Spider-Ham_Vol_1_1_Textless.jpg/revision/latest?cb=20190911100619",
+        "IiliUrl":  "https://iili.io/nIKe6EQ.webp"
+    },
+    {
+        "Name":  "Peni Parker (Earth-14512) — SP//dr",
+        "Icon":  "🤖",
+        "Quote":  "SP//dr psychic link synchronized! Charging shock cannons!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/6/6a/Edge_of_Spider-Geddon_Vol_1_2_Textless.jpg/revision/latest?cb=20181005044750",
+        "IiliUrl":  "https://iili.io/nIKkoG4.webp"
+    },
+    {
+        "Name":  "Ben Reilly (Earth-94) — Scarlet Spider",
+        "Icon":  "🔴",
+        "Quote":  "I\u0027m a clone, living in the shadow of someone else\u0027s angst!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/e/e9/Scarlet_Spiders_Vol_1_1_Bagley_Variant_Textless.jpg/revision/latest?cb=20140725235549",
+        "IiliUrl":  "https://iili.io/nIKk7wu.webp"
+    },
+    {
+        "Name":  "Pter Ptarker (Earth-66) — Spider-Rex",
+        "Icon":  "🦖",
+        "Quote":  "*ROOOAAR! Prehistoric arachnid dinosaur stomps through Nueva York*",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/c/c5/Edge_of_Spider-Verse_Vol_2_1_Spider-Rex_Variant_Textless.jpg/revision/latest?cb=20240525095212",
+        "IiliUrl":  "https://iili.io/nIKk06Q.webp"
+    },
+    {
+        "Name":  "Patrick O\u0027Hara (Earth-31913) — Web-Slinger",
+        "Icon":  "🤠",
+        "Quote":  "Reach for the sky, varmint! My horse Widow shoots webs too.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/4/41/Spider-Verse_Vol_3_4_Textless.jpg/revision/latest?cb=20200129124446",
+        "IiliUrl":  "https://iili.io/nIKkhwg.webp"
+    },
+    {
+        "Name":  "Charlotte Webber (Earth-20023) — Sun-Spider",
+        "Icon":  "☀️",
+        "Quote":  "Disabled doesn\u0027t mean unable. My crutches pack a sting!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/2/2a/Charlotte_Webber_%28Earth-20023%29_from_Edge_of_Spider-Verse_Vol_2_4_001.jpg/revision/latest?cb=20220924103428",
+        "IiliUrl":  "https://iili.io/nIKktl2.webp"
+    },
+    {
+        "Name":  "Petra Parker (Earth-TRN1036) — Cyborg Spider-Woman",
+        "Icon":  "🦾",
+        "Quote":  "Full cybernetic arm calibrated. Ready to tackle any anomaly.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/8/85/Petra_Parker_%28Earth-TRN454%29_from_Ultimate_Spider-Man_%28animated_series%29_Season_3_9_004.png/revision/latest?cb=20170109015615",
+        "IiliUrl":  "https://iili.io/nIKvAfR.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-26496) — Spectacular Spider-Man",
+        "Icon":  "📺",
+        "Quote":  "Livin\u0027 on the edge, fighting crime, spinning webs... Spectacular!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/7/7f/Peter_Parker_%28Earth-26496%29_from_Spectacular_Spider-Man_%28animated_series%29_Season_2_10_001.jpg/revision/latest?cb=20230727070005",
+        "IiliUrl":  "https://iili.io/nIKvlbn.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-1048) — Insomniac Spider-Man",
+        "Icon":  "🎮",
+        "Quote":  "Be greater. Together. Nueva York really has everything!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/7/7f/Peter_Parker_%28Earth-1048%29_from_Marvel%27s_Spider-Man_2_005.jpg/revision/latest?cb=20231117033153",
+        "IiliUrl":  "https://iili.io/nIK89dN.webp"
+    },
+    {
+        "Name":  "Peter Parkter (Earth-13122) — Lego Spider-Man",
+        "Icon":  "🧱",
+        "Quote":  "Peter Parkter reporting from Lego Earth! We\u0027re all connected!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/f/f3/Peter_Parker_%28Earth-13122%29_from_LEGO_Marvel_Spider-Man_Vexed_by_Venom_001.png/revision/latest?cb=20190810182924",
+        "IiliUrl":  "https://iili.io/nIK81kP.webp"
+    },
+    {
+        "Name":  "Spider-Cat (Earth-999)",
+        "Icon":  "🐱",
+        "Quote":  "*Hisses softly and spits a web-ball directly into the anomaly\u0027s face*",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/3/34/Spider-Man_Across_the_Spider-Verse_poster_028_textless.png/revision/latest?cb=20230601194630",
+        "IiliUrl":  "https://iili.io/nIK86Gf.webp"
+    },
+    {
+        "Name":  "Spider-Therapist (Earth-67)",
+        "Icon":  "🛋️",
+        "Quote":  "And how does being chased by your alternate selves make you feel?",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/0d/Spider_Society_%28Earth-928B%29_from_Spider-Man_Across_the_Spider-Verse_001.jpg/revision/latest?cb=20230602062318",
+        "IiliUrl":  "https://iili.io/nIKSH6x.webp"
+    },
+    {
+        "Name":  "Spider-Cop",
+        "Icon":  "👮",
+        "Quote":  "This city is a crime scene, and the only detective on duty is justice.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/00/Peter_Parker_%28Earth-1048%29_from_Marvel%27s_Spider-Man_The_Black_Cat_Strikes_Vol_1_2_001.jpg/revision/latest?cb=20200216072945",
+        "IiliUrl":  "https://iili.io/nIKSTap.webp"
+    },
+    {
+        "Name":  "Zarina Zahari (Earth-834) — Spider-UK II",
+        "Icon":  "⚡",
+        "Quote":  "Bio-electric lightning charged and ready for the crown!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/3/38/Edge_of_Spider-Verse_Vol_2_2_Unknown_Comic_Books_Exclusive_Virgin_Variant.jpg/revision/latest?cb=20220816150649",
+        "IiliUrl":  "https://iili.io/nIKShN9.webp"
+    },
+    {
+        "Name":  "Peter Parkedcar (Earth-53931) — Spider-Mobile",
+        "Icon":  "🚗",
+        "Quote":  "*Honk honk! Engine revs with radioactive spider-horsepower!*",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/a/a9/Peter_Parkedcar_%28Earth-53931%29_from_Edge_of_Spider-Verse_Vol_2_4_cover.jpg/revision/latest?cb=20230623035126",
+        "IiliUrl":  "https://iili.io/nIKS4N1.webp"
+    },
+    {
+        "Name":  "Miles G. Morales (Earth-42) — Prowler",
+        "Icon":  "🥷",
+        "Quote":  "You\u0027re in the wrong dimension, Spider-Man.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/3/30/Miles_Morales_%28Earth-42%29_from_Spider-Man_Across_the_Spider-Verse_005.png/revision/latest?cb=20230811074511",
+        "IiliUrl":  "https://iili.io/nIKStlR.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-616) — Amazing Spider-Man",
+        "Icon":  "🕷️",
+        "Quote":  "With great power there must also come great responsibility.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/7/71/Peter_Parker_%28Earth-616%29_from_Amazing_Spider-Man_Vol_5_15_Cover.jpg/revision/latest?cb=20251003212608",
+        "IiliUrl":  "https://iili.io/nIKU9DX.webp"
+    },
+    {
+        "Name":  "Cindy Moon (Earth-616) — Silk",
+        "Icon":  "🕸️",
+        "Quote":  "The Spider-Bride... I weave fate with my own fingertips.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/3/37/Silk_Vol_3_1_Yoon_Virgin_Variant.jpg/revision/latest?cb=20210327180532",
+        "IiliUrl":  "https://iili.io/nIKUIWu.webp"
+    },
+    {
+        "Name":  "Otto Octavius (Earth-616) — Superior Spider-Man",
+        "Icon":  "🐙",
+        "Quote":  "I will be a better Spider-Man than you ever were. Superior in every way!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/7/74/Otto_Octavius_from_Amazing_Spider-Man_Vol_6_28.jpg/revision/latest?cb=20230712084053",
+        "IiliUrl":  "https://iili.io/nIKUrg4.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-2818) — Cyborg Spider-Man",
+        "Icon":  "🦾",
+        "Quote":  "Heavy cybernetics locked on. Karn won\u0027t know what hit him.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/c/c4/Peter_Parker_%28Earth-2818%29_from_Superior_Spider-Man_Vol_1_33_001.png/revision/latest?cb=20140918234240",
+        "IiliUrl":  "https://iili.io/nIKGGiF.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-13) — Cosmic Spider-Man",
+        "Icon":  "🌌",
+        "Quote":  "The Enigma Force protects this sanctuary. As long as I stay here, we are safe.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/03/Peter_Parker_%28Earth-13%29_from_Amazing_Spider-Man_Vol_3_11.jpg/revision/latest?cb=20141219232810",
+        "IiliUrl":  "https://iili.io/nIKgo2R.webp"
+    },
+    {
+        "Name":  "Ben Reilly (Earth-616) — Scarlet Spider",
+        "Icon":  "🔴",
+        "Quote":  "I am Ben Reilly. I have Peter\u0027s memories, but my own soul.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/a/a7/Amazing_Spider-Man_Vol_6_14_KRS_Comics_Exclusive_Virgin_Variant.jpg/revision/latest?cb=20221123184406",
+        "IiliUrl":  "https://iili.io/nIKru8Q.webp"
+    },
+    {
+        "Name":  "Kaine Parker (Earth-616) — Scarlet Spider II",
+        "Icon":  "🗡️",
+        "Quote":  "All of the power, none of the responsibility. Welcome to Houston.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/b/bc/Scarlet_Spider_Vol_2_1_Bagley_Variant_Textless.jpg/revision/latest?cb=20111207185824",
+        "IiliUrl":  "https://iili.io/nIKrgHl.webp"
+    },
+    {
+        "Name":  "Billy Braddock (Earth-833) — Spider-UK",
+        "Icon":  "🇬🇧",
+        "Quote":  "Captain Britain Corps and Spider-Army, assemble!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/c/c0/William_Braddock_%28Earth-833%29_from_Amazing_Spider-Man_Vol_3_7_002.jpg/revision/latest?cb=20141012071303",
+        "IiliUrl":  "https://iili.io/nIK4Gse.webp"
+    },
+    {
+        "Name":  "Jessica Drew (Earth-616) — Spider-Woman",
+        "Icon":  "🛡️",
+        "Quote":  "Venom blasts fully charged. Don\u0027t make me use them.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/9/9d/Spider-Woman_Vol_7_11_Textless.jpg/revision/latest?cb=20210116123553",
+        "IiliUrl":  "https://iili.io/nIK6dp2.webp"
+    },
+    {
+        "Name":  "Anya Corazon (Earth-616) — Araña",
+        "Icon":  "🏹",
+        "Quote":  "The Sisterhood of the Wasp won\u0027t tear our Web apart.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/e/e2/A%C3%B1a_Coraz%C3%B3n_%28Earth-616%29_from_Edge_of_Spider-Verse_Vol_2_1_001.jpg/revision/latest?cb=20220804155915",
+        "IiliUrl":  "https://iili.io/nIKP8la.webp"
+    },
+    {
+        "Name":  "Takuya Yamashiro (Earth-51778) — Japanese Spider-Man",
+        "Icon":  "⚔️",
+        "Quote":  "The emissary from hell! Leopardon, change!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/7/72/Takuya_Yamashiro_%28Earth-51778%29_from_Marvel%27s_616_Promotional.jpg/revision/latest?cb=20251113042354",
+        "IiliUrl":  "https://iili.io/nIKiobV.webp"
+    },
+    {
+        "Name":  "May Reilly (Earth-803) — Lady Spider",
+        "Icon":  "⚙️",
+        "Quote":  "A proper Victorian lady knows how to handle a four-legged harness.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/0b/Maybelle_Reilly_%28Earth-803%29_from_Spider-Verse_Vol_1_1_001.jpg/revision/latest?cb=20141112210743",
+        "IiliUrl":  "https://iili.io/nIKivXS.webp"
+    },
+    {
+        "Name":  "Peter Parquagh (Earth-311) — Spider-Man 1602",
+        "Icon":  "📜",
+        "Quote":  "By royal decree of Master Fury, the Web shall endure!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/d/dc/Spider-Man_1602_Vol_1_1_Textless.jpg/revision/latest?cb=20091005235959",
+        "IiliUrl":  "https://iili.io/nIKiprg.webp"
+    },
+    {
+        "Name":  "Max Borne (Earth-9500) — Spider-Man 2211",
+        "Icon":  "⏳",
+        "Quote":  "Chronal anomaly detected. Resetting the timeline now.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/6/6e/Max_Borne_%28Earth-9500%29_from_Friendly_Neighborhood_Spider-Man_Vol_1_9_0001.jpg/revision/latest?cb=20191203043715",
+        "IiliUrl":  "https://iili.io/nIKsl3u.webp"
+    },
+    {
+        "Name":  "Bailey Briggs (Earth-616) — Spider-Boy",
+        "Icon":  "🧢",
+        "Quote":  "Nobody remembers me... but I was there by Peter\u0027s side the whole time!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/7/71/Edge_of_Spider-Verse_Vol_3_3_Golden_Apple_Comics_Exclusive_Virgin_Variant.jpg/revision/latest?cb=20230621175721",
+        "IiliUrl":  "https://iili.io/nIKLxP1.webp"
+    },
+    {
+        "Name":  "Mary Jane Watson (Earth-18119) — Spinneret",
+        "Icon":  "❤️",
+        "Quote":  "Face it, Tiger... this family sticks together!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/d/d5/Amazing_Spider-Man_Renew_Your_Vows_Vol_2_2_Textless.jpg/revision/latest?cb=20160921031522",
+        "IiliUrl":  "https://iili.io/nIKLMSs.webp"
+    },
+    {
+        "Name":  "Annie May Parker (Earth-18119) — Spiderling",
+        "Icon":  "⭐",
+        "Quote":  "My Spider-Sense doesn\u0027t just warn me about danger—it sees the future!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/9/9c/Anna-May_Parker_%28Earth-18119%29_from_Spider-Verse_Vol_3_6_001.jpg/revision/latest?cb=20200428041449",
+        "IiliUrl":  "https://iili.io/nIKLhN4.webp"
+    },
+    {
+        "Name":  "Spiders-Man (Earth-11580)",
+        "Icon":  "🕷️",
+        "Quote":  "We are thousands of spiders who devoured Peter Parker and took his dreams.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/4/4d/Spiders-Man_%28Earth-11580%29_from_Superior_Spider-Man_Vol_2_9_001.png/revision/latest?cb=20190717193358",
+        "IiliUrl":  "https://iili.io/nIKLgHb.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-312500) — Last Stand Spider-Man",
+        "Icon":  "🧥",
+        "Quote":  "I\u0027ve made my mistakes. But I won\u0027t let anyone hurt this city again.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/f/fe/Peter_Parker_%28Earth-312500%29_from_Amazing_Spider-Man_Vol_2_58_001.jpg/revision/latest?cb=20110418015819",
+        "IiliUrl":  "https://iili.io/nIKLyOv.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-8351) — Assassin Spider-Man",
+        "Icon":  "🎯",
+        "Quote":  "A silenced web-shooter leaves no witnesses.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/8/82/Peter_Parker_%28Earth-8351%29_from_Superior_Spider-Man_Vol_1_33_002.png/revision/latest?cb=20140927195812",
+        "IiliUrl":  "https://iili.io/nIKQ2sI.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-751263) — Spider-Man Unlimited",
+        "Icon":  "🚀",
+        "Quote":  "Counter-Earth needs a protector with sonic webs and stealth cloaking.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/9/94/Peter_Parker_%28Earth-751263%29_from_Spider-Man_Unlimited.jpg/revision/latest?cb=20250701014710",
+        "IiliUrl":  "https://iili.io/nIKQnef.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-2301) — Mangaverse Spider-Man",
+        "Icon":  "🥷",
+        "Quote":  "The Spider-Clan martial arts technique has been passed down for generations.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/2/21/Spider-Man_Legend_of_the_Spider-Clan_Vol_1_1_Textless.jpg/revision/latest?cb=20191223084551",
+        "IiliUrl":  "https://iili.io/nIKQTsS.webp"
+    },
+    {
+        "Name":  "Peter Parker (Earth-11638) — Ghost Spider",
+        "Icon":  "💀",
+        "Quote":  "Brought back from the underworld with hellfire burning in my veins.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/0f/Non-Stop_Spider-Man_Vol_1_1_Limited_Edition_Comix_Exclusive_Virgin_Variant.jpg/revision/latest?cb=20210403210947",
+        "IiliUrl":  "https://iili.io/nIKQUBI.webp"
+    },
+    {
+        "Name":  "Cooper Coen (Earth-71490) — Web-Weaver",
+        "Icon":  "🧵",
+        "Quote":  "Fabulous, deadly, and always dressed for the runway.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/9/9a/Edge_of_Spider-Verse_Vol_2_5_Anka_Variant_Textless.jpg/revision/latest?cb=20221008073944",
+        "IiliUrl":  "https://iili.io/nIKZo3F.webp"
+    },
+    {
+        "Name":  "Aaron Aikman (Earth-31411) — Spider-Armor",
+        "Icon":  "🔬",
+        "Quote":  "Neuro-receptors online. Cybernetic armor systems operational.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/c/c0/Edge_of_Spider-Verse_Vol_1_3_Textless.jpg/revision/latest?cb=20140606222622",
+        "IiliUrl":  "https://iili.io/nIKZMuf.webp"
+    },
+    {
+        "Name":  "Arácnido Jr. (Earth-15349)",
+        "Icon":  "🥊",
+        "Quote":  "In honor of my father, I fight in the ring and in the streets!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/c/cc/Ar%C3%A1cnido_Jr._%28Earth-15349%29_from_Spider-Man_Unlimited_%28video_game%29_003.jpg/revision/latest?cb=20240811201356",
+        "IiliUrl":  "https://iili.io/nIKZbwv.webp"
+    },
+    {
+        "Name":  "Cassandra Webb (Earth-616) — Madame Web",
+        "Icon":  "🔮",
+        "Quote":  "The Web of Life and Destiny connects every strand across eternity.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/9/9e/Cassandra_Webb_%28Earth-616%29_from_Prowler_Vol_2_1_001.jpg/revision/latest?cb=20220428150725",
+        "IiliUrl":  "https://iili.io/nIKtYDx.webp"
+    },
+    {
+        "Name":  "Julia Carpenter (Earth-616) — Arachne / Madame Web II",
+        "Icon":  "🕸️",
+        "Quote":  "Psionic webbing manifests through my willpower alone.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/7/74/Julia_Carpenter_%28Earth-616%29_from_Prowler_Vol_2_2_001.jpg/revision/latest?cb=20191006044458",
+        "IiliUrl":  "https://iili.io/nIKtix4.webp"
+    },
+    {
+        "Name":  "Mattie Franklin (Earth-616) — Spider-Woman III",
+        "Icon":  "✨",
+        "Quote":  "Blessed by the Gathering of Five with flight and four spider legs!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/1/19/Martha_Franklin_%28Earth-616%29_from_Silk_Vol_2_14_001.jpg/revision/latest?cb=20260611235256",
+        "IiliUrl":  "https://iili.io/nIKDXr7.webp"
+    },
+    {
+        "Name":  "Eugene Thompson (Earth-616) — Agent Venom",
+        "Icon":  "🎖️",
+        "Quote":  "The symbiote is a weapon. As long as I\u0027m in control, it fights for good.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/0c/Extreme_Carnage_Alpha_Vol_1_1_616_Comics_and_Jolzar_Collectibles_Exclusive_Variant_Textless.jpg/revision/latest?cb=20210901232245",
+        "IiliUrl":  "https://iili.io/nIKDQTJ.webp"
+    },
+    {
+        "Name":  "Ezekiel Sims (Earth-616) — Spider-Totem Guide",
+        "Icon":  "🏛️",
+        "Quote":  "You think you got your powers from science? The Spider chosen was spiritual.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/3/39/Ezekiel_Sims_%28Earth-616%29_from_Amazing_Spider-Man_Vol_2_33_cover.jpg/revision/latest?cb=20191219062701",
+        "IiliUrl":  "https://iili.io/nIKb7CQ.webp"
+    },
+    {
+        "Name":  "Old Man Spider / Ezekiel Sims (Earth-4)",
+        "Icon":  "👴",
+        "Quote":  "I took the costume when Peter fell. We must protect the totems!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/e/ea/Ezekiel_Sims_%28Earth-4%29_from_Edge_of_Spider-Verse_Vol_1_5_001.png/revision/latest?cb=20141016045409",
+        "IiliUrl":  "https://iili.io/nIKbhnR.webp"
+    },
+    {
+        "Name":  "Spider-Knight (Earth-71004)",
+        "Icon":  "🛡️",
+        "Quote":  "For honor and the realm of York! My sword swings as true as my web!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/e/ed/Peter_Parker_%28Earth-71004%29_from_Spider-Man_Fairy_Tales_Vol_1_4_002.jpg/revision/latest?cb=20110306223721",
+        "IiliUrl":  "https://iili.io/nIKbsFS.webp"
+    },
+    {
+        "Name":  "Rek-Rap (Earth-616) — Limbo Fan Demon",
+        "Icon":  "😈",
+        "Quote":  "Spider-Man is my best friend! Rek-Rap protects with parkour!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/0/06/Rek-Rap_%28Earth-616%29_from_Amazing_Spider-Man_Vol_6_17_002.jpg/revision/latest?cb=20230705232501",
+        "IiliUrl":  "https://iili.io/nIKmoVR.webp"
+    },
+    {
+        "Name":  "Spinstress / Princess Petra (Earth-423)",
+        "Icon":  "👑",
+        "Quote":  "*Singing melodic spells while dancing along silk threads in the fairy forest*",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/8/8c/Edge_of_Spider-Verse_Vol_2_4_Chen_Variant_Textless.jpg/revision/latest?cb=20220924204211",
+        "IiliUrl":  "https://iili.io/nIKmXRe.webp"
+    },
+    {
+        "Name":  "Night-Spider / Felicia Hardy (Earth-194)",
+        "Icon":  "🐈‍⬛",
+        "Quote":  "Nine lives, eight legs, and bad luck for anyone who crosses my path.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/6/67/Edge_of_Spider-Verse_Vol_2_3_Anka_Variant_Textless.jpg/revision/latest?cb=20220914143727",
+        "IiliUrl":  "https://iili.io/nIKmOWx.webp"
+    },
+    {
+        "Name":  "Hunter-Spider / Sergei Kravinoff (Earth-31958)",
+        "Icon":  "🦁",
+        "Quote":  "The ultimate hunter became the ultimate spider.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/5/5b/Sergei_Kravinoff_%28Earth-31%29_from_Edge_of_Spider-Verse_Vol_2_5_001.jpg/revision/latest?cb=20221008100800",
+        "IiliUrl":  "https://iili.io/nIKpfgS.webp"
+    },
+    {
+        "Name":  "Spider-Monster / Patton Parnel (Earth-51412)",
+        "Icon":  "🕷️",
+        "Quote":  "The hunger inside... it never stops.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/f/f7/Patton_Parnel_%28Earth-51412%29_from_Edge_of_Spider-Verse_Vol_1_4_001.png/revision/latest?cb=20141001235726",
+        "IiliUrl":  null
+    },
+    {
+        "Name":  "Spider-Zero (Earth-19166)",
+        "Icon":  "🌐",
+        "Quote":  "I anchor the Great Web when reality itself fractures.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/5/5b/Spider-Zero_%28Earth-19166%29_from_Spider-Verse_Vol_3_6_001.jpg/revision/latest?cb=20200606093845",
+        "IiliUrl":  "https://iili.io/nIfHomX.webp"
+    },
+    {
+        "Name":  "Captain Spider / Flash Thompson (Earth-78127)",
+        "Icon":  "🏈",
+        "Quote":  "What if Flash Thompson got bit by the radioactive spider instead?",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/3/38/Eugene_Thompson_%28Earth-78127%29_from_Amazing_Spider-Man_Vol_1_9_001.jpg/revision/latest?cb=20141212174312",
+        "IiliUrl":  "https://iili.io/nIfHEhu.webp"
+    },
+    {
+        "Name":  "Six-Armed Spider-Man (Earth-92100)",
+        "Icon":  "💪",
+        "Quote":  "The mutation went further, but six arms make swinging twice as easy!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/1/15/Peter_Parker_%28Earth-92100%29_from_Spider-Man_2099_Vol_2_6_001.png/revision/latest?cb=20260704220905",
+        "IiliUrl":  "https://iili.io/nIfJ89S.webp"
+    },
+    {
+        "Name":  "Spider-Wolf (Earth-13989)",
+        "Icon":  "🐺",
+        "Quote":  "Under the full moon, the spider howls!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/5/5b/Peter_Parker_%28Earth-13989%29_from_Amazing_Spider-Man_Vol_3_11.jpg/revision/latest?cb=20141210205719",
+        "IiliUrl":  "https://iili.io/nIfdYb9.webp"
+    },
+    {
+        "Name":  "Spider-Armor MK I (Peter Parker)",
+        "Icon":  "🛡️",
+        "Quote":  "High-impact steel-alloy armor to deflect heavy gunfire.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/c/c3/Immortal_Hulk_Vol_1_19_Spider-Man_Armor_Suit_Variant_Textless.jpg/revision/latest?cb=20190319181929",
+        "IiliUrl":  "https://iili.io/nIfdr5N.webp"
+    },
+    {
+        "Name":  "Spider-Armor MK II (Bulletproof)",
+        "Icon":  "🟡",
+        "Quote":  "Magnetic webbing and bulletproof plating when Spider-Sense was lost.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/d/da/Peter_Parker_%28Earth-616%29_from_Amazing_Spider-Man_Vol_2_656_002.jpg/revision/latest?cb=20251019210236",
+        "IiliUrl":  "https://iili.io/nIf2dXe.webp"
+    },
+    {
+        "Name":  "Spider-Armor MK III (Ends of the Earth)",
+        "Icon":  "🔴",
+        "Quote":  "Heavy anti-Sinister Six tactical assault suit.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/c/c8/Spider-Man%27s_Anti-Sinister_Six_Suit_from_Amazing_Spider-Man_Vol_2_682.jpg/revision/latest?cb=20120323220623",
+        "IiliUrl":  "https://iili.io/nIf2X4f.webp"
+    },
+    {
+        "Name":  "Spider-Armor MK IV (All-New ANAD)",
+        "Icon":  "✨",
+        "Quote":  "Nanotech liquid metal suit capable of taking hits from Hyperion.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/5/57/Amazing_Spider-Man_Vol_4_1_Campbell_Variant_Textless.jpg/revision/latest?cb=20151213085245",
+        "IiliUrl":  "https://iili.io/nIf3dyN.webp"
+    },
+    {
+        "Name":  "Stealth Suit / Big Time (Peter Parker)",
+        "Icon":  "🟢",
+        "Quote":  "Sonic-dampening mesh that bends light and sound around the suit.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/1/18/Kaine_Parker_%28Earth-616%29_from_Scarlet_Spider_Vol_2_2_001.jpg/revision/latest?cb=20260902034801",
+        "IiliUrl":  "https://iili.io/nIfF9Ve.webp"
+    },
+    {
+        "Name":  "Bullet Points Spider-Man / Bruce Banner",
+        "Icon":  "☢️",
+        "Quote":  "Dr. Banner was bitten by the spider, carrying gamma and venom.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/3/3e/Bruce_Banner_%28Earth-70105%29_from_Bullet_Points_Vol_1_4_001.jpg/revision/latest?cb=20090204043619",
+        "IiliUrl":  "https://iili.io/nIfFuUv.webp"
+    },
+    {
+        "Name":  "Spider-Carnage / Ben Reilly",
+        "Icon":  "🩸",
+        "Quote":  "The red symbiote tried to twist Ben Reilly into a monster.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/f/fe/Carnage_Vol_2_2_Crain_Variant_Textless.jpg/revision/latest?cb=20151104193223",
+        "IiliUrl":  "https://iili.io/nIfFEfs.webp"
+    },
+    {
+        "Name":  "Spider-Ma\u0027am / May Parker (Earth-3123)",
+        "Icon":  "👵",
+        "Quote":  "Just finishing knitting a fresh sweater before I stop this bank robbery, dears!",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/9/91/Spider-Verse_Vol_3_2_Textless.png/revision/latest?cb=20191002180626",
+        "IiliUrl":  "https://iili.io/nIfKnkl.webp"
+    },
+    {
+        "Name":  "Prince of Arachne / Peter Parker (Earth-71004)",
+        "Icon":  "🏰",
+        "Quote":  "Heir to the arachnid throne in a world of high fantasy.",
+        "FandomSrc":  "https://static.wikia.nocookie.net/marveldatabase/images/e/ed/Peter_Parker_%28Earth-71004%29_from_Spider-Man_Fairy_Tales_Vol_1_4_002.jpg/revision/latest?cb=20110306223721",
+        "IiliUrl":  "https://iili.io/nIKbsFS.webp"
+    }
+]

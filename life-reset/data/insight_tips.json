@@ -1,0 +1,156 @@
+{
+  "_doc": "Curated Insight tip catalog — the offline seed + canon for the `insight_tips` T3 table (insights v6). Each tip is a TEMPLATE (payload.bodyTemplate with {placeholder} tokens) + a TRIGGER (selectors). The client computes the user's REAL pattern over their completion history (program_day_items), evaluates `selectors`, fills the template with the real numbers, and surfaces the tip ONLY when its real threshold is met — so no fabricated stat ever reaches a user. Tones come from InsightsPaletteV6. Generate the Supabase seed from this file (id/payload/selectors/category/order_index/version/is_published map 1:1 to columns). `id` is STABLE.",
+  "version": 1,
+  "tips": [
+    {
+      "id": "best_weekday",
+      "category": "pattern",
+      "order_index": 10,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "best_weekday", "minTasks": 6, "threshold": 0.2 },
+      "payload": {
+        "headline": "{weekday} is your engine.",
+        "bodyTemplate": "You're {pct}% more likely to clear every task on a {weekday} than any other day. Lean into it.",
+        "glyph": "▲",
+        "confidence": "medium",
+        "toneHex": "#5B8F3A"
+      }
+    },
+    {
+      "id": "streak_risk",
+      "category": "warning",
+      "order_index": 20,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "streak_risk", "minTasks": 9, "threshold": 9 },
+      "payload": {
+        "headline": "{streak}-day streak — mind day {riskDay}.",
+        "bodyTemplate": "Across people at this point, day {riskDay} is the most common drop-off. The brain reads \"I've made it\" as permission to coast. Don't.",
+        "glyph": "🔥",
+        "confidence": "medium",
+        "toneHex": "#FB6900"
+      }
+    },
+    {
+      "id": "consistency_rising",
+      "category": "pattern",
+      "order_index": 30,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "consistency_rising", "minTasks": 10, "threshold": 0.15 },
+      "payload": {
+        "headline": "You're on the rise.",
+        "bodyTemplate": "Your completion rate climbed from {prevPct}% to {recentPct}% over the last two weeks. Momentum is real.",
+        "glyph": "↗",
+        "confidence": "high",
+        "toneHex": "#3F7B83"
+      }
+    },
+    {
+      "id": "weekend_dip",
+      "category": "pattern",
+      "order_index": 40,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "weekend_dip", "minTasks": 12, "threshold": 0.2 },
+      "payload": {
+        "headline": "Weekends slip.",
+        "bodyTemplate": "You finish {weekdayPct}% on weekdays but only {weekendPct}% on weekends. A lighter weekend plan beats a broken one.",
+        "glyph": "◐",
+        "confidence": "medium",
+        "toneHex": "#D9A441"
+      }
+    },
+    {
+      "id": "comeback",
+      "category": "milestone",
+      "order_index": 50,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "comeback", "minTasks": 5, "threshold": 2 },
+      "payload": {
+        "headline": "Welcome back.",
+        "bodyTemplate": "You missed {gapDays} days and still returned. The comeback is the muscle that actually matters.",
+        "glyph": "↺",
+        "confidence": "high",
+        "toneHex": "#5B8F3A"
+      }
+    },
+    {
+      "id": "category_focus",
+      "category": "pattern",
+      "order_index": 60,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "category_focus", "minTasks": 10, "threshold": 0.4 },
+      "payload": {
+        "headline": "You lean {pillar}.",
+        "bodyTemplate": "{pct}% of your wins are {pillar} tasks. That's a real strength — a little balance elsewhere compounds it.",
+        "glyph": "◈",
+        "confidence": "medium",
+        "toneHex": "#595F9C"
+      }
+    },
+    {
+      "id": "perfect_week",
+      "category": "milestone",
+      "order_index": 70,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "perfect_week", "minTasks": 7, "threshold": 1 },
+      "payload": {
+        "headline": "Perfect week.",
+        "bodyTemplate": "Every task, every day, seven days straight. This is what your baseline can become.",
+        "glyph": "★",
+        "confidence": "high",
+        "toneHex": "#D9A441"
+      }
+    },
+    {
+      "id": "morning_power",
+      "category": "pattern",
+      "order_index": 80,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "morning_power", "minTasks": 10, "threshold": 0.7, "requires": "wallclock" },
+      "payload": {
+        "headline": "Mornings are yours.",
+        "bodyTemplate": "You clear {morningPct}% of your morning tasks. Front-loading the hard ones plays to your strength.",
+        "glyph": "◑",
+        "confidence": "high",
+        "toneHex": "#D9A441"
+      }
+    },
+    {
+      "id": "evening_fade",
+      "category": "pattern",
+      "order_index": 90,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "evening_fade", "minTasks": 10, "threshold": 0.25, "requires": "wallclock" },
+      "payload": {
+        "headline": "Your evenings fade.",
+        "bodyTemplate": "You finish {morningPct}% of morning tasks but only {eveningPct}% of evening ones. By 9pm, willpower runs thin — schedule the important reps earlier.",
+        "glyph": "◐",
+        "confidence": "high",
+        "toneHex": "#A75847"
+      }
+    },
+    {
+      "id": "first_steps",
+      "category": "milestone",
+      "order_index": 100,
+      "version": 1,
+      "is_published": true,
+      "selectors": { "pattern": "task_milestone", "minTasks": 3, "threshold": 3 },
+      "payload": {
+        "headline": "The file is open.",
+        "bodyTemplate": "{taskCount} tasks logged. We're starting to see what you reach for first.",
+        "glyph": "◉",
+        "confidence": "low",
+        "toneHex": "#5B8F3A"
+      }
+    }
+  ]
+}

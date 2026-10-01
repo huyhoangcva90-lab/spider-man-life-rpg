@@ -1,0 +1,386 @@
+﻿[
+    {
+        "Id":  "3d6d7876-36c6-8100-8d6c-e5f6e206f5dd",
+        "Title":  "Anti-Magnetic Inverter",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8131-bc67-fbe7f0a61d78",
+        "Title":  "Anti-Ock Arm-Fusing Compound",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8154-8233-da1f9eb3d228",
+        "Title":  "Anti-Ock Suit",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8162-bc6e-f8d93fd738da",
+        "Title":  "Acid Webbing",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81ad-bad2-dc5a58ede4dc",
+        "Title":  "Flame Webbing",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81bc-8c9d-eff8e299276d",
+        "Title":  "Magnetic Webbing",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81bf-826e-d26c6a3cb035",
+        "Title":  "Non-Conductive Webbing",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81c1-9b52-c0c83a56919f",
+        "Title":  "Electro-Proof Suit",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81de-a7e7-c1d3153598cd",
+        "Title":  "Anti-Electro Netting",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8114-b6cf-cc547a43619b",
+        "Title":  "Rapid-Fire Web",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8132-8d67-e705c08df6e1",
+        "Title":  "Stark Spider-Drone",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-814a-8265-ec8f6b5b653a",
+        "Title":  "Shield Web",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8157-aab6-e2e76a833883",
+        "Title":  "Hook Web",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8158-8a4f-de3c67f8860d",
+        "Title":  "TASM Mechanical Web-Shooters",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8158-a537-e3d47472717d",
+        "Title":  "Splitter Web",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-817a-9123-e3fccb9b1603",
+        "Title":  "Spider-Signal",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-817f-9faa-c6864a335a7b",
+        "Title":  "Freeze Capsules",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8180-b404-edc79c4275ba",
+        "Title":  "Web Wings",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8184-9c88-c9390bb0f882",
+        "Title":  "Timer Web",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-8196-afb5-f6e45e9f016f",
+        "Title":  "Automatic Camera",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81a1-b0dc-dd8404447f4b",
+        "Title":  "Web Line",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81b0-8397-ddccbb448b48",
+        "Title":  "Stark Web Wings",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81b1-8bea-f1206a7053a9",
+        "Title":  "Impact Webbing",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81b3-be25-df70ddbdd228",
+        "Title":  "Web Fluid Cartridges",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81bc-bb90-f9b529bb0fc4",
+        "Title":  "Net Web",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81d8-80ea-e1215f8e6d75",
+        "Title":  "Taser Web",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81dd-a5e1-c43411093591",
+        "Title":  "Utility Belt",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81e1-85c4-eb6ec4b5cba7",
+        "Title":  "Dimensional Watch",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81ef-af65-e73b720f0b70",
+        "Title":  "Stark Web-Shooters",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3d6d7876-36c6-81f5-81a6-f30883c35f2b",
+        "Title":  "Web Grenade",
+        "HasImage":  false,
+        "ImageUrl":  "",
+        "HasIcon":  false,
+        "ImageStatus":  "Needs Fix"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8107-928a-d6d198b2946a",
+        "Title":  "Spider-Tracer",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q0tcu.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8109-9e6d-d3c39ce46c50",
+        "Title":  "Miles Web Shooters",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q0g9f.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-811e-9544-d1f4f16cb6fe",
+        "Title":  "Upshot",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q1EVS.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-811f-9892-fd073fcc6fa4",
+        "Title":  "Holo-Drone",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q0ZFe.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8122-b8fe-c7dace647691",
+        "Title":  "Remote Mine",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q19tV.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8151-a862-f523030dc8f4",
+        "Title":  "Electric Web",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q1dMP.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8158-8fda-dbb01edfa1c9",
+        "Title":  "Spider-Drone",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q0inS.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8173-829e-fe56bafb0331",
+        "Title":  "Sonic Burst",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q1Kcg.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8173-9aea-ecd0e0e9ebfa",
+        "Title":  "Web Grabber",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q1nNR.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8179-ba99-d87051e55183",
+        "Title":  "Gravity Well",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q1otp.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8182-a0d9-e112c6622e24",
+        "Title":  "Trip Mine",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q0D8b.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-8185-b4b7-d7a6cda2b136",
+        "Title":  "Ricochet Web",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q1TPt.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-81ae-b236-cc6575d41bb2",
+        "Title":  "Web Bomb",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q04wl.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-81b9-ba4e-f4a84ef90b0e",
+        "Title":  "Concussive Blast",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q1BHJ.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-81ca-84f4-ef845d8caf6b",
+        "Title":  "Web Parachute",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q15Ss.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-81ca-a354-ebf92bf973f7",
+        "Title":  "Impact Web",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q0ru4.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-81df-a12e-d4996851b404",
+        "Title":  "Suspension Matrix",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q11x2.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    },
+    {
+        "Id":  "3cbd7876-36c6-81e1-8f00-cb4b790fd2f6",
+        "Title":  "Web Shooters",
+        "HasImage":  true,
+        "ImageUrl":  "https://iili.io/n3Q08as.png",
+        "HasIcon":  true,
+        "ImageStatus":  "None"
+    }
+]

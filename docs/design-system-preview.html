@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPIDEY LIFE // Design System & Brand Guide Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-midnight: #071426;
+      --bg-console: #102C45;
+      --cyan-bright: #00F0FF;
+      --spider-red: #F0645C;
+      --web-amber: #F2C06B;
+      --mission-green: #83B96B;
+      --notion-indigo: #7C4DFF;
+      --ink-black: #050B12;
+      --paper-white: #F1F5F9;
+      --font-pixel: 'Press Start 2P', monospace;
+      --font-ui: 'Silkscreen', monospace;
+      --font-body: 'Be Vietnam Pro', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-midnight);
+      color: var(--paper-white);
+      font-family: var(--font-body);
+      padding: 30px 20px;
+      line-height: 1.6;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    header {
+      border-bottom: 4px solid var(--ink-black);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .badge {
+      display: inline-block;
+      font-family: var(--font-ui);
+      background: var(--spider-red);
+      color: var(--ink-black);
+      font-weight: bold;
+      font-size: 11px;
+      padding: 4px 8px;
+      border: 2px solid var(--ink-black);
+      box-shadow: 2px 2px 0 var(--ink-black);
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-family: var(--font-pixel);
+      font-size: 20px;
+      color: var(--cyan-bright);
+      text-shadow: 3px 3px 0 var(--ink-black);
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-family: var(--font-ui);
+      color: var(--web-amber);
+      font-size: 13px;
+    }
+
+    .section {
+      background: var(--bg-console);
+      border: 4px solid var(--ink-black);
+      box-shadow: 6px 6px 0 var(--ink-black);
+      padding: 24px;
+      margin-bottom: 30px;
+    }
+    .section-title {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      color: var(--web-amber);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Color Swatches Grid */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+    }
+    .color-card {
+      border: 3px solid var(--ink-black);
+      box-shadow: 3px 3px 0 var(--ink-black);
+      background: #091524;
+      overflow: hidden;
+    }
+    .color-swatch { height: 60px; }
+    .color-info {
+      padding: 8px;
+      font-size: 11px;
+    }
+    .color-name { font-weight: bold; font-family: var(--font-ui); color: #fff; }
+    .color-hex { font-family: monospace; color: #8fa3b5; font-size: 10px; }
+
+    /* Typography Samples */
+    .type-sample { margin-bottom: 16px; padding: 12px; background: rgba(0,0,0,0.3); border-left: 4px solid var(--cyan-bright); }
+    .type-name { font-family: var(--font-ui); color: var(--cyan-bright); font-size: 11px; margin-bottom: 6px; }
+
+    /* Interactive Buttons */
+    .button-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
+    .btn-pixel {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: bold;
+      padding: 12px 18px;
+      border: 3px solid var(--ink-black);
+      box-shadow: 0 4px 0 var(--ink-black);
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: transform 0.05s, box-shadow 0.05s;
+    }
+    .btn-pixel:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 var(--ink-black);
+    }
+    .btn-red { background: var(--spider-red); color: var(--ink-black); }
+    .btn-cyan { background: var(--cyan-bright); color: var(--ink-black); }
+    .btn-amber { background: var(--web-amber); color: var(--ink-black); }
+    .btn-indigo { background: var(--notion-indigo); color: #fff; }
+
+    /* Meters */
+    .meter-group { margin-bottom: 14px; }
+    .meter-label { font-family: var(--font-ui); font-size: 11px; margin-bottom: 4px; display: flex; justify-content: space-between; }
+    .meter-bar { height: 16px; background: #000; border: 2px solid var(--ink-black); padding: 2px; }
+    .meter-fill { height: 100%; }
+
+    /* Comic Text Display */
+    #comic-box {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-pixel);
+      font-size: 24px;
+      color: var(--spider-red);
+      text-shadow: 3px 3px 0 #000;
+      transform: rotate(-4deg);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">SPIDEY LIFE // BRAND GUIDELINES</div>
+      <h1>DESIGN SYSTEM PREVIEW</h1>
+      <p class="subtitle">Phong cách: Retro Cyber-Pixel Comic Console (Máy chơi game cầm tay & Comic Book)</p>
+    </header>
+    <!-- Official Brand Board Section -->
+    <div class="section" style="text-align: center;">
+      <div class="section-title">🖼️ BẢNG THƯƠNG HIỆU GỐC (OFFICIAL BRAND BOARD)</div>
+      <img src="../assets/brand/spidey-life-brand-board-v1.png" alt="SPIDEY LIFE Official Brand Board" style="max-width: 100%; height: auto; border: 4px solid var(--ink-black); box-shadow: 4px 4px 0 var(--ink-black); image-rendering: pixelated; margin-top: 8px;">
+    </div>
+
+    <!-- Palette Section -->
+    <div class="section">
+      <div class="section-title">🎨 1. Bảng Màu Thương Hiệu (Design Tokens)</div>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background: var(--bg-midnight);"></div>
+          <div class="color-info"><div class="color-name">Midnight Navy</div><div class="color-hex">#071426</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background: var(--bg-console);"></div>
+          <div class="color-info"><div class="color-name">Console Navy</div><div class="color-hex">#102C45</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background: var(--cyan-bright);"></div>
+          <div class="color-info"><div class="color-name">Tracker Cyan</div><div class="color-hex">#00F0FF</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background: var(--spider-red);"></div>
+          <div class="color-info"><div class="color-name">Spider Red</div><div class="color-hex">#F0645C</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background: var(--web-amber);"></div>
+          <div class="color-info"><div class="color-name">Web Amber</div><div class="color-hex">#F2C06B</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background: var(--mission-green);"></div>
+          <div class="color-info"><div class="color-name">Mission Green</div><div class="color-hex">#83B96B</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background: var(--notion-indigo);"></div>
+          <div class="color-info"><div class="color-name">Notion Indigo</div><div class="color-hex">#7C4DFF</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typography Section -->
+    <div class="section">
+      <div class="section-title">🔤 2. Hệ Thống Font Chữ (Typography Hierarchy)</div>
+      <div class="type-sample">
+        <div class="type-name">Press Start 2P — Logo / K.O / Boss VS / Finisher</div>
+        <div style="font-family: var(--font-pixel); font-size: 14px; color: var(--web-amber);">SPIDER-MAN VS GREEN GOBLIN [CHAPTER 01]</div>
+      </div>
+      <div class="type-sample">
+        <div class="type-name">Silkscreen — HUD Controls / Navigation / Meters</div>
+        <div style="font-family: var(--font-ui); font-size: 13px; color: var(--cyan-bright);">LEVEL 05 // 450 XP // 3 STREAK // IMPACT WEB READY</div>
+      </div>
+      <div class="type-sample">
+        <div class="type-name">Be Vietnam Pro — Tiêu đề & Mô tả nhiệm vụ tiếng Việt</div>
+        <div style="font-family: var(--font-body); font-size: 14px; color: #fff;">
+          Hoàn thành thói quen <b>"Deep work"</b> và <b>"Straight & Gym"</b> hôm nay để gây 50 sát thương lên Boss.
+        </div>
+      </div>
+    </div>
+
+    <!-- Components Section -->
+    <div class="section">
+      <div class="section-title">🕹️ 3. Nút Bấm Xúc Giác & Thanh Chỉ Số (Tactile UI)</div>
+      <div class="button-row">
+        <button class="btn-pixel btn-red" onclick="triggerComic('POW!')">💥 ATTACK (POW!)</button>
+        <button class="btn-pixel btn-cyan" onclick="triggerComic('THWIP!')">🕸️ WEB SHOT (THWIP!)</button>
+        <button class="btn-pixel btn-amber" onclick="triggerComic('KRAK!')">⚡ FINISHER (KRAK!)</button>
+        <button class="btn-pixel btn-indigo" onclick="triggerComic('NOTION SYNC!')">🔗 NOTION ZEUS</button>
+      </div>
+
+      <div id="comic-box">BẤM CÁC NÚT TRÊN ĐỂ THỬ HIỆU ỨNG COMIC</div>
+
+      <div style="margin-top: 20px;">
+        <div class="meter-group">
+          <div class="meter-label"><span>VILLAIN HP (GREEN GOBLIN)</span><span style="color:var(--spider-red)">450 / 600</span></div>
+          <div class="meter-bar"><div class="meter-fill" style="width: 75%; background: var(--spider-red);"></div></div>
+        </div>
+        <div class="meter-group">
+          <div class="meter-label"><span>STAGGER METER (FINISHER READY TẠI 100%)</span><span style="color:var(--web-amber)">100% [READY]</span></div>
+          <div class="meter-bar"><div class="meter-fill" style="width: 100%; background: var(--web-amber);"></div></div>
+        </div>
+        <div class="meter-group">
+          <div class="meter-label"><span>WEB ENERGY</span><span style="color:var(--cyan-bright)">80 / 100</span></div>
+          <div class="meter-bar"><div class="meter-fill" style="width: 80%; background: var(--cyan-bright);"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function triggerComic(text) {
+      const box = document.getElementById('comic-box');
+      box.textContent = text;
+      box.style.transform = 'scale(1.35) rotate(' + (Math.random() * 16 - 8) + 'deg)';
+      setTimeout(() => {
+        box.style.transform = 'scale(1) rotate(-4deg)';
+      }, 200);
+    }
+  </script>
+</body>
+</html>

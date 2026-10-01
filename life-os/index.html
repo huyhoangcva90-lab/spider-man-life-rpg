@@ -25,7 +25,8 @@
 
   <main class="os-shell">
     <aside class="system-rail" aria-label="Ứng dụng đời sống">
-      <button class="system-nav active" data-view="today"><span>✓</span><b>Hôm nay</b><small>Notion missions</small></button>
+      <button class="system-nav system-nav--reset66 active" data-view="reset66"><span>66</span><b>Life Reset</b><small>66-day protocol</small></button>
+      <button class="system-nav" data-view="today"><span>✓</span><b>Hôm nay</b><small>Notion missions</small></button>
       <button class="system-nav" data-view="routine"><span>◉</span><b>Nhịp sinh học</b><small>Routine cloud</small></button>
       <button class="system-nav" data-view="dopamine"><span>⚡</span><b>Dopamine</b><small>Menu cloud</small></button>
       <button class="system-nav" data-view="timetable"><span>◷</span><b>Timetable</b><small>Notion city clock</small></button>
@@ -37,7 +38,289 @@
     <section class="system-stage">
       <div class="stage-topline"><span id="view-kicker">TODAY // QUICK CAPTURE</span><span id="today-label"></span></div>
 
-      <section class="os-view active" data-panel="today">
+      <!-- 66-DAY LIFE RESET VIEW -->
+      <section class="os-view active" data-panel="reset66">
+        <div class="hero-copy">
+          <div>
+            <small>LIFE RESET // 66-DAY PROTOCOL</small>
+            <h1>66 Ngày.<br><em>Tái Sinh Bản Sắc.</em></h1>
+          </div>
+          <div class="reset-hero-desc">
+            <p>Dựa trên nghiên cứu thần kinh học của Dr. Phillippa Lally (UCL): cần trung bình 66 ngày để một thói quen đạt trạng thái tự động hóa hoàn toàn (Automaticity). Kỷ luật không phải sự gượng ép — đó là bản sắc siêu anh hùng.</p>
+            <div class="reset-mode-toggle">
+              <span id="hard-mode-indicator" class="hard-mode-badge">NORMAL MODE</span>
+              <button class="sense-button small" id="btn-toggle-hardmode" type="button" title="Bật/Tắt chế độ kỷ luật thép">⚡ HARD MODE</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-banner" id="stage-banner">
+          <div class="stage-banner-header">
+            <span class="stage-pill" id="stage-badge">STAGE I</span>
+            <strong id="stage-title">STAGE 1: PHÁ VỠ // THE BREAKDOWN</strong>
+            <small id="stage-window">NGÀY 1 – 22 // MA SÁT CAO NHẤT</small>
+          </div>
+          <p id="stage-desc">Vượt qua sức ỳ tâm lý, phá vỡ thói quen lười biếng và cắt giảm nguồn dopamine rác.</p>
+          <div class="stage-timeline-track"><i id="stage-progress-fill" style="width: 1.5%;"></i></div>
+        </div>
+
+        <div class="hero-rank-card" id="hero-rank-card">
+          <div class="hero-rank-header">
+            <div class="rank-name-box">
+              <span class="hero-rank-badge" id="hero-rank-badge">LV.1</span>
+              <div>
+                <strong id="hero-rank-name">FRIENDLY NEIGHBORHOOD</strong>
+                <small id="hero-rank-desc">TẬP SỰ // TIẾN HÓA LÊN STREET VIGILANTE</small>
+              </div>
+            </div>
+            <div class="rank-xp-box">
+              <span id="hero-rank-xp-text">0 / 100 XP</span>
+              <small>TIẾN ĐỘ CẤP ĐỘ</small>
+            </div>
+          </div>
+          <div class="hero-rank-bar"><i id="hero-rank-bar-fill" style="width: 0%;"></i></div>
+        </div>
+
+        <div class="metric-strip" id="reset-metrics">
+          <div class="metric"><strong><span id="metric-day">1</span> / 66</strong><span>TIẾN ĐỘ HÀNH TRÌNH</span></div>
+          <div class="metric"><strong><span id="metric-streak">1</span> NGÀY 🔥</strong><span>CHUỖI KỶ LUẬT (STREAK)</span></div>
+          <div class="metric"><strong>+<span id="metric-xp">0</span> XP</strong><span>KINH NGHIỆM ĐẠT ĐƯỢC</span></div>
+        </div>
+
+        <!-- 66-RESET SUB-NAVIGATION TABS -->
+        <nav class="reset-subnav" aria-label="Các phân hệ của Life Reset 66">
+          <button class="reset-tab-btn active" data-r66-tab="quests"><span>✓</span> 6 TRỤ CỘT HÀNG NGÀY</button>
+          <button class="reset-tab-btn" data-r66-tab="roadmap"><span>▦</span> BẢN ĐỒ 66 NGÀY</button>
+          <button class="reset-tab-btn" data-r66-tab="tools"><span>⚡</span> MINI-TOOLS</button>
+          <button class="reset-tab-btn" data-r66-tab="analytics"><span>📊</span> RADAR & THỐNG KÊ</button>
+        </nav>
+
+        <!-- SUB-PANEL 1: DAILY QUESTS -->
+        <div class="reset-subpanel active" data-r66-panel="quests">
+          <div class="quests-status-bar">
+            <div>
+              <span class="section-label">DAILY QUEST BOARD</span>
+              <h3 id="quests-score-headline">TIẾN ĐỘ HÔM NAY // 0 / 6 TRỤ CỘT</h3>
+            </div>
+            <div class="quests-action-strip">
+              <button class="daily-chest-btn" id="btn-daily-chest" type="button" title="Mở Hòm Tiếp Tế Hàng Ngày">
+                🎁 HÒM TIẾP TẾ <small id="chest-status-badge">4/6 ĐỂ MỞ</small>
+              </button>
+              <div class="quests-reward-pill">+150 XP POTENTIAL</div>
+            </div>
+          </div>
+
+          <!-- TIME OF DAY FILTERS -->
+          <div class="quest-time-filters" aria-label="Bộ lọc thời gian">
+            <button class="quest-time-btn active" data-time-filter="all">TẤT CẢ (ALL)</button>
+            <button class="quest-time-btn" data-time-filter="morning">🌅 BUỔI SÁNG</button>
+            <button class="quest-time-btn" data-time-filter="evening">🌙 BUỔI TỐI</button>
+            <button class="quest-time-btn" data-time-filter="notion">📝 NOTION MISSIONS</button>
+          </div>
+
+          <div class="pillars-grid" id="pillars-grid"></div>
+
+          <!-- NOTION SYNCED SECTION -->
+          <div class="notion-synced-quests" id="notion-synced-quests" hidden>
+            <div class="section-label">NHIỆM VỤ ĐỜI THẬT TỪ NOTION (WORKSPACE ZEUS)</div>
+            <div class="notion-quest-list" id="notion-quest-list"></div>
+          </div>
+
+          <div class="custom-habits-section">
+            <div class="section-label">THÓI QUEN BỔ TRỢ // CUSTOM PROTOCOLS</div>
+            <form class="quick-form custom-habit-rich-form" id="custom-habit-form">
+              <input id="custom-habit-input" maxlength="60" placeholder="Thêm thói quen cá nhân (vd: Chống đẩy 50 cái, học tiếng Anh 20p)..." required />
+              <select id="custom-habit-icon">
+                <option value="⚡">⚡ Năng lượng</option>
+                <option value="📚">📚 Học tập</option>
+                <option value="🧘">🧘 Thiền định</option>
+                <option value="💪">💪 Cơ bắp</option>
+                <option value="🎯">🎯 Mục tiêu</option>
+                <option value="🏃">🏃 Cardio</option>
+                <option value="🍎">🍎 Dinh dưỡng</option>
+                <option value="💻">💻 Code/Làm việc</option>
+              </select>
+              <select id="custom-habit-time">
+                <option value="all">Bất kỳ lúc nào</option>
+                <option value="morning">🌅 Buổi sáng</option>
+                <option value="evening">🌙 Buổi tối</option>
+              </select>
+              <select id="custom-habit-attr">
+                <option value="DISCIPLINE">Kỷ luật</option>
+                <option value="POWER">Thể lực</option>
+                <option value="AGILITY">Nhanh nhẹn</option>
+                <option value="INTELLECT">Trí tuệ</option>
+                <option value="WILLPOWER">Ý chí</option>
+                <option value="FOCUS">Tập trung</option>
+              </select>
+              <button type="submit">+ THÊM HABIT</button>
+            </form>
+            <div class="custom-habits-list" id="custom-habits-list"></div>
+          </div>
+        </div>
+
+        <!-- SUB-PANEL 2: 66-DAY ROADMAP -->
+        <div class="reset-subpanel" data-r66-panel="roadmap">
+          <div class="stages-overview-grid">
+            <article class="stage-card stage-card--1 active">
+              <header><span class="stage-num">01</span><h4>PHÁ VỠ</h4><small>NGÀY 1 – 22</small></header>
+              <p>Chiến thắng quán tính cũ. Cắt nguồn dopamine ngắn hạn độc hại.</p>
+              <b>THE BREAKDOWN</b>
+            </article>
+            <article class="stage-card stage-card--2">
+              <header><span class="stage-num">02</span><h4>CÀI ĐẶT</h4><small>NGÀY 23 – 44</small></header>
+              <p>Tái lập liên kết nơ-ron. Rèn luyện sự tự giác trở nên mượt mà.</p>
+              <b>THE INSTALLATION</b>
+            </article>
+            <article class="stage-card stage-card--3">
+              <header><span class="stage-num">03</span><h4>ĐỒNG HÓA</h4><small>NGÀY 45 – 66</small></header>
+              <p>Tự động hóa tuyệt đối. Thói quen trở thành nhân cách siêu anh hùng.</p>
+              <b>THE INTEGRATION</b>
+            </article>
+          </div>
+
+          <div class="roadmap-inspector" id="roadmap-inspector">
+            <div class="inspector-badge">NGÀY <span id="inspect-day-num">1</span> // CHI TIẾT</div>
+            <h3 id="inspect-day-title">NGÀY ĐẦU TIÊN CỦA CUỘC TÁI SINH</h3>
+            <p id="inspect-day-desc">Bắt đầu hành trình 66 ngày rèn luyện bản sắc Spider-Man.</p>
+            <div class="inspector-meta" id="inspect-day-meta"></div>
+          </div>
+
+          <div class="section-label" style="margin-top: 20px;">LƯỚI 66 NGÀY KỶ LUẬT (CHẠM VÀO Ô ĐỂ XEM CHI TIẾT)</div>
+          <div class="roadmap-grid" id="roadmap-grid"></div>
+        </div>
+
+        <!-- SUB-PANEL 3: MINI TOOLS -->
+        <div class="reset-subpanel" data-r66-panel="tools">
+          <div class="tools-grid">
+            <!-- TOOL 1: FOCUS TIMER -->
+            <article class="tool-card tool-focus">
+              <header>
+                <div>
+                  <span class="tool-icon">⏱️</span>
+                  <strong>SPIDER FOCUS TIMER</strong>
+                  <small>DEEP WORK & POMODORO</small>
+                </div>
+                <span class="tool-reward">+20 XP / PHIÊN</span>
+              </header>
+              <div class="timer-dial-shell">
+                <div class="timer-dial">
+                  <span id="timer-display">25:00</span>
+                  <small id="timer-mode-label">FOCUS SESSION</small>
+                </div>
+              </div>
+              <div class="timer-presets">
+                <button class="timer-preset-btn active" data-preset="25">25M POMODORO</button>
+                <button class="timer-preset-btn" data-preset="50">50M DEEP WORK</button>
+                <button class="timer-preset-btn" data-preset="15">15M RECOVERY</button>
+              </div>
+              <div class="timer-controls">
+                <button class="sense-button" id="btn-timer-toggle">▶ BẮT ĐẦU</button>
+                <button class="btn-secondary" id="btn-timer-reset">↺ RESET</button>
+              </div>
+              <div class="ambient-select-wrap">
+                <label>ÂM THANH TẬP TRUNG:</label>
+                <select id="timer-ambient-select">
+                  <option value="none">Tắt tiếng</option>
+                  <option value="rain">Mưa Manhattan Rooftop</option>
+                  <option value="hum">Sóng nhịp Alpha</option>
+                  <option value="pulse">Nhịp đập thành phố đêm</option>
+                </select>
+              </div>
+            </article>
+
+            <!-- TOOL 2: HYDRATION TRACKER -->
+            <article class="tool-card tool-water">
+              <header>
+                <div>
+                  <span class="tool-icon">💧</span>
+                  <strong>BÌNH NƯỚC THỦY LỰC</strong>
+                  <small>HYDRATION TARGET</small>
+                </div>
+                <span class="tool-reward">+20 XP KHI ĐẠT 2.5L</span>
+              </header>
+              <div class="water-bottle-wrap">
+                <div class="water-flask">
+                  <div class="water-fill" id="water-flask-fill" style="height: 30%;"></div>
+                  <div class="water-readout">
+                    <strong id="water-logged-text">750 ml</strong>
+                    <small>/ 2,500 ml</small>
+                  </div>
+                </div>
+                <div class="water-quick-buttons">
+                  <button class="water-btn" data-water="250">+250ml <small>Ly nước</small></button>
+                  <button class="water-btn" data-water="500">+500ml <small>Chai nước</small></button>
+                  <button class="water-btn" data-water="1000">+1000ml <small>Bình lớn</small></button>
+                  <button class="water-btn water-btn--reset" id="btn-reset-water">↺ Reset</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- TOOL 3: DOPAMINE BOX BREATHING -->
+            <article class="tool-card tool-breath">
+              <header>
+                <div>
+                  <span class="tool-icon">🫁</span>
+                  <strong>BOX BREATHING</strong>
+                  <small>CÂN BẰNG HỆ THẦN KINH</small>
+                </div>
+                <span class="tool-reward">GIẢM CORTISOL</span>
+              </header>
+              <div class="breath-visualizer-shell">
+                <div class="breath-circle" id="breath-circle">
+                  <span id="breath-action-text">SẴN SÀNG</span>
+                  <small id="breath-timer-text">4s</small>
+                </div>
+              </div>
+              <div class="breath-meta">
+                <span id="breath-cycle-count">VÒNG: 0 / 4</span>
+                <p>Hít vào 4 giây — Giữ 4 giây — Thở ra 4 giây — Giữ 4 giây. Đưa cơ thể về trạng thái điềm tĩnh tối đa.</p>
+              </div>
+              <button class="sense-button" id="btn-toggle-breath">▶ BẮT ĐẦU LUYỆN THỞ</button>
+            </article>
+
+            <!-- TOOL 4: DAILY WISDOM CARD -->
+            <article class="tool-card tool-wisdom">
+              <header>
+                <div>
+                  <span class="tool-icon">🎴</span>
+                  <strong>THẺ TRIẾT LÝ ANH HÙNG</strong>
+                  <small>HEROIC WISDOM</small>
+                </div>
+                <span class="tool-reward">DAILY BUFF</span>
+              </header>
+              <div class="wisdom-card" id="wisdom-card">
+                <span class="wisdom-hero" id="wisdom-hero">PETER PARKER</span>
+                <blockquote id="wisdom-quote">"With great power comes great responsibility."</blockquote>
+                <cite id="wisdom-author">— Stan Lee</cite>
+                <div class="wisdom-lesson" id="wisdom-lesson">Kỷ luật không phải là sự trừng phạt. Đó là trách nhiệm tự thân đối với tiềm năng vĩ đại của chính bạn.</div>
+              </div>
+              <button class="sense-button" id="btn-draw-wisdom">🎴 RÚT THẺ MỚI</button>
+            </article>
+          </div>
+        </div>
+
+        <!-- SUB-PANEL 4: RADAR & STATS -->
+        <div class="reset-subpanel" data-r66-panel="analytics">
+          <div class="analytics-layout">
+            <div class="radar-box">
+              <div class="section-label">BIỂU ĐỒ 6 CHỈ SỐ ANH HÙNG // 14 NGÀY GẦN NHẤT</div>
+              <div class="radar-canvas-wrap">
+                <canvas id="radar-canvas" width="320" height="320"></canvas>
+              </div>
+              <div class="radar-legend" id="radar-legend"></div>
+            </div>
+            <div class="stats-box">
+              <div class="section-label">THỐNG KÊ CHI TIẾT CUỘC TÁI SINH</div>
+              <div class="stats-summary-grid" id="stats-summary-grid"></div>
+              <div class="section-label" style="margin-top: 18px;">LỊCH SỬ KỶ LUẬT 66 NGÀY</div>
+              <div class="history-heat-grid" id="history-heat-grid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="os-view" data-panel="today">
         <div class="hero-copy"><div><small>HABIT HÔM NAY // <span data-notion-status>NOTION CONNECTING</span></small><h1>Việc nhỏ.<br><em>Nhịp lớn.</em></h1></div><p>Mission lấy trực tiếp từ Notion. Hoàn thành ở đây sẽ cập nhật lại cùng một nguồn, không tạo danh sách riêng cho thiết bị này.</p></div>
         <div class="metric-strip" id="today-metrics"></div>
         <form class="quick-form" id="task-form"><input id="task-input" maxlength="100" placeholder="Việc tiếp theo là gì?" required /><select id="task-area"><option>Cá nhân</option><option>Công việc</option><option>Học tập</option><option>Sức khỏe</option></select><button>THÊM NHIỆM VỤ</button></form>
@@ -86,6 +369,33 @@
       </section>
     </section>
   </main>
+
+  <!-- HABIT DETAIL / DOSSIER MODAL -->
+  <div class="panel-backdrop" id="habit-detail-modal" hidden inert>
+    <div class="pixel-modal habit-inspector-modal" style="max-width: 580px;">
+      <div class="modal-header">
+        <span class="modal-title">📊 CHI TIẾT THÓI QUEN // HABIT DOSSIER</span>
+        <button class="modal-close-btn" id="habit-modal-close" type="button">✕</button>
+      </div>
+      <div class="modal-body" id="habit-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- LEVEL UP CELEBRATION MODAL -->
+  <div class="panel-backdrop" id="levelup-modal" hidden inert>
+    <div class="pixel-modal levelup-dialog" style="max-width: 480px; text-align: center;">
+      <div class="levelup-header">
+        <span class="levelup-tag">SPIDER HERO ASCENSION</span>
+        <h2 id="levelup-title">LEVEL UP!</h2>
+      </div>
+      <div class="levelup-body">
+        <div class="levelup-badge-large" id="levelup-badge">LV.2</div>
+        <strong id="levelup-name">STREET VIGILANTE</strong>
+        <p id="levelup-copy">Kỷ luật bền bỉ đã đưa bạn lên một tầm cao mới. Năng lượng chiến đấu và độ tập trung của Spider-Man được gia tăng!</p>
+        <button class="sense-button" id="btn-claim-levelup" type="button">TIẾP TỤC HÀNH TRÌNH</button>
+      </div>
+    </div>
+  </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="./life-os.js?v=notion-cloud-1"></script>

@@ -1,0 +1,249 @@
+[
+  {
+    "id": "habit_formation_fundamentals",
+    "title": "Habit Formation Fundamentals",
+    "description": "Learn the science behind building lasting habits, from the habit loop to identity-based change.",
+    "iconName": "brain.head.profile",
+    "estimatedMinutes": 20,
+    "lessons": [
+      {
+        "id": "the_habit_loop",
+        "title": "The Habit Loop",
+        "subtitle": "Cue → Routine → Reward",
+        "iconName": "arrow.triangle.2.circlepath",
+        "estimatedMinutes": 3,
+        "keyTakeaway": "Every habit follows a loop: a cue triggers a routine, which delivers a reward. To change a habit, identify the cue first.",
+        "source": "Atomic Habits, James Clear",
+        "content": [
+          { "type": "heading", "text": "Why habits feel automatic" },
+          { "type": "paragraph", "text": "Your brain is constantly looking for ways to save effort. When you repeat a behavior in the same context — same time, same place, same emotional state — your brain begins to automate it. This is the habit loop." },
+          { "type": "heading", "text": "The three parts" },
+          { "type": "bulletList", "items": [
+            "Cue — the trigger that starts the behavior (a time, location, emotion, or preceding action)",
+            "Routine — the behavior itself (what you actually do)",
+            "Reward — the benefit you get (satisfaction, relief, pleasure)"
+          ]},
+          { "type": "example", "title": "Morning coffee example", "body": "Cue: You wake up and walk to the kitchen. Routine: You brew coffee and drink it. Reward: You feel alert and comforted. Over time, just walking to the kitchen triggers the craving." },
+          { "type": "paragraph", "text": "The key insight is that habits aren't about willpower — they're about structure. You don't decide to brush your teeth every morning; the cue (waking up) triggers it automatically." },
+          { "type": "highlight", "text": "To build a new habit, make the cue obvious. To break a bad one, make the cue invisible." },
+          { "type": "quote", "text": "You do not rise to the level of your goals. You fall to the level of your systems.", "author": "James Clear" }
+        ],
+        "ctaAction": {
+          "label": "Identify your cue",
+          "description": "Open your tasks and pick one to attach a clear cue to",
+          "iconName": "pencil.and.list.clipboard",
+          "actionType": { "type": "openTaskEdit" }
+        }
+      },
+      {
+        "id": "habit_stacking",
+        "title": "Habit Stacking",
+        "subtitle": "Chain new habits to existing ones",
+        "iconName": "link",
+        "estimatedMinutes": 3,
+        "keyTakeaway": "Link a new habit to an existing one using the formula: 'After I [current habit], I will [new habit].' This leverages the neural pathways you've already built.",
+        "source": "Atomic Habits, James Clear",
+        "content": [
+          { "type": "heading", "text": "The power of existing habits" },
+          { "type": "paragraph", "text": "You already have hundreds of habits that run on autopilot. Habit stacking takes advantage of these existing neural pathways by attaching new behaviors to them." },
+          { "type": "heading", "text": "The habit stacking formula" },
+          { "type": "highlight", "text": "After I [CURRENT HABIT], I will [NEW HABIT]." },
+          { "type": "example", "title": "Stacking in practice", "body": "After I pour my morning coffee, I will write in my journal for 2 minutes. After I sit down at my desk, I will write my top 3 priorities. After I finish dinner, I will put my phone in another room." },
+          { "type": "paragraph", "text": "The reason this works is that your existing habits already have strong neural connections. By linking a new behavior to a completed one, the old habit becomes the cue for the new one." },
+          { "type": "bulletList", "items": [
+            "Choose a habit you already do reliably every day",
+            "Pick a new habit that takes 2 minutes or less to start",
+            "Be specific about when and where the stack happens",
+            "Start with just one stack — don't chain five habits at once"
+          ]},
+          { "type": "quote", "text": "One of the best ways to build a new habit is to identify a current habit you already do each day and then stack your new behavior on top.", "author": "James Clear" }
+        ],
+        "ctaAction": {
+          "label": "Set up a habit stack",
+          "description": "Configure your daily habit stack order",
+          "iconName": "list.bullet.indent",
+          "actionType": { "type": "openHabitStack" }
+        }
+      },
+      {
+        "id": "the_two_minute_rule",
+        "title": "The 2-Minute Rule",
+        "subtitle": "Make it so easy you can't say no",
+        "iconName": "timer",
+        "estimatedMinutes": 2,
+        "keyTakeaway": "Scale any habit down to a 2-minute version. The goal isn't to do the full habit — it's to become the type of person who shows up consistently.",
+        "source": "Atomic Habits, James Clear",
+        "content": [
+          { "type": "heading", "text": "Why starting is the hardest part" },
+          { "type": "paragraph", "text": "The biggest barrier to any habit isn't doing it — it's starting it. Once you begin, momentum takes over. The 2-Minute Rule removes the friction of starting." },
+          { "type": "heading", "text": "How it works" },
+          { "type": "highlight", "text": "When you start a new habit, it should take less than two minutes to do." },
+          { "type": "bulletList", "items": [
+            "\"Read before bed\" becomes \"Read one page\"",
+            "\"Run three miles\" becomes \"Put on your running shoes\"",
+            "\"Study for class\" becomes \"Open your notes\"",
+            "\"Meditate for 10 minutes\" becomes \"Sit and close your eyes for 30 seconds\""
+          ]},
+          { "type": "paragraph", "text": "This isn't a trick. The point is to master the art of showing up. A habit must be established before it can be improved. You can't optimize a habit that doesn't exist." },
+          { "type": "example", "title": "The gateway habit", "body": "A reader who commits to 'read one page before bed' often reads for 20 minutes. But even if they only read one page, they reinforced their identity as a reader. That's what matters." },
+          { "type": "quote", "text": "The point is to master the habit of showing up. The truth is, a habit must be established before it can be improved.", "author": "James Clear" }
+        ],
+        "ctaAction": {
+          "label": "Review your task difficulty",
+          "description": "Check if your daily tasks follow the 2-minute rule",
+          "iconName": "slider.horizontal.3",
+          "actionType": { "type": "openProgressCheck" }
+        }
+      },
+      {
+        "id": "environment_design",
+        "title": "Environment Design",
+        "subtitle": "Shape your space, shape your behavior",
+        "iconName": "house.fill",
+        "estimatedMinutes": 3,
+        "keyTakeaway": "You don't need more motivation — you need a better environment. Make good habits obvious and easy; make bad habits invisible and hard.",
+        "source": "Atomic Habits, James Clear; Nudge, Richard Thaler",
+        "content": [
+          { "type": "heading", "text": "Your environment is stronger than willpower" },
+          { "type": "paragraph", "text": "Research consistently shows that people who appear to have great self-control are often just better at structuring their environment. They spend less time in tempting situations — not more time resisting temptation." },
+          { "type": "heading", "text": "Two principles of environment design" },
+          { "type": "bulletList", "items": [
+            "Make the cues of good habits obvious — leave your book on your pillow, put fruit on the counter, set your gym clothes out the night before",
+            "Make the cues of bad habits invisible — put your phone in another room, delete social media apps, don't keep junk food in the house"
+          ]},
+          { "type": "example", "title": "The phone-free bedroom", "body": "People who charge their phone outside the bedroom fall asleep 20 minutes faster on average. The phone isn't the problem — its proximity is. By changing the environment, you change the behavior without needing willpower." },
+          { "type": "paragraph", "text": "The most powerful way to change your behavior is to change your context. Every habit is initiated by a cue, and we are more likely to notice cues that stand out." },
+          { "type": "highlight", "text": "Design your environment for the person you want to become, not the person you are right now." },
+          { "type": "quote", "text": "People often choose products not because of what they are, but because of where they are.", "author": "Richard Thaler" }
+        ],
+        "ctaAction": {
+          "label": "Activate Screen Blocker",
+          "description": "Block distracting apps to redesign your phone environment",
+          "iconName": "iphone.slash",
+          "actionType": { "type": "routeToTool", "toolId": "screen-blocker" }
+        }
+      },
+      {
+        "id": "reward_systems",
+        "title": "Reward Systems",
+        "subtitle": "Make it satisfying to repeat",
+        "iconName": "star.fill",
+        "estimatedMinutes": 3,
+        "keyTakeaway": "We repeat behaviors that are immediately rewarding. Add an immediate reward after a good habit — even if the ultimate benefit is long-term.",
+        "source": "The Power of Habit, Charles Duhigg",
+        "content": [
+          { "type": "heading", "text": "The cardinal rule of behavior change" },
+          { "type": "highlight", "text": "What is immediately rewarded is repeated. What is immediately punished is avoided." },
+          { "type": "paragraph", "text": "The human brain evolved to prioritize immediate rewards over delayed ones. This is why bad habits feel good in the moment and good habits often feel unrewarding — the payoff is in the future." },
+          { "type": "heading", "text": "Closing the reward gap" },
+          { "type": "paragraph", "text": "The solution is to add a little bit of immediate pleasure to habits with long-term benefits, and a little bit of immediate pain to habits with long-term costs." },
+          { "type": "bulletList", "items": [
+            "Visual progress — marking an X on a calendar, filling a progress bar, watching a streak grow",
+            "Small treats — allow yourself a reward after completing a difficult habit",
+            "Social reward — share your progress with an accountability partner",
+            "Gamification — earning XP, leveling up, unlocking achievements"
+          ]},
+          { "type": "example", "title": "The streak effect", "body": "Jerry Seinfeld kept a calendar and marked an X for every day he wrote jokes. 'After a few days you'll have a chain. Just don't break the chain.' The visual progress became its own reward." },
+          { "type": "paragraph", "text": "Rise uses character progression, XP, and streaks for exactly this reason — they provide the immediate reward that long-term habits lack naturally." },
+          { "type": "quote", "text": "The brain's reward system evolved to help us remember and repeat actions that felt good. Use it intentionally.", "author": "Charles Duhigg" }
+        ],
+        "ctaAction": {
+          "label": "Try Season Mode",
+          "description": "Experience gamified habit tracking with character progression",
+          "iconName": "figure.run.circle",
+          "actionType": { "type": "routeToPage", "pageId": "season" }
+        }
+      },
+      {
+        "id": "identity_based_habits",
+        "title": "Identity-Based Habits",
+        "subtitle": "Become the person, then do the things",
+        "iconName": "person.fill",
+        "estimatedMinutes": 3,
+        "keyTakeaway": "Instead of focusing on what you want to achieve, focus on who you want to become. Each action is a vote for the type of person you wish to be.",
+        "source": "Atomic Habits, James Clear",
+        "content": [
+          { "type": "heading", "text": "Three layers of behavior change" },
+          { "type": "paragraph", "text": "Most people try to change their habits by focusing on outcomes (what they want to achieve) or processes (what they need to do). The most effective approach starts with identity — who they wish to become." },
+          { "type": "bulletList", "items": [
+            "Outcome-based: 'I want to lose 20 pounds' — fragile, gives up when progress stalls",
+            "Process-based: 'I need to go to the gym 4x a week' — better, but still external",
+            "Identity-based: 'I am a healthy person' — every choice reinforces who you are"
+          ]},
+          { "type": "heading", "text": "How identity drives habits" },
+          { "type": "paragraph", "text": "When your behavior and your identity are aligned, you're no longer pursuing a change — you're acting in accordance with who you already are. 'I'm trying to quit smoking' vs. 'I'm not a smoker' — the second person has already made the shift." },
+          { "type": "example", "title": "The identity shift", "body": "When offered a cigarette: Person A says 'No thanks, I'm trying to quit.' Person B says 'No thanks, I'm not a smoker.' Same behavior, different identity. Person B is far more likely to stay smoke-free." },
+          { "type": "highlight", "text": "Every action you take is a vote for the type of person you wish to become." },
+          { "type": "paragraph", "text": "You don't need a unanimous vote. You just need a majority. Each time you complete a habit, you're casting a vote for your new identity." },
+          { "type": "quote", "text": "The most practical way to change who you are is to change what you do. Each habit is a suggestion: 'Hey, maybe this is who I am.'", "author": "James Clear" }
+        ],
+        "ctaAction": {
+          "label": "Write your identity statement",
+          "description": "Define who you're becoming with a personal identity statement",
+          "iconName": "person.text.rectangle",
+          "actionType": { "type": "openTextInput", "placeholder": "I am the type of person who...", "saveKey": "habit_academy_identity_statement" }
+        }
+      },
+      {
+        "id": "quick_wins",
+        "title": "Quick Wins",
+        "subtitle": "Build momentum with small victories",
+        "iconName": "bolt.fill",
+        "estimatedMinutes": 2,
+        "keyTakeaway": "Small wins create a feeling of progress that fuels motivation for bigger challenges. Start with the easiest task first to build momentum.",
+        "source": "The Progress Principle, Teresa Amabile",
+        "content": [
+          { "type": "heading", "text": "The progress principle" },
+          { "type": "paragraph", "text": "Harvard researcher Teresa Amabile discovered that the single most important factor in boosting motivation and positive emotions at work was making progress in meaningful work — even small progress." },
+          { "type": "highlight", "text": "Of all the things that can boost emotions, motivation, and perceptions during a workday, the single most important is making progress — even a small win." },
+          { "type": "heading", "text": "Why small wins matter" },
+          { "type": "bulletList", "items": [
+            "They create dopamine hits that reinforce the behavior loop",
+            "They build self-efficacy — proof that you can follow through",
+            "They generate momentum that carries over to harder tasks",
+            "They counter the all-or-nothing thinking that derails habits"
+          ]},
+          { "type": "example", "title": "The domino effect", "body": "A 2-inch domino can knock over a domino 1.5x its size. Chain enough together and domino #23 could topple the Eiffel Tower. Small wins compound in exactly the same way." },
+          { "type": "paragraph", "text": "When you're struggling to start your day, do the easiest task on your list first. The sense of completion will make the next task feel more approachable." },
+          { "type": "quote", "text": "Small wins are a steady application of a small advantage. Once a small win has been accomplished, forces are set in motion that favor another small win.", "author": "Karl Weick" }
+        ],
+        "ctaAction": {
+          "label": "Experience a quick win",
+          "description": "Try a 1-minute breathing exercise for an instant sense of accomplishment",
+          "iconName": "wind",
+          "actionType": { "type": "routeToTool", "toolId": "deep-breathe" }
+        }
+      },
+      {
+        "id": "dont_break_the_chain",
+        "title": "Don't Break the Chain",
+        "subtitle": "Consistency beats intensity",
+        "iconName": "flame.fill",
+        "estimatedMinutes": 2,
+        "keyTakeaway": "Never miss twice. Missing once is an accident. Missing twice is the start of a new habit. Focus on maintaining your streak, not perfection.",
+        "source": "Atomic Habits, James Clear",
+        "content": [
+          { "type": "heading", "text": "The power of showing up" },
+          { "type": "paragraph", "text": "The most effective habit strategy isn't about having the best plan or the most motivation. It's about consistency. Doing something small every single day beats doing something big occasionally." },
+          { "type": "highlight", "text": "Never miss twice. If you miss one day, get back on track as quickly as possible." },
+          { "type": "heading", "text": "Why streaks work" },
+          { "type": "bulletList", "items": [
+            "Visual proof of consistency — each day on the streak is evidence of your commitment",
+            "Loss aversion — once you have a streak going, you don't want to lose it",
+            "Identity reinforcement — every day on the streak is a vote for your new identity",
+            "Compound effect — the benefits of consistency multiply over time"
+          ]},
+          { "type": "example", "title": "The bad day minimum", "body": "On your worst day, when everything goes wrong, your only job is to show up and do the minimum version. A 5-minute walk counts. One page counts. One push-up counts. What counts is that you didn't break the chain." },
+          { "type": "paragraph", "text": "Research shows that missing a single day has almost no measurable impact on long-term habit formation. But missing two days in a row dramatically decreases the odds of continuing. The first miss is forgivable. The second miss starts a pattern." },
+          { "type": "quote", "text": "It's not about being perfect. It's about showing up, especially on the days you don't want to.", "author": "James Clear" }
+        ],
+        "ctaAction": {
+          "label": "Check your progress",
+          "description": "See how your streak and consistency are building up",
+          "iconName": "chart.line.uptrend.xyaxis",
+          "actionType": { "type": "routeToPage", "pageId": "my_changes" }
+        }
+      }
+    ]
+  }
+]

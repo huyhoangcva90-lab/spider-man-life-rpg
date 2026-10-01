@@ -1,0 +1,972 @@
+{
+  "_readme": "CONTRACT STRINGS. The English text in options[].text, limitationRules[].limitation / whenAcuity and questions[].scoreEffects[].whenAnswer / filters[].unlessAnswerContains IS the stored survey answer AND the rule-matching key. Rewording any of them without updating every rule that names it silently disables exclusion/scoring. This file MUST stay byte-identical between Rise/Rise/Resources/Mappings/exercise_recommender_v1.json and Rise-android/app/src/main/assets/exercise_recommender_v1.json (checksum-pinned by PhysicalAbilitiesGateWiringTests / PhysicalAbilitiesGateWiringTest). Every taskKey named anywhere in this file must exist in baseHabitTasksMap on BOTH platforms. NO OPTION TEXT MAY CONTAIN ', ' — multi-select answers are stored as a ', '-joined string, so a comma inside one option splits it into two phantom segments and every rule that names it stops matching. COPY IS HEALTH-ADJACENT: describe the ACTIVITY ('low-impact'), never assert an outcome about the user's named condition ('zero impact on it', 'safe for your knee'). Absolutes are falsified by one counterexample — walking is low-impact but fully weight-bearing. Each rule's `axis` selects the template: impact framing applies to musculoskeletal only; cardiorespiratory gets the talk test, perinatal defers to a clinician, musculoskeletal_acute defers to a clinician AND drops every loaded option. TRANSLATOR NOTE: 'low-impact' means little force/shock through the joints, NOT low effort.",
+  "_clinicalReadme": "ACUITY IS A SAFETY DIMENSION, NOT A PREFERENCE. Injury SITE (knee vs ankle vs hip/leg vs back vs shoulder) and injury AGE (new / healing / long-term) load differently, so they are asked separately and each rule carries the source it was written from in `citation`. Rules are FAIL-SAFE BY CONSTRUCTION: every musculoskeletal site has a BASE rule with no `whenAcuity`, so an unanswered or unrecognised acuity answer still applies the conservative baseline — an acuity-gated rule only ever ADDS exclusions on top (exclusions union across all matching rules). NEVER convert a base rule into an acuity-gated one. Rules are ordered acute → healing → base → non-musculoskeletal because `firstMatchingRule` (JSON order) picks the copy the screen speaks with, and the acute case must win. Where the cited guidance does not clearly support recommending an activity for a stated condition, the rule EXCLUDES it rather than substituting a safer-sounding one. Any edit to limitationRules is health-adjacent content and needs human sign-off before it ships — see docs/dev/physical-abilities-clinical-basis.md.",
+  "version": 1,
+  "screenBudget": 4,
+  "startPageId": "physicalLimitations",
+  "acuityPageId": "physicalLimitationsAcuity",
+  "acuityLimitations": [
+    "Knee injury or knee pain",
+    "Ankle or foot injury",
+    "Hip or leg injury",
+    "Back problem",
+    "Shoulder problem"
+  ],
+  "pages": [
+    {
+      "id": "physicalLimitations",
+      "title": "Do any of these affect what your body can do right now?",
+      "subtitle": "We'll adapt your plan around them. Select all that apply.",
+      "type": "multipleOption",
+      "userStateKey": "physicalLimitations",
+      "section": "domain_health",
+      "options": [
+        {
+          "id": "pl_1",
+          "text": "Knee injury or knee pain",
+          "value": 0
+        },
+        {
+          "id": "pl_2",
+          "text": "Ankle or foot injury",
+          "value": 0
+        },
+        {
+          "id": "pl_3",
+          "text": "Hip or leg injury",
+          "value": 0
+        },
+        {
+          "id": "pl_4",
+          "text": "Back problem",
+          "value": 0
+        },
+        {
+          "id": "pl_5",
+          "text": "Shoulder problem",
+          "value": 0
+        },
+        {
+          "id": "pl_6",
+          "text": "Joint pain or arthritis",
+          "value": 0
+        },
+        {
+          "id": "pl_7",
+          "text": "Heart or breathing condition",
+          "value": 0
+        },
+        {
+          "id": "pl_8",
+          "text": "Pregnancy or postpartum recovery",
+          "value": 0
+        },
+        {
+          "id": "pl_9",
+          "text": "Limited mobility",
+          "value": 0
+        },
+        {
+          "id": "pl_10",
+          "text": "Other physical limitation",
+          "value": 0
+        },
+        {
+          "id": "pl_11",
+          "text": "None of the above",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "physicalLimitationsAcuity",
+      "title": "How is it right now?",
+      "subtitle": "A new injury and an old one need different starting points.",
+      "type": "singleOption",
+      "userStateKey": "physicalLimitationsAcuity",
+      "section": "domain_health",
+      "options": [
+        {
+          "id": "pa_1",
+          "text": "It's new or still painful",
+          "value": 0
+        },
+        {
+          "id": "pa_2",
+          "text": "It's healing but not back to normal",
+          "value": 0
+        },
+        {
+          "id": "pa_3",
+          "text": "It's a long-term or managed issue",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "physicalLimitationsDetail",
+      "title": "Anything else we should know about it?",
+      "subtitle": "Optional. This stays on your device.",
+      "type": "freeText",
+      "userStateKey": "physicalLimitationsDetail",
+      "section": "domain_health"
+    },
+    {
+      "id": "exerciseAccess",
+      "title": "Which of these do you have access to?",
+      "subtitle": "Select all that apply.",
+      "type": "multipleOption",
+      "userStateKey": "exerciseAccess",
+      "section": "domain_health",
+      "options": [
+        {
+          "id": "ea_1",
+          "text": "A pool",
+          "value": 0
+        },
+        {
+          "id": "ea_2",
+          "text": "A gym or weights",
+          "value": 0
+        },
+        {
+          "id": "ea_3",
+          "text": "A bicycle",
+          "value": 0
+        },
+        {
+          "id": "ea_4",
+          "text": "None of these",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "exerciseSetting",
+      "title": "Where would you rather move?",
+      "type": "singleOption",
+      "userStateKey": "exerciseSetting",
+      "section": "domain_health",
+      "options": [
+        {
+          "id": "es_1",
+          "text": "Indoors",
+          "value": 0
+        },
+        {
+          "id": "es_2",
+          "text": "Outdoors",
+          "value": 0
+        },
+        {
+          "id": "es_3",
+          "text": "Either",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "exerciseIntensity",
+      "title": "How hard do you want to push right now?",
+      "type": "singleOption",
+      "userStateKey": "exerciseIntensity",
+      "section": "domain_health",
+      "options": [
+        {
+          "id": "ei_1",
+          "text": "Take it gentle",
+          "value": 0
+        },
+        {
+          "id": "ei_2",
+          "text": "Steady effort",
+          "value": 0
+        },
+        {
+          "id": "ei_3",
+          "text": "Challenge me",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "exerciseSocial",
+      "title": "Do you like company when you exercise?",
+      "type": "singleOption",
+      "userStateKey": "exerciseSocial",
+      "section": "domain_health",
+      "options": [
+        {
+          "id": "eo_1",
+          "text": "With friends",
+          "value": 0
+        },
+        {
+          "id": "eo_2",
+          "text": "Alone",
+          "value": 0
+        },
+        {
+          "id": "eo_3",
+          "text": "Either",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "exerciseRecommendation",
+      "title": "This is what fits your body right now",
+      "subtitle": "Picked from what you just told us.",
+      "type": "recommendation",
+      "userStateKey": "exerciseRecommendation",
+      "section": "domain_health"
+    }
+  ],
+  "candidateTasks": [
+    {
+      "taskKey": "walk",
+      "isNew": true,
+      "baseScore": 2,
+      "fitSummary": "Low-impact, and it needs nothing but shoes.",
+      "tags": {
+        "impact": "low",
+        "setting": "outdoor",
+        "social": "either",
+        "intensity": "gentle",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "swim",
+      "isNew": true,
+      "baseScore": 2,
+      "fitSummary": "Full-body effort with the water taking your weight.",
+      "tags": {
+        "impact": "low",
+        "setting": "indoor",
+        "social": "alone",
+        "intensity": "moderate",
+        "equipment": [
+          "pool"
+        ]
+      }
+    },
+    {
+      "taskKey": "yoga",
+      "isNew": true,
+      "baseScore": 1,
+      "fitSummary": "Slow, controlled movement you can do at home.",
+      "tags": {
+        "impact": "low",
+        "setting": "indoor",
+        "social": "alone",
+        "intensity": "gentle",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "stretch",
+      "isNew": true,
+      "baseScore": 1,
+      "fitSummary": "A few minutes on the floor, nothing else needed.",
+      "tags": {
+        "impact": "low",
+        "setting": "indoor",
+        "social": "alone",
+        "intensity": "gentle",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "run",
+      "isNew": false,
+      "baseScore": 3,
+      "fitSummary": "The classic. Tough on the knees, huge on discipline.",
+      "tags": {
+        "impact": "high",
+        "setting": "outdoor",
+        "social": "alone",
+        "intensity": "challenging",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "gym",
+      "isNew": false,
+      "baseScore": 3,
+      "fitSummary": "Structured strength work under a roof.",
+      "tags": {
+        "impact": "moderate",
+        "setting": "indoor",
+        "social": "either",
+        "intensity": "challenging",
+        "equipment": [
+          "gym"
+        ]
+      }
+    },
+    {
+      "taskKey": "cycling",
+      "isNew": false,
+      "baseScore": 2,
+      "fitSummary": "Distance without the pounding of running.",
+      "tags": {
+        "impact": "low",
+        "setting": "outdoor",
+        "social": "either",
+        "intensity": "moderate",
+        "equipment": [
+          "bike"
+        ]
+      }
+    },
+    {
+      "taskKey": "cardio",
+      "isNew": false,
+      "baseScore": 2,
+      "fitSummary": "Anything that gets your heart going.",
+      "tags": {
+        "impact": "high",
+        "setting": "either",
+        "social": "alone",
+        "intensity": "challenging",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "pushup",
+      "isNew": false,
+      "baseScore": 2,
+      "fitSummary": "Upper-body strength, no equipment.",
+      "tags": {
+        "impact": "moderate",
+        "setting": "indoor",
+        "social": "alone",
+        "intensity": "moderate",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "situp",
+      "isNew": false,
+      "baseScore": 2,
+      "fitSummary": "Core work on the floor, no equipment.",
+      "tags": {
+        "impact": "moderate",
+        "setting": "indoor",
+        "social": "alone",
+        "intensity": "moderate",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "weighttraining",
+      "isNew": false,
+      "baseScore": 2,
+      "fitSummary": "Progressive load, real strength gains.",
+      "tags": {
+        "impact": "moderate",
+        "setting": "indoor",
+        "social": "either",
+        "intensity": "challenging",
+        "equipment": [
+          "gym"
+        ]
+      }
+    },
+    {
+      "taskKey": "hike",
+      "isNew": false,
+      "baseScore": 1,
+      "fitSummary": "Long, steady time outside.",
+      "tags": {
+        "impact": "moderate",
+        "setting": "outdoor",
+        "social": "either",
+        "intensity": "moderate",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "basketball",
+      "isNew": false,
+      "baseScore": 1,
+      "fitSummary": "Hard running and jumping, best with people.",
+      "tags": {
+        "impact": "high",
+        "setting": "outdoor",
+        "social": "friends",
+        "intensity": "challenging",
+        "equipment": []
+      }
+    },
+    {
+      "taskKey": "tennis",
+      "isNew": false,
+      "baseScore": 1,
+      "fitSummary": "Sharp stops and turns, best with a partner.",
+      "tags": {
+        "impact": "high",
+        "setting": "outdoor",
+        "social": "friends",
+        "intensity": "challenging",
+        "equipment": []
+      }
+    }
+  ],
+  "limitationRules": [
+    {
+      "limitation": "Knee injury or knee pain",
+      "whenAcuity": [
+        "It's new or still painful"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "pushup",
+        "situp",
+        "hike",
+        "cycling",
+        "swim"
+      ],
+      "replacementTaskKeys": [
+        "stretch",
+        "walk"
+      ],
+      "shortForm": "a knee injury",
+      "axis": "musculoskeletal_acute",
+      "citation": "Mayo Clinic 'Sprained ankle' — severe-sprain symptoms resemble a broken bone and need prompt evaluation; AAOS 'Sprained Ankle' — seek assessment where weight-bearing is difficult. An undifferentiated NEW injury is not something to prescribe loaded exercise for, so every loaded option is excluded and the copy defers to a clinician. NHS back-pain and NHS/CUH acute-ankle guidance both support staying gently active rather than resting completely, which is why walking and gentle floor work remain."
+    },
+    {
+      "limitation": "Ankle or foot injury",
+      "whenAcuity": [
+        "It's new or still painful"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "pushup",
+        "situp",
+        "hike",
+        "cycling",
+        "swim"
+      ],
+      "replacementTaskKeys": [
+        "stretch",
+        "walk"
+      ],
+      "shortForm": "an ankle or foot injury",
+      "axis": "musculoskeletal_acute",
+      "citation": "AAOS 'Sprained Ankle' + Mayo Clinic 'Ankle pain — when to see a doctor': difficulty bearing weight or bony tenderness needs evaluation to rule out fracture. NHS/CUH acute-ankle advice supports early weight-bearing and gentle movement, so walking and gentle floor work stay while every loaded or equipment-based option is excluded."
+    },
+    {
+      "limitation": "Hip or leg injury",
+      "whenAcuity": [
+        "It's new or still painful"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "pushup",
+        "situp",
+        "hike",
+        "cycling",
+        "swim"
+      ],
+      "replacementTaskKeys": [
+        "stretch",
+        "walk"
+      ],
+      "shortForm": "a hip or leg injury",
+      "axis": "musculoskeletal_acute",
+      "citation": "Same basis as the acute knee and ankle rules — an undifferentiated new lower-limb injury is not safely distinguishable from a fracture in a survey, so no loaded activity is recommended and the copy defers to a clinician (Mayo Clinic sprain first aid; AAOS)."
+    },
+    {
+      "limitation": "Back problem",
+      "whenAcuity": [
+        "It's new or still painful"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "pushup",
+        "situp",
+        "hike",
+        "cycling",
+        "swim"
+      ],
+      "replacementTaskKeys": [
+        "walk",
+        "stretch"
+      ],
+      "shortForm": "a back problem",
+      "axis": "musculoskeletal_acute",
+      "citation": "NHS 'Back pain' — staying active aids recovery and bed rest is NOT recommended, gentle exercise is advised in the early stages, and users are told to stop and see a GP if pain worsens. Walking and gentle floor work are therefore kept; loaded, twisting and impact options are excluded until it settles."
+    },
+    {
+      "limitation": "Shoulder problem",
+      "whenAcuity": [
+        "It's new or still painful"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "pushup",
+        "situp",
+        "hike",
+        "cycling",
+        "swim"
+      ],
+      "replacementTaskKeys": [
+        "walk",
+        "stretch"
+      ],
+      "shortForm": "a shoulder problem",
+      "axis": "musculoskeletal_acute",
+      "citation": "AAOS 'Shoulder Impingement / Rotator Cuff Tendinitis' — rest and activity modification, avoiding the overhead activity that provokes symptoms; AAOS rotator-cuff rehab guidance advises using pain as the guide and stopping painful exercise. Lower-body walking is unaffected by the shoulder and is kept."
+    },
+    {
+      "limitation": "Knee injury or knee pain",
+      "whenAcuity": [
+        "It's healing but not back to normal"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "hike"
+      ],
+      "replacementTaskKeys": [
+        "swim",
+        "cycling",
+        "walk"
+      ],
+      "shortForm": "a knee injury",
+      "axis": "musculoskeletal",
+      "citation": "NHS Royal National Orthopaedic Hospital knee rehab: rehabilitation should be built up GRADUALLY with a graduated increase in difficulty. Low-load options (swimming, cycling, walking) are retained per AAOS 'Arthritis of the Knee' and Versus Arthritis; high-impact, cutting and heavy-load work stays out until it is back to normal."
+    },
+    {
+      "limitation": "Ankle or foot injury",
+      "whenAcuity": [
+        "It's healing but not back to normal"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "hike"
+      ],
+      "replacementTaskKeys": [
+        "swim",
+        "walk",
+        "cycling"
+      ],
+      "shortForm": "an ankle or foot injury",
+      "axis": "musculoskeletal",
+      "citation": "AAOS 'Sprained Ankle' — rehabilitation restores flexibility, strength and proprioception before return to sport, and minor sprains take ~2 weeks while severe ones take 6-12. Uneven-ground and cutting sports stay excluded during that window; swimming and walking lead the replacements."
+    },
+    {
+      "limitation": "Hip or leg injury",
+      "whenAcuity": [
+        "It's healing but not back to normal"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "hike"
+      ],
+      "replacementTaskKeys": [
+        "swim",
+        "walk",
+        "cycling"
+      ],
+      "shortForm": "a hip or leg injury",
+      "axis": "musculoskeletal",
+      "citation": "Graduated-return principle as per NHS orthopaedic rehab guidance; low-load aerobic options (swimming, walking, cycling) retained per AAOS 'Managing Arthritis Pain With Exercise' as the standard alternatives to high-impact activity."
+    },
+    {
+      "limitation": "Back problem",
+      "whenAcuity": [
+        "It's healing but not back to normal"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "hike"
+      ],
+      "replacementTaskKeys": [
+        "walk",
+        "swim",
+        "yoga"
+      ],
+      "shortForm": "a back problem",
+      "axis": "musculoskeletal",
+      "citation": "NHS 'Back pain' — walking, swimming, yoga and pilates all have broadly similar benefit and staying active aids recovery. Heavy axial loading and impact sport stay out while it is still settling."
+    },
+    {
+      "limitation": "Shoulder problem",
+      "whenAcuity": [
+        "It's healing but not back to normal"
+      ],
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "gym",
+        "weighttraining",
+        "hike"
+      ],
+      "replacementTaskKeys": [
+        "walk",
+        "cycling",
+        "yoga"
+      ],
+      "shortForm": "a shoulder problem",
+      "axis": "musculoskeletal",
+      "citation": "AAOS rotator-cuff conditioning guidance — graduated return, pain as the guide, avoid the provoking overhead load. Lower-body aerobic work is unaffected and leads the replacements."
+    },
+    {
+      "limitation": "Knee injury or knee pain",
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis"
+      ],
+      "replacementTaskKeys": [
+        "swim",
+        "cycling",
+        "walk"
+      ],
+      "shortForm": "a knee injury",
+      "axis": "musculoskeletal",
+      "citation": "AAOS 'Arthritis of the Knee' and Versus Arthritis 'Osteoarthritis of the knee' — walking, swimming and cycling are the recommended lower-load alternatives to running and competitive sport; NHS knee-OA physiotherapy guidance lists cycling and swimming as load-reducing. BASE RULE: applies at every acuity including unanswered, so it must stay conservative."
+    },
+    {
+      "limitation": "Ankle or foot injury",
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "hike"
+      ],
+      "replacementTaskKeys": [
+        "swim",
+        "walk",
+        "cycling"
+      ],
+      "shortForm": "an ankle or foot injury",
+      "axis": "musculoskeletal",
+      "citation": "AAOS 'Sprained Ankle' — repeated sprains follow returning to cutting and uneven-ground activity; hiking is excluded here (and NOT in the knee rule) precisely because the ankle bucket was previously collapsed into the knee one. BASE RULE: applies at every acuity including unanswered."
+    },
+    {
+      "limitation": "Hip or leg injury",
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis"
+      ],
+      "replacementTaskKeys": [
+        "swim",
+        "walk",
+        "cycling"
+      ],
+      "shortForm": "a hip or leg injury",
+      "axis": "musculoskeletal",
+      "citation": "AAOS 'Managing Arthritis Pain With Exercise' — low-impact aerobic activity (walking, swimming, cycling) in place of high-impact and competitive sport. BASE RULE: applies at every acuity including unanswered."
+    },
+    {
+      "limitation": "Back problem",
+      "excludedTaskKeys": [
+        "weighttraining",
+        "situp",
+        "basketball",
+        "tennis"
+      ],
+      "replacementTaskKeys": [
+        "walk",
+        "swim",
+        "yoga",
+        "stretch"
+      ],
+      "shortForm": "a back problem",
+      "axis": "musculoskeletal",
+      "citation": "NHS 'Back pain' — walking, running, cycling, SWIMMING, yoga and pilates all have similar effects and swimming takes strain off joints and muscles. This is why swim is a REPLACEMENT here and not an exclusion; the previous collapsed 'Back or shoulder problem' bucket excluded swimming from back-pain users against NHS advice. Heavy axial loading and impact/twisting sport remain excluded. BASE RULE: applies at every acuity including unanswered."
+    },
+    {
+      "limitation": "Shoulder problem",
+      "excludedTaskKeys": [
+        "swim",
+        "pushup",
+        "weighttraining",
+        "tennis",
+        "gym"
+      ],
+      "replacementTaskKeys": [
+        "walk",
+        "cycling",
+        "yoga",
+        "stretch"
+      ],
+      "shortForm": "a shoulder problem",
+      "axis": "musculoskeletal",
+      "citation": "AAOS 'Shoulder Impingement / Rotator Cuff Tendinitis' and 'Common Shoulder Injuries' — shoulder injury is frequently caused by repetitive OVERHEAD motion, naming swimming, tennis, pitching and weightlifting; treatment is rest and avoiding overhead activity. This is why swim IS excluded here while it is recommended for back problems — the two were previously one bucket with one answer. BASE RULE: applies at every acuity including unanswered."
+    },
+    {
+      "limitation": "Joint pain or arthritis",
+      "excludedTaskKeys": [
+        "run",
+        "pushup",
+        "situp",
+        "weighttraining",
+        "basketball",
+        "tennis"
+      ],
+      "replacementTaskKeys": [
+        "swim",
+        "walk",
+        "cycling"
+      ],
+      "shortForm": "joint pain",
+      "axis": "musculoskeletal",
+      "citation": "AAOS 'Managing Arthritis Pain With Exercise' and Versus Arthritis 'Osteoarthritis of the knee' — exercises that reduce joint load (swimming, cycling, water-based work) are recommended, and walking/swimming/cycling are the named alternatives to high-impact and competitive sport. Unchanged from v1 apart from re-verification."
+    },
+    {
+      "limitation": "Heart or breathing condition",
+      "excludedTaskKeys": [
+        "run",
+        "cardio",
+        "basketball",
+        "tennis",
+        "weighttraining"
+      ],
+      "replacementTaskKeys": [
+        "walk",
+        "yoga",
+        "meditate"
+      ],
+      "shortForm": "a heart or breathing condition",
+      "axis": "cardiorespiratory",
+      "citation": "The relevant axis is EXERTION, not impact. The talk test is an established marker of the moderate/vigorous boundary and is consistent across walking, cycling and other modes (cardiac-rehabilitation literature); NHS knee-OA guidance phrases the same rule as working hard enough to get out of breath but still able to hold a conversation, which is the wording the copy uses. Unchanged from v1 apart from re-verification."
+    },
+    {
+      "limitation": "Pregnancy or postpartum recovery",
+      "excludedTaskKeys": [
+        "situp",
+        "pushup",
+        "weighttraining",
+        "basketball",
+        "tennis",
+        "cycling"
+      ],
+      "replacementTaskKeys": [
+        "walk",
+        "swim",
+        "yoga"
+      ],
+      "shortForm": "pregnancy or postpartum recovery",
+      "axis": "perinatal",
+      "citation": "ACOG 'Exercise During Pregnancy' — brisk walking, swimming and water workouts, modified yoga and modified pilates are the named safe activities; activities with a risk of FALLING or impact to the abdomen should be avoided, explicitly naming off-road cycling and contact sports such as soccer and basketball. CHANGED IN THIS REVISION: cycling added to the exclusions on that basis. Copy defers to the user's own clinician."
+    },
+    {
+      "limitation": "Limited mobility",
+      "excludedTaskKeys": [
+        "run",
+        "gym",
+        "cardio",
+        "pushup",
+        "situp",
+        "basketball",
+        "tennis",
+        "hike",
+        "cycling",
+        "weighttraining",
+        "walk",
+        "swim",
+        "yoga"
+      ],
+      "replacementTaskKeys": [
+        "stretch",
+        "meditate",
+        "journal",
+        "read"
+      ],
+      "shortForm": "limited mobility",
+      "axis": "mobility",
+      "citation": "No source supports recommending ambulatory or equipment-based exercise to a user who has told us their mobility is limited, so none is recommended — the honest output is seated/floor-based and non-physical options. Unchanged from v1."
+    }
+  ],
+  "questions": [
+    {
+      "pageId": "exerciseAccess",
+      "kind": "hardFilter",
+      "filters": [
+        {
+          "requiresEquipment": "pool",
+          "unlessAnswerContains": "A pool"
+        },
+        {
+          "requiresEquipment": "gym",
+          "unlessAnswerContains": "A gym or weights"
+        },
+        {
+          "requiresEquipment": "bike",
+          "unlessAnswerContains": "A bicycle"
+        }
+      ],
+      "scoreEffects": []
+    },
+    {
+      "pageId": "exerciseSetting",
+      "kind": "preference",
+      "matchTag": "setting",
+      "filters": [],
+      "scoreEffects": [
+        {
+          "whenAnswer": "Indoors",
+          "tagValue": "indoor",
+          "delta": 3
+        },
+        {
+          "whenAnswer": "Indoors",
+          "tagValue": "either",
+          "delta": 1
+        },
+        {
+          "whenAnswer": "Outdoors",
+          "tagValue": "outdoor",
+          "delta": 3
+        },
+        {
+          "whenAnswer": "Outdoors",
+          "tagValue": "either",
+          "delta": 1
+        },
+        {
+          "whenAnswer": "Either",
+          "tagValue": "either",
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "pageId": "exerciseIntensity",
+      "kind": "preference",
+      "matchTag": "intensity",
+      "filters": [],
+      "scoreEffects": [
+        {
+          "whenAnswer": "Take it gentle",
+          "tagValue": "gentle",
+          "delta": 3
+        },
+        {
+          "whenAnswer": "Steady effort",
+          "tagValue": "moderate",
+          "delta": 3
+        },
+        {
+          "whenAnswer": "Challenge me",
+          "tagValue": "challenging",
+          "delta": 3
+        }
+      ]
+    },
+    {
+      "pageId": "exerciseSocial",
+      "kind": "preference",
+      "matchTag": "social",
+      "filters": [],
+      "scoreEffects": [
+        {
+          "whenAnswer": "With friends",
+          "tagValue": "friends",
+          "delta": 3
+        },
+        {
+          "whenAnswer": "With friends",
+          "tagValue": "either",
+          "delta": 1
+        },
+        {
+          "whenAnswer": "Alone",
+          "tagValue": "alone",
+          "delta": 2
+        },
+        {
+          "whenAnswer": "Alone",
+          "tagValue": "either",
+          "delta": 1
+        },
+        {
+          "whenAnswer": "Either",
+          "tagValue": "either",
+          "delta": 1
+        }
+      ]
+    }
+  ],
+  "recommendation": {
+    "minPicks": 1,
+    "maxPicks": 2,
+    "lowImpactBonusWhenLimited": 12,
+    "acceptTitle": "Add to my plan",
+    "skipTitle": "Keep it flexible",
+    "explanationTemplates": {
+      "limitation_low_impact": "You mentioned %1$@, so we started you with something low-impact: %2$@. Go at your own pace, and skip it if anything hurts.",
+      "limitation_general": "With %1$@ in mind, we kept your start low-impact. %2$@ is where we begin.",
+      "limitation_acute_msk": "You told us about %1$@ that's still new or painful, so we've left the loaded work out and started with %2$@. Get it looked at by a doctor or physio before you push harder — especially if it isn't settling or you can't put weight on it.",
+      "limitation_talk_test": "You mentioned %1$@, so we started gentle with %2$@. A good rule: you should still be able to hold a conversation while you move.",
+      "limitation_perinatal": "We kept things gentle and started with %2$@. Your midwife or doctor is the best guide to what's right for you right now.",
+      "limitation_mobility": "You mentioned %1$@, so we started with %2$@ — something you can do seated or on the floor, at your own pace.",
+      "preference_setting": "You'd rather be %1$@, so %2$@ fits right in.",
+      "preference_social": "You train %1$@, and %2$@ works exactly that way.",
+      "access_matched": "%1$@ only needs what you already have.",
+      "access_rerouted": "No %1$@ nearby, so we picked %2$@ instead — it needs nothing extra.",
+      "default_fit": "%1$@ is the strongest fit for the way you answered."
+    },
+    "equipmentLabels": {
+      "pool": "pool",
+      "gym": "gym",
+      "bike": "bicycle"
+    },
+    "disclaimer": "General fitness guidance, not medical advice. If you're unsure what's right for you, check with your doctor or physio."
+  }
+}

@@ -1,0 +1,378 @@
+{
+  "rename_map": {
+    "Medal 1962: Origin Debut (Ditko)": {
+      "title": "Origin of Power (Cội Nguồn Trách Nhiệm)",
+      "icon": "🕸️",
+      "file": "hd_badge_1962_Ditko_Debut.png"
+    },
+    "Medal 1966: Golden Age (Romita Sr.)": {
+      "title": "Golden Age Champion (Hào Quang Kỷ Nguyên Vàng)",
+      "icon": "⭐",
+      "file": "hd_badge_1966_Romita_Sr.png"
+    },
+    "Medal 1967: Vintage Animation": {
+      "title": "Vintage Web-Slinger (Huyền Thoại Hoạt Họa 60s)",
+      "icon": "📺",
+      "file": "hd_badge_1967_Animated_TV.png"
+    },
+    "Medal 1973: Post-Gwen Tragedy": {
+      "title": "Beyond Tragedy (Vượt Qua Bi Kịch)",
+      "icon": "🩸",
+      "file": "hd_badge_1973_Post_Gwen.png"
+    },
+    "Medal 1978: The Spectacular": {
+      "title": "Spectacular Web-Warrior (Chiến Binh Đặc Biệt)",
+      "icon": "🕷️",
+      "file": "hd_badge_1978_Spectacular.png"
+    },
+    "Medal 1984: Alien Symbiote": {
+      "title": "Symbiote Awakening (Bản Năng Hắc Ám)",
+      "icon": "🖤",
+      "file": "hd_badge_1984_Alien_Costume.png"
+    },
+    "Medal 1988: McFarlane Era": {
+      "title": "Spaghetti Web Master (Bậc Thầy Tơ Xoắn Ốc)",
+      "icon": "🧵",
+      "file": "hd_badge_1988_Todd_McFarlane.png"
+    },
+    "Medal 1990: Erik Larsen Style": {
+      "title": "Urban Brawler (Chiến Binh Đường Phố)",
+      "icon": "🥊",
+      "file": "hd_badge_1990_Erik_Larsen.png"
+    },
+    "Medal 1992: Nueva York 2099": {
+      "title": "Cyberpunk 2099 (Chiến Binh Mạng 2099)",
+      "icon": "⚡",
+      "file": "hd_badge_1992_SpiderMan_2099.png"
+    },
+    "Medal 1994: The Animated Series": {
+      "title": "90s Childhood Legend (Huyền Thoại Tuổi Thơ 90s)",
+      "icon": "🎥",
+      "file": "hd_badge_1994_Animated_Series.png"
+    },
+    "Medal 1994: Scarlet Clone (Ben Reilly)": {
+      "title": "Scarlet Legacy (Di Sản Nhện Đỏ)",
+      "icon": "🔴",
+      "file": "hd_badge_1994_Scarlet_Spider.png"
+    },
+    "Medal 1996: Sensational Era": {
+      "title": "Sensational Web (Mạng Nhện Kỳ Diệu)",
+      "icon": "✨",
+      "file": "hd_badge_1996_Sensational.png"
+    },
+    "Medal 1999: Counter-Earth Unlimited": {
+      "title": "Nano Unlimited (Kháng Thần Phản Vũ Trụ)",
+      "icon": "🤖",
+      "file": "hd_badge_1999_Unlimited.png"
+    },
+    "Medal 2000: Ultimate Universe": {
+      "title": "Ultimate Web-Warrior (Chiến Binh Vũ Trụ Ultimate)",
+      "icon": "💥",
+      "file": "hd_badge_2000_Ultimate_Peter.png"
+    },
+    "Medal 2002: Cinema Legend (Tobey)": {
+      "title": "Cinema Pioneer (Tiên Phong Màn Bạc)",
+      "icon": "🎬",
+      "file": "hd_badge_2002_Raimi_Movie.png"
+    },
+    "Medal 2004: Hero's Sacrifice": {
+      "title": "Sacrifice on the Train (Hy Sinh Nghĩa Hiệp)",
+      "icon": "🚆",
+      "file": "hd_badge_2004_SpiderMan_2.png"
+    },
+    "Medal 2006: Stark Iron Spider": {
+      "title": "Iron Armor Protocol (Thiết Giáp Stark Thức Tỉnh)",
+      "icon": "🦾",
+      "file": "hd_badge_2006_Iron_Spider.png"
+    },
+    "Medal 2007: Cinema Black Suit": {
+      "title": "Shadows of Revenge (Bóng Tối Thù Hận)",
+      "icon": "⚫",
+      "file": "hd_badge_2007_Movie_Black_Suit.png"
+    },
+    "Medal 2008: Spectacular Cartoon": {
+      "title": "Spectacular Guardian (Vệ Binh New York)",
+      "icon": "🛡️",
+      "file": "hd_badge_2008_Spectacular_TV.png"
+    },
+    "Medal 2008: Brand New Day": {
+      "title": "A Brand New Day (Bình Minh Khởi Đầu Mới)",
+      "icon": "🌅",
+      "file": "hd_badge_2008_Brand_New_Day.png"
+    },
+    "Medal 2026: A Brand New Day": {
+      "title": "A Brand New Day (Bình Minh Khởi Đầu Mới)",
+      "icon": "🌅",
+      "file": "hd_badge_2008_Brand_New_Day.png"
+    },
+    "Medal 2010: Future Foundation": {
+      "title": "Future Foundation Scholar (Học Giả Hội Tương Lai)",
+      "icon": "🤍",
+      "file": "hd_badge_2010_Future_Foundation.png"
+    },
+    "Medal 2011: Brooklyn Prodigy (Miles)": {
+      "title": "Brooklyn Prodigy (Thần Đồng Brooklyn)",
+      "icon": "🎨",
+      "file": "hd_badge_2011_Miles_Ultimate.png"
+    },
+    "Medal 2011: Big Time Stealth": {
+      "title": "Neon Stealth Ghost (Bóng Ma Neon Tàng Hình)",
+      "icon": "🕶️",
+      "file": "hd_badge_2011_Stealth_Suit.png"
+    },
+    "Medal 2012: The Amazing (Andrew)": {
+      "title": "Acrobatic Champion (Nhào Lộn Tuyệt Kỹ)",
+      "icon": "🤸",
+      "file": "hd_badge_2012_Amazing_Andrew.png"
+    },
+    "Medal 2012: The Other (Kaine)": {
+      "title": "Ascended Other (Kaine Thức Tỉnh Dã Tính)",
+      "icon": "🦂",
+      "file": "hd_badge_2012_Scarlet_Kaine.png"
+    },
+    "Medal 2013: Superior Mind (Otto)": {
+      "title": "The Superior Mind (Trí Tuệ Tối Thượng)",
+      "icon": "🧠",
+      "file": "hd_badge_2013_Superior_Otto.png"
+    },
+    "Medal 2014: Visual Peak (TASM 2)": {
+      "title": "Visual Peak (Đỉnh Cao Tuyệt Kỹ Đu Dây)",
+      "icon": "🌇",
+      "file": "hd_badge_2014_Amazing_2.png"
+    },
+    "Medal 2015: ANAD 2099 White": {
+      "title": "White Armor 2099 (Bạch Giáp Tân Thời 2099)",
+      "icon": "🤍",
+      "file": "hd_badge_2015_2099_White.png"
+    },
+    "Medal 2015: Worldwide Tech CEO": {
+      "title": "Parker Industries CEO (Tập Đoàn Công Nghệ Toàn Cầu)",
+      "icon": "🌐",
+      "file": "hd_badge_2015_Parker_Industries.png"
+    },
+    "Medal 2016: MCU Homecoming (Tom)": {
+      "title": "Homecoming Prodigy (Tân Binh Avengers)",
+      "icon": "🎒",
+      "file": "hd_badge_2016_Civil_War_Tom.png"
+    },
+    "Medal 2018: Infinity Nano Spider": {
+      "title": "Nano Iron Spider (Chiến Giáp Nano Vô Cực)",
+      "icon": "🤖",
+      "file": "hd_badge_2018_MCU_Iron_Spider.png"
+    },
+    "Medal 2018: Gamerverse Advanced (PS4)": {
+      "title": "Be Greater (Vĩ Đại Hơn)",
+      "icon": "🕷️",
+      "file": "hd_badge_2018_PS4_Advanced.png"
+    },
+    "Medal 2018: Leap of Faith (Spider-Verse)": {
+      "title": "Leap of Faith (Bước Nhảy Niềm Tin)",
+      "icon": "👟",
+      "file": "hd_badge_2018_SpiderVerse_Graffiti.png"
+    },
+    "Medal 2019: Upgraded Suit (FFH)": {
+      "title": "Upgraded Vanguard (Cải Tiến Tiên Phong)",
+      "icon": "🔧",
+      "file": "hd_badge_2019_Far_From_Home.png"
+    },
+    "Medal 2020: Bio-Electric Venom (PS5)": {
+      "title": "Bio-Electric Surge (Sấm Sét Sinh Học)",
+      "icon": "⚡",
+      "file": "hd_badge_2020_Miles_PS5.png"
+    },
+    "Medal 2021: Final Swing (No Way Home)": {
+      "title": "The Final Swing (Cú Đu Dây Bất Tử)",
+      "icon": "❄️",
+      "file": "hd_badge_2021_No_Way_Home.png"
+    },
+    "Medal 2023: Across the Spider-Verse": {
+      "title": "Multiverse Anomaly (Dị Bản Đa Vũ Trụ)",
+      "icon": "🌌",
+      "file": "hd_badge_2023_Across_SpiderVerse.png"
+    }
+  },
+  "new_13_combat": [
+    {
+      "title": "Boss Slayer (Kẻ Diệt Ác Nhân)",
+      "icon": "💀",
+      "category": "Boss",
+      "tier": "Mythic",
+      "equipSlot": "Slot 1",
+      "requirement": "Hạ gục thành công Spider Rogue Bosses trong các trận đại chiến cam go.",
+      "passiveBonus": "+15% Sát thương lên Boss và Elite, tăng 20% khả năng phá vỡ Break Gauge.",
+      "file": "hd_badge_combat_boss_slayer.png",
+      "gold": 300,
+      "gems": 10,
+      "tokens": 15,
+      "bonus": 15
+    },
+    {
+      "title": "Ultra Spider-Sense (Giác Quan Nhện Thần Sầu)",
+      "icon": "👁️",
+      "category": "Combat",
+      "tier": "Mythic",
+      "equipSlot": "Slot 1",
+      "requirement": "Thực hiện thành công 30 lần Perfect Dodge né đòn hoàn hảo trong chiến đấu.",
+      "passiveBonus": "+10% Tỉ lệ Né tránh hoàn toàn, kích hoạt phản đòn Slow-Motion làm chậm thời gian.",
+      "file": "hd_badge_combat_ultra_spidersense.png",
+      "gold": 250,
+      "gems": 8,
+      "tokens": 12,
+      "bonus": 10
+    },
+    {
+      "title": "Air Combat Ace (Bậc Thầy Không Kích)",
+      "icon": "🌪️",
+      "category": "Combat",
+      "tier": "Platinum",
+      "equipSlot": "Slot 2",
+      "requirement": "Thực hiện 50 đòn combo liên hoàn trên không (Air Combo) không chạm đất.",
+      "passiveBonus": "+12% Sát thương đòn đánh trên không, duy trì chuỗi combo x2 năng lượng.",
+      "file": "hd_badge_combat_air_ace.png",
+      "gold": 200,
+      "gems": 6,
+      "tokens": 10,
+      "bonus": 12
+    },
+    {
+      "title": "Web-Whip Annihilator (Tơ Nhện Cuồng Nộ)",
+      "icon": "🧣",
+      "category": "Combat",
+      "tier": "Gold",
+      "equipSlot": "Slot 2",
+      "requirement": "Dùng kỹ năng quất tơ ném văng 100 kẻ địch hoặc vật nặng trong chiến trận.",
+      "passiveBonus": "+10% Sát thương diện rộng AoE từ các đòn quất vung và ném đồ vật.",
+      "file": "hd_badge_combat_web_whip.png",
+      "gold": 180,
+      "gems": 5,
+      "tokens": 8,
+      "bonus": 10
+    },
+    {
+      "title": "Web-Bomb Maestro (Bậc Thầy Bẫy Tơ)",
+      "icon": "💣",
+      "category": "Combat",
+      "tier": "Gold",
+      "equipSlot": "Slot 3",
+      "requirement": "Sử dụng hiệu quả thiết bị Web-Bomb trói chặt toàn bộ nhóm địch cùng lúc.",
+      "passiveBonus": "+15% Thời gian khống chế trói tơ (Webbed Up), giảm 15% thời gian hồi Gadget.",
+      "file": "hd_badge_combat_web_bomb.png",
+      "gold": 180,
+      "gems": 5,
+      "tokens": 8,
+      "bonus": 15
+    },
+    {
+      "title": "Mega Venom Blast (Cơn Bão Điện Sinh Học)",
+      "icon": "⚡",
+      "category": "Combat",
+      "tier": "Mythic",
+      "equipSlot": "Slot 1",
+      "requirement": "Tích tụ thanh năng lượng Venom tối đa và giải phóng đòn quét sạch Mega Venom Blast.",
+      "passiveBonus": "+15% Sát thương Shock điện, đánh choáng lập tức toàn bộ kẻ địch xung quanh.",
+      "file": "hd_badge_combat_mega_venom.png",
+      "gold": 300,
+      "gems": 10,
+      "tokens": 15,
+      "bonus": 15
+    },
+    {
+      "title": "Stealth Takedown Predator (Săn Lùng Trong Bóng Tối)",
+      "icon": "🕶️",
+      "category": "Combat",
+      "tier": "Platinum",
+      "equipSlot": "Slot 3",
+      "requirement": "Hạ gục 50 tên lính tuần tra hoàn toàn trong trạng thái ẩn thân không bị phát hiện.",
+      "passiveBonus": "+20% Sát thương kết liễu đòn đánh lén Takedown từ xà nhà hoặc góc khuất.",
+      "file": "hd_badge_combat_stealth_predator.png",
+      "gold": 220,
+      "gems": 7,
+      "tokens": 10,
+      "bonus": 20
+    },
+    {
+      "title": "Ground Strike Cataclysm (Thần Búa Đập Đất)",
+      "icon": "🔨",
+      "category": "Combat",
+      "tier": "Silver",
+      "equipSlot": "Slot 2",
+      "requirement": "Lao từ trên cao xuống tung đòn Ground Strike chấn động làm ngã rạp quân thù.",
+      "passiveBonus": "+12% Sát thương đập đất, tăng bán kính chấn động sóng xung kích thêm 25%.",
+      "file": "hd_badge_combat_ground_strike.png",
+      "gold": 150,
+      "gems": 4,
+      "tokens": 6,
+      "bonus": 12
+    },
+    {
+      "title": "Last Stand Resilience (Kháng Cự Thập Tử Nhất Sinh)",
+      "icon": "❤️‍🩹",
+      "category": "Combat",
+      "tier": "Platinum",
+      "equipSlot": "Slot 1",
+      "requirement": "Lội ngược dòng chiến thắng trận đánh khi lượng máu giảm xuống mức báo động đỏ (<20%).",
+      "passiveBonus": "Khi máu dưới 25%, giảm 30% sát thương phải nhận và tăng gấp đôi tốc độ hồi tơ.",
+      "file": "hd_badge_combat_last_stand.png",
+      "gold": 250,
+      "gems": 8,
+      "tokens": 12,
+      "bonus": 30
+    },
+    {
+      "title": "Velocity Speedster (Tốc Độ Đu Dây Thần Tốc)",
+      "icon": "💨",
+      "category": "Combat",
+      "tier": "Gold",
+      "equipSlot": "Slot 2",
+      "requirement": "Duy trì quán tính đu dây tối đa và tung đòn Swing Kick hạ gục mục tiêu tức thì.",
+      "passiveBonus": "+15% Tốc độ di chuyển, tăng 15% sát thương đòn đạp chân Swing Kick.",
+      "file": "hd_badge_combat_velocity.png",
+      "gold": 200,
+      "gems": 5,
+      "tokens": 8,
+      "bonus": 15
+    },
+    {
+      "title": "Cosmic Enigma (Thức Tỉnh Enigma Force)",
+      "icon": "✨",
+      "category": "Combat",
+      "tier": "Mythic",
+      "equipSlot": "Slot 1",
+      "requirement": "Hấp thụ nguồn sức mạnh vũ trụ Captain Universe, đứng vững trước các thế lực thần thánh.",
+      "passiveBonus": "+15% Toàn bộ chỉ số chiến đấu, miễn nhiễm các hiệu ứng suy nhược bất lợi.",
+      "file": "hd_badge_combat_cosmic_enigma.png",
+      "gold": 500,
+      "gems": 15,
+      "tokens": 25,
+      "bonus": 15
+    },
+    {
+      "title": "Counter-Parry Specialist (Bậc Thầy Phản Đòn)",
+      "icon": "⚔️",
+      "category": "Combat",
+      "tier": "Silver",
+      "equipSlot": "Slot 2",
+      "requirement": "Thực hiện thành công 25 lần đỡ đòn phản công (Parry) làm mất thăng bằng kẻ địch.",
+      "passiveBonus": "+15% Sát thương đòn phản kích sau khi đỡ thành công, tăng tỉ lệ chí mạng.",
+      "file": "hd_badge_combat_counter_parry.png",
+      "gold": 160,
+      "gems": 4,
+      "tokens": 6,
+      "bonus": 15
+    },
+    {
+      "title": "Indomitable Will (Người Hùng Không Khuất Phục)",
+      "icon": "🔥",
+      "category": "Combat",
+      "tier": "Mythic",
+      "equipSlot": "Slot 1",
+      "requirement": "Không bao giờ bỏ cuộc dù bị đè dưới đống đổ nát, kiên cường đứng dậy bảo vệ người dân.",
+      "passiveBonus": "Khi bị đánh bại, kích hoạt ý chí hồi sinh 1 lần với 30% Máu và lá chắn tơ bất tử 3s.",
+      "file": "hd_badge_combat_indomitable_will.png",
+      "gold": 400,
+      "gems": 12,
+      "tokens": 20,
+      "bonus": 30
+    }
+  ]
+}

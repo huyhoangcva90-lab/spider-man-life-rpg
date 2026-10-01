@@ -4,7 +4,7 @@
 
 SPIDEY LIFE turns completed real-life missions into attacks against an active villain raid. The home screen is the Arena. Map, Missions, Allies, and Profile are separate functional modes—not decoration.
 
-![SPIDEY LIFE brand board](../app-v6/assets/brand/spidey-life-brand-board-v1.png)
+![SPIDEY LIFE brand board](../assets/brand/spidey-life-brand-board-v1.png)
 
 ## Visual DNA
 

@@ -1,0 +1,266 @@
+[
+  {
+    "startTime": 1.14,
+    "words": [
+      { "text": "Welcome", "startTime": 1.14 },
+      { "text": "to", "startTime": 1.86 },
+      { "text": "this", "startTime": 2.12 },
+      { "text": "two", "startTime": 2.32 },
+      { "text": "-minute", "startTime": 2.64 },
+      { "text": "meditation", "startTime": 2.86 },
+      { "text": "from", "startTime": 3.36 },
+      { "text": "Rise.", "startTime": 3.8 },
+      { "text": "Let's", "startTime": 5.48 },
+      { "text": "take", "startTime": 6.2 },
+      { "text": "a", "startTime": 6.34 },
+      { "text": "short", "startTime": 6.48 },
+      { "text": "break", "startTime": 6.68 },
+      { "text": "to", "startTime": 6.98 },
+      { "text": "relax", "startTime": 7.28 },
+      { "text": "and", "startTime": 7.52 },
+      { "text": "recharge.", "startTime": 8.24 }
+    ]
+  },
+  {
+    "startTime": 10.16,
+    "words": [
+      { "text": "Find", "startTime": 10.16 },
+      { "text": "a", "startTime": 10.88 },
+      { "text": "comfortable", "startTime": 11.0 },
+      { "text": "position.", "startTime": 11.4 },
+      { "text": "And", "startTime": 14.46 },
+      { "text": "if", "startTime": 15.18 },
+      { "text": "you", "startTime": 15.32 },
+      { "text": "like,", "startTime": 15.42 },
+      { "text": "close", "startTime": 16.3 },
+      { "text": "your", "startTime": 16.74 },
+      { "text": "eyes.", "startTime": 17.0 }
+    ]
+  },
+  {
+    "startTime": 19.84,
+    "words": [
+      { "text": "Take", "startTime": 19.84 },
+      { "text": "a", "startTime": 20.56 },
+      { "text": "deep", "startTime": 20.68 },
+      { "text": "breath", "startTime": 20.86 },
+      { "text": "in", "startTime": 21.74 },
+      { "text": "through", "startTime": 23.74 },
+      { "text": "your", "startTime": 23.96 },
+      { "text": "nose", "startTime": 24.12 },
+      { "text": "and", "startTime": 24.46 },
+      { "text": "slowly", "startTime": 27.42 },
+      { "text": "exhale", "startTime": 27.8 },
+      { "text": "through", "startTime": 28.18 },
+      { "text": "your", "startTime": 28.5 },
+      { "text": "mouth.", "startTime": 28.66 },
+      { "text": "Release", "startTime": 30.24 },
+      { "text": "any", "startTime": 30.88 },
+      { "text": "stress", "startTime": 31.3 },
+      { "text": "or", "startTime": 31.7 },
+      { "text": "tension.", "startTime": 32.52 }
+    ]
+  },
+  {
+    "startTime": 35.58,
+    "words": [
+      { "text": "Now", "startTime": 35.58 },
+      { "text": "imagine", "startTime": 35.68 },
+      { "text": "your", "startTime": 36.1 },
+      { "text": "inner", "startTime": 36.38 },
+      { "text": "beach.", "startTime": 36.7 }
+    ]
+  },
+  {
+    "startTime": 38.58,
+    "words": [
+      { "text": "The", "startTime": 38.58 },
+      { "text": "waves", "startTime": 39.0 },
+      { "text": "are", "startTime": 39.32 },
+      { "text": "crashing", "startTime": 39.54 },
+      { "text": "against", "startTime": 39.86 },
+      { "text": "the", "startTime": 40.26 },
+      { "text": "shore.", "startTime": 40.46 },
+      { "text": "Bringing", "startTime": 42.8 },
+      { "text": "a", "startTime": 43.08 },
+      { "text": "sense", "startTime": 43.26 },
+      { "text": "of", "startTime": 43.44 },
+      { "text": "calm", "startTime": 43.74 },
+      { "text": "and", "startTime": 44.0 },
+      { "text": "clarity.", "startTime": 45.0 }
+    ]
+  },
+  {
+    "startTime": 47.0,
+    "words": [
+      { "text": "A", "startTime": 47.0 },
+      { "text": "gentle", "startTime": 47.28 },
+      { "text": "breeze", "startTime": 47.52 },
+      { "text": "carries", "startTime": 47.88 },
+      { "text": "the", "startTime": 48.32 },
+      { "text": "scent", "startTime": 48.56 },
+      { "text": "of", "startTime": 48.82 },
+      { "text": "the", "startTime": 49.04 },
+      { "text": "ocean.", "startTime": 49.24 }
+    ]
+  },
+  {
+    "startTime": 52.22,
+    "words": [
+      { "text": "As", "startTime": 52.22 },
+      { "text": "you", "startTime": 53.02 },
+      { "text": "stand", "startTime": 53.18 },
+      { "text": "on", "startTime": 53.44 },
+      { "text": "the", "startTime": 53.62 },
+      { "text": "beach,", "startTime": 53.74 },
+      { "text": "feel", "startTime": 54.9 },
+      { "text": "the", "startTime": 55.16 },
+      { "text": "sand", "startTime": 55.36 },
+      { "text": "under", "startTime": 55.66 },
+      { "text": "your", "startTime": 56.12 },
+      { "text": "feet.", "startTime": 56.28 },
+      { "text": "And", "startTime": 59.14 },
+      { "text": "the", "startTime": 59.94 },
+      { "text": "sun", "startTime": 60.1 },
+      { "text": "on", "startTime": 60.5 },
+      { "text": "your", "startTime": 60.82 },
+      { "text": "skin.", "startTime": 61.0 },
+      { "text": "Let", "startTime": 63.12 },
+      { "text": "this", "startTime": 63.26 },
+      { "text": "peaceful", "startTime": 63.52 },
+      { "text": "scene", "startTime": 63.92 },
+      { "text": "fill", "startTime": 64.4 },
+      { "text": "your", "startTime": 65.16 },
+      { "text": "mind.", "startTime": 65.44 }
+    ]
+  },
+  {
+    "startTime": 75.2,
+    "words": [
+      { "text": "Now", "startTime": 75.2 },
+      { "text": "bring", "startTime": 76.0 },
+      { "text": "your", "startTime": 76.22 },
+      { "text": "attention", "startTime": 76.44 },
+      { "text": "back", "startTime": 76.92 },
+      { "text": "to", "startTime": 77.42 },
+      { "text": "your", "startTime": 77.84 },
+      { "text": "breath.", "startTime": 77.96 },
+      { "text": "Notice", "startTime": 78.38 },
+      { "text": "the", "startTime": 79.48 },
+      { "text": "feeling", "startTime": 79.78 },
+      { "text": "of", "startTime": 80.12 },
+      { "text": "the", "startTime": 80.38 },
+      { "text": "air", "startTime": 80.56 },
+      { "text": "entering", "startTime": 80.82 },
+      { "text": "and", "startTime": 81.3 },
+      { "text": "leaving", "startTime": 81.7 },
+      { "text": "your", "startTime": 81.96 },
+      { "text": "body.", "startTime": 82.28 }
+    ]
+  },
+  {
+    "startTime": 85.1,
+    "words": [
+      { "text": "Let's", "startTime": 85.1 },
+      { "text": "count", "startTime": 85.58 },
+      { "text": "five", "startTime": 85.74 },
+      { "text": "breaths", "startTime": 86.28 },
+      { "text": "together.", "startTime": 86.64 }
+    ]
+  },
+  {
+    "startTime": 89.2,
+    "words": [
+      { "text": "Breathe", "startTime": 89.2 },
+      { "text": "in", "startTime": 89.68 },
+      { "text": "and", "startTime": 90.24 },
+      { "text": "out.", "startTime": 93.6 },
+      { "text": "One,", "startTime": 94.18 },
+      { "text": "breathe", "startTime": 97.24 },
+      { "text": "in", "startTime": 98.62 },
+      { "text": "and", "startTime": 99.04 },
+      { "text": "out.", "startTime": 102.58 },
+      { "text": "Two,", "startTime": 104.52 },
+      { "text": "breathe", "startTime": 105.66 },
+      { "text": "in", "startTime": 108.32 },
+      { "text": "and", "startTime": 109.08 },
+      { "text": "out.", "startTime": 112.22 },
+      { "text": "Three,", "startTime": 113.9 },
+      { "text": "breathe", "startTime": 114.94 },
+      { "text": "in", "startTime": 116.56 },
+      { "text": "and", "startTime": 117.14 },
+      { "text": "out.", "startTime": 120.66 },
+      { "text": "Four,", "startTime": 121.58 },
+      { "text": "breathe", "startTime": 124.62 },
+      { "text": "in", "startTime": 125.0 },
+      { "text": "and", "startTime": 125.48 },
+      { "text": "out.", "startTime": 129.18 },
+      { "text": "Five.", "startTime": 131.12 }
+    ]
+  },
+  {
+    "startTime": 133.22,
+    "words": [
+      { "text": "If", "startTime": 133.22 },
+      { "text": "your", "startTime": 133.96 },
+      { "text": "mind", "startTime": 134.04 },
+      { "text": "wanders", "startTime": 134.3 },
+      { "text": "gently", "startTime": 134.92 },
+      { "text": "bring", "startTime": 135.3 },
+      { "text": "it", "startTime": 135.6 },
+      { "text": "back", "startTime": 135.74 },
+      { "text": "to", "startTime": 135.96 },
+      { "text": "your", "startTime": 136.16 },
+      { "text": "breath.", "startTime": 136.28 }
+    ]
+  },
+  {
+    "startTime": 137.58,
+    "words": [
+      { "text": "Now", "startTime": 137.58 },
+      { "text": "take", "startTime": 138.38 },
+      { "text": "one", "startTime": 138.58 },
+      { "text": "more", "startTime": 138.84 },
+      { "text": "deep", "startTime": 139.12 },
+      { "text": "breath", "startTime": 139.6 },
+      { "text": "in", "startTime": 140.14 },
+      { "text": "and", "startTime": 141.58 },
+      { "text": "out.", "startTime": 145.26 }
+    ]
+  },
+  {
+    "startTime": 147.46,
+    "words": [
+      { "text": "When", "startTime": 147.46 },
+      { "text": "you're", "startTime": 148.1 },
+      { "text": "ready,", "startTime": 148.32 },
+      { "text": "open", "startTime": 149.3 },
+      { "text": "your", "startTime": 149.8 },
+      { "text": "eyes", "startTime": 149.98 },
+      { "text": "and", "startTime": 150.32 },
+      { "text": "bring", "startTime": 151.7 },
+      { "text": "your", "startTime": 151.92 },
+      { "text": "attention", "startTime": 152.12 },
+      { "text": "back", "startTime": 152.54 },
+      { "text": "to", "startTime": 152.88 },
+      { "text": "the", "startTime": 153.16 },
+      { "text": "present", "startTime": 153.28 },
+      { "text": "moment.", "startTime": 153.6 }
+    ]
+  },
+  {
+    "startTime": 155.64,
+    "words": [
+      { "text": "Thank", "startTime": 155.64 },
+      { "text": "you", "startTime": 156.28 },
+      { "text": "for", "startTime": 156.48 },
+      { "text": "taking", "startTime": 156.62 },
+      { "text": "this", "startTime": 156.9 },
+      { "text": "time", "startTime": 157.18 },
+      { "text": "to", "startTime": 157.5 },
+      { "text": "care", "startTime": 158.1 },
+      { "text": "for", "startTime": 158.34 },
+      { "text": "yourself.", "startTime": 158.52 }
+    ]
+  }
+]

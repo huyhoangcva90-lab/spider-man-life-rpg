@@ -8,23 +8,23 @@ export const HERO_ANIMATIONS = [
 ];
 
 const STATE = {
-  idle:          { frames: [[245, 360], [325, 360]], fps: 3, loop: true, motion: 'breathe' },
-  combat_idle:   { frames: [[85, 205], [165, 205]], fps: 5, loop: true, motion: 'guard' },
-  run:           { frames: [[0, 0], [80, 0], [160, 0], [240, 0]], fps: 10, motion: 'run' },
-  jump:          { frames: [[0, 60], [80, 60], [160, 60]], fps: 8, motion: 'jump' },
-  dodge:         { frames: [[0, 120], [80, 120], [160, 120]], fps: 12, motion: 'dodge' },
-  attack_01:     { frames: [[0, 180], [80, 180], [160, 180]], fps: 12, motion: 'strike', vfx: ['POW!', 'impact'] },
-  attack_02:     { frames: [[240, 180], [320, 180], [400, 180]], fps: 12, motion: 'uppercut', vfx: ['KRAK!', 'slash'] },
-  attack_03:     { frames: [[0, 240], [80, 240], [160, 240], [240, 240]], fps: 14, motion: 'spin', vfx: ['WHAM!', 'impact'] },
-  ranged_attack: { frames: [[320, 240], [400, 240], [480, 240]], fps: 11, motion: 'recoil', vfx: ['THWIP!', 'web'] },
-  skill_01:      { frames: [[0, 360], [80, 360], [160, 360]], fps: 12, motion: 'skill', vfx: ['ZAP!', 'electric'] },
-  skill_02:      { frames: [[240, 360], [320, 360], [400, 360]], fps: 12, motion: 'skill', vfx: ['FWIP!', 'web'] },
-  skill_03:      { frames: [[0, 420], [240, 420], [320, 420]], fps: 12, motion: 'skill', vfx: ['BOOM!', 'impact'] },
-  ultimate:      { frames: [[400, 120], [400, 180], [480, 180], [480, 240]], fps: 15, motion: 'ultimate', vfx: ['MAXIMUM SPIDER!', 'ultimate'] },
-  hurt:          { frames: [[240, 480], [320, 480]], fps: 8, motion: 'hurt', vfx: ['UGH!', 'hurt'] },
-  knockback:     { frames: [[0, 540], [240, 540], [320, 540]], fps: 10, motion: 'knockback', vfx: ['KABOOM!', 'hurt'] },
-  KO:            { frames: [[0, 600], [240, 600]], fps: 5, motion: 'ko', vfx: ['K.O.', 'ko'] },
-  victory:       { frames: [[320, 540], [320, 600], [240, 600]], fps: 6, loop: true, motion: 'victory', vfx: ['AMAZING!', 'victory'] }
+  idle:          { frames: [[0, 0], [256, 0], [512, 0], [768, 0], [1024, 0], [1280, 0], [1536, 0], [1792, 0]], fps: 7, loop: true, motion: 'breathe', vfx: null },
+  combat_idle:   { frames: [[2048, 0], [2304, 0], [0, 256], [256, 256]], fps: 6, loop: true, motion: 'guard', vfx: null },
+  run:           { frames: [[512, 256], [768, 256], [1024, 256], [1280, 256], [1536, 256], [1792, 256], [2048, 256], [2304, 256]], fps: 12, loop: false, motion: 'run', vfx: null },
+  jump:          { frames: [[0, 512], [256, 512], [512, 512], [768, 512], [1024, 512], [1280, 512]], fps: 10, loop: false, motion: 'jump', vfx: null },
+  dodge:         { frames: [[1536, 512], [1792, 512], [2048, 512], [2304, 512], [0, 768], [256, 768], [512, 768]], fps: 14, loop: false, motion: 'dodge', vfx: null },
+  attack_01:     { frames: [[768, 768], [1024, 768], [1280, 768], [1536, 768]], fps: 12, loop: false, motion: 'strike', vfx: ['THWIP-PUNCH!', 'impact'] },
+  attack_02:     { frames: [[1792, 768], [2048, 768], [2304, 768], [0, 1024], [256, 1024], [512, 1024], [768, 1024]], fps: 13, loop: false, motion: 'uppercut', vfx: ['SPIDER-KICK!', 'slash'] },
+  attack_03:     { frames: [[1024, 1024], [1280, 1024], [1536, 1024], [1792, 1024], [2048, 1024], [2304, 1024], [0, 1280], [256, 1280]], fps: 14, loop: false, motion: 'spin', vfx: ['COMBO FINISH!', 'impact'] },
+  ranged_attack: { frames: [[512, 1280], [768, 1280], [1024, 1280], [1280, 1280], [1536, 1280], [1792, 1280]], fps: 12, loop: false, motion: 'recoil', vfx: ['THWIP!', 'web'] },
+  skill_01:      { frames: [[2048, 1280], [2304, 1280], [0, 1536], [256, 1536], [512, 1536], [768, 1536]], fps: 13, loop: false, motion: 'skill', vfx: ['SPIDER DASH!', 'electric'] },
+  skill_02:      { frames: [[1024, 1536], [1280, 1536], [1536, 1536], [1792, 1536], [2048, 1536]], fps: 12, loop: false, motion: 'skill', vfx: ['WEB UPPERCUT!', 'web'] },
+  skill_03:      { frames: [[2304, 1536], [0, 1792], [256, 1792], [512, 1792], [768, 1792], [1024, 1792]], fps: 14, loop: false, motion: 'skill', vfx: ['WEB SWING SLAM!', 'impact'] },
+  ultimate:      { frames: [[1280, 1792], [1536, 1792], [1792, 1792], [2048, 1792], [2304, 1792], [0, 2048], [256, 2048], [512, 2048], [768, 2048], [1024, 2048], [1280, 2048], [1536, 2048]], fps: 15, loop: false, motion: 'ultimate', vfx: ['MAXIMUM SPIDER!', 'ultimate'] },
+  hurt:          { frames: [[1792, 2048], [2048, 2048]], fps: 8, loop: false, motion: 'hurt', vfx: ['UGH!', 'hurt'] },
+  knockback:     { frames: [[2304, 2048], [0, 2304], [256, 2304], [512, 2304], [768, 2304], [1024, 2304], [1280, 2304]], fps: 11, loop: false, motion: 'knockback', vfx: ['CRASH!', 'hurt'] },
+  KO:            { frames: [[1536, 2304], [1792, 2304], [2048, 2304], [2304, 2304], [0, 2560]], fps: 7, loop: false, motion: 'ko', vfx: ['K.O.', 'ko'] },
+  victory:       { frames: [[256, 2560], [512, 2560], [768, 2560], [1024, 2560], [1280, 2560], [1536, 2560], [1792, 2560]], fps: 7, loop: true, motion: 'victory', vfx: ['EXCELSIOR!', 'victory'] }
 };
 
 export class HeroAnimationController {
@@ -94,13 +94,16 @@ export class HeroAnimationController {
     let index = 0;
     const draw = () => {
       const [x, y] = config.frames[index % config.frames.length];
-      this.hero.style.setProperty('--sprite-x', `${-Math.round(x * 2.4)}px`);
-      this.hero.style.setProperty('--sprite-y', `${-Math.round(y * 2.4)}px`);
+      this.hero.style.setProperty('--sprite-x', `${-x}px`);
+      this.hero.style.setProperty('--sprite-y', `${-y}px`);
       index += 1;
     };
     draw();
     const interval = Math.max(24, Math.round(1000 / config.fps / this.speed));
     this.timer = window.setInterval(draw, interval);
+    if (name === 'ranged_attack' || name === 'skill_02') {
+      window.setTimeout(() => this.spawnWebProjectile(), interval * 2);
+    }
     if (config.vfx) {
       const word = this.pendingComicText || config.vfx[0];
       this.pendingComicText = null;
@@ -137,5 +140,19 @@ export class HeroAnimationController {
       document.querySelector('.arena-stage, .action-combat-stage')?.classList.remove('combat-impact');
       document.querySelector('.arena-fighter--villain')?.classList.remove('villain-hit');
     }, 760);
+  }
+
+  spawnWebProjectile() {
+    const layer = document.getElementById('combat-vfx-layer');
+    if (!layer) return;
+    const webShot = document.createElement('div');
+    webShot.className = 'cosmic-web-shot';
+    webShot.innerHTML = `
+      <div class="web-beam"></div>
+      <div class="web-ball"></div>
+      <div class="web-entangle"></div>
+    `;
+    layer.appendChild(webShot);
+    window.setTimeout(() => webShot.remove(), 700);
   }
 }
