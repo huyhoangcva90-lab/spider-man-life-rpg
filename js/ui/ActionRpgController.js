@@ -18,6 +18,10 @@ export class ActionRpgController {
     this.badges = {};
     this.notionTasks = [];
     this.notionHabits = [];
+    this.skillIcons = {};
+    this.skillsCatalog = [];
+    this.previewSuitIndex = 0;
+    this.equippedSuitIndex = 0;
     this.journalEntries = JSON.parse(localStorage.getItem('spidey_journal_entries') || '[]');
   }
 
@@ -58,14 +62,16 @@ export class ActionRpgController {
 
   async loadAllGameData() {
     try {
-      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, snapRes] = await Promise.allSettled([
+      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, snapRes, iconsRes, skillsRes] = await Promise.allSettled([
         fetch('./data/suits.json').then(r => r.json()),
         fetch('./data/spider-verse.json').then(r => r.json()),
         fetch('./data/bosses.json').then(r => r.json()),
         fetch('./data/minions.json').then(r => r.json()),
         fetch('./data/backpacks.json').then(r => r.json()),
         fetch('./data/badges.json').then(r => r.json()),
-        fetch('./data/notion-snapshot.json').then(r => r.json())
+        fetch('./data/notion-snapshot.json').then(r => r.json()),
+        fetch('./data/skill_icons.json').then(r => r.json()),
+        fetch('./data/skills.json').then(r => r.json())
       ]);
 
       if (suitsRes.status === 'fulfilled') this.suits = suitsRes.value || [];
@@ -74,6 +80,8 @@ export class ActionRpgController {
       if (minionsRes.status === 'fulfilled') this.minions = minionsRes.value || {};
       if (backpacksRes.status === 'fulfilled') this.backpacks = backpacksRes.value || [];
       if (badgesRes.status === 'fulfilled') this.badges = badgesRes.value?.rename_map || {};
+      if (iconsRes.status === 'fulfilled') this.skillIcons = iconsRes.value || {};
+      if (skillsRes.status === 'fulfilled') this.skillsCatalog = skillsRes.value || [];
       
       if (snapRes.status === 'fulfilled' && snapRes.value?.collections) {
         this.notionTasks = snapRes.value.collections.masterCalendar || [];
@@ -359,14 +367,67 @@ export class ActionRpgController {
   }
 
   /* -------------------------------------------------------------
-     2. TAB [HERO]: SUITS (THỜI TRANG), ROSTER (77 SPIDER-VERSE), SKILLS, GADGETS
+     2. TAB [HERO]: SUITS WARDROBE (WITH SHOWCASE POD), SKILLS (NOTION IMAGES), ROSTER, GADGETS
   ------------------------------------------------------------- */
   renderHeroSection() {
+    const currentVariant = this.engine.data.hero.variant || 'Advanced Suit 2.0';
+    const previewSuit = this.suits[this.previewSuitIndex] || this.suits[0] || {
+      Suit: currentVariant,
+      Owner: 'Peter Parker',
+      ImageUrl: './assets/spideytracker/tracker_logo3.png',
+      GameEffect: 'Tăng cường phản xạ và sức bền chiến đấu của Người Nhện.',
+      LevelReq: 1,
+      Cost: 'Khởi đầu'
+    };
+    const isEquipped = previewSuit.Suit === currentVariant;
+
+    // Left Column: Hero Showcase Pod
+    const showcaseHtml = `
+      <aside class="spidey-showcase-pod">
+        <div class="spidey-showcase-badge">
+          <span class="pixel-tag ${isEquipped ? 'pixel-tag--red' : 'pixel-tag--gold'}">${isEquipped ? '★ ĐANG MẶC' : 'XEM TRƯỚC'}</span>
+          <span class="pixel-tag">${previewSuit.Owner || 'Peter Parker'}</span>
+        </div>
+        <div class="spidey-showcase-avatar-frame">
+          <img src="${previewSuit.ImageUrl || previewSuit.CoverUrl || './assets/spideytracker/tracker_logo3.png'}" 
+               alt="${previewSuit.Suit}" />
+        </div>
+        <div class="spidey-showcase-details">
+          <h2 class="spidey-suit-name">${previewSuit.Suit}</h2>
+          <p class="spidey-suit-lore">${previewSuit.GameEffect || previewSuit.Notes || 'Bộ đồ bảo vệ Người Nhện trong các chiến dịch tuần tra New York.'}</p>
+          
+          <div class="spidey-stat-row">
+            <span>ATK</span>
+            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: 85%;"></div></div>
+            <span>+25%</span>
+          </div>
+          <div class="spidey-stat-row">
+            <span>DEF</span>
+            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: 70%; background: linear-gradient(90deg, #83b96b, #54b6d0);"></div></div>
+            <span>+18%</span>
+          </div>
+          <div class="spidey-stat-row">
+            <span>WEB</span>
+            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: 95%; background: linear-gradient(90deg, #f0645c, #f2c06b);"></div></div>
+            <span>+30%</span>
+          </div>
+
+          <button class="spidey-equip-btn ${isEquipped ? 'spidey-equip-btn--equipped' : ''}" 
+                  data-equip-suit="${this.previewSuitIndex}" ${isEquipped ? 'disabled' : ''}>
+            ${isEquipped ? '✓ ĐANG TRANG BỊ' : '⚡ MẶC BỘ ĐỒ NÀY'}
+          </button>
+        </div>
+      </aside>
+    `;
+
+    // Right Column content based on tab
+    let rightColumnHtml = '';
+
     if (this.panelTab === 'ROSTER') {
-      return `
+      rightColumnHtml = `
         <div class="quest-source-banner">
           <span>🕷️ SPIDER-VERSE</span>
-          <strong>77 BIẾN THỂ NHỆN ĐA VŨ TRỤ (NOTION CATALOG)</strong>
+          <strong>77 BIẾN THỂ NHỆN ĐA VŨ TRỤ</strong>
           <small>Chọn đồng đội hỗ trợ (Ally Assist) để kích hoạt hiệu ứng Synergy!</small>
         </div>
         <div class="pixel-card-grid">
@@ -391,102 +452,125 @@ export class ActionRpgController {
           `).join('')}
         </div>
       `;
-    }
+    } else if (this.panelTab === 'SKILLS') {
+      // Detailed Skill List with high-res Notion PNG Icons
+      const coreSkills = [
+        { name: 'Ground Slam', icon: this.skillIcons['skill_ground_slam.png'] || 'https://iili.io/nuza6p1.png', type: 'Active AoE', sp: 1, desc: 'Lao từ trên không đập mạnh xuống đất, tạo sóng chấn động làm choáng toàn bộ kẻ thù xung quanh.' },
+        { name: 'Maximum Spider', icon: this.skillIcons['skill_maximum_spider.png'] || 'https://iili.io/nuzaZCJ.png', type: 'Ultimate Strike', sp: 3, desc: 'Tuyệt chiêu tối thượng: Tung chuỗi đòn tơ liên hoàn với vận tốc ánh sáng, kết liễu boss ngay khi stagger.' },
+        { name: 'Spider-Sense', icon: this.skillIcons['skill_spider_sense.png'] || 'https://iili.io/nuzc9pt.png', type: 'Passive Reflex', sp: 1, desc: 'Giác quan nhện cảnh báo trước đòn hiểm. Tăng thời gian thực hiện Né Hoàn Hảo (Perfect Dodge).' },
+        { name: 'Swing Kick', icon: this.skillIcons['skill_swing_kick.png'] || 'https://iili.io/nuzcdjn.png', type: 'Aerial Combat', sp: 1, desc: 'Đu tơ lấy đà tung cú đá uy lực hất văng mục tiêu vào tường, gây thêm sát thương va đập.' },
+        { name: 'Venom Punch', icon: this.skillIcons['skill_venom_punch.png'] || 'https://iili.io/nuzcIje.png', type: 'Bio-Electricity', sp: 2, desc: 'Tích tụ điện sinh học vào nắm đấm làm tê liệt hệ thần kinh của đối thủ trong 3 giây.' },
+        { name: 'Web Cocoon', icon: this.skillIcons['skill_web_cocoon.png'] || 'https://iili.io/nuzcY3Q.png', type: 'Web Control', sp: 2, desc: 'Bắn tơ dồn dập gói trọn kẻ thù thành kén tơ cố định, vô hiệu hóa hoàn toàn hành động.' },
+        { name: 'Web Net', icon: this.skillIcons['skill_web_net.png'] || 'https://iili.io/nuzcGZg.png', type: 'Crowd Control', sp: 1, desc: 'Giăng lưới tơ bẫy diện rộng, làm chậm 50% tốc độ áp sát của nhóm minion.' },
+        { name: 'Web Zip', icon: this.skillIcons['skill_web_zip.png'] || 'https://iili.io/nuzce9I.png', type: 'Agility', sp: 1, desc: 'Phóng tơ kéo thẳng bản thân áp sát tức thì kẻ thù trên không hoặc mặt đất để nối dài combo.' }
+      ];
 
-    if (this.panelTab === 'SKILLS') {
-      const s = this.engine.snapshot();
-      return `
+      rightColumnHtml = `
         <div class="quest-source-banner">
-          <span>⚡ SKILL TREE</span>
-          <strong>CÂY KỸ NĂNG CHIẾN ĐẤU & BẮN TƠ</strong>
-          <small>Điểm kỹ năng khả dụng: ${s.hero.skillPoints} SP</small>
+          <span>⚡ SKILL LOADOUT</span>
+          <strong>BẢNG KỸ NĂNG CHIẾN ĐẤU & BẮN TƠ (NOTION RENDERS)</strong>
+          <small>Gán kỹ năng vào phím bấm Arena để thi triển trong trận chiến</small>
         </div>
-        <div class="pixel-card-grid">
-          ${s.data.skills.map((skill) => `
-            <article class="pixel-game-card ${skill.unlocked ? 'pixel-game-card--gold' : ''}">
-              <div class="pixel-card-header">
-                <span class="pixel-tag ${skill.unlocked ? 'pixel-tag--green' : 'pixel-tag--red'}">${skill.unlocked ? 'ĐÃ MỞ KHÓA' : 'CHƯA MỞ'}</span>
-                <span class="pixel-tag">CHIẾN ĐẤU</span>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          ${coreSkills.map((sk) => `
+            <article class="spidey-skill-card">
+              <div class="spidey-skill-icon-frame">
+                <img src="${sk.icon}" alt="${sk.name}" />
               </div>
-              <h3 class="pixel-card-title">${skill.name}</h3>
-              <p class="pixel-card-desc">${skill.unlocked ? 'Kỹ năng sẵn sàng kích hoạt trong Arena.' : 'Cần tiêu tốn 1 Skill Point để học kỹ năng này.'}</p>
-              <div class="pixel-card-footer">
-                <span style="color: #7fbfd2; font: 700 8px monospace;">${skill.unlocked ? 'ACTIVE' : 'COST: 1 SP'}</span>
-                <button class="pixel-action-btn ${skill.unlocked ? 'pixel-action-btn--disabled' : 'pixel-action-btn--green'}" 
-                        ${skill.unlocked || s.hero.skillPoints <= 0 ? 'disabled' : ''}>
-                  ${skill.unlocked ? 'ĐÃ HỌC' : 'NÂNG CẤP'}
+              <div class="spidey-skill-info">
+                <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 4px;">
+                  <span class="pixel-tag pixel-tag--red">${sk.type}</span>
+                  <span class="pixel-tag pixel-tag--gold">COST: ${sk.sp} SP</span>
+                </div>
+                <h4>${sk.name}</h4>
+                <p>${sk.desc}</p>
+              </div>
+              <div class="spidey-skill-actions">
+                <button class="pixel-action-btn pixel-action-btn--green" data-equip-skill="${sk.name}">
+                  ⚡ TRANG BỊ
                 </button>
               </div>
             </article>
           `).join('')}
         </div>
       `;
-    }
+    } else if (this.panelTab === 'GADGETS') {
+      const gadgets = [
+        { name: 'Web Shooter', icon: this.skillIcons['gadget_web_shooter.png'] || 'https://iili.io/nuzarYB.png', charges: 'Vô hạn', desc: 'Máy bắn tơ cơ bản trên cổ tay Peter Parker, bắn đạn tơ làm gián đoạn đòn đánh quái.' },
+        { name: 'Web Bomb', icon: this.skillIcons['gadget_web_bomb.png'] || 'https://iili.io/nuzaeLb.png', charges: '3 Quả', desc: 'Bom tơ phát nổ giải phóng hàng trăm sợi tơ trói chặt tất cả mục tiêu trong phạm vi.' },
+        { name: 'Spider-Drone', icon: this.skillIcons['gadget_spider_drone.png'] || 'https://iili.io/nuza0LG.png', charges: '2 Drone', desc: 'Drone tự hành bay lượn hỗ trợ bắn đạn năng lượng gây sát thương liên tục.' },
+        { name: 'Electric Web', icon: this.skillIcons['gadget_electric_web.png'] || 'https://iili.io/nuzaugp.png', charges: '3 Phát', desc: 'Tơ điện phóng dòng điện cao thế giật tê liệt cả mục tiêu mang khiên bảo vệ.' },
+        { name: 'Concussive Blast', icon: this.skillIcons['gadget_concussive_blast.png'] || 'https://iili.io/nuzaxLJ.png', charges: '2 Lần', desc: 'Sóng âm thanh cực mạnh thổi bay kẻ địch văng xa và phá vỡ thế phòng thủ.' },
+        { name: 'Suspension Matrix', icon: this.skillIcons['gadget_suspension_matrix.png'] || 'https://iili.io/nuzaW22.png', charges: '2 Quả', desc: 'Trường phản trọng lực nhấc bổng toàn bộ kẻ thù lơ lửng trên không trung.' },
+        { name: 'Trip Mine', icon: this.skillIcons['gadget_trip_mine.png'] || 'https://iili.io/nuzaOhu.png', charges: '3 Mìn', desc: 'Mìn laser cảm biến gắn vào tường hoặc kẻ địch, tự động kéo sập mục tiêu khi kích hoạt.' },
+        { name: 'Iron Spider Arms', icon: this.skillIcons['gadget_iron_spider_arms.png'] || 'https://iili.io/nuza57I.png', charges: '1 Lần', desc: 'Bốn chân nhện cơ khí nano vươn ra từ lưng, tăng 100% sát thương cận chiến và xuyên giáp.' }
+      ];
 
-    if (this.panelTab === 'GADGETS') {
-      const s = this.engine.snapshot();
-      return `
+      rightColumnHtml = `
         <div class="quest-source-banner">
-          <span>⌁ GADGETS</span>
-          <strong>THIẾT BỊ CÔNG NGHỆ PETER PARKER</strong>
-          <small>Sử dụng phím GADGET trong trận đấu để tiêu hao Charge</small>
+          <span>⌁ GADGET WHEEL</span>
+          <strong>THIẾT BỊ CÔNG NGHỆ PETER PARKER (NOTION RENDERS)</strong>
+          <small>Nâng cấp trang bị bằng Web Coins kiếm được từ nhiệm vụ đời thật</small>
         </div>
-        <div class="pixel-card-grid">
-          ${s.data.gadgets.map((g) => `
-            <article class="pixel-game-card pixel-game-card--hero">
-              <div class="pixel-card-header">
-                <span class="pixel-tag">CẤP ${g.level}</span>
-                <span class="pixel-tag pixel-tag--green">${g.charges} LƯỢT DÙNG</span>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          ${gadgets.map((g) => `
+            <article class="spidey-skill-card">
+              <div class="spidey-skill-icon-frame" style="border-color: #83b96b;">
+                <img src="${g.icon}" alt="${g.name}" />
               </div>
-              <h3 class="pixel-card-title">${g.name}</h3>
-              <p class="pixel-card-desc">${g.effect}</p>
-              <div class="pixel-card-footer">
-                <small style="color: #f2c06b; font: 700 8px monospace;">COOLDOWN: 12S</small>
+              <div class="spidey-skill-info">
+                <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 4px;">
+                  <span class="pixel-tag pixel-tag--green">${g.charges}</span>
+                  <span class="pixel-tag pixel-tag--gold">GADGET</span>
+                </div>
+                <h4>${g.name}</h4>
+                <p>${g.desc}</p>
+              </div>
+              <div class="spidey-skill-actions">
                 <button class="pixel-action-btn pixel-action-btn--blue">NÂNG CẤP</button>
               </div>
             </article>
           `).join('')}
         </div>
       `;
+    } else {
+      // Default: SUITS Wardrobe Tiles Grid
+      rightColumnHtml = `
+        <div class="quest-source-banner">
+          <span>👕 WARDROBE GRID</span>
+          <strong>BẤM VÀO TỪNG BỘ SUIT ĐỂ XEM TRƯỚC VÀ THAY ĐỒ (${this.suits.length} BỘ SUITS)</strong>
+          <small>Ảnh render trích xuất từ Marvel's Spider-Man & Notion Database</small>
+        </div>
+        <div class="spidey-suit-tiles">
+          ${this.suits.map((suit, idx) => {
+            const isEquip = suit.Suit === currentVariant;
+            const isPreview = idx === this.previewSuitIndex;
+            return `
+              <div class="spidey-suit-tile ${isPreview ? 'active' : ''} ${isEquip ? 'equipped' : ''}" 
+                   data-preview-suit="${idx}">
+                <img src="${suit.ImageUrl || suit.CoverUrl || './assets/spideytracker/tracker_logo3.png'}" 
+                     alt="${suit.Suit}" 
+                     class="spidey-suit-tile-img" 
+                     loading="lazy" />
+                <span class="spidey-suit-tile-name">${suit.Suit}</span>
+                <small style="color: #7fbfd2; font: 700 6px monospace; margin-top: 3px;">LV ${suit.LevelReq || 1}</small>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
     }
 
-    // Default: SUITS (Thời trang)
-    const currentVariant = this.engine.data.hero.variant || 'Advanced Suit 2.0';
     return `
-      <div class="quest-source-banner">
-        <span>👕 SUITS WARDROBE</span>
-        <strong>TỦ ĐỒ THỜI TRANG NGƯỜI NHỆN (${this.suits.length} BỘ SUITS)</strong>
-        <small>Mặc suit để nhận hiệu ứng buff nội tại và đổi Skin nhân vật!</small>
-      </div>
-      <div class="pixel-card-grid">
-        ${this.suits.map((suit, idx) => {
-          const isEquipped = suit.Suit === currentVariant;
-          return `
-            <article class="pixel-game-card ${isEquipped ? 'pixel-game-card--hero' : ''}">
-              <div class="pixel-card-header">
-                <span class="pixel-tag ${isEquipped ? 'pixel-tag--red' : ''}">${isEquipped ? '★ ĐANG MẶC' : 'LV ' + (suit.LevelReq || 1)}</span>
-                <span class="pixel-tag pixel-tag--gold">${suit.Owner || 'Peter Parker'}</span>
-              </div>
-              ${suit.ImageUrl ? `
-                <div class="pixel-card-media">
-                  <img src="${suit.ImageUrl}" alt="${suit.Suit}" loading="lazy" />
-                </div>
-              ` : ''}
-              <h3 class="pixel-card-title">${suit.Suit}</h3>
-              <p class="pixel-card-desc">${suit.GameEffect || suit.Notes || 'Bộ đồ chiến đấu bảo vệ Peter Parker.'}</p>
-              <div class="pixel-card-footer">
-                <small style="color: #7fbfd2; font: 700 7px monospace;">${suit.Cost || 'Sẵn sàng'}</small>
-                <button class="pixel-action-btn ${isEquipped ? 'pixel-action-btn--disabled' : 'pixel-action-btn--gold'}" 
-                        data-equip-suit="${idx}" ${isEquipped ? 'disabled' : ''}>
-                  ${isEquipped ? 'ĐANG DÙNG' : 'MẶC SUIT'}
-                </button>
-              </div>
-            </article>
-          `;
-        }).join('')}
+      <div class="spidey-hero-screen">
+        ${showcaseHtml}
+        <div class="spidey-gear-container">
+          ${rightColumnHtml}
+        </div>
       </div>
     `;
   }
+
 
   /* -------------------------------------------------------------
      3. TAB [ARCHIVE]: BESTIARY (BOSS & MINION), BACKPACKS, BADGES
@@ -793,17 +877,38 @@ export class ActionRpgController {
       });
     });
 
-    // 4. Equip Suit
+    // 4. Preview Suit (click tile)
+    content.querySelectorAll('[data-preview-suit]').forEach((tile) => {
+      tile.addEventListener('click', () => {
+        this.previewSuitIndex = parseInt(tile.dataset.previewSuit, 10);
+        this.sound.playSelect();
+        this.renderPanel();
+      });
+    });
+
+    // 5. Equip Suit
     content.querySelectorAll('[data-equip-suit]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const idx = parseInt(btn.dataset.equipSuit, 10);
         const suit = this.suits[idx];
         if (!suit) return;
 
+        this.equippedSuitIndex = idx;
         this.engine.data.hero.variant = suit.Suit;
         this.engine.data.hero.suitEffect = suit.GameEffect;
-        this.sound.playSelect();
+        this.sound.playVictoryCue();
         this.toast(`SUIT EQUIPPED // ${suit.Suit.toUpperCase()}`);
+        this.render();
+        this.renderPanel();
+      });
+    });
+
+    // 6. Equip Skill
+    content.querySelectorAll('[data-equip-skill]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const skillName = btn.dataset.equipSkill;
+        this.sound.playVictoryCue();
+        this.toast(`SKILL EQUIPPED // ${skillName.toUpperCase()}`);
         this.renderPanel();
       });
     });

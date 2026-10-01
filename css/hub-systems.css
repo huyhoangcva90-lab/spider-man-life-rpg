@@ -192,11 +192,269 @@
 }
 
 /* NATIVE PIXEL GAME CARDS & SECTIONS (NO IFRAMES) */
-.pixel-card-grid {
+.spidey-hero-screen {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: 340px 1fr;
+  gap: 14px;
+  height: 100%;
+  min-height: 520px;
+}
+
+@media (max-width: 860px) {
+  .spidey-hero-screen {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+/* LEFT COLUMN: HERO SHOWCASE POD */
+.spidey-showcase-pod {
+  background: radial-gradient(circle at 50% 30%, rgba(84, 182, 208, 0.22), transparent 70%),
+              linear-gradient(180deg, #0d253a 0%, #06101d 100%);
+  border: 3px solid #397c9b;
+  box-shadow: inset 0 0 15px rgba(84, 182, 208, 0.3), 3px 3px 0 #05070b;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.spidey-showcase-pod::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(2, 6, 12, 0.6) 90%),
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(84, 182, 208, 0.05) 3px, rgba(84, 182, 208, 0.05) 6px);
+  pointer-events: none;
+}
+
+.spidey-showcase-badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 8px;
+}
+
+.spidey-showcase-avatar-frame {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 250px;
+  display: grid;
+  place-items: center;
+  margin: 6px 0 12px;
+  background: radial-gradient(circle at 50% 60%, rgba(240, 100, 92, 0.25), transparent 60%);
+}
+
+.spidey-showcase-avatar-frame img {
+  max-width: 90%;
+  max-height: 240px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.8));
+  animation: hero-idle-float 4s ease-in-out infinite alternate;
+}
+
+@keyframes hero-idle-float {
+  0% { transform: translateY(0px) scale(1); }
+  100% { transform: translateY(-8px) scale(1.02); }
+}
+
+.spidey-showcase-details {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spidey-suit-name {
+  font: 700 13px/1.3 'Press Start 2P', monospace;
+  color: #fff2df;
+  text-shadow: 2px 2px 0 #a92326;
+  margin: 0;
+}
+
+.spidey-suit-lore {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #9ed9e7;
+  margin: 0;
+}
+
+.spidey-stat-row {
+  display: grid;
+  grid-template-columns: 55px 1fr 35px;
+  align-items: center;
+  gap: 8px;
+  font: 700 8px/1 'Silkscreen', monospace;
+  color: #f2c06b;
+}
+
+.spidey-stat-bar {
+  height: 8px;
+  background: #02060b;
+  border: 1px solid #397c9b;
+  overflow: hidden;
+}
+
+.spidey-stat-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #54b6d0, #f2c06b);
+}
+
+.spidey-equip-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  margin-top: 6px;
+  background: #f0645c;
+  color: #05070b;
+  font: 700 10px 'Press Start 2P', monospace;
+  border: 3px solid #05070b;
+  box-shadow: 3px 3px 0 #05070b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.spidey-equip-btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+}
+
+.spidey-equip-btn--equipped {
+  background: #83b96b;
+  color: #05070b;
+}
+
+/* RIGHT COLUMN: GEAR & WARDROBE PANEL */
+.spidey-gear-container {
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  padding: 4px;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* SUIT TILES GRID */
+.spidey-suit-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.spidey-suit-tile {
+  background: #091a2c;
+  border: 2px solid #1b3d5c;
+  box-shadow: inset 0 0 0 1px #397c9b, 2px 2px 0 #05070b;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.spidey-suit-tile:hover {
+  border-color: #54b6d0;
+  box-shadow: inset 0 0 8px rgba(84, 182, 208, 0.4), 2px 3px 0 #05070b;
+  transform: translateY(-2px);
+}
+
+.spidey-suit-tile.active {
+  border-color: #f2c06b;
+  background: #14324f;
+  box-shadow: inset 0 0 10px rgba(242, 192, 107, 0.5), 2px 3px 0 #05070b;
+}
+
+.spidey-suit-tile.equipped::after {
+  content: "EQUIPPED";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 2px 4px;
+  background: #83b96b;
+  color: #05070b;
+  font: 700 6px 'Press Start 2P', monospace;
+  border: 1px solid #05070b;
+}
+
+.spidey-suit-tile-img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+}
+
+.spidey-suit-tile-name {
+  font: 700 8px/1.2 'Press Start 2P', monospace;
+  color: #fff2df;
+  margin-top: 4px;
+}
+
+/* SKILL & GADGET CARDS */
+.spidey-skill-card {
+  display: grid;
+  grid-template-columns: 68px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  background: #091a2c;
+  border: 2px solid #397c9b;
+  box-shadow: inset 0 0 0 1px #1b3d5c, 2px 2px 0 #05070b;
+  padding: 10px;
+  transition: all 0.15s ease;
+}
+
+.spidey-skill-card:hover {
+  border-color: #f0645c;
+  transform: translateX(3px);
+}
+
+.spidey-skill-icon-frame {
+  width: 64px;
+  height: 64px;
+  background: #040911;
+  border: 2px solid #54b6d0;
+  box-shadow: inset 0 0 8px rgba(84, 182, 208, 0.4);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.spidey-skill-icon-frame img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.spidey-skill-info h4 {
+  font: 700 10px 'Press Start 2P', monospace;
+  color: #fff2df;
+  margin: 0 0 4px;
+}
+
+.spidey-skill-info p {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #9ed9e7;
+  margin: 0;
+}
+
+.spidey-skill-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
 }
 
 .pixel-card-grid--compact {
