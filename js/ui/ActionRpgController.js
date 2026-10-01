@@ -20,6 +20,8 @@ export class ActionRpgController {
     this.notionHabits = [];
     this.skillIcons = {};
     this.skillsCatalog = [];
+    this.snapCards = [];
+    this.snapMap = new Map();
     this.previewSuitIndex = 0;
     this.equippedSuitIndex = 0;
     this.journalEntries = JSON.parse(localStorage.getItem('spidey_journal_entries') || '[]');
@@ -62,7 +64,7 @@ export class ActionRpgController {
 
   async loadAllGameData() {
     try {
-      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, snapRes, iconsRes, skillsRes] = await Promise.allSettled([
+      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, snapRes, iconsRes, skillsRes, snapCardsRes] = await Promise.allSettled([
         fetch('./data/suits.json').then(r => r.json()),
         fetch('./data/spider-verse.json').then(r => r.json()),
         fetch('./data/bosses.json').then(r => r.json()),
@@ -71,7 +73,8 @@ export class ActionRpgController {
         fetch('./data/badges.json').then(r => r.json()),
         fetch('./data/notion-snapshot.json').then(r => r.json()),
         fetch('./data/skill_icons.json').then(r => r.json()),
-        fetch('./data/skills.json').then(r => r.json())
+        fetch('./data/skills.json').then(r => r.json()),
+        fetch('./data/marvel_snap_cards.json').then(r => r.json())
       ]);
 
       if (suitsRes.status === 'fulfilled') this.suits = suitsRes.value || [];
@@ -83,14 +86,53 @@ export class ActionRpgController {
       if (iconsRes.status === 'fulfilled') this.skillIcons = iconsRes.value || {};
       if (skillsRes.status === 'fulfilled') this.skillsCatalog = skillsRes.value || [];
       
-      if (snapRes.status === 'fulfilled' && snapRes.value?.collections) {
+      if (snapCardsRes.status === 'fulfilled') {
+        this.snapCards = snapCardsRes.value || [];
+        this.snapCards.forEach((c) => {
+          if (c.DefId) this.snapMap.set(c.DefId.toLowerCase().replace(/[^a-z0-9]/g, ''), c);
+          if (c.Title) this.snapMap.set(c.Title.toLowerCase().replace(/[^a-z0-9]/g, ''), c);
+        });
+      }
+
+      // Check for live synced data in localStorage first
+      const cachedTasks = localStorage.getItem('spidey_notion_tasks');
+      const cachedHabits = localStorage.getItem('spidey_notion_habits');
+      if (cachedTasks) {
+        try { this.notionTasks = JSON.parse(cachedTasks); } catch (_) {}
+      } else if (snapRes.status === 'fulfilled' && snapRes.value?.collections) {
         this.notionTasks = snapRes.value.collections.masterCalendar || [];
+      }
+
+      if (cachedHabits) {
+        try { this.notionHabits = JSON.parse(cachedHabits); } catch (_) {}
+      } else if (snapRes.status === 'fulfilled' && snapRes.value?.collections) {
         this.notionHabits = snapRes.value.collections.habits || [];
       }
     } catch (e) {
       console.warn('[ActionRpgController] Data load error, using fallbacks:', e);
     }
   }
+
+  getSnapCard(name, defid = '') {
+    if (defid) {
+      const cleanDef = defid.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const byDef = this.snapMap.get(cleanDef);
+      if (byDef) return byDef;
+      return {
+        DefId: defid,
+        CardUrl: `https://static.marvelsnap.pro/cards/${defid}.webp`,
+        ArtUrl: `https://static.marvelsnap.pro/art/${defid}.webp`,
+        Title: name || defid
+      };
+    }
+    if (!name) return null;
+    const clean = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    for (const [key, card] of this.snapMap.entries()) {
+      if (clean.includes(key) || key.includes(clean)) return card;
+    }
+    return null;
+  }
+
 
   selectSection(section, playSound = true) {
     if (playSound) this.sound.playClick();
@@ -279,8 +321,22 @@ export class ActionRpgController {
      1. TAB [QUESTS]: TODO (NOTION), HABITS (STREAK), PATROL TIMETABLE
   ------------------------------------------------------------- */
   renderQuestsSection() {
+    const syncBannerHtml = `
+      <div class="sync-online-banner">
+        <div>
+          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <span class="pixel-tag pixel-tag--blue">⚡ NOTION SYNC</span>
+            <strong style="color: #f2c06b; font-size: 10px;">WORKSPACE ZEUS (ONLINE 2 CHIỀU)</strong>
+          </div>
+          <small style="color: #9ed9e7; font-size: 8px;">Dữ liệu trực tiếp: ${this.notionTasks.length} Quests, ${this.notionHabits.length} Habits</small>
+        </div>
+        <button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue">🔄 ĐỒNG BỘ NOTION LIVE</button>
+      </div>
+    `;
+
     if (this.panelTab === 'HABITS') {
       return `
+        ${syncBannerHtml}
         <div class="quest-source-banner">
           <span>🔥 HABITS</span>
           <strong>KỶ LUẬT HÀNG NGÀY & STREAK</strong>
@@ -338,6 +394,7 @@ export class ActionRpgController {
     // Default: TODO
     const uncompletedTasks = this.notionTasks.filter(t => !t.done);
     return `
+      ${syncBannerHtml}
       <div class="quest-source-banner">
         <span>📜 NOTION QUESTS</span>
         <strong>DANH SÁCH NHIỆM VỤ ĐỜI THỰC (${uncompletedTasks.length} VIỆC CẦN LÀM)</strong>
@@ -425,31 +482,44 @@ export class ActionRpgController {
 
     if (this.panelTab === 'ROSTER') {
       rightColumnHtml = `
-        <div class="quest-source-banner">
-          <span>🕷️ SPIDER-VERSE</span>
-          <strong>77 BIẾN THỂ NHỆN ĐA VŨ TRỤ</strong>
-          <small>Chọn đồng đội hỗ trợ (Ally Assist) để kích hoạt hiệu ứng Synergy!</small>
+        <div class="sync-online-banner">
+          <div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+              <span class="pixel-tag pixel-tag--gold">🕷️ SPIDER-VERSE</span>
+              <strong style="color: #f2c06b; font-size: 10px;">77 BIẾN THỂ NHỆN & MARVEL SNAP HEROES</strong>
+            </div>
+            <small style="color: #9ed9e7; font-size: 8px;">Chọn Spider-Hero để kích hoạt Synergy và đòn đánh phối hợp</small>
+          </div>
+          <button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue">🔄 ĐỒNG BỘ NOTION LIVE</button>
         </div>
         <div class="pixel-card-grid">
-          ${this.spiderVerse.slice(0, 40).map((spider, idx) => `
-            <article class="pixel-game-card pixel-game-card--hero">
-              <div class="pixel-card-header">
-                <span class="pixel-tag">${spider.Icon || '🕷️'} ${spider.Name?.split('(')[1]?.replace(')', '') || 'Multiverse'}</span>
-                <span class="pixel-tag pixel-tag--green">ALL-STAR</span>
-              </div>
-              ${spider.IiliUrl || spider.FandomSrc ? `
-                <div class="pixel-card-media">
-                  <img src="${spider.IiliUrl || spider.FandomSrc}" alt="${spider.Name}" loading="lazy" />
+          ${this.spiderVerse.slice(0, 60).map((spider, idx) => {
+            const snap = this.getSnapCard(spider.Name);
+            const cardImg = snap?.CardUrl || snap?.ArtUrl || spider.IiliUrl || spider.FandomSrc || './assets/spideytracker/tracker_logo3.png';
+            const cost = (idx % 6) + 1;
+            const power = ((idx * 3) % 12) + 1;
+            return `
+              <article class="snap-card-pod">
+                <div class="snap-card-energy">${cost}</div>
+                <div class="snap-card-power">${power}</div>
+                <div class="snap-card-frame">
+                  <img src="${cardImg}" alt="${spider.Name}" loading="lazy" onerror="this.onerror=null; this.src='${spider.IiliUrl || spider.FandomSrc || './assets/spideytracker/tracker_logo3.png'}';" />
                 </div>
-              ` : ''}
-              <h3 class="pixel-card-title">${spider.Name?.split('—')[0] || spider.Name}</h3>
-              <p class="pixel-card-desc"><em>"${spider.Quote || 'With great power comes great responsibility.'}"</em></p>
-              <div class="pixel-card-footer">
-                <small style="color: #f2c06b; font: 700 8px monospace;">ASSIST HERO</small>
-                <button class="pixel-action-btn pixel-action-btn--gold" data-select-ally="${idx}">CHỌN ASSIST</button>
-              </div>
-            </article>
-          `).join('')}
+                <div style="padding: 4px 2px; flex: 1; display: flex; flex-direction: column;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span class="pixel-tag pixel-tag--gold">${spider.Icon || '🕷️'} ${spider.Name?.split('(')[1]?.replace(')', '') || 'Multiverse'}</span>
+                    <span class="pixel-tag pixel-tag--green">SYNERGY</span>
+                  </div>
+                  <h3 class="pixel-card-title" style="margin-bottom: 4px; font-size: 10px;">${spider.Name?.split('—')[0] || spider.Name}</h3>
+                  <p class="pixel-card-desc" style="font-size: 8px; flex: 1;"><em>"${spider.Quote || 'With great power comes great responsibility.'}"</em></p>
+                  <div class="pixel-card-footer" style="margin-top: 6px;">
+                    <small style="color: #7fbfd2; font: 700 7px monospace;">ASSIST HERO</small>
+                    <button class="pixel-action-btn pixel-action-btn--gold" data-select-ally="${idx}">CHỌN ASSIST</button>
+                  </div>
+                </div>
+              </article>
+            `;
+          }).join('')}
         </div>
       `;
     } else if (this.panelTab === 'SKILLS') {
@@ -631,26 +701,49 @@ export class ActionRpgController {
     // Default: BESTIARY (Boss & Minions)
     const minionEntries = Object.entries(this.minions);
     return `
+      <div class="sync-online-banner">
+        <div>
+          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+            <span class="pixel-tag pixel-tag--red">👹 BESTIARY // BOSSES</span>
+            <strong style="color: #f2c06b; font-size: 10px;">134 THỦ LĨNH PHẢN DIỆN & MINIONS (MARVEL SNAP CARDS)</strong>
+          </div>
+          <small style="color: #9ed9e7; font-size: 8px;">Dữ liệu phản diện trích xuất từ Marvel Snap & Notion Bestiary</small>
+        </div>
+        <button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue">🔄 ĐỒNG BỘ NOTION LIVE</button>
+      </div>
       <div class="quest-source-banner">
         <span>👹 BESTIARY</span>
         <strong>THƯ VIỆN KẺ THÙ: BOSSES & MINIONS</strong>
         <small>Thông số, điểm yếu và hệ khắc chế trong các ải tuần tra</small>
       </div>
       <div class="pixel-card-grid">
-        ${this.bosses.map((boss) => `
-          <article class="pixel-game-card pixel-game-card--hero">
-            <div class="pixel-card-header">
-              <span class="pixel-tag pixel-tag--red">BOSS // ${boss.enemyClass || 'Elite'}</span>
-              <span class="pixel-tag pixel-tag--gold">HP: ${boss.hp}</span>
-            </div>
-            <h3 class="pixel-card-title">${boss.name}</h3>
-            <p class="pixel-card-desc">${boss.notes || 'Thủ lĩnh phản diện đối đầu Spider-Man.'}</p>
-            <div class="pixel-card-footer">
-              <small style="color: #f0645c; font: 700 8px monospace;">ATK: ${boss.atk} | DEF: ${boss.def}</small>
-              <span class="pixel-tag pixel-tag--red">CHAPTER BOSS</span>
-            </div>
-          </article>
-        `).join('')}
+        ${this.bosses.map((boss) => {
+          const snap = this.getSnapCard(boss.name, boss.defid);
+          const cardImg = snap?.CardUrl || `https://static.marvelsnap.pro/cards/${boss.defid || 'Venom'}.webp`;
+          const energyCost = Math.min(6, Math.max(1, Math.round(boss.hp / 100)));
+          const power = Math.min(20, Math.max(1, Math.round(boss.atk / 5)));
+          return `
+            <article class="snap-card-pod">
+              <div class="snap-card-energy">${energyCost}</div>
+              <div class="snap-card-power">${power}</div>
+              <div class="snap-card-frame">
+                <img src="${cardImg}" alt="${boss.name}" loading="lazy" onerror="this.onerror=null; this.src='https://static.marvelsnap.pro/art/${boss.defid || 'Venom'}.webp';" />
+              </div>
+              <div style="padding: 4px 2px; flex: 1; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span class="pixel-tag pixel-tag--red">${boss.enemyClass || 'BOSS'}</span>
+                  <span class="pixel-tag pixel-tag--gold">HP: ${boss.hp}</span>
+                </div>
+                <h3 class="pixel-card-title" style="margin-bottom: 4px; font-size: 10px;">${boss.name}</h3>
+                <p class="pixel-card-desc" style="font-size: 8px; flex: 1;">${boss.notes || boss.quote || 'Thủ lĩnh phản diện đối đầu Spider-Man.'}</p>
+                <div class="pixel-card-footer" style="margin-top: 6px;">
+                  <small style="color: #f0645c; font: 700 7px monospace;">ATK: ${boss.atk} | DEF: ${boss.def}</small>
+                  <span class="pixel-tag pixel-tag--red">CHAPTER BOSS</span>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join('')}
         ${minionEntries.slice(0, 30).map(([name, desc]) => `
           <article class="pixel-game-card">
             <div class="pixel-card-header">
@@ -804,7 +897,93 @@ export class ActionRpgController {
   /* -------------------------------------------------------------
      EVENT BINDINGS & NOTION 2-WAY SYNC
   ------------------------------------------------------------- */
+  async syncLiveFromNotion(btn = null) {
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = '⏳ ĐANG ĐỒNG BỘ...';
+    }
+    this.sound.playSelect();
+    this.toast('ĐANG KẾT NỐI NOTION LIVE...');
+
+    let syncedTasks = false;
+    let syncedHabits = false;
+
+    try {
+      // 1. Try fetching Master Calendar Tasks
+      const tasksRes = await fetch('/api/notion?path=%2Fv1%2Fdatabases%2F272d787636c681d9ae35d494508b25d0%2Fquery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ page_size: 50 })
+      }).then(r => r.json()).catch(() => null);
+
+      if (tasksRes?.ok && tasksRes.data?.results) {
+        this.notionTasks = tasksRes.data.results.map((p) => {
+          const props = p.properties || {};
+          const titleProp = props.Name || props.Title || props.Task || Object.values(props).find(v => v.type === 'title');
+          const title = titleProp?.title?.[0]?.plain_text || 'Nhiệm vụ';
+          const priority = props.Priority?.select?.name || 'Bình thường';
+          const done = props.Done?.checkbox || false;
+          const date = props.Date?.date?.start || null;
+          const cover = p.cover?.external?.url || p.cover?.file?.url || null;
+          return { id: p.id, name: title, title, priority, done, date, coverUrl: cover };
+        });
+        localStorage.setItem('spidey_notion_tasks', JSON.stringify(this.notionTasks));
+        syncedTasks = true;
+      }
+
+      // 2. Try fetching Habits
+      const habitsRes = await fetch('/api/notion?path=%2Fv1%2Fdatabases%2F272d787636c681a29bf8e4d5e588e173%2Fquery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ page_size: 50 })
+      }).then(r => r.json()).catch(() => null);
+
+      if (habitsRes?.ok && habitsRes.data?.results) {
+        this.notionHabits = habitsRes.data.results.map((p) => {
+          const props = p.properties || {};
+          const titleProp = props.Name || props.Habit || props.Title || Object.values(props).find(v => v.type === 'title');
+          const title = titleProp?.title?.[0]?.plain_text || 'Thói quen';
+          const category = props.Category?.select?.name || 'Daily';
+          const today = props.Today?.checkbox || false;
+          const timeBlock = props.Time?.select?.name || props.TimeBlock?.select?.name || 'Mỗi ngày';
+          return { id: p.id, name: title, title, category, done: today, today, timeBlock };
+        });
+        localStorage.setItem('spidey_notion_habits', JSON.stringify(this.notionHabits));
+        syncedHabits = true;
+      }
+
+      if (syncedTasks || syncedHabits) {
+        this.sound.playVictoryCue();
+        this.toast(`NOTION LIVE SYNC XONG // ${this.notionTasks.length} QUESTS, ${this.notionHabits.length} HABITS`);
+      } else {
+        // Fallback: Refresh static snapshot with cache-buster
+        const snapshotRes = await fetch(`./data/notion-snapshot.json?t=${Date.now()}`).then(r => r.json()).catch(() => null);
+        if (snapshotRes?.collections) {
+          this.notionTasks = snapshotRes.collections.masterCalendar || this.notionTasks;
+          this.notionHabits = snapshotRes.collections.habits || this.notionHabits;
+          this.toast('NOTION SNAPSHOT ĐÃ ĐƯỢC TẢI LẠI (OFFLINE/STATIC MODE)');
+        } else {
+          this.toast('KHÔNG THỂ KẾT NỐI NOTION API // GIỮ NGUYÊN DỮ LIỆU CŨ');
+        }
+      }
+    } catch (err) {
+      console.warn('[ActionRpgController] Notion sync error:', err);
+      this.toast('LỖI KẾT NỐI NOTION // ĐÃ GIỮ DỮ LIỆU HIỆN TẠI');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '🔄 ĐỒNG BỘ NOTION LIVE';
+      }
+      this.renderPanel();
+    }
+  }
+
   bindEvents(content) {
+    // 0. Live Notion Sync Button
+    content.querySelectorAll('#btn-sync-notion-live').forEach((btn) => {
+      btn.addEventListener('click', () => this.syncLiveFromNotion(btn));
+    });
+
     // 1. Task Completion -> Attack Enemy in Arena & Sync to Notion
     content.querySelectorAll('[data-complete-task]').forEach((btn) => {
       btn.addEventListener('click', () => {

@@ -207,6 +207,101 @@
   }
 }
 
+/* MARVEL SNAP CARD STYLES */
+.snap-card-pod {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #102438 0%, #06101d 100%);
+  border: 2px solid #54b6d0;
+  box-shadow: inset 0 0 10px rgba(84, 182, 208, 0.25), 3px 3px 0 #05070b;
+  padding: 8px;
+  position: relative;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.snap-card-pod:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: #f2c06b;
+  box-shadow: inset 0 0 15px rgba(242, 192, 107, 0.4), 3px 5px 0 #05070b;
+}
+
+.snap-card-frame {
+  width: 100%;
+  height: 200px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  margin-bottom: 8px;
+  background: radial-gradient(circle at 50% 50%, rgba(2, 6, 12, 0.4), #040911);
+  border: 1px solid #1b3d5c;
+  position: relative;
+}
+
+.snap-card-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.8));
+  transition: transform 0.25s ease;
+}
+
+.snap-card-pod:hover .snap-card-frame img {
+  transform: scale(1.06);
+}
+
+.snap-card-energy {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #54b6d0, #093b54);
+  border: 2px solid #a8e8f8;
+  color: #fff;
+  font: 900 12px 'Silkscreen', monospace;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  z-index: 2;
+}
+
+.snap-card-power {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f2c06b, #b36319);
+  border: 2px solid #ffe39b;
+  color: #fff;
+  font: 900 12px 'Silkscreen', monospace;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  z-index: 2;
+}
+
+.sync-online-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #102c45;
+  border: 2px solid #397c9b;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .sync-online-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 /* LEFT COLUMN: HERO SHOWCASE POD */
 .spidey-showcase-pod {
   background: radial-gradient(circle at 50% 30%, rgba(84, 182, 208, 0.22), transparent 70%),

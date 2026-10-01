@@ -1,0 +1,3863 @@
+﻿[
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-8149-b00f-eef7cb332d7a",
+        "Title":  "Anti-Polar Magneto — Erik Lehnsherr (AXIS)",
+        "DefId":  "Magneto",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Magneto.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Magneto.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-812d-a3a8-da477dd6efd7",
+        "Title":  "Cyborg Spider-Man",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-812e-b872-c4e09174da09",
+        "Title":  "Ghost-Spider — Gwen Stacy",
+        "DefId":  "GhostSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/GhostSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/GhostSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-8131-bd91-fad2685c9df6",
+        "Title":  "Spider-Man 2099 — Miguel O\u0027Hara",
+        "DefId":  "SpiderMan2099",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan2099.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan2099.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-8194-bdea-cc4ae2a6a25d",
+        "Title":  "Spider-Woman — Jessica Drew",
+        "DefId":  "SpiderWoman",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderWoman.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderWoman.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81a2-bac3-e4d23617e400",
+        "Title":  "Superior Spider-Man — Otto Octavius",
+        "DefId":  "SuperiorSpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SuperiorSpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SuperiorSpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81b6-982a-f8781aae4c2d",
+        "Title":  "Spider-Man India — Pavitr Prabhakar",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81d2-b96f-f46ede936793",
+        "Title":  "Miles Morales — Spider-Man",
+        "DefId":  "MilesMorales",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MilesMorales.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MilesMorales.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81d4-91b8-c5f90700bef5",
+        "Title":  "Spider-Man 1602 — Peter Parquagh",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81de-8c1a-d78c840e0f17",
+        "Title":  "Kaine Parker — Scarlet Spider",
+        "DefId":  "ScarletSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ScarletSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ScarletSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-810b-b4ce-cc614580bdf3",
+        "Title":  "Fantomex — Charlie-Cluster 7",
+        "DefId":  "Fantomex",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Fantomex.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Fantomex.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-810e-b3c5-d95e1d5017d4",
+        "Title":  "Caiera",
+        "DefId":  "Caiera",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Caiera.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Caiera.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-8131-8452-f6d0a519a748",
+        "Title":  "Sage — Tessa",
+        "DefId":  "Sage",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sage.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sage.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-815c-b900-ef00a6ea5570",
+        "Title":  "Silk — Cindy Moon",
+        "DefId":  "Silk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Silk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Silk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-815e-b4e9-e2daddab19d8",
+        "Title":  "Pixie — Megan Gwynn",
+        "DefId":  "Pixie",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Pixie.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Pixie.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-8166-b26b-d1c49f4feebe",
+        "Title":  "Starhawk — Stakar Ogord",
+        "DefId":  "Starhawk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Starhawk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Starhawk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-816a-889e-dbfed7b46e27",
+        "Title":  "Agent Venom — Flash Thompson",
+        "DefId":  "AgentVenom",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/AgentVenom.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/AgentVenom.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-8171-98b5-f3aba41a5d46",
+        "Title":  "Joaquin Torres — Falcon II",
+        "DefId":  "JoaquinTorres",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/JoaquinTorres.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/JoaquinTorres.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-8182-b902-d8e982b0a981",
+        "Title":  "Maverick — Christoph Nord",
+        "DefId":  "Maverick",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Maverick.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Maverick.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-8197-85e9-d9ffd926eda0",
+        "Title":  "Chamber — Jonothon Starsmore",
+        "DefId":  "Chamber",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Chamber.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Chamber.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-819a-a4c4-daf7958574e9",
+        "Title":  "Captain Carter — Peggy Carter",
+        "DefId":  "CaptainCarter",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/CaptainCarter.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/CaptainCarter.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81a2-bc54-df60814c858a",
+        "Title":  "Araña — Anya Corazon",
+        "DefId":  "Arana",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Arana.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Arana.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81b1-a3b8-fd58bd0df597",
+        "Title":  "Madame Web — Julia Carpenter",
+        "DefId":  "MadameWeb",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MadameWeb.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MadameWeb.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81cc-83c3-e09fcd9deef6",
+        "Title":  "Snowguard — Amka Aliyak",
+        "DefId":  "Snowguard",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Snowguard.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Snowguard.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81cd-a80d-d319a71a9358",
+        "Title":  "Kahhori",
+        "DefId":  "Kahhori",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Kahhori.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Kahhori.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81d1-8fc2-f14ebd75ef10",
+        "Title":  "Skaar",
+        "DefId":  "Skaar",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Skaar.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Skaar.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81d4-8a9a-e39b3b200206",
+        "Title":  "Spider-Punk — Hobie Brown",
+        "DefId":  "SpiderPunk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderPunk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderPunk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81dc-969d-f81f19409aba",
+        "Title":  "Spider-Man Noir — Peter Parker",
+        "DefId":  "SpiderManNoir",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderManNoir.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderManNoir.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81e1-bd44-e1d27c021af6",
+        "Title":  "Scarlet Spider — Ben Reilly",
+        "DefId":  "ScarletSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ScarletSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ScarletSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81e4-9fb6-ce945b2ba820",
+        "Title":  "Spider-Ham — Peter Porker",
+        "DefId":  "SpiderHam",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderHam.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderHam.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3dbd7876-36c6-81fb-ab84-ec76ce9cae94",
+        "Title":  "Nocturne — Talia Wagner",
+        "DefId":  "Nocturne",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Nocturne.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Nocturne.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81e8-be98-ca600f1827fb",
+        "Title":  "Makkari",
+        "DefId":  "Makkari",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Makkari.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Makkari.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8121-bed3-cd70e224c5ce",
+        "Title":  "Gilgamesh",
+        "DefId":  "Gilgamesh",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Gilgamesh.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Gilgamesh.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8155-b6aa-ca00af9f6d4c",
+        "Title":  "Sharon Carter - Agent 13",
+        "DefId":  "Agent13",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Agent13.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Agent13.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8181-b563-e1689d5fb0f4",
+        "Title":  "Misty Knight",
+        "DefId":  "MistyKnight",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MistyKnight.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MistyKnight.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81d3-ae5e-c5c2adee09ce",
+        "Title":  "Wave - Pearl Pangan",
+        "DefId":  "Wave",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Wave.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Wave.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81bc-8e5c-e5c58712b192",
+        "Title":  "Viv Vision",
+        "DefId":  "Viv",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Viv.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Viv.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-814e-a52c-fe8b52dbd5ff",
+        "Title":  "Sword Master - Lin Lie",
+        "DefId":  "SwordMaster",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SwordMaster.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SwordMaster.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-816b-a3b5-c1329da0d269",
+        "Title":  "Sunspot - Roberto da Costa",
+        "DefId":  "Sunspot",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sunspot.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sunspot.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-814a-9415-edd03d7bc95a",
+        "Title":  "Strong Guy - Guido Carosella",
+        "DefId":  "StrongGuy",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/StrongGuy.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/StrongGuy.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8173-b699-f0c5914b5f7f",
+        "Title":  "Stature - Cassie Lang",
+        "DefId":  "Stature",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Stature.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Stature.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8139-b4de-eb4538550a90",
+        "Title":  "Speed - Tommy Shepherd",
+        "DefId":  "Speed",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Speed.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Speed.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8115-9d98-e06809742bdd",
+        "Title":  "Sentry - Robert Reynolds",
+        "DefId":  "Sentry",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sentry.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sentry.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-811a-9500-c2d50993eab7",
+        "Title":  "Sasquatch - Walter Langkowski",
+        "DefId":  "Sasquatch",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sasquatch.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sasquatch.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81b8-9656-da5b94b8b58f",
+        "Title":  "Red Guardian - Alexei Shostakov",
+        "DefId":  "RedGuardian",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/RedGuardian.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/RedGuardian.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8162-aded-da5099481513",
+        "Title":  "Quake - Daisy Johnson",
+        "DefId":  "Quake",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Quake.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Quake.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-811e-bf41-d8eeb655ef28",
+        "Title":  "Polaris - Lorna Dane",
+        "DefId":  "Polaris",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Polaris.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Polaris.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-817f-8d69-f0dae0377087",
+        "Title":  "Nico Minoru",
+        "DefId":  "NicoMinoru",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/NicoMinoru.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/NicoMinoru.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8108-8841-fea6fb316819",
+        "Title":  "Multiple Man - Jamie Madrox",
+        "DefId":  "MultipleMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MultipleMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MultipleMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81a2-9066-dc31b50766af",
+        "Title":  "Luna Snow - Seol Hee",
+        "DefId":  "LunaSnow",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/LunaSnow.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/LunaSnow.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81fa-9088-d9b0056cd7ac",
+        "Title":  "Lockjaw",
+        "DefId":  "Lockjaw",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Lockjaw.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Lockjaw.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81f6-a44b-cc642f9472d7",
+        "Title":  "Jubilee - Jubilation Lee",
+        "DefId":  "Jubilee",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Jubilee.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Jubilee.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8139-9bb2-ded3b4d8a27a",
+        "Title":  "Iron Lad - Nate Richards",
+        "DefId":  "IronLad",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/IronLad.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/IronLad.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81c2-ab05-c780a62e503d",
+        "Title":  "Hope Summers",
+        "DefId":  "HopeSummers",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/HopeSummers.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/HopeSummers.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8184-97bb-dd65f673fb5b",
+        "Title":  "Hercules",
+        "DefId":  "Hercules",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hercules.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hercules.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81c9-86c1-c631c522e863",
+        "Title":  "Havok - Alex Summers",
+        "DefId":  "Havok",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Havok.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Havok.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81e1-933b-ff365493ce5c",
+        "Title":  "Gwenpool - Gwen Poole",
+        "DefId":  "Gwenpool",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Gwenpool.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Gwenpool.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8185-adeb-ebd46d546560",
+        "Title":  "Forge",
+        "DefId":  "Forge",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Forge.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Forge.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-819c-aa05-ca0cbff4462f",
+        "Title":  "Dazzler - Alison Blaire",
+        "DefId":  "Dazzler",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Dazzler.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Dazzler.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81a6-a056-e3428b32122d",
+        "Title":  "Colleen Wing",
+        "DefId":  "ColleenWing",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ColleenWing.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ColleenWing.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81da-b3c1-f80302ed7df9",
+        "Title":  "Black Knight - Dane Whitman",
+        "DefId":  "BlackKnight",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlackKnight.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlackKnight.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8157-85b0-f96e035b27d5",
+        "Title":  "Blink - Clarice Ferguson",
+        "DefId":  "Blink",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Blink.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Blink.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81c1-81c1-dcff4794bc5e",
+        "Title":  "Bishop - Lucas Bishop",
+        "DefId":  "Bishop",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Bishop.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Bishop.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-815e-97a3-de7f2ebdb743",
+        "Title":  "Blue Marvel - Adam Brashear",
+        "DefId":  "BlueMarvel",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlueMarvel.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlueMarvel.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-81a7-9fcc-c95007d74886",
+        "Title":  "Aero — Lei Ling",
+        "DefId":  "Aero",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Aero.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Aero.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8152-adf6-e76cd75d2d19",
+        "Title":  "Elixir — Josh Foley",
+        "DefId":  "Elixir",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Elixir.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Elixir.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-813f-adb5-c7b6b34af407",
+        "Title":  "Legion — David Haller",
+        "DefId":  "Legion",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Legion.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Legion.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8140-9259-eebc4c817a1b",
+        "Title":  "Mirage — Danielle Moonstar",
+        "DefId":  "Mirage",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mirage.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mirage.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d6d7876-36c6-8118-9131-f60b0bae9877",
+        "Title":  "Wolfsbane — Rahne Sinclair",
+        "DefId":  "Wolfsbane",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Wolfsbane.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Wolfsbane.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d5d7876-36c6-8148-ab54-d23fb0dc66d7",
+        "Title":  "Darkhawk — Chris Powell",
+        "DefId":  "Darkhawk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Darkhawk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Darkhawk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d5d7876-36c6-8198-a803-c068a480a592",
+        "Title":  "Ghost Rider — Robbie Reyes",
+        "DefId":  "GhostRider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/GhostRider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/GhostRider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d5d7876-36c6-8156-b5ab-ccc93bca8953",
+        "Title":  "Mar-Vell — Captain Marvel",
+        "DefId":  "CaptainMarvel",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/CaptainMarvel.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/CaptainMarvel.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d5d7876-36c6-8165-9133-c90c9355b2c3",
+        "Title":  "Firestar - Angelica Jones",
+        "DefId":  "Firestar",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Firestar.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Firestar.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d5d7876-36c6-8120-a441-d24f0dfd4a66",
+        "Title":  "Uatu the Watcher",
+        "DefId":  "Uatu",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Uatu.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Uatu.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d5d7876-36c6-81db-84cb-f6e311e1a261",
+        "Title":  "Professor X - Charles Xavier",
+        "DefId":  "ProfessorX",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ProfessorX.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ProfessorX.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3d5d7876-36c6-81dc-92a5-c35db6d9c962",
+        "Title":  "Uncle Ben - Ben Parker",
+        "DefId":  "UncleBen",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/UncleBen.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/UncleBen.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8116-875e-d61119b109f1",
+        "Title":  "Rescue — Pepper Potts",
+        "DefId":  "Rescue",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Rescue.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Rescue.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81f2-8735-e7dad316c5b7",
+        "Title":  "Ares",
+        "DefId":  "Ares",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ares.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ares.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8101-badf-d49424f26092",
+        "Title":  "White Tiger — Ava Ayala",
+        "DefId":  "WhiteTiger",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/WhiteTiger.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/WhiteTiger.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8103-b5a0-caedd66932c7",
+        "Title":  "Clea",
+        "DefId":  "Clea",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Clea.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Clea.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8112-a3f2-d6e5aac41543",
+        "Title":  "Viv Vision",
+        "DefId":  "Viv",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Viv.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Viv.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8117-a5b4-f7674d352ff7",
+        "Title":  "Medusa — Medusalith Amaquelin",
+        "DefId":  "Medusa",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Medusa.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Medusa.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-811f-9bdc-e626f09f0aac",
+        "Title":  "Gorgon — Inhumans",
+        "DefId":  "Gorgon",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Gorgon.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Gorgon.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-811f-b3cc-eeac53e9b61b",
+        "Title":  "Quake — Daisy Johnson",
+        "DefId":  "Quake",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Quake.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Quake.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-811f-ba6b-fb08b4fa7076",
+        "Title":  "Mockingbird — Bobbi Morse",
+        "DefId":  "Mockingbird",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mockingbird.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mockingbird.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8120-b23e-d43c55e5c5df",
+        "Title":  "Sentry — Robert Reynolds",
+        "DefId":  "Sentry",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sentry.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sentry.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8121-b798-eeace55cb162",
+        "Title":  "Nova — Sam Alexander",
+        "DefId":  "Nova",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Nova.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Nova.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8123-ab10-fdc2c9631a9d",
+        "Title":  "Multiple Man — Jamie Madrox",
+        "DefId":  "MultipleMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MultipleMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MultipleMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8125-ae29-d634fb6dfa83",
+        "Title":  "Cannonball — Sam Guthrie",
+        "DefId":  "Cannonball",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Cannonball.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Cannonball.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-812a-be49-cf17518eaebf",
+        "Title":  "Sunspot — Roberto da Costa",
+        "DefId":  "Sunspot",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sunspot.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sunspot.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-812b-87c2-d9d7f865c983",
+        "Title":  "Bishop — Lucas Bishop",
+        "DefId":  "Bishop",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Bishop.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Bishop.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8135-a79f-d4a5d8ddefca",
+        "Title":  "Dazzler — Alison Blaire",
+        "DefId":  "Dazzler",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Dazzler.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Dazzler.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8136-85e8-f46f270d483d",
+        "Title":  "Stature — Cassie Lang",
+        "DefId":  "Stature",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Stature.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Stature.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-813a-a40c-e6487754fe69",
+        "Title":  "Forge",
+        "DefId":  "Forge",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Forge.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Forge.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-813a-b48e-cb850b65e376",
+        "Title":  "Noh-Varr — Marvel Boy",
+        "DefId":  "MarvelBoy",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MarvelBoy.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MarvelBoy.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8143-8d94-d7a75835d31e",
+        "Title":  "Archangel — Warren Worthington III",
+        "DefId":  "Angel",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Angel.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Angel.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8148-b0e5-da21000f0911",
+        "Title":  "Colleen Wing",
+        "DefId":  "ColleenWing",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ColleenWing.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ColleenWing.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8149-92f3-ed7a6bda190b",
+        "Title":  "M’Baku",
+        "DefId":  "MBaku",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MBaku.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MBaku.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8151-9bd6-fe04d56830fc",
+        "Title":  "Lockjaw",
+        "DefId":  "Lockjaw",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Lockjaw.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Lockjaw.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8157-b9a3-db27ddbf7613",
+        "Title":  "Armor — Hisako Ichiki",
+        "DefId":  "Armor",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Armor.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Armor.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8159-9ecd-c5d2ce285d13",
+        "Title":  "Beta Ray Bill",
+        "DefId":  "BetaRayBill",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BetaRayBill.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BetaRayBill.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-815c-9e36-cc9a680b77c5",
+        "Title":  "Patriot — Eli Bradley",
+        "DefId":  "Patriot",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Patriot.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Patriot.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8166-8bcc-fdf317dd5339",
+        "Title":  "Werewolf by Night — Jack Russell",
+        "DefId":  "WerewolfByNight",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/WerewolfByNight.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/WerewolfByNight.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8168-907f-c4261af8aebd",
+        "Title":  "Echo — Maya Lopez",
+        "DefId":  "Echo",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Echo.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Echo.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8168-9a81-fab8163abb0a",
+        "Title":  "Warpath — James Proudstar",
+        "DefId":  "Warpath",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Warpath.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Warpath.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-816b-9ad7-fc7dc6fe37a9",
+        "Title":  "Black Bolt — Blackagar Boltagon",
+        "DefId":  "BlackBolt",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlackBolt.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlackBolt.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-816c-9bec-ebc4054bdc6e",
+        "Title":  "Sersi",
+        "DefId":  "Sersi",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sersi.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sersi.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-816d-808e-e1ad327abd90",
+        "Title":  "Thena",
+        "DefId":  "Thena",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Thena.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Thena.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-816e-8dfd-db17f32fddb5",
+        "Title":  "Crystal — Crystalia Amaquelin",
+        "DefId":  "Crystal",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Crystal.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Crystal.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8177-8c53-da48bdc5bbdc",
+        "Title":  "Hope Summers",
+        "DefId":  "HopeSummers",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/HopeSummers.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/HopeSummers.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8179-bd15-f8ece03d95e7",
+        "Title":  "U.S. Agent — John Walker",
+        "DefId":  "USAgent",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/USAgent.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/USAgent.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8189-9b8c-e08d06152997",
+        "Title":  "Ghost — Ava Starr",
+        "DefId":  "Ghost",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ghost.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ghost.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8198-adcc-ce7f8bf1d406",
+        "Title":  "Prodigy — David Alleyne",
+        "DefId":  "Prodigy",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Prodigy.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Prodigy.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8199-9304-e9f2cbf8fa0d",
+        "Title":  "Gilgamesh — Eternal",
+        "DefId":  "Gilgamesh",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Gilgamesh.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Gilgamesh.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-819e-995e-fee5cced004f",
+        "Title":  "Makkari",
+        "DefId":  "Makkari",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Makkari.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Makkari.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81ad-ac24-d63e91c5fd3c",
+        "Title":  "Misty Knight",
+        "DefId":  "MistyKnight",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MistyKnight.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MistyKnight.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81b0-8024-f70383a1927b",
+        "Title":  "Domino — Neena Thurman",
+        "DefId":  "Domino",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Domino.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Domino.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81b6-87e6-d5d9312f2fa5",
+        "Title":  "Hercules",
+        "DefId":  "Hercules",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hercules.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hercules.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81bb-9985-ef35d4ffffb0",
+        "Title":  "Moon Girl — Lunella Lafayette",
+        "DefId":  "MoonGirl",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MoonGirl.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MoonGirl.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81bf-b7a7-d25ace832913",
+        "Title":  "Nakia",
+        "DefId":  "Nakia",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Nakia.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Nakia.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81d1-8810-c2a5a1739ae0",
+        "Title":  "Havok — Alex Summers",
+        "DefId":  "Havok",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Havok.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Havok.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81da-a7c6-f051e972b0f5",
+        "Title":  "Nico Minoru",
+        "DefId":  "NicoMinoru",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/NicoMinoru.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/NicoMinoru.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81dc-84cd-e1ec709e83f7",
+        "Title":  "Firestar — Angelica Jones",
+        "DefId":  "Firestar",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Firestar.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Firestar.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81de-a453-c9f8382a7945",
+        "Title":  "Cosmo the Spacedog",
+        "DefId":  "Cosmo",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Cosmo.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Cosmo.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81e3-a63a-d679b4755b0b",
+        "Title":  "Phastos",
+        "DefId":  "Phastos",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Phastos.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Phastos.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81ee-89af-ec03415138d6",
+        "Title":  "Red Guardian — Alexei Shostakov",
+        "DefId":  "RedGuardian",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/RedGuardian.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/RedGuardian.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81f1-8f3c-e9bfc7c0d388",
+        "Title":  "Blue Marvel — Adam Brashear",
+        "DefId":  "BlueMarvel",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlueMarvel.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlueMarvel.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81f4-964b-c25953c965ba",
+        "Title":  "Moondragon — Heather Douglas",
+        "DefId":  "Moondragon",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Moondragon.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Moondragon.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81f6-b420-f1cf5a1270a9",
+        "Title":  "Speed — Tommy Shepherd",
+        "DefId":  "Speed",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Speed.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Speed.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81fc-86c2-f49f36a6395b",
+        "Title":  "Taskmaster — Antonia Dreykov",
+        "DefId":  "Taskmaster",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Taskmaster.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Taskmaster.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81fc-950f-cf391a926a83",
+        "Title":  "Polaris — Lorna Dane",
+        "DefId":  "Polaris",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Polaris.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Polaris.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8116-a84f-f2683068406e",
+        "Title":  "Magneto — Erik Lehnsherr",
+        "DefId":  "Magneto",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Magneto.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Magneto.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8139-b8ef-dd47ff8fadb2",
+        "Title":  "Peni Parker",
+        "DefId":  "PeniParker",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/PeniParker.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/PeniParker.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8140-8b66-d7cf6379a91f",
+        "Title":  "Loki",
+        "DefId":  "Loki",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Loki.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Loki.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-8149-8c03-eb3b90e042e0",
+        "Title":  "Devil Dinosaur",
+        "DefId":  "DevilDinosaur",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/DevilDinosaur.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/DevilDinosaur.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-815b-8699-fe88f94be27c",
+        "Title":  "Venom — Eddie Brock",
+        "DefId":  "Venom",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Venom.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Venom.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-815e-96a7-c390a78c5d70",
+        "Title":  "Jubilee — Jubilation Lee",
+        "DefId":  "Jubilee",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Jubilee.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Jubilee.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-815f-a0a6-ea96fd73c849",
+        "Title":  "Angela — Aldrif Odinsdottir",
+        "DefId":  "Angela",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Angela.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Angela.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81cb-9a79-e9316b262263",
+        "Title":  "Jeff the Land Shark",
+        "DefId":  "JeffTheBabyLandShark",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/JeffTheBabyLandShark.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/JeffTheBabyLandShark.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81f5-bd64-e42a2c704fed",
+        "Title":  "Elsa Bloodstone",
+        "DefId":  "ElsaBloodstone",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ElsaBloodstone.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ElsaBloodstone.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3ccd7876-36c6-81a0-a3ae-f67b18f97e39",
+        "Title":  "The Hood — Parker Robbins",
+        "DefId":  "Hood",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hood.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hood.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8116-870a-c2e0e033b7c5",
+        "Title":  "Yondu Udonta",
+        "DefId":  "Yondu",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Yondu.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Yondu.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-811f-afb1-f3ef7ffce61d",
+        "Title":  "Heimdall",
+        "DefId":  "Heimdall",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Heimdall.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Heimdall.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-814d-b691-fa08363c8bfc",
+        "Title":  "Shuri",
+        "DefId":  "Shuri",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Shuri.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Shuri.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-816e-afba-fc1cd0968030",
+        "Title":  "Nebula",
+        "DefId":  "Nebula",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Nebula.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Nebula.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8177-9ad8-d2535df73d43",
+        "Title":  "Maria Hill",
+        "DefId":  "MariaHill",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MariaHill.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MariaHill.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8187-ab8a-d237af2e60a4",
+        "Title":  "Korg",
+        "DefId":  "Korg",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Korg.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Korg.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8199-bee8-eaef6bf7e454",
+        "Title":  "Yelena Belova",
+        "DefId":  "WhiteWidow",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/WhiteWidow.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/WhiteWidow.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-819e-93a6-fc09d0df608a",
+        "Title":  "Adam Warlock",
+        "DefId":  "AdamWarlock",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/AdamWarlock.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/AdamWarlock.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81a4-be98-c055135b3fd4",
+        "Title":  "Wong",
+        "DefId":  "Wong",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Wong.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Wong.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81e0-8fd8-fe6ae86cfb20",
+        "Title":  "Peggy Carter",
+        "DefId":  "CaptainCarter",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/CaptainCarter.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/CaptainCarter.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81f7-a31f-f8c7e40aa736",
+        "Title":  "Okoye",
+        "DefId":  "Okoye",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Okoye.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Okoye.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8101-92d4-da19de5ce6c6",
+        "Title":  "Quicksilver — Pietro Maximoff",
+        "DefId":  "Quicksilver",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Quicksilver.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Quicksilver.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8109-8d72-e3978add0a34",
+        "Title":  "Aunt May — May Parker",
+        "DefId":  "AuntMay",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/AuntMay.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/AuntMay.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8114-bea3-f63cfaf3cbe0",
+        "Title":  "Hulkling — Teddy Altman",
+        "DefId":  "Hulkling",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hulkling.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hulkling.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8135-b942-da2c8f5d010e",
+        "Title":  "J. Jonah Jameson",
+        "DefId":  "JJonahJameson",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/JJonahJameson.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/JJonahJameson.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8166-ab3b-cdfcff3fe1a2",
+        "Title":  "Psylocke — Betsy Braddock",
+        "DefId":  "Psylocke",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Psylocke.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Psylocke.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8190-8508-d28752d0e7fc",
+        "Title":  "Professor X — Charles Xavier",
+        "DefId":  "ProfessorX",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ProfessorX.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ProfessorX.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8193-8c7b-d7b4af36bced",
+        "Title":  "Kate Bishop — Hawkeye",
+        "DefId":  "KateBishop",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/KateBishop.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/KateBishop.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8193-a580-c72716219a1a",
+        "Title":  "Wiccan — Billy Kaplan",
+        "DefId":  "Wiccan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Wiccan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Wiccan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-819f-b075-c039549283d6",
+        "Title":  "X-23 — Laura Kinney",
+        "DefId":  "X23",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/X23.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/X23.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81a5-bf82-d79d0fa72ee2",
+        "Title":  "America Chavez",
+        "DefId":  "AmericaChavez",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/AmericaChavez.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/AmericaChavez.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81af-b1f0-d737552ced0c",
+        "Title":  "Namor the Sub-Mariner",
+        "DefId":  "Namor",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Namor.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Namor.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81c1-942a-f6df9c01d573",
+        "Title":  "Valkyrie — Brunnhilde",
+        "DefId":  "Valkyrie",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Valkyrie.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Valkyrie.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81de-8837-e0a551f78421",
+        "Title":  "Emma Frost",
+        "DefId":  "WhiteQueen",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/WhiteQueen.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/WhiteQueen.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81f3-bf85-ff480c515ce2",
+        "Title":  "Ironheart — Riri Williams",
+        "DefId":  "Ironheart",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ironheart.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ironheart.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8100-ad75-d997dfc6a796",
+        "Title":  "Gambit — Remy LeBeau",
+        "DefId":  "Gambit",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Gambit.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Gambit.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8102-8f31-ddb9ae90a0a3",
+        "Title":  "Ghost Rider — Johnny Blaze",
+        "DefId":  "GhostRider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/GhostRider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/GhostRider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8106-acab-f35cd5c8ec2f",
+        "Title":  "Iron Man — Tony Stark",
+        "DefId":  "IronMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/IronMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/IronMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-810f-b2b4-e78fa0adbadd",
+        "Title":  "Black Cat — Felicia Hardy",
+        "DefId":  "BlackCat",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlackCat.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlackCat.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8110-852a-fafde0a6e90e",
+        "Title":  "Shang-Chi",
+        "DefId":  "ShangChi",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ShangChi.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ShangChi.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8111-9357-dd728cffbf8e",
+        "Title":  "Ms. Marvel — Kamala Khan",
+        "DefId":  "MsMarvel",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MsMarvel.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MsMarvel.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8114-a4d7-f3df0eae11f5",
+        "Title":  "Silver Surfer — Norrin Radd",
+        "DefId":  "SilverSurfer",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SilverSurfer.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SilverSurfer.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8115-980e-f0c48960fc1d",
+        "Title":  "Hulk — Bruce Banner",
+        "DefId":  "Hulk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hulk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hulk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-811b-8a15-d1b1d300b804",
+        "Title":  "Cable — Nathan Summers",
+        "DefId":  "Cable",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Cable.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Cable.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8129-b8cf-ec292317be3d",
+        "Title":  "Elektra Natchios",
+        "DefId":  "Elektra",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Elektra.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Elektra.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-812a-bcce-e98537644fb2",
+        "Title":  "Phoenix — Jean Grey",
+        "DefId":  "JeanGrey",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/JeanGrey.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/JeanGrey.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-812c-8328-f8e5809df726",
+        "Title":  "Colossus — Piotr Rasputin",
+        "DefId":  "Colossus",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Colossus.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Colossus.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8130-a906-c4b702677c42",
+        "Title":  "Moon Knight — Marc Spector",
+        "DefId":  "MoonKnight",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MoonKnight.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MoonKnight.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-813b-a106-ff4976aefd02",
+        "Title":  "Rocket Raccoon",
+        "DefId":  "RocketRaccoon",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/RocketRaccoon.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/RocketRaccoon.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-813c-b274-c01334afee5d",
+        "Title":  "Kitty Pryde — Shadowcat",
+        "DefId":  "KittyPryde",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/KittyPryde.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/KittyPryde.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-813d-b269-d68df76c427c",
+        "Title":  "The Thing — Ben Grimm",
+        "DefId":  "TheThing",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/TheThing.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/TheThing.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-813f-b051-d48c9c116cb9",
+        "Title":  "She-Hulk — Jennifer Walters",
+        "DefId":  "SheHulk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SheHulk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SheHulk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8140-b415-ce5633f2d9c9",
+        "Title":  "Human Torch — Johnny Storm",
+        "DefId":  "HumanTorch",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/HumanTorch.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/HumanTorch.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8141-8b3a-e3ff80ba889b",
+        "Title":  "Wasp — Janet van Dyne",
+        "DefId":  "Wasp",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Wasp.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Wasp.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8153-9d43-c694f9825d26",
+        "Title":  "Scarlet Witch — Wanda Maximoff",
+        "DefId":  "ScarletWitch",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ScarletWitch.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ScarletWitch.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-815c-8f9c-ff83495d17ce",
+        "Title":  "Drax the Destroyer",
+        "DefId":  "Drax",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Drax.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Drax.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-815f-b1e8-f02a0c39b0ea",
+        "Title":  "Mister Fantastic — Reed Richards",
+        "DefId":  "MrFantastic",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MrFantastic.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MrFantastic.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8161-b505-e1416d0bea67",
+        "Title":  "Captain Marvel — Carol Danvers",
+        "DefId":  "CaptainMarvel",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/CaptainMarvel.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/CaptainMarvel.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8164-9fe0-e7a3eabdd613",
+        "Title":  "Gamora",
+        "DefId":  "Gamora",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Gamora.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Gamora.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8165-a7fc-fe4927b8186c",
+        "Title":  "Mantis",
+        "DefId":  "Mantis",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mantis.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mantis.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-816b-b963-e8519b796bc5",
+        "Title":  "Beast — Hank McCoy",
+        "DefId":  "Beast",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Beast.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Beast.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-816c-ba86-e6a0ea238912",
+        "Title":  "Punisher — Frank Castle",
+        "DefId":  "Punisher",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Punisher.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Punisher.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-816e-abe3-f6ed3c24e336",
+        "Title":  "Ant-Man — Scott Lang",
+        "DefId":  "AntMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/AntMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/AntMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-817e-9ab5-d0469d426f03",
+        "Title":  "Black Panther — T’Challa",
+        "DefId":  "BlackPanther",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlackPanther.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlackPanther.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8188-949d-e815f95217fa",
+        "Title":  "Iron Fist — Danny Rand",
+        "DefId":  "IronFist",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/IronFist.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/IronFist.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8196-bc74-ffb3f6cc21c7",
+        "Title":  "Blade — Eric Brooks",
+        "DefId":  "Blade",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Blade.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Blade.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8197-854a-c8e00004d616",
+        "Title":  "Hawkeye — Clint Barton",
+        "DefId":  "Hawkeye",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hawkeye.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hawkeye.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-8197-9266-cc62c9b22aa0",
+        "Title":  "War Machine — James Rhodes",
+        "DefId":  "WarMachine",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/WarMachine.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/WarMachine.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-819a-98fb-fed95f67f3a1",
+        "Title":  "Nova — Richard Rider",
+        "DefId":  "Nova",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Nova.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Nova.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-819e-a7fa-eda6f53807bc",
+        "Title":  "Rogue — Anna Marie",
+        "DefId":  "Rogue",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Rogue.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Rogue.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81a0-8afb-d52326a0614f",
+        "Title":  "Thor — Thor Odinson",
+        "DefId":  "Thor",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Thor.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Thor.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81a7-b71f-e012899be3a7",
+        "Title":  "Wolverine — Logan",
+        "DefId":  "Wolverine",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Wolverine.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Wolverine.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81aa-a2b8-dedba081b842",
+        "Title":  "Magik — Illyana Rasputina",
+        "DefId":  "Magik",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Magik.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Magik.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81ad-81c7-c5aa5db8659f",
+        "Title":  "Deadpool — Wade Wilson",
+        "DefId":  "Deadpool",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Deadpool.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Deadpool.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81ad-b2cd-e616b0768892",
+        "Title":  "Daredevil — Matt Murdock",
+        "DefId":  "Daredevil",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Daredevil.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Daredevil.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81af-9f29-d79a7e8bc9a5",
+        "Title":  "Captain America — Steve Rogers",
+        "DefId":  "CaptainAmerica",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/CaptainAmerica.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/CaptainAmerica.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81b5-a0cb-d786612f4cb3",
+        "Title":  "Black Widow — Natasha Romanoff",
+        "DefId":  "BlackWidow",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlackWidow.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlackWidow.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81b6-9407-e0683c088498",
+        "Title":  "Squirrel Girl — Doreen Green",
+        "DefId":  "SquirrelGirl",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SquirrelGirl.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SquirrelGirl.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81bb-8d4f-eeae3b3a3372",
+        "Title":  "Invisible Woman — Sue Storm",
+        "DefId":  "InvisibleWoman",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/InvisibleWoman.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/InvisibleWoman.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81bc-9d01-ed724bc863ae",
+        "Title":  "Luke Cage",
+        "DefId":  "LukeCage",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/LukeCage.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/LukeCage.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81c2-9e10-fef3709ac5de",
+        "Title":  "Storm — Ororo Munroe",
+        "DefId":  "Storm",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Storm.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Storm.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81c3-b0a1-c043da2be844",
+        "Title":  "Vision",
+        "DefId":  "Vision",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Vision.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Vision.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81c6-9030-e8116857cfac",
+        "Title":  "Nick Fury",
+        "DefId":  "NickFury",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/NickFury.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/NickFury.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81c9-a086-f30d5ff1b1f0",
+        "Title":  "Cyclops — Scott Summers",
+        "DefId":  "Cyclops",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Cyclops.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Cyclops.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81cb-8ebe-f413d34061af",
+        "Title":  "Jessica Jones",
+        "DefId":  "JessicaJones",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/JessicaJones.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/JessicaJones.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81d1-912b-deb91720fdc5",
+        "Title":  "Falcon — Sam Wilson",
+        "DefId":  "Falcon",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Falcon.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Falcon.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81d5-b90e-eaea1c7830b9",
+        "Title":  "Silver Sable",
+        "DefId":  "SilverSable",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SilverSable.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SilverSable.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81e1-8447-c43c5a76484a",
+        "Title":  "Nightcrawler — Kurt Wagner",
+        "DefId":  "Nightcrawler",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Nightcrawler.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Nightcrawler.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81e6-83d4-faedd1d4a0f8",
+        "Title":  "Groot",
+        "DefId":  "Groot",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Groot.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Groot.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81f7-865b-cf032572654b",
+        "Title":  "Winter Soldier — Bucky Barnes",
+        "DefId":  "WinterSoldier",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/WinterSoldier.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/WinterSoldier.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81ff-8ebb-ee62a742107f",
+        "Title":  "Doctor Strange — Stephen Strange",
+        "DefId":  "DoctorStrange",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/DoctorStrange.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/DoctorStrange.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Heroes",
+        "Id":  "3cbd7876-36c6-81ff-9219-d615a59b67d2",
+        "Title":  "Iceman — Bobby Drake",
+        "DefId":  "Iceman",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Iceman.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Iceman.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8102-a989-c18eb01b9f45",
+        "Title":  "The Living Tribunal",
+        "DefId":  "LivingTribunal",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/LivingTribunal.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/LivingTribunal.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8136-9181-fe60ab38990a",
+        "Title":  "Darkhawk",
+        "DefId":  "Darkhawk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Darkhawk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Darkhawk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-816f-bfb6-e15f8391f81a",
+        "Title":  "Shadow King — Amahl Farouk",
+        "DefId":  "ShadowKing",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ShadowKing.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ShadowKing.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8174-95ba-c3f580549695",
+        "Title":  "Black Knight — Dane Whitman (Corrupted/Ebony Blade)",
+        "DefId":  "BlackKnight",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlackKnight.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlackKnight.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-818b-9b78-f8420df46554",
+        "Title":  "Lady Deathstrike — Yuriko Oyama",
+        "DefId":  "LadyDeathstrike",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/LadyDeathstrike.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/LadyDeathstrike.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81dd-b169-d0c5d9158f1a",
+        "Title":  "Lady Bullseye",
+        "DefId":  "LadyBullseye",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/LadyBullseye.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/LadyBullseye.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81e6-97b1-cbfd1368da0e",
+        "Title":  "Mad Thinker",
+        "DefId":  "MadThinker",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MadThinker.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MadThinker.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8158-8aa2-ec686a699cda",
+        "Title":  "Red Onslaught — AXIS",
+        "DefId":  "RedOnslaught",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/RedOnslaught.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/RedOnslaught.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8173-910f-c929d759b231",
+        "Title":  "Superior Iron Man — Tony Stark (AXIS)",
+        "DefId":  "IronMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/IronMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/IronMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81c0-85d7-eefa5217844a",
+        "Title":  "Kluh — Hulk\u0027s Dark Persona",
+        "DefId":  "Kluh",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Kluh.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Kluh.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8104-9071-ff2dc1d71d31",
+        "Title":  "Black Swan — Yabbat Ummon Turru",
+        "DefId":  "BlackSwan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlackSwan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlackSwan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-810a-9e25-e793cd9384d3",
+        "Title":  "Fin Fang Foom",
+        "DefId":  "FinFangFoom",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/FinFangFoom.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/FinFangFoom.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-811f-b005-c7ef4c813787",
+        "Title":  "Titania — Mary MacPherran",
+        "DefId":  "Titania",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Titania.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Titania.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8120-9751-d854db7c19b4",
+        "Title":  "Arnim Zola",
+        "DefId":  "ArnimZola",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ArnimZola.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ArnimZola.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-812b-a44e-d8814b403360",
+        "Title":  "Supergiant",
+        "DefId":  "Supergiant",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Supergiant.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Supergiant.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8146-8c52-f287b7cda7c7",
+        "Title":  "Ajax — Francis Freeman",
+        "DefId":  "Ajax",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ajax.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ajax.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8150-8007-e8413beb3737",
+        "Title":  "Selene Gallio",
+        "DefId":  "Selene",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Selene.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Selene.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8155-aa48-c3d25b25e8bb",
+        "Title":  "Klaw — Ulysses Klaue",
+        "DefId":  "Klaw",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Klaw.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Klaw.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8163-99af-e2c0abd55d7b",
+        "Title":  "Typhoid Mary",
+        "DefId":  "TyphoidMary",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/TyphoidMary.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/TyphoidMary.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8167-82a3-da71580ed605",
+        "Title":  "Magus",
+        "DefId":  "Magus",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Magus.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Magus.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-817f-b722-cc764704918c",
+        "Title":  "Mojo",
+        "DefId":  "Mojo",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mojo.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mojo.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-8189-87a5-e854237086fa",
+        "Title":  "Alioth",
+        "DefId":  "Alioth",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Alioth.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Alioth.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-819b-be8b-f9bb6da7f952",
+        "Title":  "Morgan le Fay",
+        "DefId":  "MorganLeFay",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MorganLeFay.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MorganLeFay.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81cb-a808-dd130f15aa84",
+        "Title":  "Orka",
+        "DefId":  "Orka",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Orka.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Orka.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81cd-8eb1-fb827dfda2e2",
+        "Title":  "Death",
+        "DefId":  "Death",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Death.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Death.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81d3-ab63-fe4f1c7162cc",
+        "Title":  "Stryfe",
+        "DefId":  "Stryfe",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Stryfe.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Stryfe.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81dd-86de-e194ec300b19",
+        "Title":  "Ravonna Renslayer",
+        "DefId":  "RavonnaRenslayer",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/RavonnaRenslayer.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/RavonnaRenslayer.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81e0-a151-f5cf06587de0",
+        "Title":  "The Fallen One",
+        "DefId":  "FallenOne",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/FallenOne.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/FallenOne.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3dbd7876-36c6-81fd-a041-e88ae6ddf96c",
+        "Title":  "Muse",
+        "DefId":  "Muse",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Muse.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Muse.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-816f-b40c-c1df38729464",
+        "Title":  "Mysterio Illusion",
+        "DefId":  "Mysterio",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mysterio.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mysterio.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-8139-9953-c764fc66b844",
+        "Title":  "Drone - Ultron Sentry",
+        "DefId":  "Ultron",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ultron.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ultron.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-812d-9762-f48ed48823a5",
+        "Title":  "Broodling",
+        "DefId":  "Broodling",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Broodling.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Broodling.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-81d6-9d39-e6871f6207fc",
+        "Title":  "Demon - Netherworld Minion",
+        "DefId":  "Demon",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Demon.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Demon.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-817d-81f4-d7fe2d8704a2",
+        "Title":  "Sinister Clone",
+        "DefId":  "SinisterClone",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SinisterClone.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SinisterClone.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-8165-9d2e-f9eb22ae1a48",
+        "Title":  "Doombot",
+        "DefId":  "DoomBot",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/DoomBot.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/DoomBot.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-817a-b820-d9c53c3c80a6",
+        "Title":  "Zabu",
+        "DefId":  "Zabu",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Zabu.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Zabu.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-818a-8ea9-eafab649f087",
+        "Title":  "Viper - Madame Hydra",
+        "DefId":  "Viper",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Viper.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Viper.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-811b-8e9b-f3ee1aadc67e",
+        "Title":  "Sebastian Shaw",
+        "DefId":  "SebastianShaw",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SebastianShaw.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SebastianShaw.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-8147-b022-da8ce252a691",
+        "Title":  "Sauron - Karl Lykos",
+        "DefId":  "Sauron",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sauron.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sauron.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-81db-9e26-cc1ef7b2f88d",
+        "Title":  "Dracula - Vlad Dracula",
+        "DefId":  "Dracula",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Dracula.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Dracula.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-81ff-a9b6-e95c1b8607eb",
+        "Title":  "Destroyer",
+        "DefId":  "Destroyer",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Destroyer.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Destroyer.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-813f-ae34-dee28c3396a8",
+        "Title":  "Crossbones - Brock Rumlow",
+        "DefId":  "Crossbones",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Crossbones.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Crossbones.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-8147-9fa0-d194daf6858a",
+        "Title":  "Blob - Fred Dukes",
+        "DefId":  "Blob",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Blob.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Blob.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-8118-9236-e04293813dca",
+        "Title":  "Baron Mordo - Karl Mordo",
+        "DefId":  "BaronMordo",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BaronMordo.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BaronMordo.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-81e8-a7eb-df22d9a42255",
+        "Title":  "Attuma",
+        "DefId":  "Attuma",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Attuma.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Attuma.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-813f-a496-d93b35d272fc",
+        "Title":  "Absorbing Man - Crusher Creel",
+        "DefId":  "AbsorbingMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/AbsorbingMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/AbsorbingMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d6d7876-36c6-81af-8495-c0e6ed8a67e6",
+        "Title":  "Baron Zemo - Helmut Zemo",
+        "DefId":  "BaronZemo",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BaronZemo.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BaronZemo.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3d5d7876-36c6-8190-aca8-eb83c6cd8b60",
+        "Title":  "Mysterio Hologram Clone",
+        "DefId":  "Mysterio",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mysterio.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mysterio.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cfd7876-36c6-8196-9aa6-c02ba04bd328",
+        "Title":  "Vulture Crew Salvager",
+        "DefId":  "Vulture",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Vulture.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Vulture.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cfd7876-36c6-81fb-8158-c0a98474ab5a",
+        "Title":  "Mysterio EDITH Drone",
+        "DefId":  "Mysterio",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mysterio.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mysterio.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-8154-aafe-d38fa0f5eb9d",
+        "Title":  "Tarantula — Anton Miguel Rodriguez",
+        "DefId":  "Tarantula",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Tarantula.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Tarantula.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-815d-a4dc-e10914f5c032",
+        "Title":  "Stegron",
+        "DefId":  "Stegron",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Stegron.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Stegron.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-8183-9191-e452d0b8a9cd",
+        "Title":  "Scream — Symbiote",
+        "DefId":  "Scream",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Scream.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Scream.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81d6-bf88-e87a50cd3bd2",
+        "Title":  "Boomerang — Fred Myers",
+        "DefId":  "Boomerang",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Boomerang.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Boomerang.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81ea-a51f-ca798956b6a1",
+        "Title":  "Speed Demon — James Sanders",
+        "DefId":  "Speed",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Speed.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Speed.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81eb-b5c8-e36b3acebd62",
+        "Title":  "Swarm — Fritz von Meyer",
+        "DefId":  "Swarm",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Swarm.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Swarm.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-819a-a8b7-c9c670ce9346",
+        "Title":  "Yellowjacket — Darren Cross",
+        "DefId":  "Yellowjacket",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Yellowjacket.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Yellowjacket.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81cb-976a-e35bb37a4953",
+        "Title":  "Cull Obsidian",
+        "DefId":  "CullObsidian",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/CullObsidian.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/CullObsidian.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81a4-8702-c1498016298a",
+        "Title":  "Cassandra Nova",
+        "DefId":  "CassandraNova",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/CassandraNova.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/CassandraNova.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81bd-9982-ee6b833bf640",
+        "Title":  "Bastion",
+        "DefId":  "Bastion",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Bastion.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Bastion.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81c0-8002-fb2781170ae8",
+        "Title":  "Nightmare",
+        "DefId":  "Nightmare",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Nightmare.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Nightmare.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-818f-98f0-e58d3cf399d4",
+        "Title":  "Ultron Heavy Sentry",
+        "DefId":  "Ultron",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ultron.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ultron.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81f3-b799-c64e6508f8a9",
+        "Title":  "Sentinel Hunter Unit",
+        "DefId":  "Sentinel",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sentinel.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sentinel.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-8145-bd06-e28a214eda1d",
+        "Title":  "Nimrod",
+        "DefId":  "Nimrod",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Nimrod.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Nimrod.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81b9-b54f-eeb2b56f87bf",
+        "Title":  "Master Mold",
+        "DefId":  "MasterMold",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MasterMold.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MasterMold.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-815b-9946-c7bc23bfd2fb",
+        "Title":  "Symbiote — Ranged",
+        "DefId":  "Symbiote",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Symbiote.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Symbiote.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-819c-8569-d60e8b56bd4f",
+        "Title":  "Symbiote — Grabber",
+        "DefId":  "Symbiote",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Symbiote.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Symbiote.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3ccd7876-36c6-81d6-b3d2-d6b4fed11edc",
+        "Title":  "Symbiote — Rusher",
+        "DefId":  "Symbiote",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Symbiote.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Symbiote.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8113-87fc-d0e52fcdd869",
+        "Title":  "Corvus Glaive",
+        "DefId":  "CorvusGlaive",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/CorvusGlaive.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/CorvusGlaive.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-819d-911d-e62526327bd3",
+        "Title":  "Proxima Midnight",
+        "DefId":  "ProximaMidnight",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ProximaMidnight.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ProximaMidnight.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-819d-af2c-f02d9eb41cad",
+        "Title":  "Prowler — Aaron Davis",
+        "DefId":  "Prowler",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Prowler.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Prowler.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81c1-abf8-e1607e8e8d52",
+        "Title":  "Red Hulk — Thaddeus Ross",
+        "DefId":  "RedHulk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/RedHulk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/RedHulk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8122-8114-f90fb07fa707",
+        "Title":  "Lady Deathstrike — Yuriko Oyama",
+        "DefId":  "LadyDeathstrike",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/LadyDeathstrike.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/LadyDeathstrike.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-813e-9fd0-efc1d19e0d5b",
+        "Title":  "Mystique — Raven Darkhölme",
+        "DefId":  "Mystique",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mystique.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mystique.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81e3-b271-df11fdd4dacb",
+        "Title":  "Taskmaster — Tony Masters",
+        "DefId":  "Taskmaster",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Taskmaster.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Taskmaster.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81e4-9226-de8b2617f93d",
+        "Title":  "Enchantress — Amora",
+        "DefId":  "Enchantress",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Enchantress.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Enchantress.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81e9-bd77-db179b8fbc97",
+        "Title":  "Omega Red — Arkady Rossovich",
+        "DefId":  "OmegaRed",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/OmegaRed.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/OmegaRed.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8113-8aae-d1666c4d5df9",
+        "Title":  "Symbiote — Brute",
+        "DefId":  "Symbiote",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Symbiote.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Symbiote.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8123-91e6-c11d06953c85",
+        "Title":  "Symbiote — Grunt",
+        "DefId":  "Symbiote",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Symbiote.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Symbiote.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8162-a5e3-c713afea13c5",
+        "Title":  "Sentinel Drone",
+        "DefId":  "Sentinel",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sentinel.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sentinel.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-817d-b897-e7cc26f469ea",
+        "Title":  "Doombot",
+        "DefId":  "DoomBot",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/DoomBot.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/DoomBot.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8197-9ed7-f29be5b2454b",
+        "Title":  "Symbiote — Behemoth",
+        "DefId":  "Symbiote",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Symbiote.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Symbiote.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81b0-a607-fc8a6f066f53",
+        "Title":  "Ultron Sentry",
+        "DefId":  "Ultron",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ultron.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ultron.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81eb-9c84-c13336f4bd55",
+        "Title":  "Kraven Hunter",
+        "DefId":  "Kraven",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Kraven.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Kraven.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-810e-99ce-d2ecbf2d0e53",
+        "Title":  "Scorpion — Mac Gargan",
+        "DefId":  "Scorpion",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Scorpion.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Scorpion.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8113-9f8a-ff98e4289b99",
+        "Title":  "Doctor Doom — Victor von Doom",
+        "DefId":  "DrDoom",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/DrDoom.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/DrDoom.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8116-b2a8-d3b76ca9a729",
+        "Title":  "Red Skull — Johann Schmidt",
+        "DefId":  "RedSkull",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/RedSkull.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/RedSkull.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8126-ab76-ccd05f1504f0",
+        "Title":  "Shocker — Herman Schultz",
+        "DefId":  "Shocker",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Shocker.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Shocker.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-812d-afd8-dfc13681d282",
+        "Title":  "Malekith the Accursed",
+        "DefId":  "Malekith",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Malekith.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Malekith.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-812e-8769-e127e25f22b1",
+        "Title":  "Hela",
+        "DefId":  "Hela",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hela.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hela.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8134-a5a2-dc472692db26",
+        "Title":  "Shadow King",
+        "DefId":  "ShadowKing",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ShadowKing.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ShadowKing.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8138-93be-fa08d672d225",
+        "Title":  "Lizard — Curt Connors",
+        "DefId":  "Lizard",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Lizard.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Lizard.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-813a-8a6c-fac2702e06da",
+        "Title":  "Chameleon — Dmitri Smerdyakov",
+        "DefId":  "Chameleon",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Chameleon.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Chameleon.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8146-bacb-e1613983cfb3",
+        "Title":  "M.O.D.O.K.",
+        "DefId":  "Modok",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Modok.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Modok.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8149-87dd-fe9fa9c4d540",
+        "Title":  "Mister Negative — Martin Li",
+        "DefId":  "MrNegative",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MrNegative.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MrNegative.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8160-a7ba-f87fd5b8ff02",
+        "Title":  "Annihilus",
+        "DefId":  "Annihilus",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Annihilus.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Annihilus.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8162-862c-fb2f4b7c503f",
+        "Title":  "Loki Laufeyson",
+        "DefId":  "Loki",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Loki.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Loki.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8171-875e-e593229154e7",
+        "Title":  "Morbius — Michael Morbius",
+        "DefId":  "Morbius",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Morbius.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Morbius.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8174-a514-e739ca2cd9ff",
+        "Title":  "Doctor Octopus — Otto Octavius",
+        "DefId":  "DoctorOctopus",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/DoctorOctopus.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/DoctorOctopus.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-817b-a5ef-c13d573d9426",
+        "Title":  "Gorr the God Butcher",
+        "DefId":  "Gorr",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Gorr.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Gorr.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-817e-bf31-ca157d9a2b39",
+        "Title":  "Green Goblin — Norman Osborn",
+        "DefId":  "GreenGoblin",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/GreenGoblin.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/GreenGoblin.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-817f-a3c9-c2ca4b129f6a",
+        "Title":  "Hobgoblin",
+        "DefId":  "Hobgoblin",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hobgoblin.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hobgoblin.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8181-9372-e7f3783f6b5f",
+        "Title":  "Leader — Samuel Sterns",
+        "DefId":  "Leader",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Leader.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Leader.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8182-807c-fc4841e73712",
+        "Title":  "Ebony Maw",
+        "DefId":  "EbonyMaw",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/EbonyMaw.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/EbonyMaw.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8182-a2f1-cbe09a384e6e",
+        "Title":  "Abomination — Emil Blonsky",
+        "DefId":  "Abomination",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Abomination.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Abomination.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8183-afa9-c5ef5ff6e04d",
+        "Title":  "Rhino — Aleksei Sytsevich",
+        "DefId":  "Rhino",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Rhino.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Rhino.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8186-9f0c-c9446affc3cd",
+        "Title":  "Surtur",
+        "DefId":  "Surtur",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Surtur.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Surtur.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-818d-833f-db2d7e8b9a40",
+        "Title":  "Knull",
+        "DefId":  "Knull",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Knull.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Knull.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-818f-8e78-e56ec606e31a",
+        "Title":  "Tombstone — Lonnie Lincoln",
+        "DefId":  "Tombstone",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Tombstone.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Tombstone.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-8198-bf19-f0450095ebee",
+        "Title":  "Killmonger — Erik Killmonger",
+        "DefId":  "Killmonger",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Killmonger.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Killmonger.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-819e-a958-cd8cb97447a6",
+        "Title":  "Kingpin — Wilson Fisk",
+        "DefId":  "Kingpin",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Kingpin.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Kingpin.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-819f-aa0e-cb7d561dadd7",
+        "Title":  "Ronan the Accuser",
+        "DefId":  "Ronan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ronan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ronan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81a0-85b7-f6aae9d5201e",
+        "Title":  "Carnage — Cletus Kasady",
+        "DefId":  "Carnage",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Carnage.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Carnage.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81b4-8af2-da997c4f4226",
+        "Title":  "Vulture — Adrian Toomes",
+        "DefId":  "Vulture",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Vulture.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Vulture.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81bc-a6b8-c3e8a5d0cb14",
+        "Title":  "Sabretooth — Victor Creed",
+        "DefId":  "Sabretooth",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sabretooth.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sabretooth.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81c2-a8ad-e4efd80d92b6",
+        "Title":  "Dormammu",
+        "DefId":  "Dormammu",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Dormammu.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Dormammu.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81c3-8481-fd68cb6f7140",
+        "Title":  "Mysterio — Quentin Beck",
+        "DefId":  "Mysterio",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mysterio.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mysterio.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81c4-ab08-fa5d0a5a0f94",
+        "Title":  "Sandman — Flint Marko",
+        "DefId":  "Sandman",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Sandman.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Sandman.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81ca-b155-d9f00409ad1b",
+        "Title":  "Juggernaut — Cain Marko",
+        "DefId":  "Juggernaut",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Juggernaut.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Juggernaut.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81cb-a86e-c24e6016dd8c",
+        "Title":  "Ultron",
+        "DefId":  "Ultron",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Ultron.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Ultron.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81d1-9e87-ec5554216caa",
+        "Title":  "Mister Sinister — Nathaniel Essex",
+        "DefId":  "MrSinister",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MrSinister.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MrSinister.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81d5-aba9-cc9a5524dc43",
+        "Title":  "Electro — Max Dillon",
+        "DefId":  "Electro",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Electro.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Electro.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81d8-883f-e71889b3ae77",
+        "Title":  "Mephisto",
+        "DefId":  "Mephisto",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Mephisto.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Mephisto.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81df-bf82-f48425798f7f",
+        "Title":  "High Evolutionary",
+        "DefId":  "HighEvolutionary",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/HighEvolutionary.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/HighEvolutionary.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81e3-8973-fbb300ea0d09",
+        "Title":  "Galactus",
+        "DefId":  "Galactus",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Galactus.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Galactus.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81e5-ae96-d1a863ebdbcd",
+        "Title":  "Kang the Conqueror",
+        "DefId":  "Kang",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Kang.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Kang.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81eb-9494-e0187a8d7b88",
+        "Title":  "Bullseye",
+        "DefId":  "Bullseye",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Bullseye.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Bullseye.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81ee-bf20-ef5f70f7a220",
+        "Title":  "Kraven the Hunter — Sergei Kravinoff",
+        "DefId":  "Kraven",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Kraven.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Kraven.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81f5-a863-c96dd2f321fa",
+        "Title":  "Apocalypse — En Sabah Nur",
+        "DefId":  "Apocalypse",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Apocalypse.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Apocalypse.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81f7-a4a4-e26235e149c5",
+        "Title":  "Magneto — Erik Lehnsherr",
+        "DefId":  "Magneto",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Magneto.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Magneto.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81f7-b11f-c1fcc8f302b1",
+        "Title":  "Thanos",
+        "DefId":  "Thanos",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Thanos.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Thanos.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81fb-8da9-ed452876d580",
+        "Title":  "Venom — Eddie Brock",
+        "DefId":  "Venom",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Venom.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Venom.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81fd-bfec-f83075f18e39",
+        "Title":  "Super-Skrull — Kl’rt",
+        "DefId":  "SuperSkrull",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SuperSkrull.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SuperSkrull.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Bosses",
+        "Id":  "3cbd7876-36c6-81ff-a87c-cc6cd3794864",
+        "Title":  "Onslaught",
+        "DefId":  "Onslaught",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Onslaught.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Onslaught.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3dbd7876-36c6-8164-9570-f366571f8880",
+        "Title":  "Spider-Man — Brand New Day",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d8d7876-36c6-8185-8704-ea33f7c69eed",
+        "Title":  "Spider-Zero (Earth-19166)",
+        "DefId":  "Zero",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Zero.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Zero.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d8d7876-36c6-8103-bf49-cd555ac7c91a",
+        "Title":  "Spider-Woman - Mattie Franklin (Earth-616)",
+        "DefId":  "SpiderWoman",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderWoman.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderWoman.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d8d7876-36c6-8134-91a1-e2fe028ca6e7",
+        "Title":  "Ai Apaec - Decapad Spider-Man (Earth-616)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d8d7876-36c6-81a4-a62b-de6b38a32d0f",
+        "Title":  "Spider-Lizard - Peter Parker (Earth-616)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d8d7876-36c6-81d8-b2c4-ec07a95f4d7a",
+        "Title":  "Spider-Carnage - Ben Reilly (Earth-616)",
+        "DefId":  "ScarletSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ScarletSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ScarletSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d8d7876-36c6-810f-ace3-f48524b16fb5",
+        "Title":  "The Amazing Spider-Man - Peter Parker (Earth-120703)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d6d7876-36c6-81b1-ad7d-e03442fea4e7",
+        "Title":  "Prowler - Hobie Brown",
+        "DefId":  "SpiderPunk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderPunk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderPunk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d6d7876-36c6-81a0-b76d-f4cc872f8f35",
+        "Title":  "Agent Venom - Flash Thompson",
+        "DefId":  "AgentVenom",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/AgentVenom.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/AgentVenom.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d6d7876-36c6-81cf-87f7-cc3d38679871",
+        "Title":  "Madame Web - Cassandra Webb",
+        "DefId":  "MadameWeb",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MadameWeb.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MadameWeb.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d6d7876-36c6-8132-a8be-c12256f5c897",
+        "Title":  "Hostess Cakes Spider-Man (Earth-51914)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d6d7876-36c6-8161-9802-f8b7f3feab12",
+        "Title":  "Dusk — Negative Zone Peter Parker (Earth-616)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d6d7876-36c6-8113-96b7-e53955bc5186",
+        "Title":  "Shadow-Spider — Miles Morales (Earth-TRN707)",
+        "DefId":  "MilesMorales",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MilesMorales.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MilesMorales.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d6d7876-36c6-815e-b948-ce133892cf20",
+        "Title":  "Aaron Aikman — Spider-Armor (Earth-31411)",
+        "DefId":  "Armor",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Armor.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Armor.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d6d7876-36c6-8102-9989-f1fa55fc2b84",
+        "Title":  "Fear Itself Spider-Man (Earth-616)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d5d7876-36c6-81c0-b8cd-f42c6de8f0a0",
+        "Title":  "Scarlet Spider — Felicity Hardy (Earth-982)",
+        "DefId":  "ScarletSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ScarletSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ScarletSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d5d7876-36c6-816c-bbed-ea91dd2b7847",
+        "Title":  "Spider-Woman / Arachne — Julia Carpenter (Earth-616)",
+        "DefId":  "SpiderWoman",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderWoman.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderWoman.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d5d7876-36c6-8159-acf9-d4aacf0477f3",
+        "Title":  "Ghost Spider / Spirit Spider — Peter Parker (Earth-11638)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d5d7876-36c6-8103-beaa-fc6ad045cc69",
+        "Title":  "Spider-Armor MK IV — Peter Parker (Earth-616)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d5d7876-36c6-8118-9e70-c99de7fc4670",
+        "Title":  "Spider-Hulk — Peter Parker (Earth-200527)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d5d7876-36c6-8101-9f23-f247edae9ef0",
+        "Title":  "Man-Spider - Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d5d7876-36c6-8138-94c8-e94f7bd2493d",
+        "Title":  "Cyborg Spider-Man - Earth-2818",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3d5d7876-36c6-81ed-8615-d222453c2061",
+        "Title":  "Six-Armed Spider-Man - Earth-92100",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-8149-9f79-c691502351ad",
+        "Title":  "Spider-Man TNAS — Peter Parker (Earth-760207)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-8158-a99f-da830c848d68",
+        "Title":  "Spider-Man \u002767 — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-815b-b72f-dcd5cfed932f",
+        "Title":  "Spectacular Spider-Man — Peter Parker (Earth-26496)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-817c-9985-c549c59d4549",
+        "Title":  "Your Friendly Neighborhood Spider-Man — Peter Parker (Earth-86445)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-818c-9b35-eb422f48627e",
+        "Title":  "Spider-Woman — Jessica Drew (Earth-332)",
+        "DefId":  "SpiderWoman",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderWoman.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderWoman.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-819b-ac9d-d7ddce830de3",
+        "Title":  "Spider-Man TAS 1994 — Peter Parker (Earth-92131)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81b1-88e5-d21f74895bfa",
+        "Title":  "Scarlet Spider — Ben Reilly (Earth-94B)",
+        "DefId":  "ScarletSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ScarletSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ScarletSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81be-8263-d08fad3028f0",
+        "Title":  "Ultimate Spider-Man Animated — Peter Parker (Earth-12041)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81f5-b814-f1437e800a97",
+        "Title":  "Zombie Hunter Spider-Man — Peter Parker (Earth-89521)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-8106-9b6d-f49adbcadea6",
+        "Title":  "Spider-Man — House of M Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-810b-9302-ea51ca296cd9",
+        "Title":  "Araña / Spider-Girl — Anya Corazon",
+        "DefId":  "Arana",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Arana.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Arana.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-8127-9d8d-ddeb79c28df6",
+        "Title":  "Spider-Man — Renew Your Vows Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-8133-8f9d-dbe226f97d50",
+        "Title":  "Last Stand Spider-Man — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-8152-8880-c0ab0bf1a3d2",
+        "Title":  "Spider-Man 1602 — Peter Parquagh",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-8164-a962-e1389085e061",
+        "Title":  "Assassin Spider-Man — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81ac-9a3b-fcd6f92c3d67",
+        "Title":  "Night-Spider — Felicia Hardy",
+        "DefId":  "BlackCat",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/BlackCat.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/BlackCat.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81ac-a0d9-c4e37ab21a8e",
+        "Title":  "Hunter-Spider — Sergei Kravinoff",
+        "DefId":  "Kraven",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Kraven.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Kraven.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81b4-8aff-d9228cdc3a3e",
+        "Title":  "Bullet Points Spider-Man — Bruce Banner",
+        "DefId":  "Hulk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Hulk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Hulk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81bd-8417-fbf876c2a747",
+        "Title":  "Zombie Spider-Man — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81d6-abe9-c57f8d1f8acc",
+        "Title":  "Spider-Man Unlimited — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81f4-bb8e-c1c192689da3",
+        "Title":  "Mangaverse Spider-Man — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3ccd7876-36c6-81fe-9dbe-de4e6fad8489",
+        "Title":  "Spider-Man 2211 — Max Borne",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-813f-ae34-c00b33f97260",
+        "Title":  "Raimi Spider-Man — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-8160-9149-fce2461a1815",
+        "Title":  "MCU Spider-Man — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81ff-a92b-eae73cc58592",
+        "Title":  "Amazing Spider-Man — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-810b-ae98-f01efb73b648",
+        "Title":  "Spider-Man Noir — Peter Parker",
+        "DefId":  "SpiderManNoir",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderManNoir.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderManNoir.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-810f-8dce-d05456898957",
+        "Title":  "Cosmic Spider-Man — Captain Universe",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-8119-9d31-e76e934af502",
+        "Title":  "Spider-Woman — Jessica Drew",
+        "DefId":  "SpiderWoman",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderWoman.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderWoman.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-8120-8957-ebdf1301d716",
+        "Title":  "Spider-Man India — Pavitr Prabhakar",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-8121-859d-fc2b994dd2bc",
+        "Title":  "Spider-Man — Miles Morales",
+        "DefId":  "MilesMorales",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MilesMorales.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MilesMorales.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-8121-9777-cc240c42cda9",
+        "Title":  "Spider-Punk — Hobie Brown",
+        "DefId":  "SpiderPunk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderPunk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderPunk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-8123-a162-e2045e689e85",
+        "Title":  "Scarlet Spider — Ben Reilly",
+        "DefId":  "ScarletSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ScarletSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ScarletSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-812a-a1be-d61122c5bf20",
+        "Title":  "Spider-Man — Peter Parker (Earth-616)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-816c-b16f-c22f6ea1f5f7",
+        "Title":  "Future Foundation Spider-Man",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-8173-bc0d-ce2f5b105a73",
+        "Title":  "SP//dr — Peni Parker",
+        "DefId":  "PeniParker",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/PeniParker.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/PeniParker.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-8176-b1b8-ff2a81616e7d",
+        "Title":  "Insomniac Spider-Man — Miles Morales",
+        "DefId":  "MilesMorales",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/MilesMorales.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/MilesMorales.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81a4-9963-c10811fc4414",
+        "Title":  "Symbiote Spider-Man — Peter Parker",
+        "DefId":  "SymbioteSpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SymbioteSpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SymbioteSpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81a6-bcea-fb075197e62b",
+        "Title":  "Ghost-Spider — Gwen Stacy",
+        "DefId":  "GhostSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/GhostSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/GhostSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81c6-9fac-d46c2ef8babf",
+        "Title":  "Scarlet Spider — Kaine Parker",
+        "DefId":  "ScarletSpider",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/ScarletSpider.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/ScarletSpider.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81d7-ac69-e16bbb859761",
+        "Title":  "Spider-Ham — Peter Porker",
+        "DefId":  "SpiderHam",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderHam.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderHam.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81e3-b9ad-e7c49f222682",
+        "Title":  "Ultimate Spider-Man — Peter Parker (Earth-1610)",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81e4-81fa-f50e0e4ed9c3",
+        "Title":  "Iron Spider — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81f2-aff1-f1bc4026c8dc",
+        "Title":  "Araña — Anya Corazon",
+        "DefId":  "Arana",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Arana.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Arana.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81f6-b50b-d39afb088c2d",
+        "Title":  "Spider-Man 2099 — Miguel O’Hara",
+        "DefId":  "SpiderMan2099",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan2099.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan2099.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81fb-a606-d0b460db31d9",
+        "Title":  "Anti-Venom Spider-Man — Insomniac Peter",
+        "DefId":  "AntiVenom",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/AntiVenom.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/AntiVenom.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81fc-bf59-ea59a3741a5c",
+        "Title":  "Silk — Cindy Moon",
+        "DefId":  "Silk",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/Silk.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/Silk.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81fd-bbc4-c8c6736487c9",
+        "Title":  "Japanese Spider-Man — Takuya Yamashiro",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81fe-bfcf-f915d7e90544",
+        "Title":  "Insomniac Spider-Man — Peter Parker",
+        "DefId":  "SpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SpiderMan.webp",
+        "Status":  "SUCCESS"
+    },
+    {
+        "Database":  "Spiders",
+        "Id":  "3cbd7876-36c6-81ff-a9b2-fefb29a1e66a",
+        "Title":  "Superior Spider-Man — Otto Octavius",
+        "DefId":  "SuperiorSpiderMan",
+        "CardUrl":  "https://static.marvelsnap.pro/cards/SuperiorSpiderMan.webp",
+        "ArtUrl":  "https://static.marvelsnap.pro/art/SuperiorSpiderMan.webp",
+        "Status":  "SUCCESS"
+    }
+]
