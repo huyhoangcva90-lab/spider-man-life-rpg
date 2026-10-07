@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Taser Web">
+  <rect width="96" height="96" rx="13" fill="#06101d"/>
+  <path d="M0 75 96 21v75H0z" fill="#102c45" opacity=".88"/>
+  <path d="M13 13h70v70H13z" fill="none" stroke="#397c9b" stroke-width="4"/>
+  <path d="M54 7 23 54h22l-7 35 35-50H52z" fill="#e8f7ff"/>
+  <path d="M14 82c18-9 50-9 68 0" fill="none" stroke="#54b6d0" stroke-width="3" opacity=".45"/>
+</svg>

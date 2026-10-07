@@ -1,23 +1,18 @@
-// Vercel Serverless Function Proxy for Notion API
-// Safely forwards requests to Notion using server-side NOTION_API_KEY environment variable.
+// Vercel Serverless Function Proxy for Notion API.
+// Public deployments must not expose the owner's full Notion integration.
 
 export default async function handler(req, res) {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
+  const token = process.env.NOTION_API_KEY || '';
+  const accessToken = process.env.NOTION_PROXY_ACCESS_TOKEN || '';
+  const { path } = req.query;
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+  if (!accessToken || req.headers['x-spidey-access-token'] !== accessToken) {
+    return res.status(403).json({ ok: false, error: 'Private Notion proxy is disabled or access is denied' });
   }
 
-  const token = process.env.NOTION_API_KEY || '';
-  const { path } = req.query;
+  if (!token) {
+    return res.status(503).json({ ok: false, error: 'Notion is not configured on this server' });
+  }
 
   if (!path) {
     return res.status(400).json({ ok: false, error: 'Missing path query parameter' });

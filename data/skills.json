@@ -1,593 +1,1176 @@
 [
   {
-    "name": "Web Shot",
-    "branch": "Web Control",
-    "tier": 1,
-    "order": 1,
-    "type": "Active",
-    "level_req": 1,
-    "sp_cost": 1,
-    "requires": [],
-    "effects": ["🕸️ Web Buildup"],
-    "description": "Bắn phát tơ nhanh làm chậm tốc độ di chuyển và tích lũy lớp tơ trói lên kẻ địch."
-  },
-  {
-    "name": "Web Mastery",
-    "branch": "Web Control",
-    "tier": 1,
-    "order": 2,
-    "type": "Formula",
-    "level_req": 2,
-    "sp_cost": 1,
-    "requires": ["Web Shot"],
-    "effects": ["🕸️ Webbed"],
-    "description": "Tối ưu hóa công thức hợp chất tơ: Tăng vĩnh viễn Web Power và độ bền của lớp tơ."
-  },
-  {
-    "name": "Rapid-Fire Web",
-    "branch": "Web Control",
-    "tier": 1,
-    "order": 3,
-    "type": "Modifier",
-    "level_req": 3,
-    "sp_cost": 1,
-    "requires": ["Web Shot"],
-    "effects": ["🕸️ Web Buildup"],
-    "description": "Bắn tơ liên thanh 3 phát dồn dập, đẩy nhanh tốc độ tích lũy kén tơ."
-  },
-  {
-    "name": "Web Pull",
-    "branch": "Web Control",
-    "tier": 1,
-    "order": 4,
-    "type": "Active",
-    "level_req": 3,
-    "sp_cost": 1,
-    "requires": ["Web Shot"],
-    "effects": ["⬅️ Pull", "💥 Break Buildup"],
-    "description": "Bắn 2 sợi tơ giật mạnh kẻ địch lại gần hoặc tước đoạt vũ khí nguy hiểm trên tay chúng."
-  },
-  {
-    "name": "Impact Web",
-    "branch": "Web Control",
-    "tier": 2,
-    "order": 1,
-    "type": "Active",
-    "level_req": 5,
-    "sp_cost": 2,
-    "requires": ["Web Pull"],
-    "effects": ["🕸️ Webbed", "➡️ Knockback", "🪤 Immobilized"],
-    "description": "Bắn khối tơ nén áp suất cao thổi bay kẻ địch dính chặt vào tường hoặc sàn đấu."
-  },
-  {
-    "name": "Web Bind",
-    "branch": "Web Control",
-    "tier": 3,
-    "order": 1,
-    "type": "Active",
-    "level_req": 10,
-    "sp_cost": 2,
-    "requires": ["Impact Web"],
-    "effects": ["🪤 Immobilized", "🕸️ Webbed"],
-    "description": "Quấn kén tơ siêu dính phong tỏa hoàn toàn hành động của mục tiêu tinh nhuệ."
-  },
-  {
-    "name": "Web Bomb",
-    "branch": "Web Control",
-    "tier": 3,
-    "order": 2,
-    "type": "Active",
-    "level_req": 11,
-    "sp_cost": 2,
-    "requires": ["Rapid-Fire Web"],
-    "effects": ["🕸️ Webbed", "🪤 Immobilized"],
-    "description": "Ném quả cầu tơ phát nổ diện rộng, trùm tơ giam hãm mọi kẻ địch trong bán kính."
-  },
-  {
-    "name": "Web Opportunist",
-    "branch": "Web Control",
-    "tier": 3,
-    "order": 3,
-    "type": "Passive",
-    "level_req": 13,
-    "sp_cost": 2,
-    "requires": ["Web Bomb"],
-    "effects": ["🎯 Vulnerable"],
-    "description": "Tấn công lên kẻ địch đang bị dính tơ gây thêm 40% sát thương khuếch đại."
-  },
-  {
-    "name": "Total Restraint",
-    "branch": "Web Control",
-    "tier": 4,
-    "order": 1,
-    "type": "Keystone",
-    "level_req": 16,
-    "sp_cost": 4,
-    "requires": ["Web Bind", "Web Opportunist"],
-    "effects": ["🪤 Immobilized", "💔 Broken"],
-    "description": "Tơ cường lực phân tử: Mục tiêu dính tơ bị khóa cứng thế thủ và mất toàn bộ khả năng phản kháng."
-  },
-  {
-    "name": "Web Blossom",
-    "branch": "Web Control",
-    "tier": 5,
-    "order": 1,
-    "type": "Ultimate",
-    "level_req": 20,
-    "sp_cost": 5,
-    "requires": ["Total Restraint"],
-    "effects": ["🕸️ Webbed", "🌀 Stun", "🪤 Immobilized"],
-    "description": "Tuyệt kỹ Hoa Tơ: Bay lên không xoay vòng 360 độ bắn bão tơ giam giữ toàn bộ chiến trường."
-  },
-
-  {
     "name": "Web Strike",
     "branch": "Combat & Acrobatics",
     "tier": 1,
     "order": 1,
+    "slot": "active",
     "type": "Active",
-    "level_req": 1,
+    "hero": "Peter",
+    "sourceGames": [
+      "Spider-Man 2 (2004)",
+      "Marvel Spider-Man 2018"
+    ],
     "sp_cost": 1,
-    "requires": [],
-    "effects": ["💥 Break Buildup"],
-    "description": "Bắn tơ kéo bản thân lao vút tới đạp thẳng vào ngực đối thủ với tốc độ cao."
+    "level_req": 1,
+    "effectIcons": [
+      "impact",
+      "mobility"
+    ],
+    "image": "./assets/skill-icons/web-strike.svg",
+    "description": "Bắn tơ neo vào mục tiêu rồi lao tới đá mở giao tranh, dùng để rút ngắn khoảng cách và phá nhịp súng."
   },
   {
-    "name": "Air Launch",
+    "name": "Aerial Launch",
     "branch": "Combat & Acrobatics",
     "tier": 1,
     "order": 2,
+    "slot": "active",
     "type": "Active",
-    "level_req": 2,
+    "hero": "Peter",
+    "sourceGames": [
+      "Spider-Man 2 (2004)",
+      "Insomniac Spider-Man"
+    ],
     "sp_cost": 1,
-    "requires": ["Web Strike"],
-    "effects": ["↗️ Launch", "🌬️ Airborne"],
-    "description": "Đòn vuốt móc hiểm hóc hất tung kẻ địch lên không trung, cô lập chúng khỏi bầy đàn."
-  },
-  {
-    "name": "Combo Flow",
-    "branch": "Combat & Acrobatics",
-    "tier": 1,
-    "order": 3,
-    "type": "Passive",
-    "level_req": 2,
-    "sp_cost": 1,
-    "requires": ["Web Strike"],
-    "effects": ["💪 Strengthened"],
-    "description": "Nhịp combo liên hoàn: Duy trì chuỗi tấn công dồn dập giúp tăng lượng Focus nạp được."
-  },
-  {
-    "name": "Power Strikes",
-    "branch": "Combat & Acrobatics",
-    "tier": 1,
-    "order": 4,
-    "type": "Formula",
-    "level_req": 3,
-    "sp_cost": 1,
-    "requires": ["Combo Flow"],
-    "effects": ["💥 Break Buildup"],
-    "description": "Chuyển hóa quán tính di chuyển và vận tốc đu lượn thành lực sát thương vật lý trực tiếp."
-  },
-  {
-    "name": "Point Launch",
-    "branch": "Combat & Acrobatics",
-    "tier": 1,
-    "order": 5,
-    "type": "Modifier",
-    "level_req": 3,
-    "sp_cost": 1,
-    "requires": ["Web Strike"],
-    "effects": ["↗️ Launch"],
-    "description": "Chạm nhẹ vào các điểm cao rồi búng người phóng đi tức thì với gia tốc cực đại."
-  },
-  {
-    "name": "Web Wings",
-    "branch": "Combat & Acrobatics",
-    "tier": 1,
-    "order": 6,
-    "type": "Passive",
-    "level_req": 4,
-    "sp_cost": 1,
-    "requires": ["Point Launch"],
-    "effects": ["🌬️ Airborne"],
-    "description": "Mở rộng cánh lượn dưới cánh tay để lướt gió khoảng cách xa và duy trì độ cao trên không."
+    "level_req": 1,
+    "effectIcons": [
+      "launch",
+      "airborne"
+    ],
+    "image": "./assets/skill-icons/air-launch.svg",
+    "description": "Móc hàm hất mục tiêu lên không để cô lập khỏi nhóm địch và mở chuỗi không chiến."
   },
   {
     "name": "Swing Kick",
     "branch": "Combat & Acrobatics",
+    "tier": 1,
+    "order": 3,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Spider-Man 2 (2004)",
+      "Web of Shadows",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "knockback",
+      "impact"
+    ],
+    "image": "./assets/skill-icons/swing-kick.svg",
+    "description": "Đu tơ lấy đà tung song phi quét ngang, đẩy kẻ địch văng vào tường hoặc đồng bọn."
+  },
+  {
+    "name": "Dodge Under",
+    "branch": "Combat & Acrobatics",
+    "tier": 1,
+    "order": 4,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "dodge",
+      "counter"
+    ],
+    "image": "./assets/skill-icons/dodge-under.svg",
+    "description": "Lộn người luồn qua dưới chân đối thủ cầm khiên hoặc brute, đặt Spider vào sau lưng để phản kích."
+  },
+  {
+    "name": "Air Yank",
+    "branch": "Combat & Acrobatics",
     "tier": 2,
     "order": 1,
+    "slot": "active",
     "type": "Active",
-    "level_req": 5,
+    "hero": "Peter",
+    "sourceGames": [
+      "Ultimate Spider-Man",
+      "Marvel Spider-Man 2018"
+    ],
     "sp_cost": 2,
-    "requires": ["Web Strike"],
-    "effects": ["➡️ Knockback", "🌀 Stun"],
-    "description": "Đu tơ vung chân song phi quét ngã cả nhóm kẻ địch, tạo khoảng trống an toàn."
-  },
-  {
-    "name": "Web Zip",
-    "branch": "Combat & Acrobatics",
-    "tier": 2,
-    "order": 2,
-    "type": "Active",
-    "level_req": 6,
-    "sp_cost": 2,
-    "requires": ["Air Launch"],
-    "effects": ["🌬️ Airborne"],
-    "description": "Bắn tơ chuyển hướng tức thì giữa không trung, thoát khỏi tầm khống chế của địch."
-  },
-  {
-    "name": "Charge Jump",
-    "branch": "Combat & Acrobatics",
-    "tier": 2,
-    "order": 3,
-    "type": "Modifier",
-    "level_req": 7,
-    "sp_cost": 2,
-    "requires": ["Point Launch"],
-    "effects": ["↗️ Launch"],
-    "description": "Nén cơ bắp chân rồi bật nhảy cực cao, đưa bản thân lên tầm không chiến chiến lược."
-  },
-  {
-    "name": "Air Tricks",
-    "branch": "Combat & Acrobatics",
-    "tier": 2,
-    "order": 4,
-    "type": "Passive",
-    "level_req": 7,
-    "sp_cost": 2,
-    "requires": ["Web Wings"],
-    "effects": ["💪 Strengthened"],
-    "description": "Biểu diễn các động tác nhào lộn điêu luyện giữa không trung để tích lũy Focus nhanh hơn."
-  },
-  {
-    "name": "Momentum",
-    "branch": "Combat & Acrobatics",
-    "tier": 2,
-    "order": 5,
-    "type": "Formula",
     "level_req": 8,
-    "sp_cost": 2,
-    "requires": ["Power Strikes"],
-    "effects": ["💥 Break Buildup"],
-    "description": "Tích lũy động lượng từ các đòn đu lượn để gia tăng khả năng phá vỡ thế thủ kẻ thù."
-  },
-  {
-    "name": "Air Superiority",
-    "branch": "Combat & Acrobatics",
-    "tier": 2,
-    "order": 6,
-    "type": "Passive",
-    "level_req": 8,
-    "sp_cost": 2,
-    "requires": ["Air Launch", "Web Zip"],
-    "effects": ["🌬️ Airborne"],
-    "description": "Bá chủ không trung: Tăng 35% sát thương cho mọi đòn đánh khi đang lơ lửng trên không."
+    "effectIcons": [
+      "pull",
+      "airborne"
+    ],
+    "image": "./assets/skill-icons/air-yank.svg",
+    "description": "Kéo mục tiêu đang đứng dưới đất bật lên không, nối combo aerial mà không cần gadget bắn tơ thuần."
   },
   {
     "name": "Ground Strike",
     "branch": "Combat & Acrobatics",
-    "tier": 3,
-    "order": 1,
+    "tier": 2,
+    "order": 2,
+    "slot": "active",
     "type": "Active",
-    "level_req": 10,
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2018",
+      "Marvel Spider-Man 2"
+    ],
     "sp_cost": 2,
-    "requires": ["Air Superiority"],
-    "effects": ["➡️ Knockback", "💥 Break Buildup"],
-    "description": "Bổ nhào từ trên cao nện chấn động mặt đất, hất văng mọi kẻ địch xung quanh."
+    "level_req": 8,
+    "effectIcons": [
+      "slam",
+      "area"
+    ],
+    "image": "./assets/skill-icons/ground-strike.svg",
+    "description": "Bổ nhào từ độ cao lớn và nện xuống sàn, gây sóng xung kích lên nhóm địch quanh điểm rơi."
   },
   {
-    "name": "Slingshot Launch",
+    "name": "Yank Down Slam",
+    "branch": "Combat & Acrobatics",
+    "tier": 2,
+    "order": 3,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Web of Shadows",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "pull",
+      "slam"
+    ],
+    "image": "./assets/skill-icons/yank-down-slam.svg",
+    "description": "Kéo mục tiêu từ trên không xuống đất thật mạnh, tạo nhịp kết thúc cho aerial combo."
+  },
+  {
+    "name": "Perfect Hit Chain",
+    "branch": "Combat & Acrobatics",
+    "tier": 2,
+    "order": 4,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Spider-Man 3",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "combo",
+      "focus"
+    ],
+    "image": "./assets/skill-icons/perfect-hit-chain.svg",
+    "description": "Canh đúng nhịp đòn cuối để tăng Focus và mở cửa sổ finisher nhanh hơn."
+  },
+  {
+    "name": "Wall Bounce",
+    "branch": "Combat & Acrobatics",
+    "tier": 3,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Shattered Dimensions",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "knockback",
+      "stun"
+    ],
+    "image": "./assets/skill-icons/wall-bounce.svg",
+    "description": "Đá mục tiêu bật vào tường, nếu va chạm thành công sẽ choáng ngắn và tăng sát thương đòn tiếp theo."
+  },
+  {
+    "name": "Ceiling Pounce",
     "branch": "Combat & Acrobatics",
     "tier": 3,
     "order": 2,
-    "type": "Modifier",
-    "level_req": 12,
-    "sp_cost": 2,
-    "requires": ["Swing Kick", "Charge Jump"],
-    "effects": ["↗️ Launch", "💔 Broken"],
-    "description": "Kéo căng hai sợi tơ làm bệ phóng, lao vút đi như hỏa tiễn phá toang hàng phòng ngự."
-  },
-  {
-    "name": "Finisher",
-    "branch": "Combat & Acrobatics",
-    "tier": 3,
-    "order": 3,
-    "type": "Finisher",
-    "level_req": 14,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Spider-Man 2000",
+      "Shattered Dimensions"
+    ],
     "sp_cost": 3,
-    "requires": ["Ground Strike", "Slingshot Launch"],
-    "effects": ["💔 Broken", "🌀 Stun"],
-    "description": "Đòn triệt hạ nhện: Tiêu hao đầy thanh Focus để hạ gục ngay minion hoặc gây sát thương hủy diệt lên Boss."
-  },
-  {
-    "name": "Relentless Spider",
-    "branch": "Combat & Acrobatics",
-    "tier": 4,
-    "order": 1,
-    "type": "Keystone",
-    "level_req": 17,
-    "sp_cost": 4,
-    "requires": ["Finisher"],
-    "effects": ["💪 Strengthened"],
-    "description": "Nhện bất khuất: Thi triển Finisher chỉ tiêu hao 1 thanh Focus và hồi ngay 30% Energy."
+    "level_req": 12,
+    "effectIcons": [
+      "stealth",
+      "takedown"
+    ],
+    "image": "./assets/skill-icons/ceiling-pounce.svg",
+    "description": "Bám trần rồi lao xuống triệt hạ mục tiêu đơn lẻ, dùng tốt trong phòng hẹp."
   },
   {
     "name": "Maximum Spider",
     "branch": "Combat & Acrobatics",
     "tier": 5,
     "order": 1,
+    "slot": "ultimate",
     "type": "Ultimate",
-    "level_req": 20,
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel vs. Capcom",
+      "Spider-Man 2000"
+    ],
     "sp_cost": 5,
-    "requires": ["Relentless Spider"],
-    "effects": ["💔 Broken", "🌀 Stun", "🌬️ Airborne"],
-    "description": "Tuyệt kỹ nhện tối thượng: Quấn tơ giữ địch ở tâm rồi phi thân oanh kích đa hướng tốc độ âm thanh."
+    "level_req": 20,
+    "effectIcons": [
+      "finisher",
+      "combo",
+      "impact"
+    ],
+    "image": "./assets/skill-icons/maximum-spider.svg",
+    "description": "Tuyệt chiêu lao liên hoàn đa hướng, khóa mục tiêu trong chuỗi va chạm tốc độ cao trước cú đá kết thúc."
   },
-
   {
-    "name": "Danger Sense",
-    "branch": "Spider-Sense & Instinct",
+    "name": "Spider Barrage",
+    "branch": "Combat & Acrobatics",
+    "tier": 5,
+    "order": 2,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 5,
+    "level_req": 20,
+    "effectIcons": [
+      "finisher",
+      "area",
+      "focus"
+    ],
+    "image": "./assets/skill-icons/spider-barrage.svg",
+    "description": "Tiêu hao đầy Focus để tung chuỗi đòn tay chân và quăng tơ dồn dập, gây sát thương lớn lên boss."
+  },
+  {
+    "name": "Point Launch Boost",
+    "branch": "Traversal",
     "tier": 1,
     "order": 1,
-    "type": "Formula",
-    "level_req": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Spider-Man 2 (2004)",
+      "Marvel Spider-Man 2018"
+    ],
     "sp_cost": 1,
-    "requires": [],
-    "effects": ["🕷️ Spider-Sense"],
-    "description": "Trực giác nhện sơ khai: Báo trước các đòn đánh hiểm hóc và giảm tỉ lệ bị đánh bất ngờ."
+    "level_req": 1,
+    "effectIcons": [
+      "traversal",
+      "mobility"
+    ],
+    "image": "./assets/skill-icons/point-launch-boost.svg",
+    "description": "Búng khỏi điểm neo để tăng tốc tức thì, dùng trong nhiệm vụ thời gian và mở aerial opener."
+  },
+  {
+    "name": "Web Zip Reposition",
+    "branch": "Traversal",
+    "tier": 1,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Ultimate Spider-Man",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "mobility",
+      "dodge"
+    ],
+    "image": "./assets/skill-icons/web-zip-reposition.svg",
+    "description": "Kéo người đổi vị trí chớp nhoáng giữa không trung, thoát khỏi vòng vây và tìm góc đánh mới."
+  },
+  {
+    "name": "Charge Jump",
+    "branch": "Traversal",
+    "tier": 1,
+    "order": 3,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Spider-Man 2 (2004)",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "launch",
+      "traversal"
+    ],
+    "image": "./assets/skill-icons/charge-jump.svg",
+    "description": "Nén lực bật cao để vào trạng thái không chiến hoặc vượt địa hình nhanh."
+  },
+  {
+    "name": "Web Wings Glide",
+    "branch": "Traversal",
+    "tier": 2,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "traversal",
+      "airborne"
+    ],
+    "image": "./assets/skill-icons/web-wings-glide.svg",
+    "description": "Mở web wings lướt qua luồng gió thành phố, giữ nhịp di chuyển dài mà không rơi tốc độ."
+  },
+  {
+    "name": "Slingshot Launch",
+    "branch": "Traversal",
+    "tier": 2,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "traversal",
+      "launch"
+    ],
+    "image": "./assets/skill-icons/slingshot-launch.svg",
+    "description": "Kéo căng hai sợi tơ như ná cao su rồi phóng đi cực nhanh, mở đầu giao tranh hoặc truy đuổi."
+  },
+  {
+    "name": "Loop De Loop",
+    "branch": "Traversal",
+    "tier": 3,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Spider-Man 2 (2004)",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "traversal",
+      "focus"
+    ],
+    "image": "./assets/skill-icons/loop-de-loop.svg",
+    "description": "Vòng người lấy đà quanh điểm neo để tích tốc độ và nạp Focus bằng kỹ thuật di chuyển mạo hiểm."
+  },
+  {
+    "name": "Corner Tether Drift",
+    "branch": "Traversal",
+    "tier": 3,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "The Amazing Spider-Man",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "mobility",
+      "dodge"
+    ],
+    "image": "./assets/skill-icons/corner-tether-drift.svg",
+    "description": "Neo tơ vào góc phố để bẻ hướng gấp, né hỏa lực khi đang truy đuổi tốc độ cao."
+  },
+  {
+    "name": "City Flow State",
+    "branch": "Traversal",
+    "tier": 5,
+    "order": 1,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Shared",
+    "sourceGames": [
+      "Spider-Man 2 (2004)",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 5,
+    "level_req": 20,
+    "effectIcons": [
+      "traversal",
+      "focus",
+      "dodge"
+    ],
+    "image": "./assets/skill-icons/city-flow-state.svg",
+    "description": "Trong vài lượt, mọi di chuyển chuẩn nhịp đều hồi Focus, tăng né và cho phép mở combat bằng đòn lao cực mạnh."
+  },
+  {
+    "name": "Danger Sense",
+    "branch": "Spider-Sense & Defense",
+    "tier": 1,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Spider-Man 2000",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "sense",
+      "dodge"
+    ],
+    "image": "./assets/skill-icons/danger-sense.svg",
+    "description": "Giác quan nhện cảnh báo đòn hiểm, tăng khung né đúng lúc trước khi bị đánh trúng."
   },
   {
     "name": "Perfect Dodge",
-    "branch": "Spider-Sense & Instinct",
+    "branch": "Spider-Sense & Defense",
     "tier": 1,
     "order": 2,
-    "type": "Reaction",
-    "level_req": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Marvel Spider-Man 2018"
+    ],
     "sp_cost": 1,
-    "requires": ["Danger Sense"],
-    "effects": ["🕷️ Spider-Sense", "🐌 Slow"],
-    "description": "Né đòn hoàn hảo vào khoảnh khắc vàng, làm chậm thời gian và vô hiệu hóa sát thương."
-  },
-  {
-    "name": "Reflex Focus",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 2,
-    "order": 1,
-    "type": "Passive",
-    "level_req": 5,
-    "sp_cost": 2,
-    "requires": ["Perfect Dodge"],
-    "effects": ["🕷️ Spider-Sense"],
-    "description": "Mỗi cú né đòn hoàn hảo lập tức nạp ngay 25% thanh Focus cho Người Nhện."
+    "level_req": 1,
+    "effectIcons": [
+      "dodge",
+      "slow"
+    ],
+    "image": "./assets/skill-icons/perfect-dodge.svg",
+    "description": "Né vào khoảnh khắc cuối khiến thời gian chậm lại ngắn, mở phản công an toàn."
   },
   {
     "name": "Spider-Sense Parry",
-    "branch": "Spider-Sense & Instinct",
+    "branch": "Spider-Sense & Defense",
     "tier": 2,
-    "order": 2,
-    "type": "Reaction",
-    "level_req": 7,
-    "sp_cost": 2,
-    "requires": ["Perfect Dodge"],
-    "effects": ["👁️ Exposed", "🌀 Stun"],
-    "description": "Gạt phăng đòn tấn công của đối thủ, khiến chúng mất thăng bằng và lộ ra điểm yếu chí tử."
-  },
-  {
-    "name": "Counter Flow",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 3,
     "order": 1,
-    "type": "Passive",
-    "level_req": 10,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
     "sp_cost": 2,
-    "requires": ["Reflex Focus"],
-    "effects": ["🕷️ Spider-Sense"],
-    "description": "Giữ nhịp phản xạ mượt mà: Tăng thời gian mở cửa sổ né đòn hoàn hảo thêm 0.3 giây."
-  },
-  {
-    "name": "Read the Opening",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 3,
-    "order": 2,
-    "type": "Passive",
-    "level_req": 11,
-    "sp_cost": 2,
-    "requires": ["Spider-Sense Parry"],
-    "effects": ["👁️ Exposed"],
-    "description": "Đòn đánh vào kẻ thù vừa bị gạt đòn hoặc mất thăng bằng chắc chắn gây sát thương chí mạng."
+    "level_req": 8,
+    "effectIcons": [
+      "parry",
+      "stun"
+    ],
+    "image": "./assets/skill-icons/spider-sense-parry.svg",
+    "description": "Gạt đòn cận chiến bằng phản xạ nhện, làm đối thủ lộ sơ hở và choáng nhẹ."
   },
   {
     "name": "Perfect Counter",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 3,
-    "order": 3,
-    "type": "Reaction",
-    "level_req": 12,
+    "branch": "Spider-Sense & Defense",
+    "tier": 2,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Spider-Man 3",
+      "Marvel Spider-Man 2018"
+    ],
     "sp_cost": 2,
-    "requires": ["Spider-Sense Parry"],
-    "effects": ["🎯 Vulnerable", "🕸️ Webbed"],
-    "description": "Bắn tơ thẳng vào mắt đối thủ ngay sau né hoàn hảo rồi tung cước phản kích trừng phạt."
+    "level_req": 8,
+    "effectIcons": [
+      "counter",
+      "impact"
+    ],
+    "image": "./assets/skill-icons/perfect-counter.svg",
+    "description": "Ngay sau né chuẩn, trả đòn bằng cú đá hoặc elbow strike vào điểm yếu."
+  },
+  {
+    "name": "Last-Second Save",
+    "branch": "Spider-Sense & Defense",
+    "tier": 3,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Edge of Time",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "sense",
+      "heal"
+    ],
+    "image": "./assets/skill-icons/last-second-save.svg",
+    "description": "Khi sắp gục, Spider-Sense kích hoạt một lần để giảm sát thương chí tử và hồi nhẹ."
+  },
+  {
+    "name": "Untouchable Rhythm",
+    "branch": "Spider-Sense & Defense",
+    "tier": 4,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Marvel Spider-Man 2018",
+      "Miles Morales"
+    ],
+    "sp_cost": 4,
+    "level_req": 16,
+    "effectIcons": [
+      "dodge",
+      "focus",
+      "combo"
+    ],
+    "image": "./assets/skill-icons/untouchable-rhythm.svg",
+    "description": "Chuỗi né hoàn hảo liên tiếp nạp Focus và tăng sát thương đòn phản kế tiếp."
+  },
+  {
+    "name": "Spectacular Reflex",
+    "branch": "Spider-Sense & Defense",
+    "tier": 5,
+    "order": 1,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Shared",
+    "sourceGames": [
+      "Shattered Dimensions",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 5,
+    "level_req": 20,
+    "effectIcons": [
+      "sense",
+      "slow",
+      "counter"
+    ],
+    "image": "./assets/skill-icons/spectacular-reflex.svg",
+    "description": "Tăng tốc nhận thức cực đại: kẻ địch gần như chậm lại, mọi phản đòn đều gây stagger lớn."
   },
   {
     "name": "Perch Takedown",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 3,
-    "order": 4,
-    "type": "Active",
-    "level_req": 12,
-    "sp_cost": 3,
-    "requires": ["Reflex Focus"],
-    "effects": ["👻 Stealth", "🪤 Immobilized"],
-    "description": "Đậu trên xà nhà cao, bắn tơ kéo giật kẻ địch lên treo ngược triệt hạ trong tĩnh lặng."
-  },
-  {
-    "name": "Predator Takedown",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 3,
-    "order": 5,
-    "type": "Active",
-    "level_req": 14,
-    "sp_cost": 3,
-    "requires": ["Perch Takedown"],
-    "effects": ["👻 Stealth", "💔 Broken"],
-    "description": "Lao từ bóng tối bẻ khớp triệt hạ mục tiêu chớp nhoáng mà không làm kinh động đồng bọn."
-  },
-  {
-    "name": "Predator Flow",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 4,
-    "order": 1,
-    "type": "Keystone",
-    "level_req": 16,
-    "sp_cost": 4,
-    "requires": ["Predator Takedown", "Read the Opening"],
-    "effects": ["👻 Stealth", "🎯 Marked / Spider-Tracer"],
-    "description": "Triệt hạ thầm lặng thành công không làm mất trạng thái ẩn thân và lập tức đánh dấu mục tiêu kế tiếp."
-  },
-  {
-    "name": "Sixth Sense",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 4,
-    "order": 2,
-    "type": "Passive",
-    "level_req": 18,
-    "sp_cost": 4,
-    "requires": ["Counter Flow", "Perfect Counter"],
-    "effects": ["🕷️ Spider-Sense"],
-    "description": "Giác quan thứ 6 tối thượng: Tăng vĩnh viễn 25% né tránh và tự động né đòn đánh lén từ phía sau."
-  },
-  {
-    "name": "Untouchable",
-    "branch": "Spider-Sense & Instinct",
-    "tier": 5,
-    "order": 1,
-    "type": "Keystone",
-    "level_req": 20,
-    "sp_cost": 5,
-    "requires": ["Sixth Sense", "Predator Flow"],
-    "effects": ["🕷️ Spider-Sense", "🌀 Stun", "🐌 Slow"],
-    "description": "Cảnh giới Bất Khả Xâm Phạm: Miễn nhiễm hoàn toàn đòn đánh đầu tiên mỗi lượt, tỏa xung chấn làm choáng kẻ địch."
-  },
-
-  {
-    "name": "Tech Scaling",
-    "branch": "Tech Mastery",
+    "branch": "Stealth & Predator",
     "tier": 1,
     "order": 1,
-    "type": "Formula",
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Spider-Man 2000",
+      "Marvel Spider-Man 2018"
+    ],
+    "sp_cost": 1,
     "level_req": 1,
-    "sp_cost": 1,
-    "requires": [],
-    "effects": ["📡 Disrupt"],
-    "description": "Kiến thức khoa học: Trí tuệ của Peter Parker giúp tăng chỉ số hiệu quả và thời lượng cho toàn bộ Gadgets."
+    "effectIcons": [
+      "stealth",
+      "takedown"
+    ],
+    "image": "./assets/skill-icons/perch-takedown.svg",
+    "description": "Treo ngược mục tiêu từ vị trí cao, loại khỏi giao tranh mà không báo động nhóm còn lại."
   },
   {
-    "name": "Spider-Tracer Mastery",
-    "branch": "Tech Mastery",
+    "name": "Wall Takedown",
+    "branch": "Stealth & Predator",
     "tier": 1,
     "order": 2,
-    "type": "Passive",
-    "level_req": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Shared",
+    "sourceGames": [
+      "Shattered Dimensions",
+      "Marvel Spider-Man 2018"
+    ],
     "sp_cost": 1,
-    "requires": ["Tech Scaling"],
-    "effects": ["🎯 Marked / Spider-Tracer"],
-    "description": "Bọ theo dõi vi mô: Gắn lên kẻ địch để phát hiện vị trí xuyên vật cản và giảm 50% né tránh của chúng."
+    "level_req": 1,
+    "effectIcons": [
+      "stealth",
+      "impact"
+    ],
+    "image": "./assets/skill-icons/wall-takedown.svg",
+    "description": "Bám tường chờ mục tiêu đi ngang rồi kéo giật triệt hạ sát vách."
   },
   {
-    "name": "Electric Web",
-    "branch": "Tech Mastery",
+    "name": "Ceiling Ambush",
+    "branch": "Stealth & Predator",
     "tier": 2,
     "order": 1,
+    "slot": "active",
     "type": "Active",
-    "level_req": 5,
+    "hero": "Shared",
+    "sourceGames": [
+      "The Amazing Spider-Man",
+      "Marvel Spider-Man 2018"
+    ],
     "sp_cost": 2,
-    "requires": ["Tech Scaling"],
-    "effects": ["⚡ Shock", "🌀 Stun"],
-    "description": "Bắn tơ dẫn điện cao áp, tạo dòng điện giật liên hoàn nhảy qua các kẻ địch lân cận."
+    "level_req": 8,
+    "effectIcons": [
+      "stealth",
+      "marked"
+    ],
+    "image": "./assets/skill-icons/ceiling-ambush.svg",
+    "description": "Ẩn trên trần, đánh dấu mục tiêu nguy hiểm và lao xuống hạ nhanh."
   },
   {
-    "name": "Gadget Efficiency",
-    "branch": "Tech Mastery",
-    "tier": 2,
-    "order": 2,
-    "type": "Passive",
-    "level_req": 7,
-    "sp_cost": 2,
-    "requires": ["Spider-Tracer Mastery"],
-    "effects": ["📡 Disrupt"],
-    "description": "Tối ưu hóa bảng mạch: Giảm 25% thời gian hồi chiêu và tăng số lượng đạn dự trữ cho mọi thiết bị."
-  },
-  {
-    "name": "Shield Web",
-    "branch": "Tech Mastery",
+    "name": "Multi-Takedown Flow",
+    "branch": "Stealth & Predator",
     "tier": 3,
     "order": 1,
+    "slot": "active",
     "type": "Active",
-    "level_req": 10,
-    "sp_cost": 2,
-    "requires": ["Electric Web"],
-    "effects": ["🫧 Barrier", "🛡️ Guarded"],
-    "description": "Đan tấm khiên tơ nano phản xạ trước mặt chặn đứng toàn bộ đạn đạo và đòn đánh tầm xa."
-  },
-  {
-    "name": "Overload Protocol",
-    "branch": "Tech Mastery",
-    "tier": 3,
-    "order": 2,
-    "type": "Modifier",
-    "level_req": 11,
-    "sp_cost": 2,
-    "requires": ["Electric Web"],
-    "effects": ["⚡ Overload", "🛡️ Armor Break"],
-    "description": "Giao thức quá tải: Xung điện từ kích nổ vũ khí công nghệ và phá hủy giáp hộ thể của mục tiêu."
-  },
-  {
-    "name": "Environmental Engineering",
-    "branch": "Tech Mastery",
-    "tier": 3,
-    "order": 3,
-    "type": "Passive",
-    "level_req": 13,
-    "sp_cost": 2,
-    "requires": ["Gadget Efficiency"],
-    "effects": ["⚡ Shock", "💥 Break Buildup"],
-    "description": "Bắn tơ giật các vật thể môi trường (hộp điện, bình khí, giàn giáo) biến chúng thành bẫy sốc điện diện rộng."
-  },
-  {
-    "name": "Breaker Tech",
-    "branch": "Tech Mastery",
-    "tier": 4,
-    "order": 1,
-    "type": "Passive",
-    "level_req": 15,
+    "hero": "Shared",
+    "sourceGames": [
+      "Shattered Dimensions",
+      "Marvel Spider-Man 2"
+    ],
     "sp_cost": 3,
-    "requires": ["Overload Protocol"],
-    "effects": ["🛡️ Armor Break", "⚡ Overload"],
-    "description": "Đòn đánh công nghệ gây thêm 50% sát thương xuyên thủng lên lớp khiên năng lượng và giáp kim loại."
+    "level_req": 12,
+    "effectIcons": [
+      "stealth",
+      "combo",
+      "takedown"
+    ],
+    "image": "./assets/skill-icons/multi-takedown-flow.svg",
+    "description": "Sau một takedown sạch, đổi vị trí tức thì để nối triệt hạ mục tiêu kế tiếp."
   },
   {
-    "name": "Taser Web",
-    "branch": "Tech Mastery",
-    "tier": 4,
-    "order": 2,
-    "type": "Active",
-    "level_req": 17,
-    "sp_cost": 4,
-    "requires": ["Shield Web", "Breaker Tech"],
-    "effects": ["⚡ Shock", "🪤 Immobilized"],
-    "description": "Bắn dây tơ cắm ghim điện áp cực cao, giam hãm và thiêu đốt hệ thần kinh đối thủ trong nhiều lượt."
-  },
-  {
-    "name": "Tech Overclock",
-    "branch": "Tech Mastery",
+    "name": "Noir Predator Mode",
+    "branch": "Stealth & Predator",
     "tier": 5,
     "order": 1,
-    "type": "Keystone",
-    "level_req": 20,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Peter",
+    "sourceGames": [
+      "Shattered Dimensions"
+    ],
     "sp_cost": 5,
-    "requires": ["Taser Web", "Environmental Engineering"],
-    "effects": ["⚡ Overload", "⚡ Shock", "📡 Disrupt"],
-    "description": "Ép xung toàn bộ thiết bị nhện: Hồi đầy đạn Gadget tức thì, đòn đánh kích hoạt bão điện giật diện rộng."
+    "level_req": 20,
+    "effectIcons": [
+      "stealth",
+      "slow",
+      "takedown"
+    ],
+    "image": "./assets/skill-icons/noir-predator-mode.svg",
+    "description": "Chế độ săn mồi kiểu Noir: giảm tầm nhìn địch, mọi takedown tạo thêm thời gian ẩn thân."
+  },
+  {
+    "name": "Spider-Arm Strike",
+    "branch": "Spider-Arms",
+    "tier": 1,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "spiderArms",
+      "impact"
+    ],
+    "image": "./assets/skill-icons/spider-arm-strike.svg",
+    "description": "Cánh tay máy vươn ra đâm thẳng trước mặt, cắt ngang đòn brute và giữ khoảng cách."
+  },
+  {
+    "name": "Spider-Arm Rush",
+    "branch": "Spider-Arms",
+    "tier": 2,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "spiderArms",
+      "combo"
+    ],
+    "image": "./assets/skill-icons/spider-arm-rush.svg",
+    "description": "Bốn tay máy đánh liên tục trong khi Peter di chuyển, dọn nhóm địch nhẹ quanh thân."
+  },
+  {
+    "name": "Iron Arms Parry",
+    "branch": "Spider-Arms",
+    "tier": 2,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "spiderArms",
+      "parry"
+    ],
+    "image": "./assets/skill-icons/iron-arms-parry.svg",
+    "description": "Dựng tay máy đỡ đòn nặng rồi phản lại bằng cú quật ngang."
+  },
+  {
+    "name": "Spider-Arm Slam",
+    "branch": "Spider-Arms",
+    "tier": 3,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "spiderArms",
+      "slam",
+      "area"
+    ],
+    "image": "./assets/skill-icons/spider-arm-slam.svg",
+    "description": "Tay máy ghim xuống đất tạo chấn động hình nan nhện, hất lùi mục tiêu quanh Peter."
+  },
+  {
+    "name": "Iron Spider Overdrive",
+    "branch": "Spider-Arms",
+    "tier": 5,
+    "order": 1,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2018",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 5,
+    "level_req": 20,
+    "effectIcons": [
+      "spiderArms",
+      "finisher",
+      "combo"
+    ],
+    "image": "./assets/skill-icons/iron-spider-overdrive.svg",
+    "description": "Kích hoạt overdrive tay máy, mọi đòn cận chiến có thêm hit phụ và phá giáp nhanh."
+  },
+  {
+    "name": "Symbiote Punch",
+    "branch": "Symbiote & Anti-Venom",
+    "tier": 1,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Web of Shadows",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "symbiote",
+      "impact"
+    ],
+    "image": "./assets/skill-icons/symbiote-punch.svg",
+    "description": "Nắm đấm symbiote nặng, đánh xuyên phòng thủ và đẩy lùi mục tiêu đơn."
+  },
+  {
+    "name": "Symbiote Blast",
+    "branch": "Symbiote & Anti-Venom",
+    "tier": 2,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Web of Shadows",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "symbiote",
+      "area",
+      "knockback"
+    ],
+    "image": "./assets/skill-icons/symbiote-blast.svg",
+    "description": "Bùng nổ xúc tu đen quanh người, quét sạch nhóm địch đang áp sát."
+  },
+  {
+    "name": "Symbiote Yank",
+    "branch": "Symbiote & Anti-Venom",
+    "tier": 2,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Web of Shadows",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "symbiote",
+      "pull"
+    ],
+    "image": "./assets/skill-icons/symbiote-yank.svg",
+    "description": "Xúc tu kéo nhiều mục tiêu gom vào một điểm để chuẩn bị slam hoặc finisher."
+  },
+  {
+    "name": "Symbiote Surge",
+    "branch": "Symbiote & Anti-Venom",
+    "tier": 3,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Web of Shadows",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "symbiote",
+      "rage",
+      "combo"
+    ],
+    "image": "./assets/skill-icons/symbiote-surge.svg",
+    "description": "Tạm thời đổi nhịp chiến đấu sang hung bạo, tăng sát thương cận chiến và kháng stagger."
+  },
+  {
+    "name": "Tendril Uppercut",
+    "branch": "Symbiote & Anti-Venom",
+    "tier": 3,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "symbiote",
+      "launch"
+    ],
+    "image": "./assets/skill-icons/tendril-uppercut.svg",
+    "description": "Xúc tu đội đất hất tung mục tiêu lớn, mở không chiến với cả brute."
+  },
+  {
+    "name": "Anti-Venom Burst",
+    "branch": "Symbiote & Anti-Venom",
+    "tier": 4,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 4,
+    "level_req": 16,
+    "effectIcons": [
+      "antiVenom",
+      "area",
+      "stun"
+    ],
+    "image": "./assets/skill-icons/anti-venom-burst.svg",
+    "description": "Năng lượng Anti-Venom trắng bùng sáng, làm choáng symbiote và xóa hiệu ứng độc."
+  },
+  {
+    "name": "Anti-Venom Tempest",
+    "branch": "Symbiote & Anti-Venom",
+    "tier": 5,
+    "order": 1,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Peter",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 5,
+    "level_req": 20,
+    "effectIcons": [
+      "antiVenom",
+      "finisher",
+      "area"
+    ],
+    "image": "./assets/skill-icons/anti-venom-tempest.svg",
+    "description": "Tuyệt kỹ bão Anti-Venom: xúc tu trắng càn quét diện rộng, đặc biệt mạnh trước symbiote boss."
+  },
+  {
+    "name": "Venom Punch",
+    "branch": "Miles Bio-Electric",
+    "tier": 1,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "venom",
+      "stun"
+    ],
+    "image": "./assets/skill-icons/venom-punch.svg",
+    "description": "Miles dồn điện sinh học vào nắm đấm, làm tê liệt mục tiêu và phá giáp công nghệ."
+  },
+  {
+    "name": "Venom Jump",
+    "branch": "Miles Bio-Electric",
+    "tier": 1,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "venom",
+      "launch"
+    ],
+    "image": "./assets/skill-icons/venom-jump.svg",
+    "description": "Phóng điện từ mặt đất hất tung nhóm địch, đưa trận đấu lên không trung."
+  },
+  {
+    "name": "Venom Dash",
+    "branch": "Miles Bio-Electric",
+    "tier": 2,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "venom",
+      "mobility",
+      "impact"
+    ],
+    "image": "./assets/skill-icons/venom-dash.svg",
+    "description": "Lao xuyên tuyến địch bằng điện sinh học, gây damage trên đường đi."
+  },
+  {
+    "name": "Chain Lightning",
+    "branch": "Miles Bio-Electric",
+    "tier": 2,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "venom",
+      "chain"
+    ],
+    "image": "./assets/skill-icons/chain-lightning.svg",
+    "description": "Tia điện nhảy qua nhiều mục tiêu gần nhau, xử lý nhóm đông cực nhanh."
+  },
+  {
+    "name": "Reverse Flux",
+    "branch": "Miles Bio-Electric",
+    "tier": 3,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "venom",
+      "pull",
+      "overload"
+    ],
+    "image": "./assets/skill-icons/reverse-flux.svg",
+    "description": "Kéo điện trường ngược vào tâm, gom địch và làm quá tải thiết bị trên người chúng."
+  },
+  {
+    "name": "Thunder Burst",
+    "branch": "Miles Bio-Electric",
+    "tier": 3,
+    "order": 2,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "venom",
+      "area",
+      "stun"
+    ],
+    "image": "./assets/skill-icons/thunder-burst.svg",
+    "description": "Nổ điện xanh diện rộng, ngắt chuỗi tấn công của cả nhóm địch."
+  },
+  {
+    "name": "Mega Venom Blast",
+    "branch": "Miles Bio-Electric",
+    "tier": 5,
+    "order": 1,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales"
+    ],
+    "sp_cost": 5,
+    "level_req": 20,
+    "effectIcons": [
+      "venom",
+      "finisher",
+      "area"
+    ],
+    "image": "./assets/skill-icons/mega-venom-blast.svg",
+    "description": "Miles giải phóng toàn bộ điện sinh học thành vụ nổ khổng lồ, quét sạch vòng vây."
+  },
+  {
+    "name": "Bioelectric Overload",
+    "branch": "Miles Bio-Electric",
+    "tier": 5,
+    "order": 2,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Miles",
+    "sourceGames": [
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 5,
+    "level_req": 20,
+    "effectIcons": [
+      "venom",
+      "overload",
+      "chain"
+    ],
+    "image": "./assets/skill-icons/bioelectric-overload.svg",
+    "description": "Điện sinh học cộng hưởng liên hoàn, mọi đòn tiếp theo phát tia nhảy sang mục tiêu khác."
+  },
+  {
+    "name": "Camouflage Cloak",
+    "branch": "Miles Camouflage",
+    "tier": 1,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales"
+    ],
+    "sp_cost": 1,
+    "level_req": 1,
+    "effectIcons": [
+      "camouflage",
+      "stealth"
+    ],
+    "image": "./assets/skill-icons/camouflage-cloak.svg",
+    "description": "Miles biến mất trong vài giây, thoát khỏi ngắm bắn và chuẩn bị takedown."
+  },
+  {
+    "name": "Camo Strike",
+    "branch": "Miles Camouflage",
+    "tier": 2,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales"
+    ],
+    "sp_cost": 2,
+    "level_req": 8,
+    "effectIcons": [
+      "camouflage",
+      "takedown"
+    ],
+    "image": "./assets/skill-icons/camo-strike.svg",
+    "description": "Đòn đánh đầu tiên khi tàng hình gây sát thương cao và làm mục tiêu hoảng loạn."
+  },
+  {
+    "name": "Camo Reset",
+    "branch": "Miles Camouflage",
+    "tier": 3,
+    "order": 1,
+    "slot": "active",
+    "type": "Active",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales",
+      "Marvel Spider-Man 2"
+    ],
+    "sp_cost": 3,
+    "level_req": 12,
+    "effectIcons": [
+      "camouflage",
+      "dodge",
+      "focus"
+    ],
+    "image": "./assets/skill-icons/camo-reset.svg",
+    "description": "Sau né hoàn hảo, hồi một phần năng lượng tàng hình để tái lập thế chủ động."
+  },
+  {
+    "name": "Invisible Predator",
+    "branch": "Miles Camouflage",
+    "tier": 5,
+    "order": 1,
+    "slot": "ultimate",
+    "type": "Ultimate",
+    "hero": "Miles",
+    "sourceGames": [
+      "Miles Morales"
+    ],
+    "sp_cost": 5,
+    "level_req": 20,
+    "effectIcons": [
+      "camouflage",
+      "stealth",
+      "finisher"
+    ],
+    "image": "./assets/skill-icons/invisible-predator.svg",
+    "description": "Trong thời gian ngắn, Miles giữ tàng hình sau mỗi takedown và finisher không phá stealth ngay."
   }
 ]

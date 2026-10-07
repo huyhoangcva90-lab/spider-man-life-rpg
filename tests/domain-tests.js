@@ -28,6 +28,28 @@ test('Quest completion awards reward once', () => {
   assert(second === null && game.state.progression.coins === coins, 'duplicate completion rewarded twice');
 });
 
+test('Notion EXP reward is applied once and persisted as total EXP', () => {
+  const storage = new MemoryStorage();
+  const game = engine(storage);
+  const entry = { id: 'notion-quest-1', title: 'Push-ups', type: 'NOTION_MISSION', status: 'DONE', source: 'NOTION', xp: 100 };
+  game.completeRealQuest(entry);
+  game.completeRealQuest(entry);
+  const restored = engine(storage);
+  assert(restored.state.progression.totalXp === 100, 'Notion EXP was duplicated or lost');
+});
+
+test('Habit check-in restores resources once per day and survives reload', () => {
+  const storage = new MemoryStorage();
+  const game = engine(storage);
+  game.state.progression.hp = 0;
+  game.state.progression.webEnergy = 0;
+  const first = game.recordHabitCheckin('habit-1');
+  const second = game.recordHabitCheckin('habit-1');
+  const restored = engine(storage);
+  assert(first.hp === 30 && first.webEnergy === 30, 'habit did not restore resources');
+  assert(second.blocked && restored.state.progression.hp === 30 && restored.state.progression.webEnergy === 30, 'habit rewarded twice or was not saved');
+});
+
 test('Enemy HP never drops below zero', () => {
   const game = engine();
   game.state.battle.enemyHp = 1;

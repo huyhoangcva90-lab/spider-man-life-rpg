@@ -60,7 +60,7 @@ export class CombatEngine {
     if (state.progression.hp === 0) {
       result.heroKo = true;
       const hero = this.content.heroes.get(state.player.activeHeroId);
-      state.progression.hp = Math.round(hero.maxHp * 0.6);
+      state.progression.hp = Math.round((state.progression.maxHp || hero.maxHp) * 0.6);
     }
   }
 

@@ -305,7 +305,8 @@ class LifeResetApp {
     if (activePane) activePane.classList.add('active');
 
     const appContent = document.querySelector('.app-main-content');
-    if (appContent) appContent.scrollTo({ top: 0, behavior: 'smooth' });
+    if (appContent) appContent.scrollTo({ top: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
 
     if (targetTab === 'reports') {
       this.renderReportsSubview();
@@ -366,6 +367,7 @@ class LifeResetApp {
           timeBlock: h.timeBlock || 'Allday',
           outcome: h.outcome || '',
           description: h.description || '',
+          today: !!h.today,
           xp: h.xp ? h.xp * 35 : 35,
           gold: h.gold ? h.gold * 15 : 20,
           sourceUrl: h.sourceUrl
@@ -389,6 +391,12 @@ class LifeResetApp {
         if (hCount) hCount.textContent = this.notionHabits.length;
         if (tCount) tCount.textContent = this.notionTasks.length;
         if (statusEl) statusEl.textContent = `Notion Zeus: ${this.notionHabits.length} habits ready`;
+
+        this.notionHabits.forEach((habit) => {
+          if (habit.today && this.state.notionDoneToday[habit.id] === undefined) this.state.notionDoneToday[habit.id] = true;
+        });
+        this.saveState();
+        this.renderHelloSquareHabits();
 
         if (this.activeSource !== 'anime') {
           this.renderHabitCards();
@@ -686,6 +694,32 @@ class LifeResetApp {
     }
     this.saveState();
     this.renderHabitCards();
+    this.renderHelloSquareHabits();
+    void this.persistNotionHabitCheck(habit, isDone);
+  }
+
+  async persistNotionHabitCheck(habit, checked) {
+    if (!habit.rawId) return;
+    try {
+      const pageId = String(habit.rawId).replace(/-/g, '');
+      const response = await fetch(`/api/notion?path=${encodeURIComponent(`/v1/pages/${pageId}`)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ properties: { Today: { checkbox: checked } } })
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) throw new Error(payload.error || `HTTP ${response.status}`);
+      this.showSpideyToast('NOTION HABIT SYNCED', checked ? 'CHECKED ✓' : 'UNCHECKED', `${habit.name} đã cập nhật trong Notion Zeus.`);
+    } catch (_) {
+      if (checked) {
+        let pending = [];
+        try { pending = JSON.parse(localStorage.getItem('spidey_notion_pending_writes') || '[]'); } catch (_) {}
+        pending = Array.isArray(pending) ? pending.filter((item) => !(item.kind === 'habits' && item.id === habit.rawId)) : [];
+        pending.push({ kind: 'habits', id: habit.rawId });
+        localStorage.setItem('spidey_notion_pending_writes', JSON.stringify(pending));
+      }
+      this.showSpideyToast('NOTION SYNC PENDING', 'RETRY ↻', `${habit.name} đã lưu trên máy và sẽ thử đồng bộ lại.`);
+    }
   }
 
   toggleNotionTaskDone(task) {
@@ -913,8 +947,46 @@ class LifeResetApp {
     if (this.activeSubview === 'reports') {
       this.renderHeatmapMatrices();
     } else {
+      this.renderHelloSquareHabits();
       this.renderTrackerSplitCards();
     }
+  }
+
+  renderHelloSquareHabits() {
+    const grid = document.getElementById('hello-square-grid');
+    const progress = document.getElementById('hello-square-progress');
+    if (!grid || !progress) return;
+
+    const habits = this.notionHabits;
+    const completed = habits.filter((habit) => !!this.state.notionDoneToday[habit.id]).length;
+    progress.textContent = `${completed} / ${habits.length} CHECKED`;
+    grid.innerHTML = '';
+
+    if (!habits.length) {
+      grid.innerHTML = '<div class="hello-square-empty">Đang tải Habit từ Notion Zeus…</div>';
+      return;
+    }
+
+    const tones = ['sky', 'mint', 'coral', 'violet', 'amber'];
+    habits.forEach((habit, index) => {
+      const done = !!this.state.notionDoneToday[habit.id];
+      const tile = document.createElement('button');
+      tile.type = 'button';
+      tile.className = `hello-square-tile hello-square-tile--${tones[index % tones.length]}${done ? ' is-checked' : ''}`;
+      tile.setAttribute('aria-pressed', String(done));
+      tile.setAttribute('aria-label', `${done ? 'Bỏ check' : 'Check'} ${habit.name}`);
+      tile.innerHTML = `
+        <span class="hello-square-box" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+        <span class="hello-square-type"></span>
+        <strong class="hello-square-name"></strong>
+        <small class="hello-square-time"></small>
+      `;
+      tile.querySelector('.hello-square-type').textContent = habit.category || 'HABIT';
+      tile.querySelector('.hello-square-name').textContent = habit.name;
+      tile.querySelector('.hello-square-time').textContent = habit.timeBlock || 'Cả ngày';
+      tile.addEventListener('click', () => this.toggleNotionHabitDone(habit));
+      grid.appendChild(tile);
+    });
   }
 
   renderTrackerSplitCards() {

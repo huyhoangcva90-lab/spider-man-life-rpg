@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="./css/clawed-hub.css?build=hub-slices-1" />
   <link rel="stylesheet" href="./css/hub-systems.css?build=hub-systems-1" />
   <link rel="stylesheet" href="./css/single-version-polish.css?build=single-root-1" />
+  <link rel="stylesheet" href="./css/game-layout.css?build=game-layout-5" />
 </head>
 <body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
@@ -87,7 +88,7 @@
             <div class="hud-bars">
               <label>EXP <span id="hud-xp-text">0 / 100</span><i><b id="hud-xp-fill"></b></i></label>
               <label>HP <span id="hud-hp-text">120 / 120</span><i><b id="hud-hp-fill"></b></i></label>
-              <label>WEB <span id="hud-web-text">100 / 100</span><i><b id="hud-web-fill"></b></i></label>
+              <label>ENERGY <span id="hud-web-text">0 / 10</span><i><b id="hud-web-fill"></b></i></label>
             </div>
             <div class="hud-economy"><span><small>WEB COINS</small><b id="hud-coins">0</b></span><span><small>STREAK</small><b><i id="hud-streak">0</i>D</b></span></div>
           </div>
@@ -95,6 +96,7 @@
           <div class="action-combat-stage" id="action-combat-stage">
             <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
             <div class="combat-location"><strong id="combat-district">MANHATTAN ROOFTOP</strong><span id="combat-weather">NIGHT // LIGHT RAIN</span></div>
+            <div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span></div>
             <div class="arena-fighter arena-fighter--hero action-fighter--hero"><button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác hero tiếp theo"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></button><span>HERO SLOT</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
             <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div class="combat-placeholder combat-placeholder--enemy" id="combat-enemy-image" role="img" aria-label="Enemy placeholder"><b>FOE</b></div><span id="combat-enemy-short">THUG</span></div>
             <aside class="combat-info-panel" aria-label="Combat information">
@@ -147,11 +149,11 @@
         <nav class="game-primary-nav" aria-label="Màn hình game chính">
           <button data-game-section="QUESTS"><svg><use href="#icon-missions"></use></svg><span>QUESTS</span></button>
           <button data-game-section="HERO"><svg><use href="#icon-mask"></use></svg><span>HERO</span></button>
-          <button class="game-primary-nav__arena active" data-game-section="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>ARENA</span></button>
-          <button data-game-section="ARCHIVE"><svg><use href="#icon-book"></use></svg><span>ARCHIVE</span></button>
-          <button data-game-section="CHRONICLE"><svg><use href="#icon-bolt"></use></svg><span>CHRONICLE</span></button>
+          <button class="game-primary-nav__arena active" data-game-section="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>BATTLE</span></button>
+          <button data-game-section="HABITS" aria-label="Mở Life Reset: 66 Day Habit" title="Life Reset: 66 Day Habit"><svg><use href="#icon-bolt"></use></svg><span>LIFE 66</span></button>
+          <button data-game-section="FIELD"><svg><use href="#icon-clock"></use></svg><span>FIELD</span></button>
         </nav>
-        <div class="game-panel-backdrop" id="game-panel-backdrop" hidden inert><section class="game-panel" aria-modal="true" role="dialog" aria-labelledby="game-panel-title"><header><div><small id="game-panel-kicker">SPIDEY LIFE</small><h2 id="game-panel-title">MISSIONS</h2></div><button id="game-panel-close" aria-label="Đóng">✕</button></header><nav id="game-panel-tabs" aria-label="Game panel tabs"></nav><div class="game-panel-content" id="game-panel-content"></div></section></div>
+        <div class="game-panel-backdrop" id="game-panel-backdrop" hidden inert><section class="game-panel" aria-labelledby="game-panel-title"><header><div><small id="game-panel-kicker">SPIDEY LIFE</small><h2 id="game-panel-title">MISSIONS</h2></div><button id="game-panel-close" aria-label="Về màn Battle">← BATTLE</button></header><nav id="game-panel-tabs" role="tablist" aria-label="Các mục của màn hình"></nav><div class="game-panel-content" id="game-panel-content"></div></section></div>
 
         <!-- SIDE DRAWER: ACTIVITY LOG -->
         <div class="side-drawer-panel" id="activity-log-drawer" hidden inert>

@@ -35,6 +35,7 @@ export class RewardEngine {
 
   gainXp(progression, amount) {
     progression.xp += amount;
+    progression.totalXp = (Number(progression.totalXp) || 0) + amount;
     while (progression.xp >= progression.xpToNext) {
       progression.xp -= progression.xpToNext;
       progression.level += 1;

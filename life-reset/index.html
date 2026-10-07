@@ -4,27 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>66 日間 - Life Reset: 66 Day Habit</title>
-  <link rel="stylesheet" href="css/reset-app.css" />
+  <link rel="stylesheet" href="css/reset-app.css?build=spider-life-theme-1" />
   <link rel="icon" type="image/png" href="assets/images/house_ember.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet" />
 </head>
 <body>
   
   <!-- Outer Wrapper with Top Japanese Brand Banner (Image 2) -->
   <div class="desktop-screen-wrapper">
 
-    <!-- Iconic Orange '66 日間' Branding Banner from Image 2 -->
+    <!-- Shared Spider Life campaign header -->
     <div class="brand-top-banner">
       <div class="brand-66-logo">
-        <span class="logo-66-num">66</span>
-        <div class="logo-kanji-box">
-          <span class="kanji-text">日</span>
-          <span class="kanji-text">間</span>
-        </div>
-        <div class="logo-stripes">
-          <span></span><span></span><span></span>
+        <a class="spider-reset-home" href="../index.html" aria-label="Back to Spider Life battle hub">
+          <img class="spider-reset-logo" src="../assets/spideytracker/tracker_logo3.png" alt="Spider Life" />
+          <span class="spider-reset-title">
+            <strong>LIFE RESET</strong>
+            <small>HABIT PROTOCOL</small>
+          </span>
+        </a>
+        <div class="spider-campaign-badge" aria-label="66 day campaign">
+          <span class="logo-66-num">66</span>
+          <div class="logo-kanji-box">
+            <span class="kanji-text">日</span>
+            <span class="kanji-text">間</span>
+          </div>
+          <div class="logo-stripes" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
         </div>
       </div>
     </div>
@@ -199,6 +208,15 @@
               <div class="cal-day-cell" data-day="Tue 15"><span class="cal-day-name">Tue</span><span class="cal-day-num">15</span></div>
               <div class="cal-day-cell active" data-day="Wed 16"><span class="cal-day-name">Wed</span><span class="cal-day-num">16</span></div>
             </div>
+
+            <!-- Hello Habit quick check: square Notion habits -->
+            <section class="hello-square-check-section" aria-labelledby="hello-square-title">
+              <header class="hello-square-check-header">
+                <div><span>NOTION ZEUS // TODAY</span><h3 id="hello-square-title">Hello Habit</h3></div>
+                <strong id="hello-square-progress">0 / 0 CHECKED</strong>
+              </header>
+              <div class="hello-square-grid" id="hello-square-grid" aria-live="polite"></div>
+            </section>
 
             <!-- Daily Goals (Split Color Tiles from Image 4) -->
             <div class="goals-group-container" id="group-daily-goals">
@@ -441,7 +459,7 @@
         </button>
 
         <!-- 2. Bar Chart / Reports (Hello Habit) -->
-        <button class="dock-item-btn" data-tab="reports" aria-label="Reports">
+        <button class="dock-item-btn" data-tab="reports" aria-label="Hello Habit">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <line x1="18" y1="20" x2="18" y2="10"/>
             <line x1="12" y1="20" x2="12" y2="4"/>
@@ -523,6 +541,6 @@
     </div>
   </div>
 
-  <script src="js/app.js"></script>
+  <script src="js/app.js?build=hello-habit-squares-3"></script>
 </body>
 </html>

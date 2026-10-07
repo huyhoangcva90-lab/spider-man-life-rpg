@@ -1,386 +1,800 @@
-﻿[
-    {
-        "Id":  "3d6d7876-36c6-8100-8d6c-e5f6e206f5dd",
-        "Title":  "Anti-Magnetic Inverter",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8131-bc67-fbe7f0a61d78",
-        "Title":  "Anti-Ock Arm-Fusing Compound",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8154-8233-da1f9eb3d228",
-        "Title":  "Anti-Ock Suit",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8162-bc6e-f8d93fd738da",
-        "Title":  "Acid Webbing",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81ad-bad2-dc5a58ede4dc",
-        "Title":  "Flame Webbing",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81bc-8c9d-eff8e299276d",
-        "Title":  "Magnetic Webbing",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81bf-826e-d26c6a3cb035",
-        "Title":  "Non-Conductive Webbing",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81c1-9b52-c0c83a56919f",
-        "Title":  "Electro-Proof Suit",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81de-a7e7-c1d3153598cd",
-        "Title":  "Anti-Electro Netting",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8114-b6cf-cc547a43619b",
-        "Title":  "Rapid-Fire Web",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8132-8d67-e705c08df6e1",
-        "Title":  "Stark Spider-Drone",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-814a-8265-ec8f6b5b653a",
-        "Title":  "Shield Web",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8157-aab6-e2e76a833883",
-        "Title":  "Hook Web",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8158-8a4f-de3c67f8860d",
-        "Title":  "TASM Mechanical Web-Shooters",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8158-a537-e3d47472717d",
-        "Title":  "Splitter Web",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-817a-9123-e3fccb9b1603",
-        "Title":  "Spider-Signal",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-817f-9faa-c6864a335a7b",
-        "Title":  "Freeze Capsules",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8180-b404-edc79c4275ba",
-        "Title":  "Web Wings",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8184-9c88-c9390bb0f882",
-        "Title":  "Timer Web",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-8196-afb5-f6e45e9f016f",
-        "Title":  "Automatic Camera",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81a1-b0dc-dd8404447f4b",
-        "Title":  "Web Line",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81b0-8397-ddccbb448b48",
-        "Title":  "Stark Web Wings",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81b1-8bea-f1206a7053a9",
-        "Title":  "Impact Webbing",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81b3-be25-df70ddbdd228",
-        "Title":  "Web Fluid Cartridges",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81bc-bb90-f9b529bb0fc4",
-        "Title":  "Net Web",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81d8-80ea-e1215f8e6d75",
-        "Title":  "Taser Web",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81dd-a5e1-c43411093591",
-        "Title":  "Utility Belt",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81e1-85c4-eb6ec4b5cba7",
-        "Title":  "Dimensional Watch",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81ef-af65-e73b720f0b70",
-        "Title":  "Stark Web-Shooters",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3d6d7876-36c6-81f5-81a6-f30883c35f2b",
-        "Title":  "Web Grenade",
-        "HasImage":  false,
-        "ImageUrl":  "",
-        "HasIcon":  false,
-        "ImageStatus":  "Needs Fix"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8107-928a-d6d198b2946a",
-        "Title":  "Spider-Tracer",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q0tcu.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8109-9e6d-d3c39ce46c50",
-        "Title":  "Miles Web Shooters",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q0g9f.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-811e-9544-d1f4f16cb6fe",
-        "Title":  "Upshot",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q1EVS.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-811f-9892-fd073fcc6fa4",
-        "Title":  "Holo-Drone",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q0ZFe.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8122-b8fe-c7dace647691",
-        "Title":  "Remote Mine",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q19tV.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8151-a862-f523030dc8f4",
-        "Title":  "Electric Web",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q1dMP.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8158-8fda-dbb01edfa1c9",
-        "Title":  "Spider-Drone",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q0inS.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8173-829e-fe56bafb0331",
-        "Title":  "Sonic Burst",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q1Kcg.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8173-9aea-ecd0e0e9ebfa",
-        "Title":  "Web Grabber",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q1nNR.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8179-ba99-d87051e55183",
-        "Title":  "Gravity Well",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q1otp.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8182-a0d9-e112c6622e24",
-        "Title":  "Trip Mine",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q0D8b.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-8185-b4b7-d7a6cda2b136",
-        "Title":  "Ricochet Web",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q1TPt.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-81ae-b236-cc6575d41bb2",
-        "Title":  "Web Bomb",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q04wl.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-81b9-ba4e-f4a84ef90b0e",
-        "Title":  "Concussive Blast",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q1BHJ.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-81ca-84f4-ef845d8caf6b",
-        "Title":  "Web Parachute",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q15Ss.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-81ca-a354-ebf92bf973f7",
-        "Title":  "Impact Web",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q0ru4.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-81df-a12e-d4996851b404",
-        "Title":  "Suspension Matrix",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q11x2.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    },
-    {
-        "Id":  "3cbd7876-36c6-81e1-8f00-cb4b790fd2f6",
-        "Title":  "Web Shooters",
-        "HasImage":  true,
-        "ImageUrl":  "https://iili.io/n3Q08as.png",
-        "HasIcon":  true,
-        "ImageStatus":  "None"
-    }
+[
+  {
+    "Id": "local-gadget-001-classic-web-shooters",
+    "Title": "Classic Web Shooters",
+    "Category": "WEB_SHOOTER",
+    "Family": "Web Shooter DB",
+    "Role": "Web-shooter rig",
+    "Charges": "Infinite basic",
+    "Cooldown": 0,
+    "EffectIcons": [
+      "web",
+      "reload"
+    ],
+    "GameEffect": "Bộ máy bắn tơ cơ khí cổ điển của Peter, ổn định, dễ nâng cấp, dùng mọi cartridge tiêu chuẩn.",
+    "Tuning": "Baseline rig.",
+    "ImageUrl": "./assets/gadget-icons/classic-web-shooters.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "rig"
+  },
+  {
+    "Id": "3cbd7876-36c6-8109-9e6d-d3c39ce46c50",
+    "Title": "Miles Web Shooters",
+    "Category": "WEB_SHOOTER",
+    "Family": "Web Shooter DB",
+    "Role": "Web-shooter rig",
+    "Charges": "+venom sync",
+    "Cooldown": 0,
+    "EffectIcons": [
+      "web",
+      "venom"
+    ],
+    "GameEffect": "Máy bắn tơ của Miles đồng bộ bio-electricity, cho phép cartridge tơ dẫn điện ổn định hơn.",
+    "Tuning": "Miles bio-electric rig.",
+    "ImageUrl": "./assets/gadget-icons/miles-web-shooters.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "rig-miles"
+  },
+  {
+    "Id": "3d6d7876-36c6-81ef-af65-e73b720f0b70",
+    "Title": "Stark Web-Shooters",
+    "Category": "WEB_SHOOTER",
+    "Family": "Web Shooter DB",
+    "Role": "Web-shooter rig",
+    "Charges": "+smart modes",
+    "Cooldown": 0,
+    "EffectIcons": [
+      "web",
+      "overload"
+    ],
+    "GameEffect": "Web-shooter Stark tích hợp AI chọn đầu đạn tơ, đổi mode nhanh và khóa mục tiêu mềm.",
+    "Tuning": "Smart targeting rig.",
+    "ImageUrl": "./assets/gadget-icons/stark-web-shooters.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "rig-stark"
+  },
+  {
+    "Id": "3d6d7876-36c6-8158-8a4f-de3c67f8860d",
+    "Title": "TASM Mechanical Web-Shooters",
+    "Category": "WEB_SHOOTER",
+    "Family": "Web Shooter DB",
+    "Role": "Web-shooter rig",
+    "Charges": "+aim assist",
+    "Cooldown": 0,
+    "EffectIcons": [
+      "web",
+      "marked"
+    ],
+    "GameEffect": "Cặp web-shooter cơ khí thiên về độ chính xác, hợp bắn tơ dài và tước vũ khí.",
+    "Tuning": "Precision rig.",
+    "ImageUrl": "./assets/gadget-icons/tasm-mechanical-web-shooters.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "rig-tasm"
+  },
+  {
+    "Id": "3d6d7876-36c6-81b3-be25-df70ddbdd228",
+    "Title": "Web Fluid Cartridges",
+    "Category": "WEB_SHOOTER",
+    "Family": "Web Shooter DB",
+    "Role": "Rig / upgrade",
+    "Charges": "+2 capacity",
+    "Cooldown": 1,
+    "EffectIcons": [
+      "web",
+      "reload"
+    ],
+    "GameEffect": "Băng đạn dịch tơ dự phòng, tăng số lần dùng các chế độ tơ đặc biệt trong patrol dài.",
+    "Tuning": "Capacity upgrade rather than a shot.",
+    "ImageUrl": "./assets/gadget-icons/web-fluid-cartridges.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "cartridge"
+  },
+  {
+    "Id": "3d6d7876-36c6-817f-9faa-c6864a335a7b",
+    "Title": "Freeze Capsules",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "2 capsules",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "slow",
+      "immobilize"
+    ],
+    "GameEffect": "Viên lạnh trộn vào tơ làm cứng nhanh, giữ brute hoặc symbiote nhỏ trong khoảnh khắc.",
+    "Tuning": "Temporary hard stop.",
+    "ImageUrl": "./assets/gadget-icons/freeze-capsules.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "freeze"
+  },
+  {
+    "Id": "3d6d7876-36c6-8157-aab6-e2e76a833883",
+    "Title": "Hook Web",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "4 hooks",
+    "Cooldown": 1,
+    "EffectIcons": [
+      "web",
+      "pull"
+    ],
+    "GameEffect": "Đầu móc tơ kéo vũ khí, khiên hoặc mục tiêu nhẹ về phía Spider.",
+    "Tuning": "Utility pull, not raw damage.",
+    "ImageUrl": "./assets/gadget-icons/hook-web.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "hook"
+  },
+  {
+    "Id": "3d6d7876-36c6-81b1-8bea-f1206a7053a9",
+    "Title": "Impact Webbing",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "3 shots",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "web",
+      "knockback",
+      "stun"
+    ],
+    "GameEffect": "Tơ nén áp lực cao bắn một phát đẩy mục tiêu dính chặt vào tường hoặc sàn.",
+    "Tuning": "High stagger single target shot.",
+    "ImageUrl": "./assets/gadget-icons/impact-webbing.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "impact"
+  },
+  {
+    "Id": "3d6d7876-36c6-81bc-8c9d-eff8e299276d",
+    "Title": "Magnetic Webbing",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "2 cartridges",
+    "Cooldown": 2,
+    "EffectIcons": [
+      "web",
+      "pull",
+      "marked"
+    ],
+    "GameEffect": "Tơ có hạt từ tính kéo vũ khí kim loại và gom drone nhỏ vào một điểm.",
+    "Tuning": "Anti-metal control option.",
+    "ImageUrl": "./assets/gadget-icons/magnetic-webbing.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "magnet"
+  },
+  {
+    "Id": "3d6d7876-36c6-81bc-bb90-f9b529bb0fc4",
+    "Title": "Net Web",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "2 nets",
+    "Cooldown": 2,
+    "EffectIcons": [
+      "web",
+      "immobilize"
+    ],
+    "GameEffect": "Bắn lưới tơ bản rộng để chặn đường lao tới hoặc bắt mục tiêu bay thấp.",
+    "Tuning": "Good anti-air and lane control.",
+    "ImageUrl": "./assets/gadget-icons/net-web.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "net"
+  },
+  {
+    "Id": "3d6d7876-36c6-81bf-826e-d26c6a3cb035",
+    "Title": "Non-Conductive Webbing",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "2 canisters",
+    "Cooldown": 2,
+    "EffectIcons": [
+      "web",
+      "barrier"
+    ],
+    "GameEffect": "Tơ cách điện dùng để khóa nguồn điện, bọc dây hở hoặc chống phản sốc.",
+    "Tuning": "Defensive cartridge for Electro-style threats.",
+    "ImageUrl": "./assets/gadget-icons/non-conductive-webbing.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "insulated"
+  },
+  {
+    "Id": "3d6d7876-36c6-8114-b6cf-cc547a43619b",
+    "Title": "Rapid-Fire Web",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "Heat meter",
+    "Cooldown": 1,
+    "EffectIcons": [
+      "web",
+      "combo"
+    ],
+    "GameEffect": "Bắn loạt tơ mỏng tốc độ cao, dùng để giữ combo và tích web buildup nhanh.",
+    "Tuning": "Best when enemies are already staggered.",
+    "ImageUrl": "./assets/gadget-icons/rapid-fire-web.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "burst"
+  },
+  {
+    "Id": "3cbd7876-36c6-8185-b4b7-d7a6cda2b136",
+    "Title": "Ricochet Web",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "3 shots",
+    "Cooldown": 2,
+    "EffectIcons": [
+      "web",
+      "chain"
+    ],
+    "GameEffect": "Đạn tơ nảy qua nhiều mục tiêu, dọn nhóm nhỏ đứng gần nhau.",
+    "Tuning": "Chain control without spending drone charges.",
+    "ImageUrl": "./assets/gadget-icons/ricochet-web.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "ricochet"
+  },
+  {
+    "Id": "3d6d7876-36c6-8158-a537-e3d47472717d",
+    "Title": "Splitter Web",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "2 bursts",
+    "Cooldown": 2,
+    "EffectIcons": [
+      "web",
+      "area"
+    ],
+    "GameEffect": "Một phát tơ tách thành nhiều tia nhỏ sau khi rời cổ tay, phủ cone phía trước.",
+    "Tuning": "Wide cone opener.",
+    "ImageUrl": "./assets/gadget-icons/splitter-web.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "split"
+  },
+  {
+    "Id": "local-gadget-019-standard-web-line",
+    "Title": "Standard Web Line",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "Infinite",
+    "Cooldown": 0,
+    "EffectIcons": [
+      "web",
+      "interrupt"
+    ],
+    "GameEffect": "Sợi tơ tiêu chuẩn để khóa tay, kéo vật thể nhẹ và ngắt nhịp tấn công.",
+    "Tuning": "Default quick shot for safe crowd control.",
+    "ImageUrl": "./assets/gadget-icons/standard-web-line.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "basic"
+  },
+  {
+    "Id": "3d6d7876-36c6-81d8-80ea-e1215f8e6d75",
+    "Title": "Taser Web",
+    "Category": "WEB_AMMO",
+    "Family": "Web Shooter DB",
+    "Role": "Web cartridge",
+    "Charges": "3 charges",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "web",
+      "venom",
+      "stun"
+    ],
+    "GameEffect": "Tơ dẫn điện giật tê liệt mục tiêu công nghệ hoặc kẻ địch dùng giáp điện.",
+    "Tuning": "Peter tech answer to electric enemies.",
+    "ImageUrl": "./assets/gadget-icons/taser-web.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "electric"
+  },
+  {
+    "Id": "3d6d7876-36c6-81de-a7e7-c1d3153598cd",
+    "Title": "Anti-Electro Netting",
+    "Category": "WEB_DEPLOYABLE",
+    "Family": "Web Shooter DB",
+    "Role": "Deployable web shot",
+    "Charges": "1 net",
+    "Cooldown": 4,
+    "EffectIcons": [
+      "web",
+      "barrier",
+      "stun"
+    ],
+    "GameEffect": "Lưới tơ chống điện mở ra như khiên, hấp thụ xung và phản lại một cú choáng.",
+    "Tuning": "Boss counter cartridge.",
+    "ImageUrl": "./assets/gadget-icons/anti-electro-netting.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "net-electric"
+  },
+  {
+    "Id": "3d6d7876-36c6-814a-8265-ec8f6b5b653a",
+    "Title": "Shield Web",
+    "Category": "WEB_DEPLOYABLE",
+    "Family": "Web Shooter DB",
+    "Role": "Deployable web shot",
+    "Charges": "2 shields",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "web",
+      "barrier"
+    ],
+    "GameEffect": "Đan tơ dày thành tấm khiên tạm thời chặn đạn đạo và mảnh nổ.",
+    "Tuning": "Momentary projectile defense.",
+    "ImageUrl": "./assets/gadget-icons/shield-web.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "shield"
+  },
+  {
+    "Id": "3d6d7876-36c6-8184-9c88-c9390bb0f882",
+    "Title": "Timer Web",
+    "Category": "WEB_DEPLOYABLE",
+    "Family": "Web Shooter DB",
+    "Role": "Deployable web shot",
+    "Charges": "2 traps",
+    "Cooldown": 2,
+    "EffectIcons": [
+      "web",
+      "trap"
+    ],
+    "GameEffect": "Bẫy tơ hẹn giờ bung sau vài giây, hợp với combo kéo nhóm vào tâm.",
+    "Tuning": "Delayed crowd control.",
+    "ImageUrl": "./assets/gadget-icons/timer-web.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "timer"
+  },
+  {
+    "Id": "3cbd7876-36c6-81ae-b236-cc6575d41bb2",
+    "Title": "Web Bomb",
+    "Category": "WEB_DEPLOYABLE",
+    "Family": "Web Shooter DB",
+    "Role": "Deployable web shot",
+    "Charges": "3 bombs",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "web",
+      "area",
+      "immobilize"
+    ],
+    "GameEffect": "Quả cầu tơ nổ diện rộng, quấn nhiều mục tiêu trong cùng một nhịp.",
+    "Tuning": "Classic crowd lock gadget.",
+    "ImageUrl": "./assets/gadget-icons/web-bomb.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "area"
+  },
+  {
+    "Id": "3d6d7876-36c6-81f5-81a6-f30883c35f2b",
+    "Title": "Web Grenade",
+    "Category": "WEB_DEPLOYABLE",
+    "Family": "Web Shooter DB",
+    "Role": "Deployable web shot",
+    "Charges": "2 grenades",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "web",
+      "area",
+      "knockback"
+    ],
+    "GameEffect": "Lựu tơ bung mảnh theo hình nan nhện, đẩy lùi nhóm địch áp sát.",
+    "Tuning": "Better spacing than Web Bomb, less hard lock.",
+    "ImageUrl": "./assets/gadget-icons/web-grenade.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "scatter"
+  },
+  {
+    "Id": "3d6d7876-36c6-81a1-b0dc-dd8404447f4b",
+    "Title": "Web Line",
+    "Category": "WEB_DEPLOYABLE",
+    "Family": "Web Shooter DB",
+    "Role": "Deployable web shot",
+    "Charges": "2 lines",
+    "Cooldown": 2,
+    "EffectIcons": [
+      "web",
+      "stealth"
+    ],
+    "GameEffect": "Tạo dây tơ ngang giữa hai điểm neo để di chuyển, phục kích hoặc treo mục tiêu.",
+    "Tuning": "Stealth setup tool.",
+    "ImageUrl": "./assets/gadget-icons/web-line.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "line"
+  },
+  {
+    "Id": "3cbd7876-36c6-81b9-ba4e-f4a84ef90b0e",
+    "Title": "Concussive Blast",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "2 blasts",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "knockback",
+      "impact"
+    ],
+    "GameEffect": "Sóng xung lực không sát thương cao nhưng phá vây, đẩy brute và khiên khỏi vị trí.",
+    "Tuning": "Spacing tool.",
+    "ImageUrl": "./assets/gadget-icons/concussive-blast.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "blast"
+  },
+  {
+    "Id": "3cbd7876-36c6-8179-ba99-d87051e55183",
+    "Title": "Gravity Well",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "1 well",
+    "Cooldown": 5,
+    "EffectIcons": [
+      "pull",
+      "area"
+    ],
+    "GameEffect": "Trường hấp dẫn mini hút địch, vật thể và projectile nhỏ vào tâm.",
+    "Tuning": "Setup for AoE skills.",
+    "ImageUrl": "./assets/gadget-icons/gravity-well.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "gravity"
+  },
+  {
+    "Id": "3cbd7876-36c6-8122-b8fe-c7dace647691",
+    "Title": "Remote Mine",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "2 mines",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "trap",
+      "impact"
+    ],
+    "GameEffect": "Mìn kích hoạt thủ công, dùng để mở combat hoặc phá armor khi boss vào phase mới.",
+    "Tuning": "Manual burst setup.",
+    "ImageUrl": "./assets/gadget-icons/remote-mine.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "remote-mine"
+  },
+  {
+    "Id": "3cbd7876-36c6-8173-829e-fe56bafb0331",
+    "Title": "Sonic Burst",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "2 bursts",
+    "Cooldown": 4,
+    "EffectIcons": [
+      "stun",
+      "area"
+    ],
+    "GameEffect": "Xung âm tần số cao làm gián đoạn symbiote và kẻ địch tụ đông.",
+    "Tuning": "Symbiote counter.",
+    "ImageUrl": "./assets/gadget-icons/sonic-burst.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "sonic"
+  },
+  {
+    "Id": "3cbd7876-36c6-8158-8fda-dbb01edfa1c9",
+    "Title": "Spider-Drone",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "2 drones",
+    "Cooldown": 4,
+    "EffectIcons": [
+      "marked",
+      "combo"
+    ],
+    "GameEffect": "Drone nhện bay quanh chiến trường, bắn hỗ trợ vào mục tiêu đã đánh dấu.",
+    "Tuning": "Passive pressure, low burst.",
+    "ImageUrl": "./assets/gadget-icons/spider-drone.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "drone"
+  },
+  {
+    "Id": "3cbd7876-36c6-81df-a12e-d4996851b404",
+    "Title": "Suspension Matrix",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "2 pods",
+    "Cooldown": 4,
+    "EffectIcons": [
+      "airborne",
+      "immobilize"
+    ],
+    "GameEffect": "Thiết bị phản trọng lực treo nhóm mục tiêu lên không, mở combo aerial an toàn.",
+    "Tuning": "Aerial setup.",
+    "ImageUrl": "./assets/gadget-icons/suspension-matrix.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "suspend"
+  },
+  {
+    "Id": "3cbd7876-36c6-8182-a0d9-e112c6622e24",
+    "Title": "Trip Mine",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "3 mines",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "trap",
+      "pull"
+    ],
+    "GameEffect": "Mìn tơ cảm biến gắn tường hoặc sàn, kéo mục tiêu vào bề mặt khi kích hoạt.",
+    "Tuning": "Wall-control trap.",
+    "ImageUrl": "./assets/gadget-icons/trip-mine.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "mine"
+  },
+  {
+    "Id": "3cbd7876-36c6-811e-9544-d1f4f16cb6fe",
+    "Title": "Upshot",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "2 shots",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "launch",
+      "airborne"
+    ],
+    "GameEffect": "Nổ lực nâng dưới chân mục tiêu, hất nhiều kẻ địch lên không ngay tại chỗ.",
+    "Tuning": "Aerial opener.",
+    "ImageUrl": "./assets/gadget-icons/upshot.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "upshot"
+  },
+  {
+    "Id": "3cbd7876-36c6-8173-9aea-ecd0e0e9ebfa",
+    "Title": "Web Grabber",
+    "Category": "TECH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "tech gadget",
+    "Charges": "2 pulls",
+    "Cooldown": 3,
+    "EffectIcons": [
+      "pull",
+      "area"
+    ],
+    "GameEffect": "Thiết bị bắn nhiều móc tơ nhỏ kéo vật thể môi trường lao vào nhóm địch.",
+    "Tuning": "Environmental combo tool.",
+    "ImageUrl": "./assets/gadget-icons/web-grabber.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "grabber"
+  },
+  {
+    "Id": "3cbd7876-36c6-811f-9892-fd073fcc6fa4",
+    "Title": "Holo-Drone",
+    "Category": "STEALTH_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "stealth gadget",
+    "Charges": "1 decoy",
+    "Cooldown": 4,
+    "EffectIcons": [
+      "stealth",
+      "marked"
+    ],
+    "GameEffect": "Máy chiếu mồi nhử hologram kéo hỏa lực khỏi Spider và gom địch về một hướng.",
+    "Tuning": "Aggro redirect.",
+    "ImageUrl": "./assets/gadget-icons/holo-drone.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "holo"
+  },
+  {
+    "Id": "3cbd7876-36c6-81ca-84f4-ef845d8caf6b",
+    "Title": "Web Parachute",
+    "Category": "MOBILITY_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "mobility gadget",
+    "Charges": "Passive",
+    "Cooldown": 0,
+    "EffectIcons": [
+      "traversal",
+      "barrier"
+    ],
+    "GameEffect": "Dù tơ khẩn cấp giảm rơi, cứu lỗi traversal và cho phép đáp xuống vị trí chiến thuật.",
+    "Tuning": "Safety mobility tool.",
+    "ImageUrl": "./assets/gadget-icons/web-parachute.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "parachute"
+  },
+  {
+    "Id": "3d6d7876-36c6-8180-b404-edc79c4275ba",
+    "Title": "Web Wings",
+    "Category": "MOBILITY_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "mobility gadget",
+    "Charges": "Passive",
+    "Cooldown": 0,
+    "EffectIcons": [
+      "traversal",
+      "airborne"
+    ],
+    "GameEffect": "Cánh lượn tơ dưới cánh tay, dùng cho traversal và mở aerial combat từ tốc độ cao.",
+    "Tuning": "Movement gadget, not a web shot.",
+    "ImageUrl": "./assets/gadget-icons/web-wings.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "wings"
+  },
+  {
+    "Id": "3d6d7876-36c6-817a-9123-e3fccb9b1603",
+    "Title": "Spider-Signal",
+    "Category": "UTILITY_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "utility gadget",
+    "Charges": "1 beacon",
+    "Cooldown": 4,
+    "EffectIcons": [
+      "marked",
+      "stun"
+    ],
+    "GameEffect": "Đèn tín hiệu nhện làm kẻ địch mất phương hướng và gọi assist trong các encounter đặc biệt.",
+    "Tuning": "Taunt plus team cue.",
+    "ImageUrl": "./assets/gadget-icons/spider-signal.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "signal"
+  },
+  {
+    "Id": "3cbd7876-36c6-8107-928a-d6d198b2946a",
+    "Title": "Spider-Tracer",
+    "Category": "UTILITY_GADGET",
+    "Family": "Field Gadget DB",
+    "Role": "utility gadget",
+    "Charges": "4 tags",
+    "Cooldown": 1,
+    "EffectIcons": [
+      "marked",
+      "sense"
+    ],
+    "GameEffect": "Bọ theo dõi siêu nhỏ đánh dấu mục tiêu, lộ tuyến di chuyển và tăng độ chính xác gadget.",
+    "Tuning": "Tracking utility.",
+    "ImageUrl": "./assets/gadget-icons/spider-tracer.svg",
+    "HasImage": true,
+    "HasIcon": true,
+    "ImageStatus": "Local SVG",
+    "NotionStatus": "Ready to sync",
+    "Source": "Notion Gadget DB",
+    "Visual": "tracer"
+  }
 ]

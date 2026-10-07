@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Point Launch Boost">
+  <rect width="96" height="96" rx="14" fill="#17415f"/>
+  <path d="M0 78 96 18v78H0z" fill="#05070b" opacity=".32"/>
+  <circle cx="75" cy="22" r="10" fill="#f6c667" opacity=".86"/>
+  <path d="M17 73C34 22 62 20 80 25M22 64c17-5 38-4 57 14" fill="none" stroke="#5ac8d8" stroke-width="7" stroke-linecap="round"/><circle cx="79" cy="25" r="7" fill="#f6c667"/>
+  <path d="M14 14h68v68H14z" fill="none" stroke="#e8f7ff" stroke-width="3" opacity=".85"/>
+  <text x="48" y="89" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="12" fill="#fff">PLB</text>
+</svg>

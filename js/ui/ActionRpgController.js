@@ -1,3 +1,5 @@
+import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js';
+
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
     this.bus = eventBus;
@@ -16,9 +18,31 @@ export class ActionRpgController {
     this.minions = [];
     this.backpacks = [];
     this.badges = {};
+    this.gadgetsCatalog = [];
     this.notionTasks = [];
     this.notionHabits = [];
+    this.notionGoals = [];
+    this.notionActiveQuests = [];
+    this.notionHeroProfile = null;
+    this.notionBadges = [];
+    this.notionSuits = [];
+    this.notionGadgets = [];
+    this.notionCombatSkills = [];
+    this.notionSpiderVerse = [];
+    this.notionWorkoutPlans = [];
+    this.notionExerciseLogs = [];
+    this.notionCardioLogs = [];
+    this.notionSportLogs = [];
+    this.notionEnemies = [];
+    this.notionTimeLogs = [];
+    this.notionJournalEntries = [];
+    try { this.focusSession = JSON.parse(localStorage.getItem('spidey_focus_session') || 'null') || { startedAt: null, elapsedMs: 0, running: false, firstStartedAt: null }; }
+    catch { this.focusSession = { startedAt: null, elapsedMs: 0, running: false, firstStartedAt: null }; }
+    this.focusInterval = null;
+    this.notionSource = 'snapshot';
+    this.notionSyncedAt = null;
     this.skillIcons = {};
+    this.effectIcons = {};
     this.skillsCatalog = [];
     this.snapCards = [];
     this.snapMap = new Map();
@@ -45,13 +69,10 @@ export class ActionRpgController {
     this.bus.on('CAMPAIGN_UPDATED', (result) => this.handleUpdate(result));
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
       if (section === 'CITY') return this.selectSection('CITY');
-      this.panelSection = section;
+      if (section === 'ARCHIVE') { section = 'HERO'; tab = 'BADGES'; }
+      if (section === 'CHRONICLE') { section = 'FIELD'; tab = tab === 'RHYTHM' ? 'TIME' : tab; }
+      this.selectSection(section, false);
       this.panelTab = tab || this.defaultTab(section);
-      document.body.dataset.gameMode = 'ARENA';
-      this.setActiveNav(section);
-      const panel = document.getElementById('game-panel-backdrop'); 
-      panel?.removeAttribute('hidden'); 
-      panel?.removeAttribute('inert');
       this.renderPanel();
     });
 
@@ -60,19 +81,24 @@ export class ActionRpgController {
 
     this.selectSection('ARENA', false);
     this.render();
+    this.focusInterval = window.setInterval(() => this.updateFocusClock(), 1000);
+    // Local preview data is immediately available; live Notion replaces it once connected.
+    void this.syncLiveFromNotion(null, { quiet: true });
   }
 
   async loadAllGameData() {
     try {
-      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, snapRes, iconsRes, skillsRes, snapCardsRes] = await Promise.allSettled([
+      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, gadgetsRes, snapRes, iconsRes, effectsRes, skillsRes, snapCardsRes] = await Promise.allSettled([
         fetch('./data/suits.json').then(r => r.json()),
         fetch('./data/spider-verse.json').then(r => r.json()),
         fetch('./data/bosses.json').then(r => r.json()),
         fetch('./data/minions.json').then(r => r.json()),
         fetch('./data/backpacks.json').then(r => r.json()),
         fetch('./data/badges.json').then(r => r.json()),
+        fetch('./data/gadgets.json').then(r => r.json()),
         fetch('./data/notion-snapshot.json').then(r => r.json()),
         fetch('./data/skill_icons.json').then(r => r.json()),
+        fetch('./data/effect_icons.json').then(r => r.json()),
         fetch('./data/skills.json').then(r => r.json()),
         fetch('./data/marvel_snap_cards.json').then(r => r.json())
       ]);
@@ -83,7 +109,9 @@ export class ActionRpgController {
       if (minionsRes.status === 'fulfilled') this.minions = minionsRes.value || {};
       if (backpacksRes.status === 'fulfilled') this.backpacks = backpacksRes.value || [];
       if (badgesRes.status === 'fulfilled') this.badges = badgesRes.value?.rename_map || {};
+      if (gadgetsRes.status === 'fulfilled') this.gadgetsCatalog = gadgetsRes.value || [];
       if (iconsRes.status === 'fulfilled') this.skillIcons = iconsRes.value || {};
+      if (effectsRes.status === 'fulfilled') this.effectIcons = effectsRes.value || {};
       if (skillsRes.status === 'fulfilled') this.skillsCatalog = skillsRes.value || [];
       
       if (snapCardsRes.status === 'fulfilled') {
@@ -94,19 +122,37 @@ export class ActionRpgController {
         });
       }
 
-      // Check for live synced data in localStorage first
+      // Use the newest known Notion source. Older browser caches must not hide a newer snapshot.
       const cachedTasks = localStorage.getItem('spidey_notion_tasks');
       const cachedHabits = localStorage.getItem('spidey_notion_habits');
-      if (cachedTasks) {
-        try { this.notionTasks = JSON.parse(cachedTasks); } catch (_) {}
-      } else if (snapRes.status === 'fulfilled' && snapRes.value?.collections) {
+      const snapshotTime = Date.parse(snapRes.status === 'fulfilled' ? snapRes.value?.metadata?.syncedAt : '') || 0;
+      const cacheTime = Date.parse(localStorage.getItem('spidey_notion_cached_at') || '') || 0;
+      const useCache = cacheTime > snapshotTime;
+      if (snapRes.status === 'fulfilled' && snapRes.value?.collections) {
         this.notionTasks = snapRes.value.collections.masterCalendar || [];
-      }
-
-      if (cachedHabits) {
-        try { this.notionHabits = JSON.parse(cachedHabits); } catch (_) {}
-      } else if (snapRes.status === 'fulfilled' && snapRes.value?.collections) {
         this.notionHabits = snapRes.value.collections.habits || [];
+        this.notionGoals = snapRes.value.collections.goals || [];
+        this.notionSyncedAt = snapRes.value.metadata?.syncedAt || null;
+      }
+      if (useCache || !this.notionSyncedAt) {
+        try {
+          if (cachedTasks) this.notionTasks = JSON.parse(cachedTasks);
+          if (cachedHabits) this.notionHabits = JSON.parse(cachedHabits);
+          const cachedGoals = localStorage.getItem('spidey_notion_goals');
+          if (cachedGoals) this.notionGoals = JSON.parse(cachedGoals);
+          const cachedActiveQuests = localStorage.getItem('spidey_notion_active_quests');
+          if (cachedActiveQuests) this.notionActiveQuests = JSON.parse(cachedActiveQuests);
+          if (useCache) {
+            this.notionSource = localStorage.getItem('spidey_notion_cache_source') || 'snapshot';
+            this.notionSyncedAt = localStorage.getItem('spidey_notion_source_at') || new Date(cacheTime).toISOString();
+          }
+        } catch (_) { /* Keep the snapshot. */ }
+      }
+      // Locally completed records remain completed until their Notion write succeeds.
+      for (const write of readPendingNotionWrites()) {
+        const list = write.kind === 'habits' ? this.notionHabits : write.kind === 'activeQuests' ? this.notionActiveQuests : this.notionTasks;
+        const record = list.find((item) => item.id === write.id);
+        if (record) { record.done = true; if (write.kind === 'habits') record.today = true; }
       }
     } catch (e) {
       console.warn('[ActionRpgController] Data load error, using fallbacks:', e);
@@ -133,10 +179,80 @@ export class ActionRpgController {
     return null;
   }
 
+  escapeHtml(value = '') {
+    return String(value).replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  effectSymbolId(token) {
+    const map = {
+      impact: 'icon-arena',
+      web: 'icon-web-map',
+      interrupt: 'icon-arena',
+      launch: 'icon-send',
+      airborne: 'icon-compass',
+      stun: 'icon-bolt',
+      knockback: 'icon-send',
+      focus: 'icon-target',
+      combo: 'icon-arena',
+      finisher: 'icon-bolt',
+      mobility: 'icon-compass',
+      traversal: 'icon-web-map',
+      sense: 'icon-spider',
+      dodge: 'icon-compass',
+      parry: 'icon-mask',
+      counter: 'icon-arena',
+      slow: 'icon-clock',
+      stealth: 'icon-mask',
+      trap: 'icon-target',
+      immobilize: 'icon-mask',
+      takedown: 'icon-target',
+      marked: 'icon-search',
+      camouflage: 'icon-mask',
+      venom: 'icon-bolt',
+      chain: 'icon-web-map',
+      overload: 'icon-bolt',
+      heal: 'icon-plus',
+      barrier: 'icon-mask',
+      spiderArms: 'icon-spider',
+      symbiote: 'icon-spider',
+      antiVenom: 'icon-plus',
+      pull: 'icon-web-map',
+      slam: 'icon-arena',
+      area: 'icon-target',
+      pierce: 'icon-arena',
+      rage: 'icon-bolt',
+      reload: 'icon-gear'
+    };
+    return map[token] || 'icon-target';
+  }
+
+  renderEffectIcons(tokens = []) {
+    return tokens.map((token) => {
+      const effect = this.effectIcons[token] || { label: token };
+      const label = this.escapeHtml(effect.label || token);
+      return `
+        <span class="spidey-effect-icon spidey-effect-icon--${this.escapeHtml(token)}" title="${label}" aria-label="${label}">
+          <svg><use href="#${this.effectSymbolId(token)}"></use></svg>
+        </span>
+      `;
+    }).join('');
+  }
+
 
   selectSection(section, playSound = true) {
     if (playSound) this.sound.playClick();
+    if (section === 'HABITS') {
+      window.location.assign('./life-reset/index.html');
+      return;
+    }
     if (section === 'CITY') {
+      this.closePanel();
       document.body.dataset.gameMode = 'MAP';
       this.setActiveNav('CITY');
       requestAnimationFrame(() => this.mapEngine.resize?.());
@@ -169,6 +285,10 @@ export class ActionRpgController {
   }
 
   runAction(action) {
+    if (this.notionHeroProfile && (Number(this.notionHeroProfile.HP) <= 0 || Number(this.notionHeroProfile.Energy) <= 0)) {
+      this.toast('HERO HẾT HP / ENERGY // HOÀN THÀNH HABIT ĐỂ HỒI PHỤC');
+      return;
+    }
     this.playIntroOnce();
     const result = this.engine.performAction(action);
     if (result.blocked) {
@@ -176,6 +296,7 @@ export class ActionRpgController {
       this.toast(result.reason);
       return;
     }
+    this.queueHeroProfileSync();
   }
 
   handleUpdate(result) {
@@ -193,14 +314,17 @@ export class ActionRpgController {
     this.text('hud-level', hero.level);
     this.text('hud-rank', hero.rank);
     this.text('hud-xp-text', `${hero.xp} / ${hero.xpToNext}`);
-    this.text('hud-hp-text', `${hero.hp} / ${data.hero.maxHp}`);
-    this.text('hud-web-text', `${hero.webEnergy} / ${data.hero.maxWebEnergy}`);
+    this.text('hud-hp-text', `${hero.hp} / ${hero.maxHp || data.hero.maxHp}`);
+    const maxEnergy = Number(this.notionHeroProfile?.['Max Energy']) || 10;
+    this.text('hud-web-text', `${Math.round(hero.webEnergy / data.hero.maxWebEnergy * maxEnergy)} / ${maxEnergy}`);
     this.text('hud-coins', hero.coins);
     this.text('hud-streak', hero.streak);
     this.width('hud-xp-fill', hero.xp / hero.xpToNext * 100);
-    this.width('hud-hp-fill', hero.hp / data.hero.maxHp * 100);
+    this.width('hud-hp-fill', hero.hp / (hero.maxHp || data.hero.maxHp) * 100);
     this.width('hud-web-fill', hero.webEnergy / data.hero.maxWebEnergy * 100);
-    this.text('hud-quest-progress', snapshot.storyComplete ? 'CHAPTER CLEAR' : `WAVE ${snapshot.encounterIndex + 1} / ${data.encounter.length}`);
+    const activeQuest = this.notionActiveQuests.find((quest) => !quest.done);
+    this.text('hud-main-quest', activeQuest?.title || (this.notionSource === 'live' ? 'ALL NOTION QUESTS CLEAR' : 'THE GOBLIN SIGNAL'));
+    this.text('hud-quest-progress', this.notionActiveQuests.length ? `${this.notionActiveQuests.filter((quest) => quest.done).length} / ${this.notionActiveQuests.length} QUESTS` : snapshot.storyComplete ? 'CHAPTER CLEAR' : `WAVE ${snapshot.encounterIndex + 1} / ${data.encounter.length}`);
     this.text('enemy-tier', enemy.tier);
     this.text('enemy-name', enemy.name);
     this.text('combat-enemy-short', enemy.name.split(' ').slice(-1)[0]);
@@ -210,11 +334,14 @@ export class ActionRpgController {
     this.text('enemy-resistance', enemy.resistance);
     this.text('enemy-phase', snapshot.phase);
     this.text('combat-log-line', snapshot.combatLog[0]);
+    this.text('arena-turn-value', String(snapshot.turn + 1).padStart(2, '0'));
+    const combatExhausted = Boolean(this.notionHeroProfile) && (hero.hp <= 0 || hero.webEnergy <= 0);
+    this.text('arena-turn-tip', combatExhausted ? 'Hoàn thành Habit để hồi HP & Energy' : 'Chọn đòn đánh hoặc hoàn thành Quest');
     this.width('enemy-hp-fill', snapshot.enemyHp / enemy.maxHp * 100);
     this.width('enemy-stagger-fill', snapshot.enemyStagger);
     this.width('ultimate-fill', hero.ultimate);
     this.text('ultimate-charge', snapshot.enemyStagger >= 100 ? 'FINISHER READY' : `${hero.ultimate}%`);
-    this.text('cooldown-web', snapshot.cooldowns.web ? `CD ${snapshot.cooldowns.web}` : `${data.actions.web.energy} WEB`);
+    this.text('cooldown-web', snapshot.cooldowns.web ? `CD ${snapshot.cooldowns.web}` : `${Math.ceil(data.actions.web.energy / data.hero.maxWebEnergy * maxEnergy)} ENERGY`);
     this.text('cooldown-gadget', snapshot.cooldowns.gadget ? `CD ${snapshot.cooldowns.gadget}` : `${snapshot.charges.gadget} CHARGES`);
     this.text('cooldown-ally', snapshot.cooldowns.ally ? `CD ${snapshot.cooldowns.ally}` : 'READY');
 
@@ -222,14 +349,14 @@ export class ActionRpgController {
     enemyFighter?.classList.toggle('enemy--grunt', snapshot.encounterIndex < 3);
     enemyFighter?.classList.toggle('enemy--elite', snapshot.encounterIndex === 3);
     enemyFighter?.classList.toggle('enemy--boss', snapshot.encounterIndex >= 4 || enemy.tier === 'BOSS');
-    document.querySelector('[data-combat-action="web"]')?.toggleAttribute('disabled', snapshot.cooldowns.web > 0 || hero.webEnergy < data.actions.web.energy || snapshot.storyComplete);
-    document.querySelector('[data-combat-action="gadget"]')?.toggleAttribute('disabled', snapshot.cooldowns.gadget > 0 || snapshot.charges.gadget <= 0 || snapshot.storyComplete);
-    document.querySelector('[data-combat-action="ally"]')?.toggleAttribute('disabled', snapshot.cooldowns.ally > 0 || snapshot.storyComplete);
-    document.querySelector('[data-combat-action="attack"]')?.toggleAttribute('disabled', snapshot.storyComplete);
+    document.querySelector('[data-combat-action="web"]')?.toggleAttribute('disabled', combatExhausted || snapshot.cooldowns.web > 0 || hero.webEnergy < data.actions.web.energy || snapshot.storyComplete);
+    document.querySelector('[data-combat-action="gadget"]')?.toggleAttribute('disabled', combatExhausted || snapshot.cooldowns.gadget > 0 || snapshot.charges.gadget <= 0 || snapshot.storyComplete);
+    document.querySelector('[data-combat-action="ally"]')?.toggleAttribute('disabled', combatExhausted || snapshot.cooldowns.ally > 0 || snapshot.storyComplete);
+    document.querySelector('[data-combat-action="attack"]')?.toggleAttribute('disabled', combatExhausted || snapshot.storyComplete);
     const ultimate = document.querySelector('[data-combat-action="ultimate"]');
-    ultimate?.toggleAttribute('disabled', hero.ultimate < 100 || snapshot.storyComplete);
-    ultimate?.classList.toggle('ready', hero.ultimate >= 100 && !snapshot.storyComplete);
-    ultimate?.classList.toggle('finisher-ready', snapshot.enemyStagger >= 100 && hero.ultimate >= 100 && !snapshot.storyComplete);
+    ultimate?.toggleAttribute('disabled', combatExhausted || hero.ultimate < 100 || snapshot.storyComplete);
+    ultimate?.classList.toggle('ready', hero.ultimate >= 100 && !combatExhausted && !snapshot.storyComplete);
+    ultimate?.classList.toggle('finisher-ready', snapshot.enemyStagger >= 100 && hero.ultimate >= 100 && !combatExhausted && !snapshot.storyComplete);
     ultimate?.querySelector('strong') && (ultimate.querySelector('strong').textContent = snapshot.enemyStagger >= 100 ? 'FINISHER' : 'ULTIMATE');
     document.getElementById('btn-next-patrol')?.toggleAttribute('hidden', !snapshot.storyComplete);
     document.body.classList.toggle('game-reduce-motion', snapshot.settings.reduceMotion);
@@ -242,23 +369,27 @@ export class ActionRpgController {
   openPanel(section) {
     this.panelSection = section;
     this.panelTab = this.defaultTab(section);
+    document.body.dataset.gameSection = section;
     const panel = document.getElementById('game-panel-backdrop');
     panel?.removeAttribute('hidden'); 
     panel?.removeAttribute('inert');
-    this.renderPanel();
+    this.renderPanel({ resetScroll: true });
   }
 
   closePanel() {
     const panel = document.getElementById('game-panel-backdrop');
     panel?.setAttribute('hidden', ''); 
     panel?.setAttribute('inert', '');
+    delete document.body.dataset.gameSection;
     if (document.body.dataset.gameMode !== 'MAP') this.setActiveNav('ARENA');
   }
 
   defaultTab(section) {
     const map = {
       QUESTS: 'TODO',
-      HERO: 'SUITS',
+      HERO: 'PROFILE',
+      HABITS: 'TODAY',
+      FIELD: 'SYSTEMS',
       ARCHIVE: 'BESTIARY',
       CHRONICLE: 'RHYTHM',
       SETTINGS: 'GAME'
@@ -266,7 +397,7 @@ export class ActionRpgController {
     return map[section] || 'TODO';
   }
 
-  renderPanel() {
+  renderPanel({ resetScroll = false } = {}) {
     const title = document.getElementById('game-panel-title');
     const kicker = document.getElementById('game-panel-kicker');
     const tabs = document.getElementById('game-panel-tabs');
@@ -274,8 +405,10 @@ export class ActionRpgController {
     if (!title || !tabs || !content) return;
 
     const titles = { 
-      QUESTS: 'QUEST BOARD // GAMBIT & NOTION', 
-      HERO: 'HERO WARDROBE & BUILD', 
+      QUESTS: 'FRIENDLY NEIGHBORHOOD // QUESTS',
+      HERO: 'SPIDER SUIT // HERO BUILD',
+      HABITS: 'DAILY PATROL // HABITS',
+      FIELD: 'SPIDER OS // FIELD SYSTEMS',
       ARCHIVE: 'SPIDEY ARCHIVE & BESTIARY', 
       CHRONICLE: 'PETER PARKER CHRONICLE', 
       SETTINGS: 'GAME SETTINGS & SAVE' 
@@ -285,8 +418,10 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: ['TODO', 'HABITS', 'PATROL'],
-      HERO: ['SUITS', 'ROSTER', 'SKILLS', 'GADGETS'],
+      QUESTS: ['TODO', 'ACTIVE', 'GOALS', 'PATROL'],
+      HERO: ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
+      HABITS: ['TODAY', 'REPORTS', 'RESET 66'],
+      FIELD: ['SYSTEMS', 'TIME', 'GYM', 'JOURNAL', 'BESTIARY', 'BACKPACKS'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
       CHRONICLE: ['RHYTHM', 'JOURNAL', 'GYM'],
       SETTINGS: ['GAME', 'SAVE']
@@ -295,14 +430,15 @@ export class ActionRpgController {
     const tabNames = tabMap[this.panelSection] || ['TODO'];
     if (!tabNames.includes(this.panelTab)) this.panelTab = tabNames[0];
 
-    tabs.innerHTML = tabNames.map((tab) => `<button class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab}</button>`).join('');
+    tabs.innerHTML = tabNames.map((tab) => `<button role="tab" aria-selected="${tab === this.panelTab}" class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab}</button>`).join('');
     tabs.querySelectorAll('button').forEach((button) => button.addEventListener('click', () => { 
       this.sound.playSelect(); 
       this.panelTab = button.dataset.gamePanelTab; 
-      this.renderPanel(); 
+      this.renderPanel({ resetScroll: true });
     }));
 
     content.innerHTML = this.renderSection();
+    if (resetScroll) content.scrollTop = 0;
     this.bindEvents(content);
   }
 
@@ -310,6 +446,8 @@ export class ActionRpgController {
     switch (this.panelSection) {
       case 'QUESTS': return this.renderQuestsSection();
       case 'HERO': return this.renderHeroSection();
+      case 'HABITS': return this.renderHabitSection();
+      case 'FIELD': return this.renderFieldSection();
       case 'ARCHIVE': return this.renderArchiveSection();
       case 'CHRONICLE': return this.renderChronicleSection();
       case 'SETTINGS': return this.renderSettings();
@@ -317,22 +455,120 @@ export class ActionRpgController {
     }
   }
 
+  renderHabitSection() {
+    if (this.panelTab === 'RESET 66') {
+      return `<div class="quest-source-banner"><span>66-DAY PROTOCOL</span><strong>LIFE RESET // HABIT CAMPAIGN</strong><small>Mở ứng dụng Life Reset hiện có trong dự án để theo dõi hành trình 66 ngày.</small></div><div class="pixel-card-grid"><article class="pixel-game-card"><h3 class="pixel-card-title">DAY BY DAY</h3><p class="pixel-card-desc">Thẻ thói quen, ngày hiện tại, nhiệm vụ hoàn thành và tiến độ dài hạn.</p><a class="pixel-action-btn pixel-action-btn--gold" href="./life-reset/index.html">MỞ LIFE RESET 66</a></article></div>`;
+    }
+    if (this.panelTab === 'REPORTS') {
+      const total = this.notionHabits.length;
+      const completed = this.notionHabits.filter((habit) => habit.today || habit.done).length;
+      return `<div class="quest-source-banner"><span>DAILY PATROL REPORT</span><strong>${completed} / ${total} HABITS HÔM NAY</strong><small>Dữ liệu check-in lấy từ Notion. Các ngày trước cần lịch sử Habit Log trong Notion để vẽ biểu đồ chính xác.</small></div>
+        <div class="pixel-card-grid">${this.notionHabits.map((habit) => `<article class="pixel-game-card ${habit.today || habit.done ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${habit.today || habit.done ? '✓ DONE' : 'TO DO'}</span></div><h3 class="pixel-card-title">${this.escapeHtml(habit.name || habit.title)}</h3></article>`).join('')}</div>`;
+    }
+    const originalTab = this.panelTab;
+    this.panelTab = 'HABITS';
+    const html = this.renderQuestsSection();
+    this.panelTab = originalTab;
+    return html;
+  }
+
+  renderFieldSection() {
+    if (this.panelTab === 'SYSTEMS') return this.renderSpiderSystems();
+    if (this.panelTab === 'BESTIARY' || this.panelTab === 'BACKPACKS') return this.renderArchiveSection();
+    if (this.panelTab === 'GYM') {
+      const workouts = this.notionHabits.map((habit, index) => ({ habit, index })).filter(({ habit }) => /gym|workout|exercise|push|plank|run|chạy|tập|hít đất|thể dục|cardio/i.test(`${habit.title} ${habit.category} ${habit.description}`));
+      return `<div class="quest-source-banner"><span>PARKER TRAINING</span><strong>GYM // NHIỆM VỤ TẬP LUYỆN TỪ NOTION</strong><small>Hoàn thành buổi tập sẽ check-in đúng Habit trong Notion và hồi phục Hero.</small></div>
+        <div class="pixel-card-grid">${workouts.length ? workouts.map(({ habit, index }) => `<article class="pixel-game-card ${habit.today ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${habit.today ? 'DONE' : 'READY'}</span></div><h3 class="pixel-card-title">${this.escapeHtml(habit.title)}</h3><p class="pixel-card-desc">${this.escapeHtml(habit.description || habit.outcome || '')}</p><button class="pixel-action-btn" data-checkin-habit="${index}" ${habit.today ? 'disabled' : ''}>${habit.today ? 'ĐÃ XONG' : 'CHECK-IN NOTION'}</button></article>`).join('') : '<p class="pixel-card-desc">Chưa thấy Habit tập luyện trong Notion.</p>'}</div>
+        <div class="quest-source-banner"><span>WORKOUT PLANS</span><strong>GIÁO ÁN TỪ NOTION</strong><small>${this.notionWorkoutPlans.length} giáo án · ${this.notionExerciseLogs.length + this.notionCardioLogs.length + this.notionSportLogs.length} buổi đã ghi trong các bảng tập luyện.</small></div>
+        <div class="pixel-card-grid">${this.notionWorkoutPlans.map((plan) => `<article class="pixel-game-card"><h3 class="pixel-card-title">${this.escapeHtml(plan.Name || 'Workout plan')}</h3>${plan.sourceUrl ? `<a class="pixel-action-btn pixel-action-btn--blue" href="${this.escapeHtml(plan.sourceUrl)}" target="_blank" rel="noopener noreferrer">XEM GIÁO ÁN</a>` : ''}</article>`).join('') || '<p class="pixel-card-desc">Đang tải giáo án từ Notion.</p>'}</div>`;
+    }
+    if (this.panelTab === 'TIME') {
+      const originalTab = this.panelTab;
+      this.panelTab = 'RHYTHM';
+      const html = this.renderChronicleSection();
+      this.panelTab = originalTab;
+      const elapsed = this.focusElapsedMs();
+      const remaining = Math.max(0, 25 * 60 * 1000 - elapsed);
+      const clock = `${String(Math.floor(remaining / 60000)).padStart(2, '0')}:${String(Math.floor(remaining % 60000 / 1000)).padStart(2, '0')}`;
+      return `<div class="quest-source-banner"><span>PARKER TIME</span><strong>FOCUS SESSION // 25 MIN</strong><small>Khi lưu phiên, Start/End được ghi vào bảng Time-Tracking của Notion.</small></div><section class="field-focus-card"><span>ĐANG TẬP TRUNG VÀO</span><strong>${this.escapeHtml(this.notionActiveQuests.find((quest) => !quest.done)?.title || 'Nhiệm vụ hôm nay')}</strong><output id="field-focus-clock">${clock}</output><div class="field-focus-actions"><button class="pixel-action-btn" data-focus-toggle>${this.focusSession.running ? 'TẠM DỪNG' : elapsed ? 'TIẾP TỤC' : 'BẮT ĐẦU'}</button><button class="pixel-action-btn pixel-action-btn--blue" data-focus-save ${elapsed < 1000 ? 'disabled' : ''}>LƯU VÀO NOTION</button><button class="pixel-action-btn pixel-action-btn--gold" data-focus-reset ${elapsed < 1000 ? 'disabled' : ''}>ĐẶT LẠI</button></div><small>${this.notionTimeLogs.length} phiên đang có trong Notion</small></section>${html}`;
+    }
+    return this.renderChronicleSection();
+  }
+
+  renderSpiderSystems() {
+    const apps = [
+      { id: '01', icon: '◉', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './life-os/index.html#routine', desc: 'Morning, work và evening routine đồng bộ qua Gambit cloud.' },
+      { id: '02', icon: '◷', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', section: 'FIELD', tab: 'TIME', desc: 'Focus timer, lịch tuần tra và Time-Tracking lấy từ Notion.' },
+      { id: '03', icon: '⚡', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './life-os/index.html#dopamine', desc: 'Chọn hoạt động thay thế việc cuộn vô thức.' },
+      { id: '04', icon: '₫', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GOOGLE SHEETS', tone: 'green', href: 'https://gambit-d9b.pages.dev/apps/finance/index.html', external: true, desc: 'Dòng tiền, tiết kiệm, tài sản, khoản nợ và kế hoạch tháng.' },
+      { id: '05', icon: '▣', name: 'TODAY MISSIONS', meta: 'QUICK TASKS', source: 'NOTION', tone: 'red', section: 'QUESTS', tab: 'TODO', desc: 'Danh sách nhiệm vụ hôm nay và phần thưởng chiến đấu.' },
+      { id: '06', icon: '◆', name: 'HABIT TRACKER', meta: 'STREAK HUB', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'TODAY', desc: 'Check-in thói quen để hồi HP, Energy và giữ streak.' },
+      { id: '07', icon: 'A', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: 'https://gambit-d9b.pages.dev/apps/english/index.html', external: true, desc: '32 bài ngữ pháp, flashcard, tra từ và ôn lại câu sai.' },
+      { id: '08', icon: '✎', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', section: 'FIELD', tab: 'JOURNAL', desc: 'Nhật ký, bài học và chiến công được lưu về Notion.' },
+      { id: '09', icon: '✦', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: 'https://gambit-d9b.pages.dev/apps/oracle/index.html', external: true, desc: 'Không gian rút bài và tự chiêm nghiệm theo chủ đề.' },
+      { id: '10', icon: '▲', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', section: 'FIELD', tab: 'GYM', desc: 'Giáo án và lịch sử Exercise, Cardio, Sport lấy từ Notion.' },
+      { id: '11', icon: '◇', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: 'https://gambit-d9b.pages.dev/apps/style30/index.html', external: true, desc: 'Phối màu, dáng người, capsule wardrobe và grooming.' },
+      { id: '12', icon: 'J', name: 'JARVIS', meta: 'AI CONSOLE', source: 'EXTERNAL', tone: 'blue', href: 'https://huyhoangcva90-lab.github.io/jarvis/', external: true, desc: 'Mở trợ lý AI Jarvis trong một ứng dụng riêng.' }
+    ];
+    return `
+      <section class="spider-system-command">
+        <div><span>GAMBIT LIFE OS // SPIDER NETWORK</span><strong>12 FIELD SYSTEMS ONLINE</strong><small>Ứng dụng có database tiếp tục dùng Notion làm nguồn chuẩn. Routine và Dopamine dùng Gambit cloud.</small></div>
+        <div class="spider-system-count"><b>12</b><span>APPS</span></div>
+      </section>
+      <div class="spider-app-grid" aria-label="Danh sách ứng dụng Gambit">
+        ${apps.map((app) => {
+          const attrs = app.section
+            ? `button type="button" data-open-system-section="${app.section}" data-open-system-tab="${app.tab}"`
+            : `a href="${app.href}"${app.external ? ' target="_blank" rel="noopener noreferrer"' : ''}`;
+          const closeTag = app.section ? 'button' : 'a';
+          return `<${attrs} class="spider-app-card spider-app-card--${app.tone}">
+            <span class="spider-app-index">${app.id}</span>
+            <span class="spider-app-icon" aria-hidden="true">${app.icon}</span>
+            <span class="spider-app-copy"><small>${app.meta}</small><strong>${app.name}</strong><em>${app.desc}</em></span>
+            <span class="spider-app-source">${app.source}</span>
+            <span class="spider-app-arrow" aria-hidden="true">↗</span>
+          </${closeTag}>`;
+        }).join('')}
+      </div>`;
+  }
+
+  focusElapsedMs() {
+    return this.focusSession.elapsedMs + (this.focusSession.running && this.focusSession.startedAt ? Date.now() - this.focusSession.startedAt : 0);
+  }
+
+  updateFocusClock() {
+    const output = document.getElementById('field-focus-clock');
+    if (!output) return;
+    const remaining = Math.max(0, 25 * 60 * 1000 - this.focusElapsedMs());
+    output.textContent = `${String(Math.floor(remaining / 60000)).padStart(2, '0')}:${String(Math.floor(remaining % 60000 / 1000)).padStart(2, '0')}`;
+    if (!remaining && this.focusSession.running) { this.focusSession.running = false; this.focusSession.elapsedMs = 25 * 60 * 1000; this.focusSession.startedAt = null; this.persistFocusSession(); this.sound.playVictoryCue(); this.renderPanel(); }
+  }
+
+  persistFocusSession() { localStorage.setItem('spidey_focus_session', JSON.stringify(this.focusSession)); }
+
   /* -------------------------------------------------------------
      1. TAB [QUESTS]: TODO (NOTION), HABITS (STREAK), PATROL TIMETABLE
   ------------------------------------------------------------- */
   renderQuestsSection() {
+    const sourceLabel = this.notionSource === 'live' ? 'Notion live' : this.notionSource === 'mixed' ? 'Notion live một phần' : 'Bản chụp Notion';
+    const sourceTime = this.notionSyncedAt ? new Date(this.notionSyncedAt).toLocaleString('vi-VN') : 'Chưa rõ thời điểm';
+    const pendingCount = readPendingNotionWrites().length;
     const syncBannerHtml = `
       <div class="sync-online-banner">
         <div>
           <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
-            <span class="pixel-tag pixel-tag--blue">⚡ NOTION SYNC</span>
-            <strong style="color: #f2c06b; font-size: 10px;">WORKSPACE ZEUS (ONLINE 2 CHIỀU)</strong>
+            <span class="pixel-tag pixel-tag--blue">NOTION</span>
+            <strong style="color: #f2c06b; font-size: 10px;">${sourceLabel}</strong>
           </div>
-          <small style="color: #9ed9e7; font-size: 8px;">Dữ liệu trực tiếp: ${this.notionTasks.length} Quests, ${this.notionHabits.length} Habits</small>
+          <small style="color: #9ed9e7; font-size: 10px;">${this.notionTasks.length} nhiệm vụ · ${this.notionHabits.length} thói quen · ${this.notionGoals.length} mục tiêu · ${sourceTime}${pendingCount ? ` · ${pendingCount} thay đổi chờ đồng bộ` : ''}</small>
         </div>
-        <button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue">🔄 ĐỒNG BỘ NOTION LIVE</button>
+        <button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue">↻ ĐỒNG BỘ NOTION</button>
       </div>
     `;
+
+    if (this.panelTab === 'ACTIVE') {
+      return `${syncBannerHtml}<div class="quest-source-banner"><span>ACTIVE QUESTS</span><strong>QUESTLINE // NOTION</strong><small>${this.notionActiveQuests.length} nhiệm vụ từ bảng Active Quests.</small></div><div class="pixel-card-grid">${this.notionActiveQuests.map((quest, index) => `<article class="pixel-game-card ${quest.done ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(quest.frequency || 'QUEST')}</span><span class="pixel-tag pixel-tag--gold">${Number(quest.xp) || 0} EXP</span></div><h3 class="pixel-card-title">${this.escapeHtml(quest.title)}</h3><p class="pixel-card-desc">${this.escapeHtml(quest.description || '')}</p><button class="pixel-action-btn" data-complete-active-quest="${index}" ${quest.done ? 'disabled' : ''}>${quest.done ? 'ĐÃ HOÀN THÀNH' : 'HOÀN THÀNH TRONG NOTION'}</button></article>`).join('') || '<p class="pixel-card-desc">Đang tải Active Quests từ Notion.</p>'}</div>`;
+    }
 
     if (this.panelTab === 'HABITS') {
       return `
@@ -346,13 +582,13 @@ export class ActionRpgController {
           ${this.notionHabits.map((habit, idx) => `
             <article class="pixel-game-card ${habit.done || habit.today ? 'pixel-game-card--done' : 'pixel-game-card--gold'}">
               <div class="pixel-card-header">
-                <span class="pixel-tag ${habit.category === 'Good' || habit.category?.includes('Good') ? 'pixel-tag--green' : 'pixel-tag--red'}">${habit.category || 'HABIT'}</span>
-                <span class="pixel-tag pixel-tag--gold">STREAK: ${this.engine.snapshot().hero.streak}D</span>
+                <span class="pixel-tag ${habit.category === 'Good' || habit.category?.includes('Good') ? 'pixel-tag--green' : 'pixel-tag--red'}">${this.escapeHtml(habit.category || 'HABIT')}</span>
+                ${habit.streak ? `<span class="pixel-tag pixel-tag--gold">STREAK: ${habit.streak}D</span>` : ''}
               </div>
-              <h3 class="pixel-card-title">${habit.name || habit.title}</h3>
-              <p class="pixel-card-desc">${habit.description || habit.outcome || 'Thói quen duy trì kỷ luật bản thân.'}</p>
+              <h3 class="pixel-card-title">${this.escapeHtml(habit.name || habit.title)}</h3>
+              <p class="pixel-card-desc">${this.escapeHtml(habit.description || habit.outcome || 'Thói quen duy trì kỷ luật bản thân.')}</p>
               <div class="pixel-card-footer">
-                <small style="color: #f2c06b; font: 700 8px monospace;">${habit.timeBlock || 'Mỗi ngày'}</small>
+                <small style="color: #f2c06b; font: 700 8px monospace;">${this.escapeHtml(habit.timeBlock || 'Mỗi ngày')}</small>
                 <button class="pixel-action-btn ${habit.done || habit.today ? 'pixel-action-btn--disabled' : 'pixel-action-btn--green'}" 
                         data-checkin-habit="${idx}" ${habit.done || habit.today ? 'disabled' : ''}>
                   ${habit.done || habit.today ? '✓ ĐÃ XONG' : '⚡ CHECK-IN'}
@@ -361,7 +597,22 @@ export class ActionRpgController {
             </article>
           `).join('')}
         </div>
+        <form class="quest-create-form" id="habit-create-form"><label for="habit-new-title">THÓI QUEN MỚI TRONG NOTION</label><input id="habit-new-title" name="title" required maxlength="150" placeholder="Thói quen bạn muốn xây..." autocomplete="off"><select name="type" aria-label="Loại thói quen"><option value="Good Habit">Good Habit</option><option value="Bad Habit">Bad Habit</option></select><button class="pixel-action-btn pixel-action-btn--green" type="submit">+ TẠO HABIT</button></form>
       `;
+    }
+
+    if (this.panelTab === 'GOALS') {
+      return `${syncBannerHtml}
+        <div class="quest-source-banner"><span>GOALS</span><strong>MỤC TIÊU TỪ NOTION</strong><small>${this.notionGoals.length} mục tiêu</small></div>
+        <div class="pixel-card-grid">${this.notionGoals.length ? this.notionGoals.map((goal, index) => `
+          <article class="pixel-game-card ${goal.achieved ? 'pixel-game-card--done' : ''}">
+            <div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(goal.status || 'Mục tiêu')}</span></div>
+            <h3 class="pixel-card-title">${this.escapeHtml(goal.title || goal.name)}</h3>
+            <p class="pixel-card-desc">${this.escapeHtml(goal.description || (goal.date ? `Mốc: ${new Date(goal.date).toLocaleDateString('vi-VN')}` : 'Theo dõi tiến độ trong Notion'))}</p>
+            <button class="pixel-action-btn" data-complete-goal="${index}" ${goal.achieved ? 'disabled' : ''}>${goal.achieved ? 'ĐÃ ĐẠT' : 'ĐÁNH DẤU ĐÃ ĐẠT'}</button>
+            ${goal.sourceUrl ? `<a class="pixel-action-btn pixel-action-btn--blue" href="${this.escapeHtml(goal.sourceUrl)}" target="_blank" rel="noopener noreferrer">MỞ TRONG NOTION</a>` : ''}
+          </article>`).join('') : '<p class="pixel-card-desc">Chưa có mục tiêu trong bản dữ liệu hiện tại.</p>'}</div>
+          <form class="quest-create-form" id="goal-create-form"><label for="goal-new-title">MỤC TIÊU MỚI TRONG NOTION</label><input id="goal-new-title" name="title" required maxlength="150" placeholder="Mục tiêu của bạn..." autocomplete="off"><input name="deadline" type="date" aria-label="Hạn mục tiêu"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">+ TẠO GOAL</button></form>`;
     }
 
     if (this.panelTab === 'PATROL') {
@@ -404,10 +655,10 @@ export class ActionRpgController {
         ${this.notionTasks.map((task, idx) => `
           <article class="pixel-game-card ${task.done ? 'pixel-game-card--done' : ''}">
             <div class="pixel-card-header">
-              <span class="pixel-tag ${task.priority?.includes('High') || task.priority?.includes('Critical') ? 'pixel-tag--red' : 'pixel-tag'}">${task.priority || 'Bình thường'}</span>
-              <span class="pixel-tag pixel-tag--green">+30 XP // +10 COINS</span>
+              <span class="pixel-tag ${task.priority?.includes('High') || task.priority?.includes('Critical') ? 'pixel-tag--red' : 'pixel-tag'}">${this.escapeHtml(task.priority || 'Bình thường')}</span>
+              <span class="pixel-tag pixel-tag--green">${task.gameXp != null ? `+${Number(task.gameXp) || 0} XP` : '+28 XP // +18 COINS'}</span>
             </div>
-            <h3 class="pixel-card-title">${task.title || task.name}</h3>
+            <h3 class="pixel-card-title">${this.escapeHtml(task.title || task.name)}</h3>
             <p class="pixel-card-desc">${task.date ? `Hạn chót: ${new Date(task.date).toLocaleDateString('vi-VN')}` : 'Nhiệm vụ hàng ngày từ Notion'}</p>
             <div class="pixel-card-footer">
               ${task.address ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${idx}">📍 BẢN ĐỒ</button>` : '<span></span>'}
@@ -419,15 +670,50 @@ export class ActionRpgController {
           </article>
         `).join('')}
       </div>
-      <button class="game-panel-action" data-open-real-mission style="margin-top: 10px;">+ TẠO THÊM NHIỆM VỤ ĐỜI THẬT</button>
+      <form class="quest-create-form" id="quest-create-form"><label for="quest-new-title">NHIỆM VỤ MỚI TRONG NOTION</label><input id="quest-new-title" name="title" required maxlength="150" placeholder="Việc bạn sẽ làm..." autocomplete="off"><input name="date" type="date" aria-label="Ngày thực hiện"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">+ TẠO QUEST</button></form>
     `;
+  }
+
+  persistNotionCache() {
+    localStorage.setItem('spidey_notion_tasks', JSON.stringify(this.notionTasks));
+    localStorage.setItem('spidey_notion_habits', JSON.stringify(this.notionHabits));
+    localStorage.setItem('spidey_notion_goals', JSON.stringify(this.notionGoals));
+    localStorage.setItem('spidey_notion_active_quests', JSON.stringify(this.notionActiveQuests));
+    localStorage.setItem('spidey_notion_cached_at', new Date().toISOString());
+    localStorage.setItem('spidey_notion_cache_source', this.notionSource);
+    if (this.notionSyncedAt) localStorage.setItem('spidey_notion_source_at', this.notionSyncedAt);
   }
 
   /* -------------------------------------------------------------
      2. TAB [HERO]: SUITS WARDROBE (WITH SHOWCASE POD), SKILLS (NOTION IMAGES), ROSTER, GADGETS
   ------------------------------------------------------------- */
   renderHeroSection() {
-    const currentVariant = this.engine.data.hero.variant || 'Advanced Suit 2.0';
+    const profile = this.notionHeroProfile;
+    if (this.panelTab === 'PROFILE') {
+      if (!profile) return '<div class="quest-source-banner"><strong>ĐANG TẢI HERO PROFILE TỪ NOTION</strong><small>Kiểm tra kết nối Notion hoặc chọn đồng bộ lại ở màn Quest.</small></div>';
+      const suit = this.notionSuits.find((item) => profile['Equipped Suit']?.includes(item.id));
+      const gadgets = this.notionGadgets.filter((item) => profile['Equipped Gadgets']?.includes(item.id));
+      const skills = this.notionCombatSkills.filter((item) => [1, 2, 3, 4].some((slot) => profile[`Skill Slot ${slot}`]?.includes(item.id)));
+      return `<div class="quest-source-banner"><span>NOTION HERO PROFILE</span><strong>${this.escapeHtml(profile.Hero || 'SPIDER-MAN')}</strong><small>Chỉ số và trang bị đang đọc trực tiếp từ Notion.</small></div>
+        <div class="spidey-skill-summary"><span><b>LV ${Number(profile.Level) || 1}</b> LEVEL</span><span><b>${Number(profile.Exp) || 0}</b> XP</span><span><b>${Number(profile.Gold) || 0}</b> GOLD</span></div>
+        <div class="spidey-skill-summary"><span><b>${Number(profile.HP) || 0}/${Number(profile['Max HP']) || 100}</b> HP</span><span><b>${Number(profile.Energy) || 0}/${Number(profile['Max Energy']) || 10}</b> ENERGY</span><span><b>${Number(profile['Skill Point']) || 0}</b> SP</span></div>
+        <div class="pixel-card-grid"><article class="pixel-game-card"><h3 class="pixel-card-title">SUIT</h3><p class="pixel-card-desc">${this.escapeHtml(suit?.Suit || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">GADGETS</h3><p class="pixel-card-desc">${this.escapeHtml(gadgets.map((item) => item.Gadget || item.Name || item.Title).join(', ') || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">SKILLS</h3><p class="pixel-card-desc">${this.escapeHtml(skills.map((item) => item.Skill || item.Name || item.Title).join(', ') || 'Chưa trang bị')}</p></article></div>`;
+    }
+    if (this.panelTab === 'BADGES') {
+      return `<div class="quest-source-banner"><span>SPIDER BADGES</span><strong>HUY HIỆU TỪ NOTION</strong><small>${this.notionBadges.length} badge, biểu tượng lấy từ mục Badges & Medals.</small></div><div class="pixel-card-grid">${this.notionBadges.map((badge) => `<article class="pixel-game-card ${badge.Unlocked ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(badge.Tier || 'BADGE')}</span><span class="pixel-tag">${badge.Unlocked ? 'UNLOCKED' : 'LOCKED'}</span></div>${badge.iconUrl || badge.Image ? `<img class="notion-badge-icon" src="${this.escapeHtml(badge.iconUrl || badge.Image)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(badge.Medal || 'Badge')}</h3><p class="pixel-card-desc">${this.escapeHtml(badge.Requirement || '')}</p></article>`).join('') || '<p class="pixel-card-desc">Đang tải badge từ Notion.</p>'}</div>`;
+    }
+    if (this.panelTab === 'SKILLS') {
+      return `<div class="quest-source-banner"><span>SPIDER MOVESET</span><strong>COMBAT SKILLS // NOTION</strong><small>Chọn kỹ năng để gắn vào một trong bốn ô của Hero Profile.</small></div>
+        <div class="pixel-card-grid">${this.notionCombatSkills.map((skill) => { const equipped = [1,2,3,4].some((slot) => profile?.[`Skill Slot ${slot}`]?.includes(skill.id)); return `<article class="pixel-game-card"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(skill.Branch || skill['Skill Type'] || 'SKILL')}</span><span class="pixel-tag">${Number(skill['Energy Cost']) || 0} ENERGY</span></div><h3 class="pixel-card-title">${this.escapeHtml(skill.Skill)}</h3><p class="pixel-card-desc">${this.escapeHtml(skill.Description || '')}</p><button class="pixel-action-btn" data-equip-skill="${skill.id}" ${equipped || !profile ? 'disabled' : ''}>${equipped ? 'ĐANG TRANG BỊ' : 'TRANG BỊ'}</button></article>`; }).join('') || '<p class="pixel-card-desc">Đang tải Combat Skills từ Notion.</p>'}</div>`;
+    }
+    if (this.panelTab === 'GADGETS') {
+      return `<div class="quest-source-banner"><span>WEB TECH</span><strong>GADGET LOADOUT // NOTION</strong><small>Gadget được lưu ở Hero Profile, tối đa hai món.</small></div><div class="pixel-card-grid">${this.notionGadgets.map((gadget) => { const equipped = profile?.['Equipped Gadgets']?.includes(gadget.id); const unlocked = gadget.Status === 'Unlocked' || gadget.Status === 'Equipped'; return `<article class="pixel-game-card"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(gadget.Category || 'GADGET')}</span><span class="pixel-tag">${this.escapeHtml(gadget.Status || 'LOCKED')}</span></div>${gadget.Image ? `<img class="notion-badge-icon" src="${this.escapeHtml(gadget.Image)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(gadget.Gadget)}</h3><p class="pixel-card-desc">${this.escapeHtml(gadget['Gameplay Effect'] || gadget.Description || '')}</p><button class="pixel-action-btn" data-equip-gadget="${gadget.id}" ${!profile || !unlocked ? 'disabled' : ''}>${equipped ? 'THÁO GADGET' : unlocked ? 'TRANG BỊ' : 'CHƯA MỞ KHÓA'}</button></article>`; }).join('') || '<p class="pixel-card-desc">Đang tải Spider Gadgets từ Notion.</p>'}</div>`;
+    }
+    if (this.panelTab === 'ROSTER') {
+      return `<div class="quest-source-banner"><span>SPIDER-VERSE</span><strong>CHỌN COMPANION // NOTION</strong><small>Companion được lưu ở Hero Profile.</small></div><div class="pixel-card-grid">${this.notionSpiderVerse.map((spider) => { const selected = profile?.Companion?.includes(spider.id); return `<article class="pixel-game-card"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(spider.Tier || 'SPIDER')}</span></div>${spider.Image ? `<img class="notion-badge-icon" src="${this.escapeHtml(spider.Image)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(spider.Spider)}</h3><p class="pixel-card-desc">${this.escapeHtml(spider.Quote || '')}</p><button class="pixel-action-btn" data-equip-companion="${spider.id}" ${selected || !profile ? 'disabled' : ''}>${selected ? 'ĐANG ĐỒNG HÀNH' : 'CHỌN COMPANION'}</button></article>`; }).join('') || '<p class="pixel-card-desc">Đang tải Spider-Verse từ Notion.</p>'}</div>`;
+    }
+    const equippedSuitId = profile?.['Equipped Suit']?.[0];
+    const currentVariant = profile ? (this.suits.find((item) => item.id === equippedSuitId)?.Suit || '') : (this.engine.data.hero.variant || 'Advanced Suit 2.0');
     const previewSuit = this.suits[this.previewSuitIndex] || this.suits[0] || {
       Suit: currentVariant,
       Owner: 'Peter Parker',
@@ -436,7 +722,8 @@ export class ActionRpgController {
       LevelReq: 1,
       Cost: 'Khởi đầu'
     };
-    const isEquipped = previewSuit.Suit === currentVariant;
+    const isEquipped = Boolean(currentVariant && previewSuit.Suit === currentVariant);
+    const canEquipSuit = Boolean(profile?.id && previewSuit.id && (previewSuit.Status === 'Unlocked' || previewSuit.Status === 'Equipped') && (Number(profile.Level) || 1) >= (Number(previewSuit.LevelReq) || 1));
 
     // Left Column: Hero Showcase Pod
     const showcaseHtml = `
@@ -454,24 +741,24 @@ export class ActionRpgController {
           <p class="spidey-suit-lore">${previewSuit.GameEffect || previewSuit.Notes || 'Bộ đồ bảo vệ Người Nhện trong các chiến dịch tuần tra New York.'}</p>
           
           <div class="spidey-stat-row">
-            <span>ATK</span>
-            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: 85%;"></div></div>
-            <span>+25%</span>
+            <span>HP</span>
+            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: ${Math.min(100, Math.max(0, Number(previewSuit.HPBonus) || 0))}%;"></div></div>
+            <span>+${Number(previewSuit.HPBonus) || 0}</span>
           </div>
           <div class="spidey-stat-row">
             <span>DEF</span>
-            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: 70%; background: linear-gradient(90deg, #83b96b, #54b6d0);"></div></div>
-            <span>+18%</span>
+            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: ${Math.min(100, Math.max(0, Number(previewSuit.DEFBonus) || 0))}%; background: linear-gradient(90deg, #83b96b, #54b6d0);"></div></div>
+            <span>+${Number(previewSuit.DEFBonus) || 0}</span>
           </div>
           <div class="spidey-stat-row">
-            <span>WEB</span>
-            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: 95%; background: linear-gradient(90deg, #f0645c, #f2c06b);"></div></div>
-            <span>+30%</span>
+            <span>ENERGY</span>
+            <div class="spidey-stat-bar"><div class="spidey-stat-fill" style="width: ${Math.min(100, Math.max(0, Number(previewSuit.EnergyBonus) || 0))}%; background: linear-gradient(90deg, #f0645c, #f2c06b);"></div></div>
+            <span>+${Number(previewSuit.EnergyBonus) || 0}</span>
           </div>
 
           <button class="spidey-equip-btn ${isEquipped ? 'spidey-equip-btn--equipped' : ''}" 
-                  data-equip-suit="${this.previewSuitIndex}" ${isEquipped ? 'disabled' : ''}>
-            ${isEquipped ? '✓ ĐANG TRANG BỊ' : '⚡ MẶC BỘ ĐỒ NÀY'}
+                  data-equip-suit="${this.previewSuitIndex}" ${isEquipped || !canEquipSuit ? 'disabled' : ''}>
+            ${isEquipped ? '✓ ĐANG TRANG BỊ' : !canEquipSuit ? 'CHƯA MỞ KHÓA / CHƯA TẢI NOTION' : '⚡ MẶC BỘ ĐỒ NÀY'}
           </button>
         </div>
       </aside>
@@ -523,83 +810,132 @@ export class ActionRpgController {
         </div>
       `;
     } else if (this.panelTab === 'SKILLS') {
-      // Detailed Skill List with high-res Notion PNG Icons
-      const coreSkills = [
-        { name: 'Ground Slam', icon: this.skillIcons['skill_ground_slam.png'] || 'https://iili.io/nuza6p1.png', type: 'Active AoE', sp: 1, desc: 'Lao từ trên không đập mạnh xuống đất, tạo sóng chấn động làm choáng toàn bộ kẻ thù xung quanh.' },
-        { name: 'Maximum Spider', icon: this.skillIcons['skill_maximum_spider.png'] || 'https://iili.io/nuzaZCJ.png', type: 'Ultimate Strike', sp: 3, desc: 'Tuyệt chiêu tối thượng: Tung chuỗi đòn tơ liên hoàn với vận tốc ánh sáng, kết liễu boss ngay khi stagger.' },
-        { name: 'Spider-Sense', icon: this.skillIcons['skill_spider_sense.png'] || 'https://iili.io/nuzc9pt.png', type: 'Passive Reflex', sp: 1, desc: 'Giác quan nhện cảnh báo trước đòn hiểm. Tăng thời gian thực hiện Né Hoàn Hảo (Perfect Dodge).' },
-        { name: 'Swing Kick', icon: this.skillIcons['skill_swing_kick.png'] || 'https://iili.io/nuzcdjn.png', type: 'Aerial Combat', sp: 1, desc: 'Đu tơ lấy đà tung cú đá uy lực hất văng mục tiêu vào tường, gây thêm sát thương va đập.' },
-        { name: 'Venom Punch', icon: this.skillIcons['skill_venom_punch.png'] || 'https://iili.io/nuzcIje.png', type: 'Bio-Electricity', sp: 2, desc: 'Tích tụ điện sinh học vào nắm đấm làm tê liệt hệ thần kinh của đối thủ trong 3 giây.' },
-        { name: 'Web Cocoon', icon: this.skillIcons['skill_web_cocoon.png'] || 'https://iili.io/nuzcY3Q.png', type: 'Web Control', sp: 2, desc: 'Bắn tơ dồn dập gói trọn kẻ thù thành kén tơ cố định, vô hiệu hóa hoàn toàn hành động.' },
-        { name: 'Web Net', icon: this.skillIcons['skill_web_net.png'] || 'https://iili.io/nuzcGZg.png', type: 'Crowd Control', sp: 1, desc: 'Giăng lưới tơ bẫy diện rộng, làm chậm 50% tốc độ áp sát của nhóm minion.' },
-        { name: 'Web Zip', icon: this.skillIcons['skill_web_zip.png'] || 'https://iili.io/nuzce9I.png', type: 'Agility', sp: 1, desc: 'Phóng tơ kéo thẳng bản thân áp sát tức thì kẻ thù trên không hoặc mặt đất để nối dài combo.' }
-      ];
+      const skills = this.skillsCatalog.filter((skill) => skill.slot === 'active' || skill.slot === 'ultimate');
+      const groupedSkills = skills.reduce((groups, skill) => {
+        const key = skill.branch || 'Spider Skills';
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(skill);
+        return groups;
+      }, new Map());
 
       rightColumnHtml = `
         <div class="quest-source-banner">
-          <span>⚡ SKILL LOADOUT</span>
-          <strong>BẢNG KỸ NĂNG CHIẾN ĐẤU & BẮN TƠ (NOTION RENDERS)</strong>
-          <small>Gán kỹ năng vào phím bấm Arena để thi triển trong trận chiến</small>
+          <span>ACTIVE SKILLS</span>
+          <strong>SPIDER MOVESET: CHIÊU THƯỜNG & ULTIMATE</strong>
+          <small>Không trộn Web Shooter/Web Bomb/Impact Web: các món bắn tơ thuần nằm ở Gadget Wheel</small>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          ${coreSkills.map((sk) => `
-            <article class="spidey-skill-card">
-              <div class="spidey-skill-icon-frame">
-                <img src="${sk.icon}" alt="${sk.name}" />
+        <div class="spidey-skill-summary">
+          <span><b>${skills.filter((skill) => skill.slot === 'active').length}</b> ACTIVE</span>
+          <span><b>${skills.filter((skill) => skill.slot === 'ultimate').length}</b> ULTIMATE</span>
+          <span><b>${groupedSkills.size}</b> BRANCHES</span>
+        </div>
+        <div class="spidey-skill-branch-list">
+          ${Array.from(groupedSkills.entries()).map(([branch, branchSkills]) => `
+            <section class="spidey-skill-branch">
+              <header>
+                <strong>${this.escapeHtml(branch)}</strong>
+                <span>${branchSkills.length} moves</span>
+              </header>
+              <div class="spidey-skill-stack">
+                ${branchSkills
+                  .sort((a, b) => (a.tier - b.tier) || (a.order - b.order) || a.name.localeCompare(b.name))
+                  .map((sk) => {
+                    const image = sk.image || this.skillIcons[`${sk.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.png`] || './assets/spideytracker/tracker_logo3.png';
+                    const source = (sk.sourceGames || []).slice(0, 3).join(' // ');
+                    return `
+                      <article class="spidey-skill-card spidey-skill-card--${sk.slot === 'ultimate' ? 'ultimate' : 'active'}">
+                        <div class="spidey-skill-icon-frame">
+                          <img src="${image}" alt="${this.escapeHtml(sk.name)}" loading="lazy" />
+                        </div>
+                        <div class="spidey-skill-info">
+                          <div class="spidey-skill-meta">
+                            <span class="pixel-tag ${sk.slot === 'ultimate' ? 'pixel-tag--gold' : 'pixel-tag--red'}">${sk.slot === 'ultimate' ? 'ULT' : 'ACTIVE'}</span>
+                            <span class="pixel-tag">${this.escapeHtml(sk.hero || 'Shared')}</span>
+                            <span class="pixel-tag pixel-tag--green">SP ${sk.sp_cost || 1}</span>
+                            <span class="spidey-effect-row">${this.renderEffectIcons(sk.effectIcons || [])}</span>
+                          </div>
+                          <h4>${this.escapeHtml(sk.name)}</h4>
+                          <p>${this.escapeHtml(sk.description)}</p>
+                          <small class="spidey-skill-source">${this.escapeHtml(source || 'Spider games moveset')}</small>
+                        </div>
+                        <div class="spidey-skill-actions">
+                          <button class="pixel-action-btn ${sk.slot === 'ultimate' ? 'pixel-action-btn--gold' : 'pixel-action-btn--green'}" data-equip-skill="${this.escapeHtml(sk.name)}">
+                            ${sk.slot === 'ultimate' ? 'GẮN ULT' : 'TRANG BỊ'}
+                          </button>
+                        </div>
+                      </article>
+                    `;
+                  }).join('')}
               </div>
-              <div class="spidey-skill-info">
-                <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 4px;">
-                  <span class="pixel-tag pixel-tag--red">${sk.type}</span>
-                  <span class="pixel-tag pixel-tag--gold">COST: ${sk.sp} SP</span>
-                </div>
-                <h4>${sk.name}</h4>
-                <p>${sk.desc}</p>
-              </div>
-              <div class="spidey-skill-actions">
-                <button class="pixel-action-btn pixel-action-btn--green" data-equip-skill="${sk.name}">
-                  ⚡ TRANG BỊ
-                </button>
-              </div>
-            </article>
+            </section>
           `).join('')}
         </div>
       `;
     } else if (this.panelTab === 'GADGETS') {
-      const gadgets = [
-        { name: 'Web Shooter', icon: this.skillIcons['gadget_web_shooter.png'] || 'https://iili.io/nuzarYB.png', charges: 'Vô hạn', desc: 'Máy bắn tơ cơ bản trên cổ tay Peter Parker, bắn đạn tơ làm gián đoạn đòn đánh quái.' },
-        { name: 'Web Bomb', icon: this.skillIcons['gadget_web_bomb.png'] || 'https://iili.io/nuzaeLb.png', charges: '3 Quả', desc: 'Bom tơ phát nổ giải phóng hàng trăm sợi tơ trói chặt tất cả mục tiêu trong phạm vi.' },
-        { name: 'Spider-Drone', icon: this.skillIcons['gadget_spider_drone.png'] || 'https://iili.io/nuza0LG.png', charges: '2 Drone', desc: 'Drone tự hành bay lượn hỗ trợ bắn đạn năng lượng gây sát thương liên tục.' },
-        { name: 'Electric Web', icon: this.skillIcons['gadget_electric_web.png'] || 'https://iili.io/nuzaugp.png', charges: '3 Phát', desc: 'Tơ điện phóng dòng điện cao thế giật tê liệt cả mục tiêu mang khiên bảo vệ.' },
-        { name: 'Concussive Blast', icon: this.skillIcons['gadget_concussive_blast.png'] || 'https://iili.io/nuzaxLJ.png', charges: '2 Lần', desc: 'Sóng âm thanh cực mạnh thổi bay kẻ địch văng xa và phá vỡ thế phòng thủ.' },
-        { name: 'Suspension Matrix', icon: this.skillIcons['gadget_suspension_matrix.png'] || 'https://iili.io/nuzaW22.png', charges: '2 Quả', desc: 'Trường phản trọng lực nhấc bổng toàn bộ kẻ thù lơ lửng trên không trung.' },
-        { name: 'Trip Mine', icon: this.skillIcons['gadget_trip_mine.png'] || 'https://iili.io/nuzaOhu.png', charges: '3 Mìn', desc: 'Mìn laser cảm biến gắn vào tường hoặc kẻ địch, tự động kéo sập mục tiêu khi kích hoạt.' },
-        { name: 'Iron Spider Arms', icon: this.skillIcons['gadget_iron_spider_arms.png'] || 'https://iili.io/nuza57I.png', charges: '1 Lần', desc: 'Bốn chân nhện cơ khí nano vươn ra từ lưng, tăng 100% sát thương cận chiến và xuyên giáp.' }
-      ];
+      const categoryLabels = {
+        WEB_SHOOTER: 'WEB-SHOOTER RIGS',
+        WEB_AMMO: 'WEB CARTRIDGES',
+        WEB_DEPLOYABLE: 'WEB DEPLOYABLES',
+        TECH_GADGET: 'FIELD TECH',
+        STEALTH_GADGET: 'STEALTH TECH',
+        MOBILITY_GADGET: 'MOBILITY GEAR',
+        UTILITY_GADGET: 'UTILITY'
+      };
+      const categoryOrder = Object.keys(categoryLabels);
+      const gadgets = [...this.gadgetsCatalog].sort((a, b) => {
+        const categoryDiff = categoryOrder.indexOf(a.Category) - categoryOrder.indexOf(b.Category);
+        return categoryDiff || (a.Title || '').localeCompare(b.Title || '');
+      });
+      const groupedGadgets = gadgets.reduce((groups, gadget) => {
+        const key = gadget.Category || 'UTILITY_GADGET';
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(gadget);
+        return groups;
+      }, new Map());
+      const webModeCount = gadgets.filter((g) => ['WEB_AMMO', 'WEB_DEPLOYABLE'].includes(g.Category)).length;
 
       rightColumnHtml = `
         <div class="quest-source-banner">
-          <span>⌁ GADGET WHEEL</span>
-          <strong>THIẾT BỊ CÔNG NGHỆ PETER PARKER (NOTION RENDERS)</strong>
-          <small>Nâng cấp trang bị bằng Web Coins kiếm được từ nhiệm vụ đời thật</small>
+          <span>GADGET DB</span>
+          <strong>WEB-SHOOTER DATABASE & SPIDER GADGET WHEEL</strong>
+          <small>Máy bắn tơ, cartridge, trap và field tech đã chuẩn hóa cho Notion DB mirror</small>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          ${gadgets.map((g) => `
-            <article class="spidey-skill-card">
-              <div class="spidey-skill-icon-frame" style="border-color: #83b96b;">
-                <img src="${g.icon}" alt="${g.name}" />
+        <div class="spidey-skill-summary spidey-gadget-summary">
+          <span><b>${gadgets.length}</b> GADGETS</span>
+          <span><b>${webModeCount}</b> WEB TYPES</span>
+          <span><b>${groupedGadgets.size}</b> GROUPS</span>
+        </div>
+        <div class="spidey-gadget-branch-list">
+          ${Array.from(groupedGadgets.entries()).map(([category, group]) => `
+            <section class="spidey-skill-branch spidey-gadget-branch spidey-gadget-branch--${this.escapeHtml(category.toLowerCase())}">
+              <header>
+                <strong>${categoryLabels[category] || this.escapeHtml(category)}</strong>
+                <span>${group.length} items</span>
+              </header>
+              <div class="spidey-gadget-grid">
+                ${group.map((g) => `
+                  <article class="spidey-gadget-card">
+                    <div class="spidey-gadget-media">
+                      <img src="${this.escapeHtml(g.ImageUrl || './assets/spideytracker/tracker_logo3.png')}" alt="${this.escapeHtml(g.Title)}" loading="lazy" />
+                    </div>
+                    <div class="spidey-gadget-info">
+                      <div class="spidey-skill-meta">
+                        <span class="pixel-tag ${g.Category === 'WEB_SHOOTER' ? 'pixel-tag--blue' : g.Category?.includes('WEB') ? 'pixel-tag--gold' : 'pixel-tag--green'}">${this.escapeHtml(g.Charges || 'READY')}</span>
+                        <span class="pixel-tag">CD ${Number(g.Cooldown || 0)}</span>
+                        <span class="spidey-effect-row">${this.renderEffectIcons(g.EffectIcons || [])}</span>
+                      </div>
+                      <h4>${this.escapeHtml(g.Title)}</h4>
+                      <p>${this.escapeHtml(g.GameEffect || 'Spider gadget ready for field deployment.')}</p>
+                      <small class="spidey-skill-source">${this.escapeHtml(g.Tuning || g.Role || 'Field tuning')}</small>
+                    </div>
+                    <footer>
+                      <span>${this.escapeHtml(g.NotionStatus || 'LOCAL DB')}</span>
+                      <button class="pixel-action-btn pixel-action-btn--blue">SYNC</button>
+                    </footer>
+                  </article>
+                `).join('')}
               </div>
-              <div class="spidey-skill-info">
-                <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 4px;">
-                  <span class="pixel-tag pixel-tag--green">${g.charges}</span>
-                  <span class="pixel-tag pixel-tag--gold">GADGET</span>
-                </div>
-                <h4>${g.name}</h4>
-                <p>${g.desc}</p>
-              </div>
-              <div class="spidey-skill-actions">
-                <button class="pixel-action-btn pixel-action-btn--blue">NÂNG CẤP</button>
-              </div>
-            </article>
+            </section>
           `).join('')}
         </div>
       `;
@@ -646,6 +982,9 @@ export class ActionRpgController {
      3. TAB [ARCHIVE]: BESTIARY (BOSS & MINION), BACKPACKS, BADGES
   ------------------------------------------------------------- */
   renderArchiveSection() {
+    if (this.panelTab === 'BESTIARY' && this.notionEnemies.length) {
+      return `<div class="quest-source-banner"><span>THREAT DATABASE</span><strong>ENEMIES // NOTION</strong><small>${this.notionEnemies.length} hồ sơ Boss và Minion.</small></div><div class="pixel-card-grid">${this.notionEnemies.map((enemy) => `<article class="pixel-game-card"><div class="pixel-card-header"><span class="pixel-tag pixel-tag--red">${this.escapeHtml(enemy.Tier || enemy['Enemy Class'] || 'ENEMY')}</span><span class="pixel-tag">${this.escapeHtml(enemy.Faction || '')}</span></div>${enemy.Image ? `<img class="notion-badge-icon" src="${this.escapeHtml(enemy.Image)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(enemy.Boss || 'Enemy')}</h3><p class="pixel-card-desc">HP ${Number(enemy['Max HP']) || 0} · ATK ${Number(enemy.ATK) || 0} · DEF ${Number(enemy.DEF) || 0}</p></article>`).join('')}</div>`;
+    }
     if (this.panelTab === 'BACKPACKS') {
       return `
         <div class="quest-source-banner">
@@ -769,7 +1108,7 @@ export class ActionRpgController {
     if (this.panelTab === 'JOURNAL') {
       return `
         <div class="quest-source-banner">
-          <span>📓 CHRONICLE</span>
+          <span>PARKER FIELD NOTES</span>
           <strong>NHẬT KÝ CHIẾN TÍCH PETER PARKER</strong>
           <small>Ghi lại bài học và chiến công mỗi ngày để rèn giũa bản thân</small>
         </div>
@@ -785,17 +1124,17 @@ export class ActionRpgController {
             <label style="font: 700 8px 'Silkscreen', monospace; color: #9ed9e7;">3. CHIẾN CÔNG ĐẮC Ý NHẤT:</label>
             <textarea id="journal-input-win" rows="2" class="form-textarea" placeholder="Hôm nay mình đã vượt qua được thói quen xấu nào?" style="border: 2px solid #05070b; background: #050b12; color: #fff; padding: 6px;"></textarea>
             
-            <button class="pixel-action-btn pixel-action-btn--gold" id="btn-save-journal" style="align-self: flex-start; margin-top: 6px;">💾 LƯU NHẬT KÝ VÀO NOTION</button>
+            <button class="pixel-action-btn pixel-action-btn--gold" id="btn-save-journal" style="align-self: flex-start; margin-top: 6px;">LƯU VÀO NOTION</button>
           </div>
         </div>
         <div class="pixel-card-grid">
-          ${this.journalEntries.length ? this.journalEntries.map((entry) => `
+          ${this.notionJournalEntries.length ? this.notionJournalEntries.map((entry) => `
             <article class="pixel-game-card">
-              <div class="pixel-card-header"><span class="pixel-tag">${entry.date}</span><span class="pixel-tag pixel-tag--green">RECORDED</span></div>
-              <h3 class="pixel-card-title">${entry.win || 'Nhật ký ngày'}</h3>
-              <p class="pixel-card-desc"><strong>Biết ơn:</strong> ${entry.grateful}<br><strong>Bài học:</strong> ${entry.lesson}</p>
+              <div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(entry.Date || entry.createdAt?.slice(0, 10) || '')}</span><span class="pixel-tag pixel-tag--green">NOTION</span></div>
+              <h3 class="pixel-card-title">${this.escapeHtml(entry["today's mood"] || 'Nhật ký ngày')}</h3>
+              ${entry.sourceUrl ? `<a class="pixel-action-btn pixel-action-btn--blue" href="${this.escapeHtml(entry.sourceUrl)}" target="_blank" rel="noopener noreferrer">XEM NỘI DUNG</a>` : ''}
             </article>
-          `).join('') : '<article class="pixel-game-card"><p class="pixel-card-desc">Chưa có nhật ký nào được ghi lại. Hãy viết trang đầu tiên hôm nay!</p></article>'}
+          `).join('') : '<article class="pixel-game-card"><p class="pixel-card-desc">Chưa có nhật ký trong Notion. Hãy viết trang đầu tiên hôm nay.</p></article>'}
         </div>
       `;
     }
@@ -887,98 +1226,218 @@ export class ActionRpgController {
     </div>`;
     const toggle = (key, label) => `<label class="game-setting-row"><span>${label}</span><input type="checkbox" data-setting="${key}" ${settings[key] ? 'checked' : ''}></label>`;
     return `<div class="game-settings-grid">
-      ${toggle('sfx', 'SFX')}${toggle('music', 'MUSIC')}${toggle('reduceMotion', 'REDUCE MOTION')}${toggle('screenShake', 'SCREEN SHAKE')}${toggle('comicText', 'COMIC TEXT')}${toggle('autoCombat', 'AUTO COMBAT')}
+      ${toggle('sfx', 'SFX')}${toggle('music', 'MUSIC')}${toggle('reduceMotion', 'REDUCE MOTION')}${toggle('screenShake', 'SCREEN SHAKE')}${toggle('comicText', 'COMIC TEXT')}
       <label class="game-setting-row"><span>COMBAT SPEED</span><select data-setting="combatSpeed"><option value="1" ${settings.combatSpeed === 1 ? 'selected' : ''}>x1</option><option value="2" ${settings.combatSpeed === 2 ? 'selected' : ''}>x2</option></select></label>
       <label class="game-setting-row"><span>DIFFICULTY</span><select data-setting="difficulty">${Object.keys(this.engine.content.difficulties).map((id) => `<option ${id === settings.difficulty ? 'selected' : ''}>${id}</option>`).join('')}</select></label>
       <label class="game-setting-row game-setting-row--wide"><span>MASTER VOLUME // ${Math.round(settings.volume * 100)}%</span><input type="range" min="0" max="1" step="0.1" value="${settings.volume}" data-setting="volume"></label>
-    </div><p class="game-settings-note">Difficulty applies fully when the next enemy or patrol begins. Quest combat remains the only source of persistent progression.</p>`;
+    </div><p class="game-settings-note">Độ khó áp dụng từ đối thủ kế tiếp. Trận đấu được lưu trên thiết bị; HP, Energy, EXP và Gold được ghi vào Hero Profile trong Notion.</p>`;
   }
 
   /* -------------------------------------------------------------
      EVENT BINDINGS & NOTION 2-WAY SYNC
   ------------------------------------------------------------- */
-  async syncLiveFromNotion(btn = null) {
+  async syncLiveFromNotion(btn = null, { quiet = false } = {}) {
     if (btn) {
       btn.disabled = true;
       btn.textContent = '⏳ ĐANG ĐỒNG BỘ...';
     }
-    this.sound.playSelect();
-    this.toast('ĐANG KẾT NỐI NOTION LIVE...');
-
-    let syncedTasks = false;
-    let syncedHabits = false;
+    if (!quiet) { this.sound.playSelect(); this.toast('ĐANG KẾT NỐI NOTION...'); }
 
     try {
-      // 1. Try fetching Master Calendar Tasks
-      const tasksRes = await fetch('/api/notion?path=%2Fv1%2Fdatabases%2F272d787636c681d9ae35d494508b25d0%2Fquery', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ page_size: 50 })
-      }).then(r => r.json()).catch(() => null);
-
-      if (tasksRes?.ok && tasksRes.data?.results) {
-        this.notionTasks = tasksRes.data.results.map((p) => {
-          const props = p.properties || {};
-          const titleProp = props.Name || props.Title || props.Task || Object.values(props).find(v => v.type === 'title');
-          const title = titleProp?.title?.[0]?.plain_text || 'Nhiệm vụ';
-          const priority = props.Priority?.select?.name || 'Bình thường';
-          const done = props.Done?.checkbox || false;
-          const date = props.Date?.date?.start || null;
-          const cover = p.cover?.external?.url || p.cover?.file?.url || null;
-          return { id: p.id, name: title, title, priority, done, date, coverUrl: cover };
-        });
-        localStorage.setItem('spidey_notion_tasks', JSON.stringify(this.notionTasks));
-        syncedTasks = true;
-      }
-
-      // 2. Try fetching Habits
-      const habitsRes = await fetch('/api/notion?path=%2Fv1%2Fdatabases%2F272d787636c681a29bf8e4d5e588e173%2Fquery', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ page_size: 50 })
-      }).then(r => r.json()).catch(() => null);
-
-      if (habitsRes?.ok && habitsRes.data?.results) {
-        this.notionHabits = habitsRes.data.results.map((p) => {
-          const props = p.properties || {};
-          const titleProp = props.Name || props.Habit || props.Title || Object.values(props).find(v => v.type === 'title');
-          const title = titleProp?.title?.[0]?.plain_text || 'Thói quen';
-          const category = props.Category?.select?.name || 'Daily';
-          const today = props.Today?.checkbox || false;
-          const timeBlock = props.Time?.select?.name || props.TimeBlock?.select?.name || 'Mỗi ngày';
-          return { id: p.id, name: title, title, category, done: today, today, timeBlock };
-        });
-        localStorage.setItem('spidey_notion_habits', JSON.stringify(this.notionHabits));
-        syncedHabits = true;
-      }
-
-      if (syncedTasks || syncedHabits) {
-        this.sound.playVictoryCue();
-        this.toast(`NOTION LIVE SYNC XONG // ${this.notionTasks.length} QUESTS, ${this.notionHabits.length} HABITS`);
+      if (!localStorage.getItem('spidey_notion_authoritative_reset_v1')) {
+        // Old demo actions must never be replayed into the owner's clean Notion state.
+        localStorage.removeItem('spidey_notion_pending_writes');
+        localStorage.removeItem('spidey_notion_profile_pending');
       } else {
-        // Fallback: Refresh static snapshot with cache-buster
-        const snapshotRes = await fetch(`./data/notion-snapshot.json?t=${Date.now()}`).then(r => r.json()).catch(() => null);
-        if (snapshotRes?.collections) {
-          this.notionTasks = snapshotRes.collections.masterCalendar || this.notionTasks;
-          this.notionHabits = snapshotRes.collections.habits || this.notionHabits;
-          this.toast('NOTION SNAPSHOT ĐÃ ĐƯỢC TẢI LẠI (OFFLINE/STATIC MODE)');
-        } else {
-          this.toast('KHÔNG THỂ KẾT NỐI NOTION API // GIỮ NGUYÊN DỮ LIỆU CŨ');
-        }
+        await flushPendingNotionWrites();
       }
+      const [tasks, habits, goals, profile, activeQuests] = await Promise.allSettled([
+        queryAllNotionPages(NOTION_GAME_DATABASES.masterCalendar),
+        queryAllNotionPages(NOTION_GAME_DATABASES.habits),
+        queryAllNotionPages(NOTION_GAME_DATABASES.goals),
+        queryAllNotionPages(NOTION_GAME_DATABASES.heroProfile),
+        queryAllNotionPages(NOTION_GAME_DATABASES.activeQuests)
+      ]);
+      const successes = [tasks, habits, goals, profile, activeQuests].filter((result) => result.status === 'fulfilled').length;
+      if (!successes) throw new Error('No Notion database could be read');
+      if (tasks.status === 'fulfilled') this.notionTasks = tasks.value.map((page) => normalizeNotionPage(page, 'masterCalendar'));
+      if (habits.status === 'fulfilled') this.notionHabits = habits.value.map((page) => normalizeNotionPage(page, 'habits'));
+      if (goals.status === 'fulfilled') this.notionGoals = goals.value.map((page) => normalizeNotionPage(page, 'goals'));
+      if (activeQuests.status === 'fulfilled') this.notionActiveQuests = activeQuests.value.map((page) => normalizeNotionPage(page, 'activeQuests'));
+      if (profile.status === 'fulfilled' && profile.value[0]) {
+        const pendingProfile = localStorage.getItem('spidey_notion_profile_pending');
+        this.notionHeroProfile = normalizeNotionCatalogPage(profile.value[0]);
+        if (!localStorage.getItem('spidey_notion_authoritative_reset_v1')) {
+          // One-time migration requested by the owner: discard demo combat progress.
+          localStorage.removeItem('spidey_notion_profile_pending');
+          this.engine.resetSave();
+          const hero = this.engine.state.progression;
+          const source = this.notionHeroProfile;
+          hero.level = Number(source.Level) || 1;
+          hero.xp = Number(source.Exp) || 0;
+          hero.totalXp = Number(source.Exp) || 0;
+          hero.coins = Number(source.Gold) || 0;
+          hero.hp = Number(source.HP) || 0;
+          hero.maxHp = Number(source['Max HP']) || this.engine.data.hero.maxHp;
+          hero.webEnergy = Math.round((Number(source.Energy) || 0) / (Number(source['Max Energy']) || 10) * this.engine.data.hero.maxWebEnergy);
+          this.engine.commit({ notionProfileImported: true });
+          localStorage.setItem('spidey_notion_authoritative_reset_v1', new Date().toISOString());
+        } else {
+          if (pendingProfile) {
+            await this.flushHeroProfileSync();
+          } else {
+            // Changes made directly in Notion (or on another device) are authoritative.
+            const hero = this.engine.state.progression;
+            const source = this.notionHeroProfile;
+            hero.level = Number(source.Level) || 1;
+            hero.totalXp = Number(source.Exp) || 0;
+            hero.xpToNext = 100;
+            let previousLevelsXp = 0;
+            for (let level = 1; level < hero.level; level += 1) {
+              previousLevelsXp += hero.xpToNext;
+              hero.xpToNext = Math.round(hero.xpToNext * 1.28);
+            }
+            hero.xp = Math.max(0, Math.min(hero.xpToNext - 1, hero.totalXp - previousLevelsXp));
+            hero.coins = Number(source.Gold) || 0;
+            hero.hp = Number(source.HP) || 0;
+            hero.webEnergy = Math.round((Number(source.Energy) || 0) / (Number(source['Max Energy']) || 10) * this.engine.data.hero.maxWebEnergy);
+            this.engine.commit({ notionProfileImported: true });
+          }
+        }
+        this.engine.state.progression.maxHp = Number(this.notionHeroProfile['Max HP']) || this.engine.data.hero.maxHp;
+      }
+      for (const write of readPendingNotionWrites()) {
+        const list = write.kind === 'habits' ? this.notionHabits : write.kind === 'activeQuests' ? this.notionActiveQuests : this.notionTasks;
+        const record = list.find((item) => item.id === write.id);
+        if (record) { record.done = true; if (write.kind === 'habits') record.today = true; }
+      }
+
+      this.notionSyncedAt = new Date().toISOString();
+      this.notionSource = successes === 5 ? 'live' : 'mixed';
+      this.persistNotionCache();
+      this.render();
+      if (!quiet) { this.sound.playVictoryCue(); this.toast(`NOTION ĐÃ CẬP NHẬT ${successes}/5 DATABASE // ${this.notionTasks.length} TASKS, ${this.notionHabits.length} HABITS`); }
+      void this.syncHeroCatalog();
     } catch (err) {
       console.warn('[ActionRpgController] Notion sync error:', err);
-      this.toast('LỖI KẾT NỐI NOTION // ĐÃ GIỮ DỮ LIỆU HIỆN TẠI');
+      if (!quiet) this.toast('CHƯA KẾT NỐI NOTION // ĐANG DÙNG DỮ LIỆU ĐÃ LƯU');
     } finally {
       if (btn) {
         btn.disabled = false;
-        btn.textContent = '🔄 ĐỒNG BỘ NOTION LIVE';
+        btn.textContent = '↻ ĐỒNG BỘ NOTION';
       }
       this.renderPanel();
     }
   }
 
+  async syncHeroCatalog() {
+    if (this.catalogSyncPromise) return this.catalogSyncPromise;
+    this.catalogSyncPromise = this.loadHeroCatalog();
+    try { return await this.catalogSyncPromise; }
+    finally { this.catalogSyncPromise = null; }
+  }
+
+  async loadHeroCatalog() {
+    const sources = [
+      ['notionSuits', NOTION_GAME_DATABASES.suits],
+      ['notionGadgets', NOTION_GAME_DATABASES.gadgets],
+      ['notionCombatSkills', NOTION_GAME_DATABASES.combatSkills],
+      ['notionBadges', NOTION_GAME_DATABASES.badges],
+      ['notionSpiderVerse', NOTION_GAME_DATABASES.spiderVerse],
+      ['notionWorkoutPlans', NOTION_GAME_DATABASES.workoutPlans],
+      ['notionExerciseLogs', NOTION_GAME_DATABASES.exerciseLogs],
+      ['notionCardioLogs', NOTION_GAME_DATABASES.cardioLogs],
+      ['notionSportLogs', NOTION_GAME_DATABASES.sportLogs],
+      ['notionEnemies', NOTION_GAME_DATABASES.enemies],
+      ['notionTimeLogs', NOTION_GAME_DATABASES.timeTracking],
+      ['notionJournalEntries', NOTION_GAME_DATABASES.journal]
+    ];
+    for (const [key, database] of sources) {
+      try {
+        this[key] = (await queryAllNotionPages(database)).map(normalizeNotionCatalogPage);
+        if (key === 'notionSuits') this.suits = this[key].map((item) => ({
+          id: item.id, Suit: item.Suit, Owner: item.Owner || 'Spider-Man',
+          ImageUrl: item.Image || item.iconUrl || './assets/spideytracker/tracker_logo3.png',
+          GameEffect: item['Game Effect'] || '', LevelReq: item['Level Req'] || 1,
+          HPBonus: item['HP Bonus'], DEFBonus: item['DEF Bonus'], EnergyBonus: item['Energy Bonus'],
+          Status: item.Status
+        }));
+        if (key === 'notionSpiderVerse') this.spiderVerse = this[key].map((item) => ({ id: item.id, Name: item.Spider, Quote: item.Quote, ImageUrl: item.Image, Tier: item.Tier }));
+        if (key === 'notionBadges') {
+          const badge = this.notionBadges.find((item) => item.Equipped && (item.iconUrl || item.Image)) || this.notionBadges.find((item) => item.Unlocked && (item.iconUrl || item.Image)) || this.notionBadges.find((item) => item.iconUrl || item.Image);
+          const mask = document.querySelector('.hud-mask');
+          if (badge && mask) mask.innerHTML = `<img src="${this.escapeHtml(badge.iconUrl || badge.Image)}" alt="${this.escapeHtml(badge.Medal || 'Hero badge')}">`;
+        }
+      }
+      catch (error) { console.warn(`[ActionRpgController] ${key} sync failed`, error); }
+      if (['HERO', 'FIELD'].includes(this.panelSection) && !document.getElementById('game-panel-backdrop')?.hasAttribute('hidden')) this.renderPanel();
+    }
+  }
+
+  async patchNotionPage(pageId, properties) {
+    const response = await fetch(`/api/notion?path=${encodeURIComponent(`/v1/pages/${pageId}`)}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ properties })
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) throw new Error(payload.error || `Notion HTTP ${response.status}`);
+    return payload.data;
+  }
+
+  async createNotionPage(databaseId, properties, children = []) {
+    const response = await fetch(`/api/notion?path=${encodeURIComponent('/v1/pages')}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ parent: { database_id: databaseId }, properties, ...(children.length ? { children } : {}) })
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) throw new Error(payload.error || `Notion HTTP ${response.status}`);
+    return payload.data;
+  }
+
+  queueHeroProfileSync() {
+    if (!this.notionHeroProfile?.id) return;
+    const hero = this.engine.snapshot().hero;
+    const maxEnergy = Number(this.notionHeroProfile['Max Energy']) || 10;
+    const properties = {
+      HP: { number: Math.max(0, Math.min(Number(this.notionHeroProfile['Max HP']) || 100, Math.round(hero.hp))) },
+      Energy: { number: Math.max(0, Math.min(maxEnergy, Math.round(hero.webEnergy / this.engine.data.hero.maxWebEnergy * maxEnergy))) },
+      Exp: { number: Math.max(0, Number(hero.totalXp) || 0) },
+      Gold: { number: Math.max(0, Number(hero.coins) || 0) }
+    };
+    this.notionHeroProfile.HP = properties.HP.number;
+    this.notionHeroProfile.Energy = properties.Energy.number;
+    this.notionHeroProfile.Exp = properties.Exp.number;
+    this.notionHeroProfile.Gold = properties.Gold.number;
+    localStorage.setItem('spidey_notion_profile_pending', JSON.stringify(properties));
+    void this.flushHeroProfileSync();
+  }
+
+  async flushHeroProfileSync() {
+    if (this.profileSyncInFlight || !this.notionHeroProfile?.id) return;
+    const serialized = localStorage.getItem('spidey_notion_profile_pending');
+    if (!serialized) return;
+    this.profileSyncInFlight = true;
+    try {
+      await this.patchNotionPage(this.notionHeroProfile.id, JSON.parse(serialized));
+      Object.entries(JSON.parse(serialized)).forEach(([key, value]) => { this.notionHeroProfile[key] = value.number; });
+      if (localStorage.getItem('spidey_notion_profile_pending') === serialized) localStorage.removeItem('spidey_notion_profile_pending');
+    } catch (error) { console.warn('[ActionRpgController] Hero Profile pending Notion sync', error); }
+    finally {
+      this.profileSyncInFlight = false;
+      if (localStorage.getItem('spidey_notion_profile_pending') && localStorage.getItem('spidey_notion_profile_pending') !== serialized) void this.flushHeroProfileSync();
+    }
+  }
+
   bindEvents(content) {
+    content.querySelectorAll('[data-open-system-section]').forEach((button) => {
+      button.addEventListener('click', () => {
+        this.sound.playSelect();
+        this.panelSection = button.dataset.openSystemSection;
+        this.panelTab = button.dataset.openSystemTab || this.defaultTab(this.panelSection);
+        document.body.dataset.gameSection = this.panelSection;
+        this.renderPanel({ resetScroll: true });
+      });
+    });
+
     // 0. Live Notion Sync Button
     content.querySelectorAll('#btn-sync-notion-live').forEach((btn) => {
       btn.addEventListener('click', () => this.syncLiveFromNotion(btn));
@@ -992,30 +1451,49 @@ export class ActionRpgController {
         if (!task || task.done) return;
 
         task.done = true;
+        this.persistNotionCache();
         this.sound.playVictoryCue();
 
-        // Deal combat strike in Arena
-        this.engine.performAction('attack');
-        this.engine.state.hero.xp += 30;
-        this.engine.state.hero.coins += 10;
-        if (this.engine.state.hero.xp >= this.engine.state.hero.xpToNext) {
-          this.engine.levelUp();
-        }
+        const result = this.engine.completeRealQuest({ id: task.id, title: task.title || task.name, type: 'NOTION_MISSION', status: 'DONE', source: 'NOTION', xp: task.gameXp });
+        if (result) this.queueHeroProfileSync();
+        this.toast(result ? 'QUEST DONE // ĐÃ CẬP NHẬT TRẬN ĐẤU' : 'QUEST ĐÃ HOÀN THÀNH');
 
-        this.toast(`QUEST DONE // PETER TUNG ĐÒN! +30 XP +10 COINS`);
-
-        // Send 2-way sync to Notion in background
+        // Persist the local completion and retry the Notion write on the next sync.
         if (task.id) {
-          fetch(`/api/notion?path=${encodeURIComponent('/v1/pages/' + task.id.replace(/-/g, ''))}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ properties: { Done: { checkbox: true } } })
-          }).catch(() => console.log('[NotionSync] Offline or queued'));
+          queueNotionWrite('masterCalendar', task.id);
+          void flushPendingNotionWrites().then(() => this.renderPanel());
         }
 
         this.renderPanel();
       });
     });
+
+    content.querySelectorAll('[data-complete-active-quest]').forEach((btn) => btn.addEventListener('click', () => {
+      const quest = this.notionActiveQuests[Number(btn.dataset.completeActiveQuest)];
+      if (!quest || quest.done) return;
+      quest.done = true;
+      queueNotionWrite('activeQuests', quest.id);
+      this.engine.completeRealQuest({ id: quest.id, title: quest.title, type: 'NOTION_MISSION', status: 'DONE', source: 'NOTION', xp: quest.xp });
+      this.queueHeroProfileSync();
+      this.persistNotionCache();
+      this.toast('ACTIVE QUEST // ĐÃ GHI NHẬN, ĐANG ĐỒNG BỘ NOTION');
+      this.renderPanel();
+      void flushPendingNotionWrites().then(() => this.renderPanel());
+    }));
+
+    content.querySelectorAll('[data-complete-goal]').forEach((btn) => btn.addEventListener('click', async () => {
+      const goal = this.notionGoals[Number(btn.dataset.completeGoal)];
+      if (!goal?.id || goal.achieved) return;
+      btn.disabled = true;
+      btn.textContent = 'ĐANG LƯU...';
+      try {
+        await this.patchNotionPage(goal.id, { 'Achieved/Competive': { checkbox: true } });
+        goal.achieved = true;
+        this.persistNotionCache();
+        this.toast('GOAL // ĐÃ CẬP NHẬT NOTION');
+      } catch (error) { this.toast(`CHƯA CẬP NHẬT: ${error.message}`); }
+      this.renderPanel();
+    }));
 
     // 2. Open map overlay for located tasks
     content.querySelectorAll('[data-open-task-map]').forEach((btn) => {
@@ -1034,22 +1512,17 @@ export class ActionRpgController {
 
         habit.done = true;
         habit.today = true;
+        this.persistNotionCache();
         this.sound.playSelect();
 
-        // Restore Hero HP & Web Energy
-        this.engine.state.hero.hp = Math.min(this.engine.data.hero.maxHp, this.engine.state.hero.hp + 30);
-        this.engine.state.hero.webEnergy = this.engine.data.hero.maxWebEnergy;
-        this.engine.state.hero.streak += 1;
+        this.engine.recordHabitCheckin(habit.id);
+        this.queueHeroProfileSync();
+        this.toast('HABIT CHECKED // HỒI PHỤC HP & ENERGY');
 
-        this.toast(`HABIT CHECKED // HỒI PHỤC HP & TƠ! STREAK +1`);
-
-        // Sync to Notion
+        // Persist the local check-in and retry the Notion write on the next sync.
         if (habit.id) {
-          fetch(`/api/notion?path=${encodeURIComponent('/v1/pages/' + habit.id.replace(/-/g, ''))}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ properties: { Today: { checkbox: true } } })
-          }).catch(() => console.log('[NotionSync] Offline or queued'));
+          queueNotionWrite('habits', habit.id);
+          void flushPendingNotionWrites().then(() => this.renderPanel());
         }
 
         this.renderPanel();
@@ -1067,30 +1540,70 @@ export class ActionRpgController {
 
     // 5. Equip Suit
     content.querySelectorAll('[data-equip-suit]').forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const idx = parseInt(btn.dataset.equipSuit, 10);
         const suit = this.suits[idx];
-        if (!suit) return;
-
-        this.equippedSuitIndex = idx;
-        this.engine.data.hero.variant = suit.Suit;
-        this.engine.data.hero.suitEffect = suit.GameEffect;
-        this.sound.playVictoryCue();
-        this.toast(`SUIT EQUIPPED // ${suit.Suit.toUpperCase()}`);
-        this.render();
+        if (!suit?.id || !this.notionHeroProfile?.id) return;
+        btn.disabled = true;
+        btn.textContent = 'ĐANG TRANG BỊ...';
+        try {
+          await this.patchNotionPage(this.notionHeroProfile.id, { 'Equipped Suit': { relation: [{ id: suit.id }] } });
+          this.notionHeroProfile['Equipped Suit'] = [suit.id];
+          this.equippedSuitIndex = idx;
+          this.sound.playVictoryCue();
+          this.toast(`SUIT EQUIPPED // ${suit.Suit.toUpperCase()}`);
+        } catch (error) { this.toast(`CHƯA TRANG BỊ: ${error.message}`); }
         this.renderPanel();
       });
     });
 
     // 6. Equip Skill
     content.querySelectorAll('[data-equip-skill]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const skillName = btn.dataset.equipSkill;
-        this.sound.playVictoryCue();
-        this.toast(`SKILL EQUIPPED // ${skillName.toUpperCase()}`);
+      btn.addEventListener('click', async () => {
+        const profile = this.notionHeroProfile;
+        const skillId = btn.dataset.equipSkill;
+        if (!profile?.id || !this.notionCombatSkills.some((item) => item.id === skillId)) return;
+        const slot = [1, 2, 3, 4].find((number) => !profile[`Skill Slot ${number}`]?.length);
+        if (!slot) { this.toast('CẢ 4 Ô SKILL ĐÃ ĐẦY'); return; }
+        btn.disabled = true;
+        try {
+          await this.patchNotionPage(profile.id, { [`Skill Slot ${slot}`]: { relation: [{ id: skillId }] } });
+          profile[`Skill Slot ${slot}`] = [skillId];
+          this.sound.playVictoryCue();
+          this.toast(`SKILL SLOT ${slot} // ĐÃ LƯU NOTION`);
+        } catch (error) { this.toast(`CHƯA TRANG BỊ: ${error.message}`); }
         this.renderPanel();
       });
     });
+
+    content.querySelectorAll('[data-equip-gadget]').forEach((btn) => btn.addEventListener('click', async () => {
+      const profile = this.notionHeroProfile;
+      const gadgetId = btn.dataset.equipGadget;
+      if (!profile?.id) return;
+      const current = profile['Equipped Gadgets'] || [];
+      const next = current.includes(gadgetId) ? current.filter((id) => id !== gadgetId) : [...current, gadgetId];
+      if (next.length > 2) { this.toast('TỐI ĐA 2 GADGET'); return; }
+      btn.disabled = true;
+      try {
+        await this.patchNotionPage(profile.id, { 'Equipped Gadgets': { relation: next.map((id) => ({ id })) } });
+        profile['Equipped Gadgets'] = next;
+        this.toast('GADGET LOADOUT // ĐÃ LƯU NOTION');
+      } catch (error) { this.toast(`CHƯA TRANG BỊ: ${error.message}`); }
+      this.renderPanel();
+    }));
+
+    content.querySelectorAll('[data-equip-companion]').forEach((btn) => btn.addEventListener('click', async () => {
+      const profile = this.notionHeroProfile;
+      if (!profile?.id) return;
+      const companionId = btn.dataset.equipCompanion;
+      btn.disabled = true;
+      try {
+        await this.patchNotionPage(profile.id, { Companion: { relation: [{ id: companionId }] } });
+        profile.Companion = [companionId];
+        this.toast('COMPANION // ĐÃ LƯU NOTION');
+      } catch (error) { this.toast(`CHƯA CHỌN COMPANION: ${error.message}`); }
+      this.renderPanel();
+    }));
 
     // 5. Select Ally
     content.querySelectorAll('[data-select-ally]').forEach((btn) => {
@@ -1107,30 +1620,49 @@ export class ActionRpgController {
       });
     });
 
-    // 6. Gym Train
-    content.querySelectorAll('[data-gym-train]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const type = btn.dataset.gymTrain;
-        if (type === 'atk') {
-          this.engine.state.hero.bonusAtk = (this.engine.state.hero.bonusAtk || 0) + 1;
-          this.toast(`WORKOUT DONE // HERO ATK +1!`);
-        } else if (type === 'def') {
-          this.engine.state.hero.bonusDef = (this.engine.state.hero.bonusDef || 0) + 1;
-          this.toast(`WORKOUT DONE // HERO DEF +1!`);
-        } else if (type === 'hp') {
-          this.engine.data.hero.maxHp += 20;
-          this.engine.state.hero.hp += 20;
-          this.toast(`CARDIO DONE // MAX HP +20!`);
-        }
-        this.sound.playVictoryCue();
-        this.renderPanel();
-      });
+    content.querySelector('[data-focus-toggle]')?.addEventListener('click', () => {
+      if (this.focusSession.running) {
+        this.focusSession.elapsedMs = this.focusElapsedMs();
+        this.focusSession.startedAt = null;
+        this.focusSession.running = false;
+      } else {
+        this.focusSession.firstStartedAt ||= new Date().toISOString();
+        this.focusSession.startedAt = Date.now();
+        this.focusSession.running = true;
+      }
+      this.persistFocusSession();
+      this.sound.playSelect();
+      this.renderPanel();
+    });
+    content.querySelector('[data-focus-reset]')?.addEventListener('click', () => {
+      this.focusSession = { startedAt: null, elapsedMs: 0, running: false, firstStartedAt: null };
+      this.persistFocusSession();
+      this.renderPanel();
+    });
+    content.querySelector('[data-focus-save]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      if (this.focusElapsedMs() < 1000) return;
+      button.disabled = true;
+      button.textContent = 'ĐANG LƯU...';
+      try {
+        const title = `Focus: ${this.notionActiveQuests.find((quest) => !quest.done)?.title || 'Daily patrol'}`;
+        const page = await this.createNotionPage(NOTION_GAME_DATABASES.timeTracking, {
+          Name: { title: [{ text: { content: title } }] },
+          Start: { date: { start: this.focusSession.firstStartedAt || new Date().toISOString() } },
+          End: { date: { start: new Date().toISOString() } }
+        });
+        this.notionTimeLogs.unshift(normalizeNotionCatalogPage(page));
+        this.focusSession = { startedAt: null, elapsedMs: 0, running: false, firstStartedAt: null };
+        this.persistFocusSession();
+        this.toast('FOCUS SESSION // ĐÃ LƯU NOTION');
+      } catch (error) { this.toast(`CHƯA LƯU PHIÊN: ${error.message}`); }
+      this.renderPanel();
     });
 
-    // 7. Save Journal
+    // Journal entries are created in Notion; the form stays visible on failure.
     const btnSaveJournal = content.querySelector('#btn-save-journal');
     if (btnSaveJournal) {
-      btnSaveJournal.addEventListener('click', () => {
+      btnSaveJournal.addEventListener('click', async () => {
         const grateful = content.querySelector('#journal-input-grateful')?.value?.trim();
         const lesson = content.querySelector('#journal-input-lesson')?.value?.trim();
         const win = content.querySelector('#journal-input-win')?.value?.trim();
@@ -1140,25 +1672,106 @@ export class ActionRpgController {
           return;
         }
 
-        const entry = {
-          date: new Date().toLocaleDateString('vi-VN'),
-          grateful: grateful || 'Một ngày bình an',
-          lesson: lesson || 'Tiếp tục rèn luyện',
-          win: win || 'Hoàn thành thử thách'
-        };
-
-        this.journalEntries.unshift(entry);
-        localStorage.setItem('spidey_journal_entries', JSON.stringify(this.journalEntries.slice(0, 30)));
-        this.sound.playVictoryCue();
-        this.toast('NHẬT KÝ ĐÃ LƯU!');
-        this.renderPanel();
+        btnSaveJournal.disabled = true;
+        btnSaveJournal.textContent = 'ĐANG LƯU...';
+        try {
+          const paragraph = (label, value) => ({ object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: { content: `${label}: ${value || '—'}` } }] } });
+          const page = await this.createNotionPage(NOTION_GAME_DATABASES.journal, {
+            "today's mood": { title: [{ text: { content: win || 'Peter Parker field notes' } }] },
+            Date: { date: { start: new Date().toISOString() } }
+          }, [paragraph('Biết ơn', grateful), paragraph('Bài học', lesson), paragraph('Chiến công', win)]);
+          this.notionJournalEntries.unshift(normalizeNotionCatalogPage(page));
+          this.sound.playVictoryCue();
+          this.toast('FIELD NOTES // ĐÃ LƯU NOTION');
+          this.renderPanel();
+        } catch (error) {
+          btnSaveJournal.disabled = false;
+          btnSaveJournal.textContent = 'LƯU VÀO NOTION';
+          this.toast(`CHƯA LƯU NHẬT KÝ: ${error.message}`);
+        }
       });
     }
 
-    // 8. Open Real Mission Editor
-    content.querySelector('[data-open-real-mission]')?.addEventListener('click', () => {
-      this.closePanel();
-      this.bus.emit('OPEN_EDITOR', { type: 'WORK', status: 'PLANNED' });
+    content.querySelector('#quest-create-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const title = form.elements.namedItem('title')?.value?.trim();
+      const date = form.elements.namedItem('date')?.value;
+      if (!title) return;
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true;
+      button.textContent = 'ĐANG TẠO...';
+      try {
+        const page = await this.createNotionPage(NOTION_GAME_DATABASES.masterCalendar, {
+          Name: { title: [{ text: { content: title } }] },
+          Done: { checkbox: false },
+          'Game Enabled': { checkbox: true },
+          'Game XP': { number: 28 },
+          ...(date ? { Date: { date: { start: date } } } : {})
+        });
+        this.notionTasks.unshift(normalizeNotionPage(page, 'masterCalendar'));
+        this.persistNotionCache();
+        this.toast('QUEST MỚI // ĐÃ LƯU NOTION');
+        this.renderPanel();
+      } catch (error) {
+        button.disabled = false;
+        button.textContent = '+ TẠO QUEST';
+        this.toast(`CHƯA TẠO QUEST: ${error.message}`);
+      }
+    });
+
+    content.querySelector('#habit-create-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const title = form.elements.namedItem('title')?.value?.trim();
+      const type = form.elements.namedItem('type')?.value || 'Good Habit';
+      if (!title) return;
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true;
+      button.textContent = 'ĐANG TẠO...';
+      try {
+        const page = await this.createNotionPage(NOTION_GAME_DATABASES.habits, {
+          Name: { title: [{ text: { content: title } }] },
+          Type: { select: { name: type } },
+          Status: { status: { name: 'In Progress' } },
+          Today: { checkbox: false },
+          'Game Enabled': { checkbox: true }
+        });
+        this.notionHabits.unshift(normalizeNotionPage(page, 'habits'));
+        this.persistNotionCache();
+        this.toast('HABIT MỚI // ĐÃ LƯU NOTION');
+        this.renderPanel();
+      } catch (error) {
+        button.disabled = false;
+        button.textContent = '+ TẠO HABIT';
+        this.toast(`CHƯA TẠO HABIT: ${error.message}`);
+      }
+    });
+
+    content.querySelector('#goal-create-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const title = form.elements.namedItem('title')?.value?.trim();
+      const deadline = form.elements.namedItem('deadline')?.value;
+      if (!title) return;
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true;
+      button.textContent = 'ĐANG TẠO...';
+      try {
+        const page = await this.createNotionPage(NOTION_GAME_DATABASES.goals, {
+          Name: { title: [{ text: { content: title } }] },
+          'Achieved/Competive': { checkbox: false },
+          ...(deadline ? { Deadline: { date: { start: deadline } } } : {})
+        });
+        this.notionGoals.unshift(normalizeNotionPage(page, 'goals'));
+        this.persistNotionCache();
+        this.toast('GOAL MỚI // ĐÃ LƯU NOTION');
+        this.renderPanel();
+      } catch (error) {
+        button.disabled = false;
+        button.textContent = '+ TẠO GOAL';
+        this.toast(`CHƯA TẠO GOAL: ${error.message}`);
+      }
     });
 
     // 9. Bind Settings

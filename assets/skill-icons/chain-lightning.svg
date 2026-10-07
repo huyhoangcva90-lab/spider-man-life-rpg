@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Chain Lightning">
+  <rect width="96" height="96" rx="14" fill="#16171d"/>
+  <path d="M0 78 96 18v78H0z" fill="#05070b" opacity=".32"/>
+  <circle cx="75" cy="22" r="10" fill="#4fd6ff" opacity=".86"/>
+  <path d="M30 36h17m2 24h17M29 49c-9 0-16-7-16-16s7-16 16-16h15c9 0 16 7 16 16M67 47c9 0 16 7 16 16s-7 16-16 16H52c-9 0-16-7-16-16" fill="none" stroke="#f45a3d" stroke-width="7" stroke-linecap="round"/>
+  <path d="M14 14h68v68H14z" fill="none" stroke="#e8f7ff" stroke-width="3" opacity=".85"/>
+  <text x="48" y="89" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="12" fill="#fff">CL</text>
+</svg>

@@ -3,9 +3,19 @@
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
 $TOKEN = $env:NOTION_API_KEY
+$localEnv = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) '..\.env.local'
+if ([string]::IsNullOrWhiteSpace($TOKEN) -and (Test-Path $localEnv)) {
+    foreach ($line in [System.IO.File]::ReadLines((Resolve-Path $localEnv).Path)) {
+        if ($line -match '^NOTION_API_KEY=(.+)$') { $TOKEN = $Matches[1].Trim(); break }
+    }
+}
 $CALENDAR_DB = "272d7876-36c6-81d9-ae35-d494508b25d0"
 $HABITS_DB   = "272d7876-36c6-81a2-9bf8-e4d5e588e173"
 $GOALS_DB    = "272d7876-36c6-8172-9e4d-f3566c0d933d"
+
+if ([string]::IsNullOrWhiteSpace($TOKEN)) {
+    throw "NOTION_API_KEY is required to refresh the Notion snapshot."
+}
 
 $headers = @{
     "Authorization" = "Bearer $TOKEN"
@@ -48,6 +58,27 @@ while ($hasMore) {
     $cursor = $res.next_cursor
 }
 Write-Host " OK ($($calRaw.Count) tasks)" -ForegroundColor Green
+
+# 2b. Fetch Goals
+Write-Host "Fetching Goals from Notion..." -NoNewline
+$goalsRaw = @()
+$hasMore = $true
+$cursor = $null
+$goalsAvailable = $true
+try {
+    while ($hasMore) {
+        $bodyObj = @{ page_size = 100 }
+        if ($cursor) { $bodyObj["start_cursor"] = $cursor }
+        $res = Invoke-RestMethod -Uri "https://api.notion.com/v1/databases/$GOALS_DB/query" -Method Post -Headers $headers -Body ($bodyObj | ConvertTo-Json)
+        $goalsRaw += $res.results
+        $hasMore = $res.has_more
+        $cursor = $res.next_cursor
+    }
+} catch {
+    $goalsAvailable = $false
+    Write-Warning "Goals database is unavailable; retaining any previous Goals snapshot."
+}
+Write-Host " OK ($($goalsRaw.Count) goals)" -ForegroundColor Green
 
 # 3. Transform Habits
 $habitsList = @()
@@ -115,7 +146,27 @@ foreach ($page in $calRaw) {
     }
 }
 
-# 5. Build Snapshot Structure
+# 5. Transform Goals
+$goalsList = @()
+foreach ($page in $goalsRaw) {
+    $p = $page.properties
+    $titleProp = $p.Name
+    if (-not $titleProp) { $titleProp = $p.Title }
+    $title = ($titleProp.title | ForEach-Object { $_.plain_text }) -join ""
+    if ([string]::IsNullOrWhiteSpace($title)) { continue }
+    $status = if ($p.Status.status) { $p.Status.status.name } elseif ($p.Status.select) { $p.Status.select.name } else { "Chưa rõ" }
+    $goalsList += [PSCustomObject]@{
+        id          = $page.id
+        title       = $title
+        status      = $status
+        achieved    = [bool]$p.Done.checkbox -or $status -match '^(Done|Completed|Achieved)$'
+        date        = if ($p.Date.date) { $p.Date.date.start } elseif ($p.Deadline.date) { $p.Deadline.date.start } else { $null }
+        description = ($p.Description.rich_text | ForEach-Object { $_.plain_text }) -join ""
+        sourceUrl   = $page.url
+    }
+}
+
+# 6. Build Snapshot Structure
 $snapshot = [PSCustomObject]@{
     metadata = [PSCustomObject]@{
         syncedAt         = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
@@ -130,13 +181,18 @@ $snapshot = [PSCustomObject]@{
     collections = [PSCustomObject]@{
         masterCalendar = $calList
         habits         = $habitsList
-        goals          = @()
+        goals          = $goalsList
     }
 }
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..')).Path
 $targetFile = Join-Path $repoRoot "data\notion-snapshot.json"
+if (-not $goalsAvailable -and (Test-Path $targetFile)) {
+    $previousSnapshot = Get-Content -Raw -Encoding UTF8 $targetFile | ConvertFrom-Json
+    $goalsList = @($previousSnapshot.collections.goals)
+    $snapshot.collections.goals = $goalsList
+}
 $jsonString = $snapshot | ConvertTo-Json -Depth 10
 
 [System.IO.File]::WriteAllText($targetFile, $jsonString, [System.Text.Encoding]::UTF8)
@@ -145,5 +201,6 @@ Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "Sync completed successfully!" -ForegroundColor Green
 Write-Host "   - Habits count: $($habitsList.Count)" -ForegroundColor White
 Write-Host "   - Tasks count:  $($calList.Count)" -ForegroundColor White
+Write-Host "   - Goals count:  $($goalsList.Count)" -ForegroundColor White
 Write-Host "   - Saved to:     data/notion-snapshot.json" -ForegroundColor Gray
 Write-Host "==========================================" -ForegroundColor Cyan

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Thunder Burst">
+  <rect width="96" height="96" rx="14" fill="#16171d"/>
+  <path d="M0 78 96 18v78H0z" fill="#05070b" opacity=".32"/>
+  <circle cx="75" cy="22" r="10" fill="#4fd6ff" opacity=".86"/>
+  <circle cx="48" cy="48" r="30" fill="none" stroke="#f45a3d" stroke-width="7"/><circle cx="48" cy="48" r="13" fill="#4fd6ff"/><path d="M48 8v14M48 74v14M8 48h14M74 48h14" stroke="#f45a3d" stroke-width="6" stroke-linecap="round"/>
+  <path d="M14 14h68v68H14z" fill="none" stroke="#e8f7ff" stroke-width="3" opacity=".85"/>
+  <text x="48" y="89" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="12" fill="#fff">TB</text>
+</svg>

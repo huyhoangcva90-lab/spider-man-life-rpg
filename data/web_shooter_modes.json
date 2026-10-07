@@ -1,0 +1,350 @@
+[
+  {
+    "id": "standard-web-line",
+    "title": "Standard Web Line",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "basic",
+    "charges": "Infinite",
+    "cooldown": 0,
+    "effectIcons": [
+      "web",
+      "interrupt"
+    ],
+    "role": "Web cartridge",
+    "description": "Sợi tơ tiêu chuẩn để khóa tay, kéo vật thể nhẹ và ngắt nhịp tấn công.",
+    "tuning": "Default quick shot for safe crowd control.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/standard-web-line.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "rapid-fire-web",
+    "title": "Rapid-Fire Web",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "burst",
+    "charges": "Heat meter",
+    "cooldown": 1,
+    "effectIcons": [
+      "web",
+      "combo"
+    ],
+    "role": "Web cartridge",
+    "description": "Bắn loạt tơ mỏng tốc độ cao, dùng để giữ combo và tích web buildup nhanh.",
+    "tuning": "Best when enemies are already staggered.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/rapid-fire-web.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "impact-webbing",
+    "title": "Impact Webbing",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "impact",
+    "charges": "3 shots",
+    "cooldown": 3,
+    "effectIcons": [
+      "web",
+      "knockback",
+      "stun"
+    ],
+    "role": "Web cartridge",
+    "description": "Tơ nén áp lực cao bắn một phát đẩy mục tiêu dính chặt vào tường hoặc sàn.",
+    "tuning": "High stagger single target shot.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/impact-webbing.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "web-bomb",
+    "title": "Web Bomb",
+    "category": "WEB_DEPLOYABLE",
+    "family": "Web Shooter DB",
+    "visual": "area",
+    "charges": "3 bombs",
+    "cooldown": 3,
+    "effectIcons": [
+      "web",
+      "area",
+      "immobilize"
+    ],
+    "role": "Deployable web shot",
+    "description": "Quả cầu tơ nổ diện rộng, quấn nhiều mục tiêu trong cùng một nhịp.",
+    "tuning": "Classic crowd lock gadget.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/web-bomb.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "web-grenade",
+    "title": "Web Grenade",
+    "category": "WEB_DEPLOYABLE",
+    "family": "Web Shooter DB",
+    "visual": "scatter",
+    "charges": "2 grenades",
+    "cooldown": 3,
+    "effectIcons": [
+      "web",
+      "area",
+      "knockback"
+    ],
+    "role": "Deployable web shot",
+    "description": "Lựu tơ bung mảnh theo hình nan nhện, đẩy lùi nhóm địch áp sát.",
+    "tuning": "Better spacing than Web Bomb, less hard lock.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/web-grenade.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "net-web",
+    "title": "Net Web",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "net",
+    "charges": "2 nets",
+    "cooldown": 2,
+    "effectIcons": [
+      "web",
+      "immobilize"
+    ],
+    "role": "Web cartridge",
+    "description": "Bắn lưới tơ bản rộng để chặn đường lao tới hoặc bắt mục tiêu bay thấp.",
+    "tuning": "Good anti-air and lane control.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/net-web.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "ricochet-web",
+    "title": "Ricochet Web",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "ricochet",
+    "charges": "3 shots",
+    "cooldown": 2,
+    "effectIcons": [
+      "web",
+      "chain"
+    ],
+    "role": "Web cartridge",
+    "description": "Đạn tơ nảy qua nhiều mục tiêu, dọn nhóm nhỏ đứng gần nhau.",
+    "tuning": "Chain control without spending drone charges.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/ricochet-web.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "splitter-web",
+    "title": "Splitter Web",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "split",
+    "charges": "2 bursts",
+    "cooldown": 2,
+    "effectIcons": [
+      "web",
+      "area"
+    ],
+    "role": "Web cartridge",
+    "description": "Một phát tơ tách thành nhiều tia nhỏ sau khi rời cổ tay, phủ cone phía trước.",
+    "tuning": "Wide cone opener.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/splitter-web.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "hook-web",
+    "title": "Hook Web",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "hook",
+    "charges": "4 hooks",
+    "cooldown": 1,
+    "effectIcons": [
+      "web",
+      "pull"
+    ],
+    "role": "Web cartridge",
+    "description": "Đầu móc tơ kéo vũ khí, khiên hoặc mục tiêu nhẹ về phía Spider.",
+    "tuning": "Utility pull, not raw damage.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/hook-web.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "taser-web",
+    "title": "Taser Web",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "electric",
+    "charges": "3 charges",
+    "cooldown": 3,
+    "effectIcons": [
+      "web",
+      "venom",
+      "stun"
+    ],
+    "role": "Web cartridge",
+    "description": "Tơ dẫn điện giật tê liệt mục tiêu công nghệ hoặc kẻ địch dùng giáp điện.",
+    "tuning": "Peter tech answer to electric enemies.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/taser-web.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "non-conductive-webbing",
+    "title": "Non-Conductive Webbing",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "insulated",
+    "charges": "2 canisters",
+    "cooldown": 2,
+    "effectIcons": [
+      "web",
+      "barrier"
+    ],
+    "role": "Web cartridge",
+    "description": "Tơ cách điện dùng để khóa nguồn điện, bọc dây hở hoặc chống phản sốc.",
+    "tuning": "Defensive cartridge for Electro-style threats.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/non-conductive-webbing.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "magnetic-webbing",
+    "title": "Magnetic Webbing",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "magnet",
+    "charges": "2 cartridges",
+    "cooldown": 2,
+    "effectIcons": [
+      "web",
+      "pull",
+      "marked"
+    ],
+    "role": "Web cartridge",
+    "description": "Tơ có hạt từ tính kéo vũ khí kim loại và gom drone nhỏ vào một điểm.",
+    "tuning": "Anti-metal control option.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/magnetic-webbing.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "anti-electro-netting",
+    "title": "Anti-Electro Netting",
+    "category": "WEB_DEPLOYABLE",
+    "family": "Web Shooter DB",
+    "visual": "net-electric",
+    "charges": "1 net",
+    "cooldown": 4,
+    "effectIcons": [
+      "web",
+      "barrier",
+      "stun"
+    ],
+    "role": "Deployable web shot",
+    "description": "Lưới tơ chống điện mở ra như khiên, hấp thụ xung và phản lại một cú choáng.",
+    "tuning": "Boss counter cartridge.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/anti-electro-netting.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "shield-web",
+    "title": "Shield Web",
+    "category": "WEB_DEPLOYABLE",
+    "family": "Web Shooter DB",
+    "visual": "shield",
+    "charges": "2 shields",
+    "cooldown": 3,
+    "effectIcons": [
+      "web",
+      "barrier"
+    ],
+    "role": "Deployable web shot",
+    "description": "Đan tơ dày thành tấm khiên tạm thời chặn đạn đạo và mảnh nổ.",
+    "tuning": "Momentary projectile defense.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/shield-web.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "web-line",
+    "title": "Web Line",
+    "category": "WEB_DEPLOYABLE",
+    "family": "Web Shooter DB",
+    "visual": "line",
+    "charges": "2 lines",
+    "cooldown": 2,
+    "effectIcons": [
+      "web",
+      "stealth"
+    ],
+    "role": "Deployable web shot",
+    "description": "Tạo dây tơ ngang giữa hai điểm neo để di chuyển, phục kích hoặc treo mục tiêu.",
+    "tuning": "Stealth setup tool.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/web-line.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "timer-web",
+    "title": "Timer Web",
+    "category": "WEB_DEPLOYABLE",
+    "family": "Web Shooter DB",
+    "visual": "timer",
+    "charges": "2 traps",
+    "cooldown": 2,
+    "effectIcons": [
+      "web",
+      "trap"
+    ],
+    "role": "Deployable web shot",
+    "description": "Bẫy tơ hẹn giờ bung sau vài giây, hợp với combo kéo nhóm vào tâm.",
+    "tuning": "Delayed crowd control.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/timer-web.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "freeze-capsules",
+    "title": "Freeze Capsules",
+    "category": "WEB_AMMO",
+    "family": "Web Shooter DB",
+    "visual": "freeze",
+    "charges": "2 capsules",
+    "cooldown": 3,
+    "effectIcons": [
+      "slow",
+      "immobilize"
+    ],
+    "role": "Web cartridge",
+    "description": "Viên lạnh trộn vào tơ làm cứng nhanh, giữ brute hoặc symbiote nhỏ trong khoảnh khắc.",
+    "tuning": "Temporary hard stop.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/freeze-capsules.svg",
+    "notionStatus": "Ready to sync"
+  },
+  {
+    "id": "web-fluid-cartridges",
+    "title": "Web Fluid Cartridges",
+    "category": "WEB_SHOOTER",
+    "family": "Web Shooter DB",
+    "visual": "cartridge",
+    "charges": "+2 capacity",
+    "cooldown": 1,
+    "effectIcons": [
+      "web",
+      "reload"
+    ],
+    "role": "Rig / upgrade",
+    "description": "Băng đạn dịch tơ dự phòng, tăng số lần dùng các chế độ tơ đặc biệt trong patrol dài.",
+    "tuning": "Capacity upgrade rather than a shot.",
+    "source": "Notion Gadget DB",
+    "image": "./assets/gadget-icons/web-fluid-cartridges.svg",
+    "notionStatus": "Ready to sync"
+  }
+]

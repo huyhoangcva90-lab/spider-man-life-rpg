@@ -46,21 +46,23 @@ Hero Arena dùng sprite sheet hành động với 17 state từ `idle` tới `vi
 
 ## Test
 
-Mở `tests/domain-tests.html` qua static server. Bộ test browser-native kiểm tra 11 rule quan trọng: reward-once, HP clamp, boss phase, Finisher, cooldown, unique loot, save/load, migration, difficulty, ally cooldown và Ultimate cap.
+Mở `tests/domain-tests.html` qua static server. Bộ test browser-native kiểm tra 13 rule quan trọng: reward-once, Notion EXP idempotency, habit resource restore, HP clamp, boss phase, Finisher, cooldown, unique loot, save/load, migration, difficulty, ally cooldown và Ultimate cap.
 
 ## Chạy local
 
-Đây là ứng dụng HTML/CSS/JavaScript module không cần build step. Vì trình duyệt chặn ES modules khi mở bằng `file://`, hãy phục vụ thư mục bằng một static server, ví dụ:
+Đây là ứng dụng HTML/CSS/JavaScript module không cần build step. Để đọc và ghi Notion từ máy cá nhân, tạo `.env.local` trong thư mục dự án với dòng `NOTION_API_KEY=<khóa của bạn>` rồi chạy:
 
 ```bash
-python -m http.server 4173
+powershell -ExecutionPolicy Bypass -File tools/start_local_server.ps1 -Port 4173
 ```
 
-Sau đó mở <http://127.0.0.1:4173/>. Đây là bản app chính duy nhất và cũng là bản GitHub Pages phục vụ.
+Sau đó mở <http://127.0.0.1:4173/>. Nếu cổng 4173 đang chạy máy chủ cũ, hãy dừng máy chủ đó hoặc chọn cổng khác bằng `-Port 4186`. Máy chủ static thông thường không có API Notion.
 
 ## Dữ liệu và âm thanh
 
-- Dữ liệu Life RPG, missions và ally được lưu trong LocalStorage của trình duyệt.
+- Quest, Habit, Goal, Active Quests, Hero Profile, suit, skill, gadget, companion và badge được đọc từ Notion khi `/api/notion` hoạt động. Check-in, hoàn thành quest và đổi trang bị ghi lại vào Notion; tác vụ hoàn thành và chỉ số Hero có hàng chờ cục bộ khi mạng lỗi.
+- Phần chiến đấu, nhật ký và một số chế độ phụ vẫn dùng LocalStorage. Hero Profile trong Notion là nguồn khởi tạo tiến độ; trạng thái trận đánh được lưu riêng trên thiết bị.
+- GitHub Pages chỉ phục vụ file tĩnh, nên không thể gọi Notion live qua `/api/notion`. Vercel `/api/notion` mặc định từ chối truy cập; cần thiết kế đăng nhập riêng trước khi bật đồng bộ trên Internet. `data/notion-snapshot.json` là file được Git theo dõi và có thể công khai; không đẩy dữ liệu Notion cá nhân vào file này nếu không chủ ý công bố. Máy chủ local chỉ lắng nghe `127.0.0.1` và dùng khóa trong `.env.local`.
 - SFX mặc định bật, nhưng trình duyệt chỉ cho phát audio sau thao tác đầu tiên của người dùng; có thể tắt ngay trên thanh trên hoặc trong Game Settings.
 - App không tự xin quyền GPS khi khởi động.
 

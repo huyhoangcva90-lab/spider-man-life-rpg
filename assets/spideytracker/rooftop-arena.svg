@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#0b1935"/><stop offset=".62" stop-color="#152c49"/><stop offset="1" stop-color="#111b32"/></linearGradient>
+    <linearGradient id="roof" x2="0" y2="1"><stop stop-color="#24405a"/><stop offset="1" stop-color="#07111f"/></linearGradient>
+    <pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#75b4ce" opacity=".15"/></pattern>
+    <pattern id="windows" width="32" height="32" patternUnits="userSpaceOnUse"><rect x="6" y="8" width="7" height="10" fill="#dba45f" opacity=".25"/><rect x="21" y="8" width="5" height="10" fill="#63a1bd" opacity=".22"/></pattern>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1200v700H0z"/>
+  <path fill="url(#dots)" d="M0 0h1200v540H0z"/>
+  <circle cx="602" cy="160" r="74" fill="#aac9d8" opacity=".11"/>
+  <circle cx="602" cy="160" r="49" fill="#a4c5d3" opacity=".16"/>
+  <path d="M0 420h58V291h42v30h31v99h64V237h70v183h39V329h56v91h72V195h42v-49h20v49h43v225h76V281h82v139h58V250h72v170h60V310h67v110h82V266h59v154h78v280H0z" fill="#0b1729"/>
+  <path d="M0 420h58V291h42v30h31v99h64V237h70v183h39V329h56v91h72V195h42v-49h20v49h43v225h76V281h82v139h58V250h72v170h60V310h67v110h82V266h59v154h78v280H0z" fill="url(#windows)"/>
+  <path d="M0 466h85V342h88v124h133V354h84v112h101V300h72v166h76V343h82v123h116V364h88v102h102V329h92v137h41v234H0z" fill="#091424"/>
+  <path d="M0 466h85V342h88v124h133V354h84v112h101V300h72v166h76V343h82v123h116V364h88v102h102V329h92v137h41v234H0z" fill="url(#windows)" opacity=".75"/>
+  <path d="M0 512h1200v188H0z" fill="url(#roof)"/>
+  <path d="M0 507h1200v12H0z" fill="#427b99"/>
+  <path d="M0 524h1200" stroke="#63b2ce" stroke-width="2" opacity=".4"/>
+  <path d="M0 620h1200M0 682h1200" stroke="#4d6f81" stroke-width="4" opacity=".35"/>
+  <path d="M115 512v188M270 512v188M435 512v188M600 512v188M765 512v188M930 512v188M1085 512v188" stroke="#607d89" stroke-width="4" opacity=".17"/>
+  <path d="M585 0v79m-12 0h24" stroke="#76bed6" stroke-width="3" opacity=".4"/>
+  <path d="M0 0h1200v700H0z" fill="#020912" opacity=".25"/>
+</svg>

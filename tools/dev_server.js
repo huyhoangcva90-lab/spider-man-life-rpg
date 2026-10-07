@@ -6,6 +6,10 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
+const localEnv = path.join(ROOT_DIR, '.env.local');
+if (!process.env.NOTION_API_KEY && fs.existsSync(localEnv) && typeof process.loadEnvFile === 'function') {
+  process.loadEnvFile(localEnv);
+}
 const PORT = process.env.PORT || 4173;
 
 const MIME_TYPES = {
@@ -45,6 +49,12 @@ const server = http.createServer((req, res) => {
     const notionPath = urlObj.searchParams.get('path');
     const token = process.env.NOTION_API_KEY || '';
 
+    if (!token) {
+      res.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: false, error: 'Notion is not configured on this server' }));
+      return;
+    }
+
     if (!notionPath) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ ok: false, error: 'Missing path query parameter' }));
@@ -80,8 +90,17 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  let safePath = path.normalize(decodeURIComponent(rawUrl)).replace(/^(\.\.[\/\\])+/, '');
-  let filePath = path.join(ROOT_DIR, safePath);
+  let decodedPath;
+  try { decodedPath = decodeURIComponent(rawUrl); } catch {
+    res.writeHead(400); res.end('Bad path'); return;
+  }
+  const segments = decodedPath.split(/[\/]+/).filter(Boolean);
+  const filePathRoot = path.resolve(ROOT_DIR, `.${decodedPath.replace(/\\/g, '/')}`);
+  const relativePath = path.relative(ROOT_DIR, filePathRoot);
+  if (segments.some((segment) => segment.startsWith('.')) || relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+    res.writeHead(403); res.end('Forbidden'); return;
+  }
+  let filePath = filePathRoot;
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
     filePath = path.join(filePath, 'index.html');

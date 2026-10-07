@@ -1,0 +1,150 @@
+{
+  "impact": {
+    "icon": "burst",
+    "label": "Impact"
+  },
+  "launch": {
+    "icon": "arrow-up-right",
+    "label": "Launch"
+  },
+  "airborne": {
+    "icon": "wind",
+    "label": "Airborne"
+  },
+  "stun": {
+    "icon": "sparkles",
+    "label": "Stun"
+  },
+  "knockback": {
+    "icon": "chevrons-right",
+    "label": "Knockback"
+  },
+  "focus": {
+    "icon": "gauge",
+    "label": "Focus"
+  },
+  "combo": {
+    "icon": "repeat-2",
+    "label": "Combo"
+  },
+  "finisher": {
+    "icon": "badge-x",
+    "label": "Finisher"
+  },
+  "mobility": {
+    "icon": "route",
+    "label": "Mobility"
+  },
+  "traversal": {
+    "icon": "send",
+    "label": "Traversal"
+  },
+  "sense": {
+    "icon": "radar",
+    "label": "Spider-Sense"
+  },
+  "dodge": {
+    "icon": "circle-dashed",
+    "label": "Dodge"
+  },
+  "parry": {
+    "icon": "shield-check",
+    "label": "Parry"
+  },
+  "counter": {
+    "icon": "rotate-ccw",
+    "label": "Counter"
+  },
+  "slow": {
+    "icon": "hourglass",
+    "label": "Slow"
+  },
+  "stealth": {
+    "icon": "eye-off",
+    "label": "Stealth"
+  },
+  "takedown": {
+    "icon": "crosshair",
+    "label": "Takedown"
+  },
+  "marked": {
+    "icon": "scan",
+    "label": "Marked"
+  },
+  "camouflage": {
+    "icon": "scan-face",
+    "label": "Camouflage"
+  },
+  "venom": {
+    "icon": "zap",
+    "label": "Bio-Electric"
+  },
+  "chain": {
+    "icon": "network",
+    "label": "Chain"
+  },
+  "overload": {
+    "icon": "activity",
+    "label": "Overload"
+  },
+  "heal": {
+    "icon": "heart-pulse",
+    "label": "Heal"
+  },
+  "barrier": {
+    "icon": "shield",
+    "label": "Barrier"
+  },
+  "spiderArms": {
+    "icon": "git-fork",
+    "label": "Spider-Arms"
+  },
+  "symbiote": {
+    "icon": "tentacle",
+    "label": "Symbiote"
+  },
+  "antiVenom": {
+    "icon": "sparkle",
+    "label": "Anti-Venom"
+  },
+  "pull": {
+    "icon": "magnet",
+    "label": "Pull"
+  },
+  "slam": {
+    "icon": "hammer",
+    "label": "Slam"
+  },
+  "area": {
+    "icon": "scan-search",
+    "label": "Area"
+  },
+  "pierce": {
+    "icon": "swords",
+    "label": "Pierce"
+  },
+  "rage": {
+    "icon": "flame",
+    "label": "Surge"
+  },
+  "web": {
+    "icon": "web",
+    "label": "Web"
+  },
+  "interrupt": {
+    "icon": "slash",
+    "label": "Interrupt"
+  },
+  "immobilize": {
+    "icon": "lock",
+    "label": "Immobilize"
+  },
+  "trap": {
+    "icon": "trap",
+    "label": "Trap"
+  },
+  "reload": {
+    "icon": "reload",
+    "label": "Reload"
+  }
+}

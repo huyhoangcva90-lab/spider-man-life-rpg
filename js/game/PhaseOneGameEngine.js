@@ -35,7 +35,7 @@ export class PhaseOneGameEngine {
         cooldowns: { web: 0, gadget: 0, ally: 0 }, charges: { gadget: 3 },
         combatLog: ['PATROL STARTED // MANHATTAN ROOFTOP'], storyComplete: false
       },
-      progression: { level: 1, rank: hero.rank, xp: 0, xpToNext: 100, hp: hero.maxHp, webEnergy: hero.maxWebEnergy, coins: 0, streak: 0, ultimate: 0, skillPoints: 0 },
+      progression: { level: 1, rank: hero.rank, xp: 0, totalXp: 0, xpToNext: 100, hp: hero.maxHp, webEnergy: hero.maxWebEnergy, coins: 0, streak: 0, ultimate: 0, skillPoints: 0 },
       daily: { date: this.localDay(), completed: 0, claimed: false, metrics: { WEB_USED: 0, ELITE_DEFEATED: 0 } },
       inventory: {},
       allyAffinity: { 'miles-morales': 0 },
@@ -120,7 +120,13 @@ export class PhaseOneGameEngine {
     let result = this.performActionById(questEvent.actionId, { quest: questEvent.title, bonus: 1.35, deferCommit: true });
     if (result.blocked && !this.state.battle.storyComplete) result = this.performActionById('basic-combo', { quest: questEvent.title, bonus: 1.35, deferCommit: true });
     result.quest = questEvent;
-    result.questReward = this.applyReward(questEvent.rewardId);
+    if (Number.isFinite(Number(entry.xp)) && entry.xp !== null) {
+      const xp = Math.max(0, Number(entry.xp));
+      this.rewardEngine.gainXp(this.state.progression, xp);
+      result.questReward = { xp, coins: 0, rewardId: 'notion-exp' };
+    } else {
+      result.questReward = this.applyReward(questEvent.rewardId);
+    }
     if (this.state.daily.completed >= 3 && !this.state.daily.claimed) {
       this.state.daily.claimed = true;
       result.dailyReward = this.applyReward('daily-three-clear');
@@ -129,6 +135,19 @@ export class PhaseOneGameEngine {
     this.log(`QUEST COMPLETE // ${questEvent.title.toUpperCase()}`);
     this.commit(result);
     return result;
+  }
+
+  recordHabitCheckin(habitId) {
+    if (!habitId) return { blocked: true, reason: 'HABIT ID MISSING' };
+    if (this.state.daily.date !== this.localDay()) this.repairState();
+    this.state.daily.habitIds ||= [];
+    if (this.state.daily.habitIds.includes(habitId)) return { blocked: true, reason: 'HABIT ALREADY CHECKED' };
+    this.state.daily.habitIds.push(habitId);
+    const hero = this.state.progression;
+    hero.hp = Math.min(hero.maxHp || this.data.hero.maxHp, hero.hp + 30);
+    hero.webEnergy = Math.min(this.data.hero.maxWebEnergy, hero.webEnergy + 30);
+    this.commit({ habitChecked: habitId });
+    return { hp: hero.hp, webEnergy: hero.webEnergy };
   }
 
   performAction(slot, options = {}) {
