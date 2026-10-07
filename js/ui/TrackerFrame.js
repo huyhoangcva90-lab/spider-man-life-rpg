@@ -120,9 +120,9 @@ export class TrackerFrame {
       if (!current) this.sound.playTrackerJingle();
     });
 
-    document.getElementById('btn-map-mode')?.addEventListener('click', () => {
+    document.getElementById('btn-field-mode')?.addEventListener('click', () => {
       this.sound.playSelect();
-      this.bus.emit('GAME_MENU_TARGET', { section: 'CITY' });
+      this.bus.emit('GAME_MENU_TARGET', { section: 'FIELD', tab: 'SYSTEMS' });
     });
 
     document.getElementById('btn-footer-settings')?.addEventListener('click', () => {

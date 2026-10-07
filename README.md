@@ -1,6 +1,6 @@
 # SPIDEY LIFE — Arena Mission Hub
 
-Ứng dụng Life RPG local-first biến nhiệm vụ đời thực thành sát thương trong trận đấu Spider hero vs villain.
+Ứng dụng Life RPG local-first kết hợp Life Reset 66 ngày, Quest Notion, Spider Apps và trận đấu theo lượt Spider hero vs villain.
 
 - Live: <https://huyhoangcva90-lab.github.io/spider-man-life-rpg/>
 - Repository: <https://github.com/huyhoangcva90-lab/spider-man-life-rpg>
@@ -9,18 +9,19 @@
 
 ## Luồng chính
 
-1. Tạo một mission thật trong Arena hoặc Map.
-2. Chuyển mission sang `DONE`.
-3. Quest event được normalize rồi kích hoạt CombatEngine và RewardEngine.
-4. Nhận XP, Web Coins, streak, loot và gây damage lên encounter hiện tại.
-5. Đánh đầy stagger để mở `FINISHER`; hạ Green Goblin để kết thúc Chapter.
+1. Habit chính nằm trong **Life Reset**; tab Progress dùng lưới ô vuông kiểu Hello Habit và tab 66 Days theo dõi hành trình.
+2. Quest được lấy từ Notion rồi tự chia Today, Main, Side và Daily theo Type, Frequency và Priority.
+3. Hoàn thành Habit hoặc Quest thật trong Notion để hồi HP, Energy, nhận XP và tiến triển trận đấu.
+4. Field là trung tâm app nhỏ: Time, Gym, Journal, Place Map và các app Gambit liên quan.
+5. Place Map lưu địa điểm theo danh mục, mở chỉ đường ngoài và chia sẻ link sang điện thoại.
 
 ## Các mode có chức năng
 
 - **Arena:** màn hình mặc định, Spider đấu villain, boss HP và battle action.
-- **Missions:** Main/Side/Daily quest và cổng tạo nhiệm vụ đời thật.
+- **Life Reset:** Habit hôm nay, lưới tiến độ và chiến dịch 66 ngày dùng Notion làm nguồn chuẩn.
+- **Quests:** Main/Side/Daily quest và cổng tạo nhiệm vụ đời thật.
 - **Spider-Verse:** Peter Classic, Miles assist và team synergy của vertical slice.
-- **City:** mode MapLibre để tìm, lọc và điều hướng; bấm nền map không tự tạo dữ liệu.
+- **Field:** trung tâm Spider Apps; Place Map là một công cụ con để tìm, lưu, lọc, chia sẻ và điều hướng.
 - **Hero:** profile, skill tree, gadget và inventory.
 
 Các nút không có nội dung đã được loại bỏ. Giao diện không dùng rương/lootbox; phần thưởng đến từ mission thật.

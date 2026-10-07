@@ -33,7 +33,14 @@ export function notionValue(property) {
 
 export function normalizeNotionCatalogPage(page) {
   const values = Object.fromEntries(Object.entries(page.properties || {}).map(([key, property]) => [key, notionValue(property)]));
-  return { ...values, id: page.id, createdAt: page.created_time || null, iconUrl: page.icon?.external?.url || page.icon?.file?.url || null, sourceUrl: page.url || '' };
+  return {
+    ...values,
+    id: page.id,
+    createdAt: page.created_time || null,
+    iconUrl: page.icon?.external?.url || page.icon?.file?.url || null,
+    coverUrl: page.cover?.external?.url || page.cover?.file?.url || null,
+    sourceUrl: page.url || ''
+  };
 }
 
 const text = (property) => (property?.title || property?.rich_text || [])

@@ -48,6 +48,8 @@ export class ActionRpgController {
     this.snapMap = new Map();
     this.previewSuitIndex = 0;
     this.equippedSuitIndex = 0;
+    this.visibleEnemyId = null;
+    this.enemyMotionTimer = null;
     this.journalEntries = JSON.parse(localStorage.getItem('spidey_journal_entries') || '[]');
   }
 
@@ -179,6 +181,43 @@ export class ActionRpgController {
     return null;
   }
 
+  catalogImage(item) {
+    return item?.Image || item?.['Marvel Snap'] || item?.['Suit Preview'] || item?.coverUrl || item?.iconUrl || '';
+  }
+
+  normalizedCatalogName(value = '') {
+    return String(value).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+
+  notionEnemyFor(enemy, encounterIndex = 0) {
+    if (!this.notionEnemies.length) return null;
+    const target = this.normalizedCatalogName(enemy?.name);
+    const exact = this.notionEnemies.find((item) => this.normalizedCatalogName(item.Boss || item.Enemy || item.Name) === target);
+    if (exact) return exact;
+    const withArt = this.notionEnemies.filter((item) => this.catalogImage(item));
+    if (!withArt.length) return null;
+    if (enemy?.tier === 'BOSS') {
+      return withArt.find((item) => /green goblin/i.test(item.Boss || '')) || withArt.find((item) => /boss/i.test(`${item['Enemy Class']} ${item['Enemy Role']} ${item.Type}`)) || withArt[0];
+    }
+    const minions = withArt.filter((item) => /minion|melee|ranged|bruiser|assassin/i.test(`${item['Enemy Class']} ${item['Enemy Role']} ${item.Type}`));
+    return (minions.length ? minions : withArt)[encounterIndex % (minions.length || withArt.length)];
+  }
+
+  syncArenaEnemyArt(enemyRecord) {
+    const art = this.catalogImage(enemyRecord);
+    const displayArt = art || './assets/spideytracker/street-thug-minion.png';
+    const target = document.getElementById('combat-enemy-image');
+    const rival = document.getElementById('footer-enemy-rival-image');
+    if (target) {
+      target.classList.add('has-notion-art');
+      target.innerHTML = `<img src="${this.escapeHtml(displayArt)}" alt="${this.escapeHtml(enemyRecord?.Boss || 'Street Thug')}">`;
+    }
+    if (rival) {
+      rival.src = displayArt;
+      rival.closest('.footer-enemy-counterpart')?.classList.add('has-art');
+    }
+  }
+
   escapeHtml(value = '') {
     return String(value).replace(/[&<>"']/g, (char) => ({
       '&': '&amp;',
@@ -247,10 +286,6 @@ export class ActionRpgController {
 
   selectSection(section, playSound = true) {
     if (playSound) this.sound.playClick();
-    if (section === 'HABITS') {
-      window.location.assign('./life-reset/index.html');
-      return;
-    }
     if (section === 'CITY') {
       this.closePanel();
       document.body.dataset.gameMode = 'MAP';
@@ -301,6 +336,11 @@ export class ActionRpgController {
 
   handleUpdate(result) {
     this.render(result.snapshot);
+    if (result.phaseChanged) this.animateEnemy('phase', 650);
+    else if (result.victory?.next) this.animateEnemy('enter', 550);
+    else if (result.victory?.boss) this.animateEnemy('defeat', 800);
+    else if (result.heroDamage > 0 || result.perfectDodge) this.animateEnemy('attack', 520);
+    else if (result.damage > 0) this.animateEnemy('hurt', 440);
     if (result.perfectDodge) this.sound.playPerfectDodge();
     if (result.victory?.boss) this.sound.playVictoryCue();
     else if (result.victory?.next) this.sound.playCrimeAlert();
@@ -311,6 +351,12 @@ export class ActionRpgController {
 
   render(snapshot = this.engine.snapshot()) {
     const { hero, enemy, data } = snapshot;
+    const notionEnemy = this.notionEnemyFor(enemy, snapshot.encounterIndex);
+    const enemyDisplayName = notionEnemy?.Boss || enemy.name;
+    const heroDisplayName = this.notionHeroProfile?.Hero || this.notionHeroProfile?.Name || this.notionHeroProfile?.Profile || 'PETER PARKER';
+    const heroName = document.querySelector('.hud-avatar strong');
+    if (heroName) heroName.textContent = String(heroDisplayName).toUpperCase();
+    this.renderEnemySprite(enemy);
     this.text('hud-level', hero.level);
     this.text('hud-rank', hero.rank);
     this.text('hud-xp-text', `${hero.xp} / ${hero.xpToNext}`);
@@ -325,9 +371,9 @@ export class ActionRpgController {
     const activeQuest = this.notionActiveQuests.find((quest) => !quest.done);
     this.text('hud-main-quest', activeQuest?.title || (this.notionSource === 'live' ? 'ALL NOTION QUESTS CLEAR' : 'THE GOBLIN SIGNAL'));
     this.text('hud-quest-progress', this.notionActiveQuests.length ? `${this.notionActiveQuests.filter((quest) => quest.done).length} / ${this.notionActiveQuests.length} QUESTS` : snapshot.storyComplete ? 'CHAPTER CLEAR' : `WAVE ${snapshot.encounterIndex + 1} / ${data.encounter.length}`);
-    this.text('enemy-tier', enemy.tier);
-    this.text('enemy-name', enemy.name);
-    this.text('combat-enemy-short', enemy.name.split(' ').slice(-1)[0]);
+    this.text('enemy-tier', notionEnemy?.['Tier Rank'] || notionEnemy?.['Enemy Class'] || enemy.tier);
+    this.text('enemy-name', enemyDisplayName);
+    this.text('combat-enemy-short', enemyDisplayName.split(' ').slice(-1)[0]);
     this.text('enemy-hp-text', `${snapshot.enemyHp} / ${enemy.maxHp}`);
     this.text('enemy-stagger-text', `${Math.round(snapshot.enemyStagger)}%`);
     this.text('enemy-weakness', enemy.weakness);
@@ -344,6 +390,7 @@ export class ActionRpgController {
     this.text('cooldown-web', snapshot.cooldowns.web ? `CD ${snapshot.cooldowns.web}` : `${Math.ceil(data.actions.web.energy / data.hero.maxWebEnergy * maxEnergy)} ENERGY`);
     this.text('cooldown-gadget', snapshot.cooldowns.gadget ? `CD ${snapshot.cooldowns.gadget}` : `${snapshot.charges.gadget} CHARGES`);
     this.text('cooldown-ally', snapshot.cooldowns.ally ? `CD ${snapshot.cooldowns.ally}` : 'READY');
+    this.syncArenaEnemyArt(notionEnemy);
 
     const enemyFighter = document.querySelector('.action-fighter--enemy');
     enemyFighter?.classList.toggle('enemy--grunt', snapshot.encounterIndex < 3);
@@ -366,6 +413,34 @@ export class ActionRpgController {
     if (!document.getElementById('game-panel-backdrop')?.hasAttribute('hidden')) this.renderPanel();
   }
 
+  renderEnemySprite(enemy) {
+    const sprite = document.getElementById('combat-enemy-image');
+    if (!sprite || !enemy) return;
+    const sprites = {
+      'street-thug': './assets/spideytracker/street-thug-minion.png',
+      'tech-gunner': './assets/sprites/minions/Fisk_Gunner_B.png',
+      'shield-enemy': './assets/sprites/minions/Hunter_Shieldbearer.png',
+      'hunter-captain': './assets/sprites/minions/Hunter_Swordsman.png',
+      'green-goblin': './assets/spideytracker/green-goblin-pixel.png'
+    };
+    const src = sprites[enemy.id] || sprites['street-thug'];
+    if (this.visibleEnemyId !== enemy.id) {
+      this.visibleEnemyId = enemy.id;
+      sprite.style.setProperty('--enemy-art', `url("${src}")`);
+      sprite.setAttribute('aria-label', enemy.name);
+      sprite.dataset.enemy = enemy.id;
+      this.animateEnemy('enter', 550);
+    }
+  }
+
+  animateEnemy(state, duration) {
+    const sprite = document.getElementById('combat-enemy-image');
+    if (!sprite) return;
+    window.clearTimeout(this.enemyMotionTimer);
+    sprite.dataset.motion = state;
+    this.enemyMotionTimer = window.setTimeout(() => { sprite.dataset.motion = 'idle'; }, duration);
+  }
+
   openPanel(section) {
     this.panelSection = section;
     this.panelTab = this.defaultTab(section);
@@ -386,7 +461,7 @@ export class ActionRpgController {
 
   defaultTab(section) {
     const map = {
-      QUESTS: 'TODO',
+      QUESTS: 'TODAY',
       HERO: 'PROFILE',
       HABITS: 'TODAY',
       FIELD: 'SYSTEMS',
@@ -407,7 +482,7 @@ export class ActionRpgController {
     const titles = { 
       QUESTS: 'FRIENDLY NEIGHBORHOOD // QUESTS',
       HERO: 'SPIDER SUIT // HERO BUILD',
-      HABITS: 'DAILY PATROL // HABITS',
+      HABITS: 'LIFE RESET // 66 DAY HABIT',
       FIELD: 'SPIDER OS // FIELD SYSTEMS',
       ARCHIVE: 'SPIDEY ARCHIVE & BESTIARY', 
       CHRONICLE: 'PETER PARKER CHRONICLE', 
@@ -418,10 +493,10 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: ['TODO', 'ACTIVE', 'GOALS', 'PATROL'],
+      QUESTS: ['TODAY', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
       HERO: ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
-      HABITS: ['TODAY', 'REPORTS', 'RESET 66'],
-      FIELD: ['SYSTEMS', 'TIME', 'GYM', 'JOURNAL', 'BESTIARY', 'BACKPACKS'],
+      HABITS: ['TODAY', 'PROGRESS', '66 DAYS'],
+      FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
       CHRONICLE: ['RHYTHM', 'JOURNAL', 'GYM'],
       SETTINGS: ['GAME', 'SAVE']
@@ -456,25 +531,52 @@ export class ActionRpgController {
   }
 
   renderHabitSection() {
-    if (this.panelTab === 'RESET 66') {
-      return `<div class="quest-source-banner"><span>66-DAY PROTOCOL</span><strong>LIFE RESET // HABIT CAMPAIGN</strong><small>Mở ứng dụng Life Reset hiện có trong dự án để theo dõi hành trình 66 ngày.</small></div><div class="pixel-card-grid"><article class="pixel-game-card"><h3 class="pixel-card-title">DAY BY DAY</h3><p class="pixel-card-desc">Thẻ thói quen, ngày hiện tại, nhiệm vụ hoàn thành và tiến độ dài hạn.</p><a class="pixel-action-btn pixel-action-btn--gold" href="./life-reset/index.html">MỞ LIFE RESET 66</a></article></div>`;
+    const hasGameEnabledSelection = this.notionHabits.some((habit) => habit.gameEnabled);
+    const habits = this.notionHabits
+      .map((habit, sourceIndex) => ({ ...habit, sourceIndex }))
+      .filter((habit) => !hasGameEnabledSelection || habit.gameEnabled);
+    const total = habits.length;
+    const completed = habits.filter((habit) => habit.today || habit.done).length;
+    let resetState = { day: 1, totalDays: 66 };
+    try { resetState = { ...resetState, ...JSON.parse(localStorage.getItem('life_reset_screenshot_v5') || '{}') }; } catch { /* use day one */ }
+    const day = Math.max(1, Math.min(66, Number(resetState.day) || 1));
+    const pct = total ? Math.round(completed / total * 100) : 0;
+    const syncLabel = this.notionSource === 'live' ? 'NOTION LIVE' : 'NOTION SNAPSHOT';
+    const syncBar = `<div class="life-reset-sync"><span><i></i>${syncLabel}</span><b>${total} HABITS</b><button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue">↻ SYNC</button></div>`;
+
+    if (this.panelTab === 'PROGRESS') {
+      return `${syncBar}<section class="habit-progress-head"><div><small>HELLO HABIT // TODAY</small><strong>${completed}<em>/ ${total}</em></strong><span>HOÀN THÀNH</span></div><div class="habit-progress-ring" style="--habit-progress:${pct * 3.6}deg"><b>${pct}%</b></div></section>
+        <div class="habit-square-grid">${habits.map((habit) => {
+          const done = habit.today || habit.done;
+          return `<button type="button" class="habit-square ${done ? 'is-done' : ''}" data-checkin-habit="${habit.sourceIndex}" ${done ? 'disabled' : ''}><span class="habit-square-check">${done ? '✓' : ''}</span><small>${this.escapeHtml(habit.category || 'HABIT')}</small><strong>${this.escapeHtml(habit.name || habit.title)}</strong><em>${this.escapeHtml(habit.timeBlock || 'Cả ngày')}</em></button>`;
+        }).join('') || '<p class="pixel-card-desc">Chưa có Habit trong Notion.</p>'}</div>`;
     }
-    if (this.panelTab === 'REPORTS') {
-      const total = this.notionHabits.length;
-      const completed = this.notionHabits.filter((habit) => habit.today || habit.done).length;
-      return `<div class="quest-source-banner"><span>DAILY PATROL REPORT</span><strong>${completed} / ${total} HABITS HÔM NAY</strong><small>Dữ liệu check-in lấy từ Notion. Các ngày trước cần lịch sử Habit Log trong Notion để vẽ biểu đồ chính xác.</small></div>
-        <div class="pixel-card-grid">${this.notionHabits.map((habit) => `<article class="pixel-game-card ${habit.today || habit.done ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${habit.today || habit.done ? '✓ DONE' : 'TO DO'}</span></div><h3 class="pixel-card-title">${this.escapeHtml(habit.name || habit.title)}</h3></article>`).join('')}</div>`;
+
+    if (this.panelTab === '66 DAYS') {
+      return `${syncBar}<section class="life-66-campaign"><div><small>LIFE RESET // SPIDER PROTOCOL</small><h3>DAY ${day}<span>/66</span></h3><p>Mỗi ngày hoàn thành Habit thật trong Notion để hồi HP, Energy và xây chuỗi kỷ luật.</p></div><div class="life-66-score"><strong>${pct}%</strong><small>TODAY</small></div></section>
+        <div class="life-66-grid" aria-label="Lộ trình 66 ngày">${Array.from({ length: 66 }, (_, index) => { const value = index + 1; return `<span class="${value === day ? 'is-today' : value < day ? 'is-past' : ''}">${value}</span>`; }).join('')}</div>`;
     }
-    const originalTab = this.panelTab;
-    this.panelTab = 'HABITS';
-    const html = this.renderQuestsSection();
-    this.panelTab = originalTab;
-    return html;
+
+    return `${syncBar}
+      <section class="life-reset-hero"><div><small>SPIDER LIFE // 66 DAY HABIT</small><h3>DAY ${day}<span>/66</span></h3><p>${completed === total && total ? 'Daily patrol complete. Thành phố an toàn thêm một ngày.' : `${Math.max(0, total - completed)} thói quen còn lại trong patrol hôm nay.`}</p></div><div class="life-reset-meter"><span style="width:${pct}%"></span><b>${completed}/${total}</b></div></section>
+      <div class="habit-filter-row"><button class="active" data-habit-filter="all">ALL ${total}</button><button data-habit-filter="todo">TO-DO ${total - completed}</button><button data-habit-filter="done">DONE ${completed}</button></div>
+      <div class="life-reset-card-list">${habits.map((habit) => {
+        const done = habit.today || habit.done;
+        const bad = /bad/i.test(habit.category || '');
+        return `<article class="life-reset-card ${done ? 'is-done' : ''} ${bad ? 'is-bad' : ''}" data-habit-state="${done ? 'done' : 'todo'}"><div class="life-reset-card-copy"><div><span>${this.escapeHtml(habit.category || 'HABIT')}</span>${habit.streak ? `<em>🔥 ${habit.streak}D</em>` : ''}</div><h3>${this.escapeHtml(habit.name || habit.title)}</h3><p>${this.escapeHtml(habit.description || habit.outcome || 'Daily discipline protocol from Notion.')}</p><small>${this.escapeHtml(habit.timeBlock || 'Cả ngày')} · +${Number(habit.xp) || 1} XP</small></div><button type="button" data-checkin-habit="${habit.sourceIndex}" ${done ? 'disabled' : ''} aria-label="${done ? 'Đã hoàn thành' : `Hoàn thành ${this.escapeHtml(habit.name || habit.title)}`}">${done ? '✓' : '+'}</button></article>`;
+      }).join('') || '<p class="pixel-card-desc">Đang tải Habit từ Notion.</p>'}</div>`;
   }
 
   renderFieldSection() {
     if (this.panelTab === 'SYSTEMS') return this.renderSpiderSystems();
-    if (this.panelTab === 'BESTIARY' || this.panelTab === 'BACKPACKS') return this.renderArchiveSection();
+    if (this.panelTab === 'PLACES') return `<section class="place-command-card"><div><small>SPIDER FIELD // PLACES</small><strong>SỔ ĐỊA ĐIỂM & ĐIỀU HƯỚNG</strong><p>Lưu địa chỉ theo danh mục, tìm kiếm trên bản đồ và mở chỉ đường bằng Google Maps hoặc Apple Maps. Nút chia sẻ trong hồ sơ địa điểm có thể gửi link sang điện thoại.</p></div><button class="pixel-action-btn pixel-action-btn--blue" data-open-map-system>MỞ PLACE MAP</button></section>`;
+    if (this.panelTab === 'ENEMIES' || this.panelTab === 'BESTIARY' || this.panelTab === 'BACKPACKS') {
+      const originalTab = this.panelTab;
+      if (this.panelTab === 'ENEMIES') this.panelTab = 'BESTIARY';
+      const html = this.renderArchiveSection();
+      this.panelTab = originalTab;
+      return html;
+    }
     if (this.panelTab === 'GYM') {
       const workouts = this.notionHabits.map((habit, index) => ({ habit, index })).filter(({ habit }) => /gym|workout|exercise|push|plank|run|chạy|tập|hít đất|thể dục|cardio/i.test(`${habit.title} ${habit.category} ${habit.description}`));
       return `<div class="quest-source-banner"><span>PARKER TRAINING</span><strong>GYM // NHIỆM VỤ TẬP LUYỆN TỪ NOTION</strong><small>Hoàn thành buổi tập sẽ check-in đúng Habit trong Notion và hồi phục Hero.</small></div>
@@ -497,30 +599,32 @@ export class ActionRpgController {
 
   renderSpiderSystems() {
     const apps = [
-      { id: '01', icon: '◉', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './life-os/index.html#routine', desc: 'Morning, work và evening routine đồng bộ qua Gambit cloud.' },
-      { id: '02', icon: '◷', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', section: 'FIELD', tab: 'TIME', desc: 'Focus timer, lịch tuần tra và Time-Tracking lấy từ Notion.' },
-      { id: '03', icon: '⚡', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './life-os/index.html#dopamine', desc: 'Chọn hoạt động thay thế việc cuộn vô thức.' },
-      { id: '04', icon: '₫', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GOOGLE SHEETS', tone: 'green', href: 'https://gambit-d9b.pages.dev/apps/finance/index.html', external: true, desc: 'Dòng tiền, tiết kiệm, tài sản, khoản nợ và kế hoạch tháng.' },
-      { id: '05', icon: '▣', name: 'TODAY MISSIONS', meta: 'QUICK TASKS', source: 'NOTION', tone: 'red', section: 'QUESTS', tab: 'TODO', desc: 'Danh sách nhiệm vụ hôm nay và phần thưởng chiến đấu.' },
-      { id: '06', icon: '◆', name: 'HABIT TRACKER', meta: 'STREAK HUB', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'TODAY', desc: 'Check-in thói quen để hồi HP, Energy và giữ streak.' },
-      { id: '07', icon: 'A', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: 'https://gambit-d9b.pages.dev/apps/english/index.html', external: true, desc: '32 bài ngữ pháp, flashcard, tra từ và ôn lại câu sai.' },
-      { id: '08', icon: '✎', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', section: 'FIELD', tab: 'JOURNAL', desc: 'Nhật ký, bài học và chiến công được lưu về Notion.' },
-      { id: '09', icon: '✦', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: 'https://gambit-d9b.pages.dev/apps/oracle/index.html', external: true, desc: 'Không gian rút bài và tự chiêm nghiệm theo chủ đề.' },
-      { id: '10', icon: '▲', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', section: 'FIELD', tab: 'GYM', desc: 'Giáo án và lịch sử Exercise, Cardio, Sport lấy từ Notion.' },
-      { id: '11', icon: '◇', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: 'https://gambit-d9b.pages.dev/apps/style30/index.html', external: true, desc: 'Phối màu, dáng người, capsule wardrobe và grooming.' },
-      { id: '12', icon: 'J', name: 'JARVIS', meta: 'AI CONSOLE', source: 'EXTERNAL', tone: 'blue', href: 'https://huyhoangcva90-lab.github.io/jarvis/', external: true, desc: 'Mở trợ lý AI Jarvis trong một ứng dụng riêng.' }
+      { id: '01', icon: '⌖', name: 'PLACE MAP', meta: 'ADDRESS BOOK · ROUTES', source: 'LOCAL + NOTION', tone: 'blue', map: true, desc: 'Quản lý địa chỉ theo danh mục, mở chỉ đường và gửi link sang điện thoại.' },
+      { id: '02', icon: '◉', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './life-os/index.html#routine', desc: 'Morning, work và evening routine đồng bộ qua Gambit cloud.' },
+      { id: '03', icon: '◷', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', section: 'FIELD', tab: 'TIME', desc: 'Focus timer và Time-Tracking lấy từ Notion.' },
+      { id: '04', icon: '▲', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', section: 'FIELD', tab: 'GYM', desc: 'Giáo án và lịch sử tập luyện lấy từ Notion.' },
+      { id: '05', icon: '⚡', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './life-os/index.html#dopamine', desc: 'Chọn hoạt động thay thế việc cuộn vô thức.' },
+      { id: '06', icon: '₫', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GAMBIT APP', tone: 'green', href: 'https://gambit-d9b.pages.dev/apps/finance/index.html', external: true, desc: 'Dòng tiền, tiết kiệm, tài sản và kế hoạch tháng.' },
+      { id: '07', icon: '▣', name: 'TODAY MISSIONS', meta: 'QUICK TASKS', source: 'NOTION', tone: 'red', section: 'QUESTS', tab: 'TODAY', desc: 'Quest hôm nay được lọc theo Type và thời hạn.' },
+      { id: '08', icon: '◆', name: 'LIFE RESET 66', meta: 'HABIT CAMPAIGN', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'TODAY', desc: 'Check-in thói quen để hồi HP, Energy và giữ streak.' },
+      { id: '09', icon: 'A', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: 'https://gambit-d9b.pages.dev/apps/english/index.html', external: true, desc: 'Ngữ pháp, flashcard, tra từ và ôn lại câu sai.' },
+      { id: '10', icon: '✎', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', section: 'FIELD', tab: 'JOURNAL', desc: 'Nhật ký, bài học và chiến công lưu về Notion.' },
+      { id: '11', icon: '✦', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: 'https://gambit-d9b.pages.dev/apps/oracle/index.html', external: true, desc: 'Không gian rút bài và tự chiêm nghiệm.' },
+      { id: '12', icon: '◇', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: 'https://gambit-d9b.pages.dev/apps/style30/index.html', external: true, desc: 'Phối màu, capsule wardrobe và grooming.' }
     ];
     return `
       <section class="spider-system-command">
-        <div><span>GAMBIT LIFE OS // SPIDER NETWORK</span><strong>12 FIELD SYSTEMS ONLINE</strong><small>Ứng dụng có database tiếp tục dùng Notion làm nguồn chuẩn. Routine và Dopamine dùng Gambit cloud.</small></div>
-        <div class="spider-system-count"><b>12</b><span>APPS</span></div>
+        <div><span>GAMBIT LIFE OS // SPIDER NETWORK</span><strong>${apps.length} FIELD SYSTEMS ONLINE</strong><small>Map là một công cụ trong Field. Ứng dụng có database dùng Notion làm nguồn chuẩn.</small></div>
+        <div class="spider-system-count"><b>${apps.length}</b><span>APPS</span></div>
       </section>
       <div class="spider-app-grid" aria-label="Danh sách ứng dụng Gambit">
         ${apps.map((app) => {
-          const attrs = app.section
+          const attrs = app.map
+            ? 'button type="button" data-open-map-system'
+            : app.section
             ? `button type="button" data-open-system-section="${app.section}" data-open-system-tab="${app.tab}"`
             : `a href="${app.href}"${app.external ? ' target="_blank" rel="noopener noreferrer"' : ''}`;
-          const closeTag = app.section ? 'button' : 'a';
+          const closeTag = app.map || app.section ? 'button' : 'a';
           return `<${attrs} class="spider-app-card spider-app-card--${app.tone}">
             <span class="spider-app-index">${app.id}</span>
             <span class="spider-app-icon" aria-hidden="true">${app.icon}</span>
@@ -642,33 +746,58 @@ export class ActionRpgController {
       `;
     }
 
-    // Default: TODO
-    const uncompletedTasks = this.notionTasks.filter(t => !t.done);
+    const taskQuests = this.notionTasks.map((task, index) => ({ ...task, sourceKind: 'task', sourceIndex: index, questType: task.type || 'SIDE' }));
+    const activeQuestRecords = this.notionActiveQuests.map((quest, index) => ({ ...quest, sourceKind: 'active', sourceIndex: index, questType: /daily/i.test(quest.frequency || '') ? 'DAILY' : 'MAIN' }));
+    const allQuests = [...activeQuestRecords, ...taskQuests];
+    const dateKey = (value) => value ? String(value).slice(0, 10) : '';
+    const today = new Date();
+    const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const classify = (quest) => {
+      const haystack = `${quest.questType || ''} ${quest.type || ''} ${quest.frequency || ''} ${quest.priority || ''}`.toLowerCase();
+      if (/daily|every day|hàng ngày/.test(haystack)) return 'DAILY';
+      if (/main|critical|high priority|work/.test(haystack)) return 'MAIN';
+      return 'SIDE';
+    };
+    let visibleQuests;
+    if (this.panelTab === 'TODAY') {
+      visibleQuests = allQuests.filter((quest) => !quest.done && (dateKey(quest.date || quest.dueDate) === todayKey || /daily/i.test(quest.frequency || '')));
+      if (!visibleQuests.length) visibleQuests = allQuests.filter((quest) => !quest.done);
+    } else {
+      visibleQuests = allQuests.filter((quest) => classify(quest) === this.panelTab);
+    }
+    const sectionCopy = {
+      TODAY: ['TODAY PATROL', 'NHIỆM VỤ CẦN LÀM', 'Ưu tiên nhiệm vụ đến hạn hôm nay; khi không có hạn hôm nay sẽ hiện toàn bộ việc chưa hoàn thành.'],
+      MAIN: ['MAIN QUESTS', 'NHIỆM VỤ CHÍNH', 'Lọc từ Type và Priority trong Notion.'],
+      SIDE: ['SIDE QUESTS', 'NHIỆM VỤ PHỤ', 'Các việc phụ, hẹn gặp và nhiệm vụ không thuộc tuyến chính.'],
+      DAILY: ['DAILY QUESTS', 'NHIỆM VỤ LẶP LẠI', 'Nhiệm vụ Daily trong Master Calendar và Active Quests.']
+    }[this.panelTab] || ['NOTION QUESTS', 'QUEST BOARD', 'Dữ liệu trực tiếp từ Notion.'];
     return `
       ${syncBannerHtml}
       <div class="quest-source-banner">
-        <span>📜 NOTION QUESTS</span>
-        <strong>DANH SÁCH NHIỆM VỤ ĐỜI THỰC (${uncompletedTasks.length} VIỆC CẦN LÀM)</strong>
-        <small>Hoàn thành mỗi việc sẽ kích hoạt Hero tung Combo đập quái trong Arena!</small>
+        <span>${sectionCopy[0]}</span>
+        <strong>${sectionCopy[1]} (${visibleQuests.length})</strong>
+        <small>${sectionCopy[2]}</small>
       </div>
-      <div class="pixel-card-grid">
-        ${this.notionTasks.map((task, idx) => `
-          <article class="pixel-game-card ${task.done ? 'pixel-game-card--done' : ''}">
+      <div class="quest-board-list">
+        ${visibleQuests.map((quest) => `
+          <article class="quest-board-card ${quest.done ? 'is-done' : ''}">
             <div class="pixel-card-header">
-              <span class="pixel-tag ${task.priority?.includes('High') || task.priority?.includes('Critical') ? 'pixel-tag--red' : 'pixel-tag'}">${this.escapeHtml(task.priority || 'Bình thường')}</span>
-              <span class="pixel-tag pixel-tag--green">${task.gameXp != null ? `+${Number(task.gameXp) || 0} XP` : '+28 XP // +18 COINS'}</span>
+              <span class="pixel-tag ${classify(quest) === 'MAIN' ? 'pixel-tag--red' : classify(quest) === 'DAILY' ? 'pixel-tag--green' : 'pixel-tag--blue'}">${this.escapeHtml(classify(quest))}</span>
+              <span class="pixel-tag">${this.escapeHtml(quest.type || quest.frequency || 'QUEST')}</span>
+              <span class="pixel-tag pixel-tag--gold">+${Number(quest.gameXp ?? quest.xp) || 1} XP</span>
             </div>
-            <h3 class="pixel-card-title">${this.escapeHtml(task.title || task.name)}</h3>
-            <p class="pixel-card-desc">${task.date ? `Hạn chót: ${new Date(task.date).toLocaleDateString('vi-VN')}` : 'Nhiệm vụ hàng ngày từ Notion'}</p>
+            <h3>${this.escapeHtml(quest.title || quest.name)}</h3>
+            <p>${this.escapeHtml(quest.description || '')}</p>
+            <small>${quest.date || quest.dueDate ? `HẠN ${new Date(quest.date || quest.dueDate).toLocaleDateString('vi-VN')}` : 'NOTION QUEST'}</small>
             <div class="pixel-card-footer">
-              ${task.address ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${idx}">📍 BẢN ĐỒ</button>` : '<span></span>'}
-              <button class="pixel-action-btn ${task.done ? 'pixel-action-btn--disabled' : ''}" 
-                      data-complete-task="${idx}" ${task.done ? 'disabled' : ''}>
-                ${task.done ? '✓ ĐÃ XONG' : '⚔️ HOÀN THÀNH'}
+              ${quest.address && quest.sourceKind === 'task' ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${quest.sourceIndex}">📍 ĐỊA ĐIỂM</button>` : '<span></span>'}
+              <button class="pixel-action-btn ${quest.done ? 'pixel-action-btn--disabled' : ''}"
+                      ${quest.sourceKind === 'active' ? `data-complete-active-quest="${quest.sourceIndex}"` : `data-complete-task="${quest.sourceIndex}"`} ${quest.done ? 'disabled' : ''}>
+                ${quest.done ? '✓ ĐÃ XONG' : 'HOÀN THÀNH'}
               </button>
             </div>
           </article>
-        `).join('')}
+        `).join('') || '<div class="quest-empty-state"><strong>KHÔNG CÓ QUEST TRONG NHÓM NÀY</strong><small>Kiểm tra trường Type/Frequency trong Notion hoặc chuyển sang tab Today.</small></div>'}
       </div>
       <form class="quest-create-form" id="quest-create-form"><label for="quest-new-title">NHIỆM VỤ MỚI TRONG NOTION</label><input id="quest-new-title" name="title" required maxlength="150" placeholder="Việc bạn sẽ làm..." autocomplete="off"><input name="date" type="date" aria-label="Ngày thực hiện"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">+ TẠO QUEST</button></form>
     `;
@@ -700,7 +829,7 @@ export class ActionRpgController {
         <div class="pixel-card-grid"><article class="pixel-game-card"><h3 class="pixel-card-title">SUIT</h3><p class="pixel-card-desc">${this.escapeHtml(suit?.Suit || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">GADGETS</h3><p class="pixel-card-desc">${this.escapeHtml(gadgets.map((item) => item.Gadget || item.Name || item.Title).join(', ') || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">SKILLS</h3><p class="pixel-card-desc">${this.escapeHtml(skills.map((item) => item.Skill || item.Name || item.Title).join(', ') || 'Chưa trang bị')}</p></article></div>`;
     }
     if (this.panelTab === 'BADGES') {
-      return `<div class="quest-source-banner"><span>SPIDER BADGES</span><strong>HUY HIỆU TỪ NOTION</strong><small>${this.notionBadges.length} badge, biểu tượng lấy từ mục Badges & Medals.</small></div><div class="pixel-card-grid">${this.notionBadges.map((badge) => `<article class="pixel-game-card ${badge.Unlocked ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(badge.Tier || 'BADGE')}</span><span class="pixel-tag">${badge.Unlocked ? 'UNLOCKED' : 'LOCKED'}</span></div>${badge.iconUrl || badge.Image ? `<img class="notion-badge-icon" src="${this.escapeHtml(badge.iconUrl || badge.Image)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(badge.Medal || 'Badge')}</h3><p class="pixel-card-desc">${this.escapeHtml(badge.Requirement || '')}</p></article>`).join('') || '<p class="pixel-card-desc">Đang tải badge từ Notion.</p>'}</div>`;
+      return `<div class="quest-source-banner"><span>SPIDER BADGES</span><strong>HUY HIỆU TỪ NOTION</strong><small>${this.notionBadges.length} badge, biểu tượng lấy từ mục Badges & Medals.</small></div><div class="pixel-card-grid">${this.notionBadges.map((badge) => { const art = this.catalogImage(badge); return `<article class="pixel-game-card ${badge.Unlocked ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(badge.Tier || 'BADGE')}</span><span class="pixel-tag">${badge.Unlocked ? 'UNLOCKED' : 'LOCKED'}</span></div>${art ? `<img class="notion-badge-icon" src="${this.escapeHtml(art)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(badge.Medal || 'Badge')}</h3><p class="pixel-card-desc">${this.escapeHtml(badge.Requirement || '')}</p></article>`; }).join('') || '<p class="pixel-card-desc">Đang tải badge từ Notion.</p>'}</div>`;
     }
     if (this.panelTab === 'SKILLS') {
       return `<div class="quest-source-banner"><span>SPIDER MOVESET</span><strong>COMBAT SKILLS // NOTION</strong><small>Chọn kỹ năng để gắn vào một trong bốn ô của Hero Profile.</small></div>
@@ -983,7 +1112,9 @@ export class ActionRpgController {
   ------------------------------------------------------------- */
   renderArchiveSection() {
     if (this.panelTab === 'BESTIARY' && this.notionEnemies.length) {
-      return `<div class="quest-source-banner"><span>THREAT DATABASE</span><strong>ENEMIES // NOTION</strong><small>${this.notionEnemies.length} hồ sơ Boss và Minion.</small></div><div class="pixel-card-grid">${this.notionEnemies.map((enemy) => `<article class="pixel-game-card"><div class="pixel-card-header"><span class="pixel-tag pixel-tag--red">${this.escapeHtml(enemy.Tier || enemy['Enemy Class'] || 'ENEMY')}</span><span class="pixel-tag">${this.escapeHtml(enemy.Faction || '')}</span></div>${enemy.Image ? `<img class="notion-badge-icon" src="${this.escapeHtml(enemy.Image)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(enemy.Boss || 'Enemy')}</h3><p class="pixel-card-desc">HP ${Number(enemy['Max HP']) || 0} · ATK ${Number(enemy.ATK) || 0} · DEF ${Number(enemy.DEF) || 0}</p></article>`).join('')}</div>`;
+      const gameReady = this.notionEnemies.filter((enemy) => Number(enemy['Max HP']) > 0 || Number(enemy.ATK) > 0);
+      const roster = (gameReady.length ? gameReady : this.notionEnemies).slice(0, 48);
+      return `<div class="quest-source-banner"><span>THREAT DATABASE</span><strong>ENEMIES // NOTION</strong><small>${gameReady.length || this.notionEnemies.length} hồ sơ game-ready trong tổng số ${this.notionEnemies.length} bản ghi. Arena tự chọn đúng ảnh quái theo tên.</small></div><div class="pixel-card-grid">${roster.map((enemy) => { const art = this.catalogImage(enemy); return `<article class="pixel-game-card"><div class="pixel-card-header"><span class="pixel-tag pixel-tag--red">${this.escapeHtml(enemy.Tier || enemy['Enemy Class'] || 'ENEMY')}</span><span class="pixel-tag">${this.escapeHtml(enemy.Faction || '')}</span></div>${art ? `<img class="notion-badge-icon" src="${this.escapeHtml(art)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(enemy.Boss || enemy.Enemy || enemy.Name || 'Enemy')}</h3><p class="pixel-card-desc">HP ${Number(enemy['Max HP']) || 0} · ATK ${Number(enemy.ATK) || 0} · DEF ${Number(enemy.DEF) || 0}</p></article>`; }).join('')}</div>`;
     }
     if (this.panelTab === 'BACKPACKS') {
       return `
@@ -1339,16 +1470,16 @@ export class ActionRpgController {
 
   async loadHeroCatalog() {
     const sources = [
+      ['notionEnemies', NOTION_GAME_DATABASES.enemies],
+      ['notionBadges', NOTION_GAME_DATABASES.badges],
       ['notionSuits', NOTION_GAME_DATABASES.suits],
       ['notionGadgets', NOTION_GAME_DATABASES.gadgets],
       ['notionCombatSkills', NOTION_GAME_DATABASES.combatSkills],
-      ['notionBadges', NOTION_GAME_DATABASES.badges],
       ['notionSpiderVerse', NOTION_GAME_DATABASES.spiderVerse],
       ['notionWorkoutPlans', NOTION_GAME_DATABASES.workoutPlans],
       ['notionExerciseLogs', NOTION_GAME_DATABASES.exerciseLogs],
       ['notionCardioLogs', NOTION_GAME_DATABASES.cardioLogs],
       ['notionSportLogs', NOTION_GAME_DATABASES.sportLogs],
-      ['notionEnemies', NOTION_GAME_DATABASES.enemies],
       ['notionTimeLogs', NOTION_GAME_DATABASES.timeTracking],
       ['notionJournalEntries', NOTION_GAME_DATABASES.journal]
     ];
@@ -1357,21 +1488,23 @@ export class ActionRpgController {
         this[key] = (await queryAllNotionPages(database)).map(normalizeNotionCatalogPage);
         if (key === 'notionSuits') this.suits = this[key].map((item) => ({
           id: item.id, Suit: item.Suit, Owner: item.Owner || 'Spider-Man',
-          ImageUrl: item.Image || item.iconUrl || './assets/spideytracker/tracker_logo3.png',
+          ImageUrl: this.catalogImage(item) || './assets/spideytracker/tracker_logo3.png',
           GameEffect: item['Game Effect'] || '', LevelReq: item['Level Req'] || 1,
           HPBonus: item['HP Bonus'], DEFBonus: item['DEF Bonus'], EnergyBonus: item['Energy Bonus'],
           Status: item.Status
         }));
         if (key === 'notionSpiderVerse') this.spiderVerse = this[key].map((item) => ({ id: item.id, Name: item.Spider, Quote: item.Quote, ImageUrl: item.Image, Tier: item.Tier }));
         if (key === 'notionBadges') {
-          const badge = this.notionBadges.find((item) => item.Equipped && (item.iconUrl || item.Image)) || this.notionBadges.find((item) => item.Unlocked && (item.iconUrl || item.Image)) || this.notionBadges.find((item) => item.iconUrl || item.Image);
+          const badge = this.notionBadges.find((item) => item.Equipped && this.catalogImage(item)) || this.notionBadges.find((item) => item.Unlocked && this.catalogImage(item)) || this.notionBadges.find((item) => this.catalogImage(item));
           const mask = document.querySelector('.hud-mask');
-          if (badge && mask) mask.innerHTML = `<img src="${this.escapeHtml(badge.iconUrl || badge.Image)}" alt="${this.escapeHtml(badge.Medal || 'Hero badge')}">`;
+          if (badge && mask) mask.innerHTML = `<img src="${this.escapeHtml(this.catalogImage(badge))}" alt="${this.escapeHtml(badge.Medal || 'Hero badge')}">`;
         }
+        if (key === 'notionEnemies') this.render();
       }
       catch (error) { console.warn(`[ActionRpgController] ${key} sync failed`, error); }
       if (['HERO', 'FIELD'].includes(this.panelSection) && !document.getElementById('game-panel-backdrop')?.hasAttribute('hidden')) this.renderPanel();
     }
+    this.render();
   }
 
   async patchNotionPage(pageId, properties) {
@@ -1428,6 +1561,11 @@ export class ActionRpgController {
   }
 
   bindEvents(content) {
+    content.querySelectorAll('[data-open-map-system]').forEach((button) => button.addEventListener('click', () => {
+      this.sound.playSelect();
+      this.selectSection('CITY', false);
+    }));
+
     content.querySelectorAll('[data-open-system-section]').forEach((button) => {
       button.addEventListener('click', () => {
         this.sound.playSelect();
@@ -1442,6 +1580,12 @@ export class ActionRpgController {
     content.querySelectorAll('#btn-sync-notion-live').forEach((btn) => {
       btn.addEventListener('click', () => this.syncLiveFromNotion(btn));
     });
+
+    content.querySelectorAll('[data-habit-filter]').forEach((button) => button.addEventListener('click', () => {
+      content.querySelectorAll('[data-habit-filter]').forEach((item) => item.classList.toggle('active', item === button));
+      const filter = button.dataset.habitFilter;
+      content.querySelectorAll('[data-habit-state]').forEach((card) => { card.hidden = filter !== 'all' && card.dataset.habitState !== filter; });
+    }));
 
     // 1. Task Completion -> Attack Enemy in Arena & Sync to Notion
     content.querySelectorAll('[data-complete-task]').forEach((btn) => {

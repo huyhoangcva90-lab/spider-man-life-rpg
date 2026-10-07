@@ -24,10 +24,6 @@ export class HubOverlayPanels {
         this.sound.playSelect();
         const [section, tab] = button.dataset.gameMenuTarget.split(':');
         this.close();
-        if (section === 'NATIVE') {
-          window.location.href = './life-reset/index.html';
-          return;
-        }
         this.bus.emit('GAME_MENU_TARGET', { section, tab });
       }));
     }
@@ -45,22 +41,20 @@ export class HubOverlayPanels {
 
   renderApps() {
     const apps = [
-      ['QUESTS:TODO', 'NOTION QUESTS', 'Todo & Nhiệm vụ đời thực từ Notion', '✓', 'cyan'],
-      ['QUESTS:ACTIVE', 'ACTIVE QUESTS', 'Nhiệm vụ đang mở trong Notion', '✓', 'red'],
-      ['HABITS:TODAY', 'DAILY PATROL', 'Thói quen và hồi phục Energy', '⌁', 'green'],
-      ['HABITS:RESET 66', 'LIFE RESET 66', 'Chiến dịch thói quen 66 ngày', '66', 'amber'],
-      ['QUESTS:PATROL', 'PATROL SCHEDULE', 'Ca tuần tra Tobey · Andrew · Tom', '◷', 'cyan'],
+      ['QUESTS:TODAY', 'TODAY QUESTS', 'Việc cần làm hôm nay từ Notion', '✓', 'cyan'],
+      ['QUESTS:MAIN', 'MAIN QUESTS', 'Tuyến nhiệm vụ chính theo Type', '◆', 'red'],
+      ['QUESTS:DAILY', 'DAILY QUESTS', 'Nhiệm vụ lặp lại mỗi ngày', '↻', 'green'],
+      ['HABITS:TODAY', 'LIFE RESET', 'Habit hôm nay và hồi phục Energy', '66', 'green'],
+      ['HABITS:PROGRESS', 'HELLO HABIT', 'Xem tiến độ bằng các ô vuông', '▦', 'cyan'],
+      ['HABITS:66 DAYS', '66 DAY PATH', 'Lộ trình xây kỷ luật 66 ngày', '66', 'amber'],
+      ['FIELD:SYSTEMS', 'SPIDER APPS', 'Trung tâm Gym, Time, Journal và công cụ', '⌘', 'cyan'],
+      ['FIELD:PLACES', 'PLACE MAP', 'Sổ địa chỉ, danh mục và chỉ đường', '⌖', 'green'],
       ['HERO:SUITS', 'SUITS WARDROBE', 'Tủ đồ thời trang & đổi Skin', '👕', 'amber'],
       ['HERO:ROSTER', 'SPIDER-VERSE', '77 Biến thể Nhện đa vũ trụ', '🕷️', 'red'],
       ['HERO:SKILLS', 'SKILL TREE', 'Combat · Web · Spider-Sense', '⚡', 'cyan'],
       ['HERO:GADGETS', 'GADGETS', 'Impact Web · Drone · EMP', '⌁', 'green'],
-      ['FIELD:BESTIARY', 'BESTIARY', 'Hồ sơ kẻ địch Bosses & Minions', '◉', 'red'],
-      ['FIELD:BACKPACKS', 'BACKPACKS', 'Kỷ vật Peter Parker', '▣', 'amber'],
+      ['FIELD:ENEMIES', 'BESTIARY', 'Hồ sơ kẻ địch Bosses & Minions', '◉', 'red'],
       ['HERO:BADGES', 'SPIDER BADGES', 'Huy hiệu từ Notion', '✦', 'amber'],
-      ['FIELD:TIME', 'PARKER TIME', 'Nhịp sinh học và phiên tập trung', '◷', 'green'],
-      ['FIELD:JOURNAL', 'FIELD NOTES', 'Nhật ký Peter Parker', '▤', 'paper'],
-      ['FIELD:GYM', 'PARKER TRAINING', 'Giáo án và nhật ký tập từ Notion', '◆', 'red'],
-      ['CITY', 'CITY MAP', 'Bản đồ thực địa & Định vị GPS', '▦', 'paper'],
       ['SETTINGS', 'GAME SETTINGS', 'Âm thanh, hiệu ứng, sao lưu save', '⚙', 'paper']
     ];
 

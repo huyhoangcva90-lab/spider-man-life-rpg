@@ -106,16 +106,36 @@ export class MarkerDossier {
     const navGrid = document.getElementById('dossier-nav-grid');
     if (navGrid) {
       navGrid.innerHTML = `
-        <a href="${directionsInfo.externalLinks.googleMaps}" target="_blank" class="nav-link-btn">
+        <a href="${directionsInfo.externalLinks.googleMaps}" target="_blank" rel="noopener noreferrer" class="nav-link-btn">
           <span>🗺️ Google Maps</span>
         </a>
-        <a href="${directionsInfo.externalLinks.appleMaps}" target="_blank" class="nav-link-btn">
+        <a href="${directionsInfo.externalLinks.appleMaps}" target="_blank" rel="noopener noreferrer" class="nav-link-btn">
           <span>🍏 Apple Maps</span>
         </a>
-        <a href="${directionsInfo.externalLinks.openStreetMap}" target="_blank" class="nav-link-btn">
+        <a href="${directionsInfo.externalLinks.openStreetMap}" target="_blank" rel="noopener noreferrer" class="nav-link-btn">
           <span>🌐 OpenStreetMap</span>
         </a>
+        <button type="button" class="nav-link-btn" id="dossier-share-location">
+          <span>📲 Gửi sang điện thoại</span>
+        </button>
       `;
+      const shareButton = document.getElementById('dossier-share-location');
+      shareButton?.addEventListener('click', async () => {
+        const shareData = {
+          title: entry.title,
+          text: entry.address || `${entry.lat.toFixed(5)}, ${entry.lng.toFixed(5)}`,
+          url: directionsInfo.externalLinks.googleMaps
+        };
+        try {
+          if (navigator.share) await navigator.share(shareData);
+          else {
+            await navigator.clipboard.writeText(`${shareData.title}\n${shareData.text}\n${shareData.url}`);
+            shareButton.querySelector('span').textContent = '✓ Đã sao chép link';
+          }
+        } catch (error) {
+          if (error?.name !== 'AbortError') shareButton.querySelector('span').textContent = 'Mở Google Maps để chia sẻ';
+        }
+      });
     }
 
     // Notion link
@@ -124,7 +144,7 @@ export class MarkerDossier {
       if (entry.notionPageUrl) {
         notionBox.style.display = 'block';
         notionBox.innerHTML = `
-          <a href="${entry.notionPageUrl}" target="_blank" class="btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; margin-top: 6px;">
+          <a href="${entry.notionPageUrl}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; margin-top: 6px;">
             📝 MỞ TRANG NOTION CHÍNH THỨC
           </a>
         `;

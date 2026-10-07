@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="./css/clawed-hub.css?build=hub-slices-1" />
   <link rel="stylesheet" href="./css/hub-systems.css?build=hub-systems-1" />
   <link rel="stylesheet" href="./css/single-version-polish.css?build=single-root-1" />
-  <link rel="stylesheet" href="./css/game-layout.css?build=game-layout-5" />
+  <link rel="stylesheet" href="./css/game-layout.css?build=game-layout-6" />
+  <link rel="stylesheet" href="./css/combat-characters.css?build=animated-enemies-2" />
 </head>
 <body data-game-mode="ARENA">
   <svg class="svg-sprite" aria-hidden="true">
@@ -72,7 +73,10 @@
           <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
         </div>
 
-        <button class="system-signal" id="btn-map-mode" aria-label="Mở bản đồ nhiệm vụ" title="CITY MAP"><i></i><span>ONLINE</span></button>
+        <button class="system-signal system-signal--spider-apps" id="btn-field-mode" aria-label="Mở trung tâm Spider Apps" title="SPIDER APPS">
+          <span class="top-hanging-spidey" aria-hidden="true"></span>
+          <span class="system-signal-label">APPS</span>
+        </button>
       </header>
 
       <main class="frame-main-content" id="tracker-main">
@@ -97,8 +101,8 @@
             <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
             <div class="combat-location"><strong id="combat-district">MANHATTAN ROOFTOP</strong><span id="combat-weather">NIGHT // LIGHT RAIN</span></div>
             <div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span></div>
-            <div class="arena-fighter arena-fighter--hero action-fighter--hero"><button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác hero tiếp theo"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></button><span>HERO SLOT</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
-            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div class="combat-placeholder combat-placeholder--enemy" id="combat-enemy-image" role="img" aria-label="Enemy placeholder"><b>FOE</b></div><span id="combat-enemy-short">THUG</span></div>
+            <div class="arena-fighter arena-fighter--hero action-fighter--hero"><button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác Người Nhện tiếp theo"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></button><span>SPIDER-MAN</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
+            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div class="combat-placeholder combat-placeholder--enemy" id="combat-enemy-image" role="img" aria-label="Street Thug" data-motion="idle"><b>FOE</b></div><span id="combat-enemy-short">THUG</span></div>
             <aside class="combat-info-panel" aria-label="Combat information">
               <small id="enemy-tier">TIER 1</small><strong id="enemy-name">STREET THUG</strong>
               <label>HP <span id="enemy-hp-text">85 / 85</span><i><b id="enemy-hp-fill"></b></i></label>
@@ -200,8 +204,7 @@
             TAP TO OPEN CHAT LIST <span id="ticker-gps-readout">• GPS: STANDBY</span> • YOUR FRIENDLY NEIGHBORHOOD IS ONLINE
           </div>
         </button>
-        <button class="footer-console-btn footer-console-btn--send" id="btn-chat-compose" aria-label="Soạn tin nhắn" title="Gửi tin nhắn"><svg><use href="#icon-send"></use></svg></button>
-        <button class="footer-console-btn footer-console-btn--settings" id="btn-footer-settings" aria-label="Mở cài đặt" title="Settings"><svg><use href="#icon-gear"></use></svg></button>
+        <div class="footer-enemy-counterpart" aria-hidden="true"><img id="footer-enemy-rival-image" alt="" /></div>
       </footer>
 
     </div>
@@ -411,6 +414,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=hub-systems-1"></script>
+  <script type="module" src="./js/main.js?build=spider-life-reset-1"></script>
 </body>
 </html>
