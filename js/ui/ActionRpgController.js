@@ -54,6 +54,22 @@ export class ActionRpgController {
   }
 
   async init() {
+    if (!localStorage.getItem('spidey_owner_clean_start_v2')) {
+      // Owner-approved migration: discard every old demo battle and start from Notion's clean state.
+      localStorage.removeItem('spidey_notion_pending_writes');
+      localStorage.removeItem('spidey_notion_profile_pending');
+      this.engine.resetSave();
+      const hero = this.engine.state.progression;
+      hero.level = 1;
+      hero.xp = 0;
+      hero.totalXp = 0;
+      hero.coins = 0;
+      hero.hp = 0;
+      hero.maxHp = 100;
+      hero.webEnergy = 0;
+      this.engine.commit({ ownerCleanStart: true });
+      localStorage.setItem('spidey_owner_clean_start_v2', new Date().toISOString());
+    }
     document.querySelectorAll('[data-game-section]').forEach((button) => button.addEventListener('click', () => this.selectSection(button.dataset.gameSection)));
     document.querySelectorAll('[data-combat-action]').forEach((button) => button.addEventListener('click', () => this.runAction(button.dataset.combatAction)));
     document.getElementById('game-panel-close')?.addEventListener('click', () => this.closePanel());
@@ -320,7 +336,8 @@ export class ActionRpgController {
   }
 
   runAction(action) {
-    if (this.notionHeroProfile && (Number(this.notionHeroProfile.HP) <= 0 || Number(this.notionHeroProfile.Energy) <= 0)) {
+    const hero = this.engine.snapshot().hero;
+    if (hero.hp <= 0 || hero.webEnergy <= 0) {
       this.toast('HERO HẾT HP / ENERGY // HOÀN THÀNH HABIT ĐỂ HỒI PHỤC');
       return;
     }
@@ -381,7 +398,7 @@ export class ActionRpgController {
     this.text('enemy-phase', snapshot.phase);
     this.text('combat-log-line', snapshot.combatLog[0]);
     this.text('arena-turn-value', String(snapshot.turn + 1).padStart(2, '0'));
-    const combatExhausted = Boolean(this.notionHeroProfile) && (hero.hp <= 0 || hero.webEnergy <= 0);
+    const combatExhausted = hero.hp <= 0 || hero.webEnergy <= 0;
     this.text('arena-turn-tip', combatExhausted ? 'Hoàn thành Habit để hồi HP & Energy' : 'Chọn đòn đánh hoặc hoàn thành Quest');
     this.width('enemy-hp-fill', snapshot.enemyHp / enemy.maxHp * 100);
     this.width('enemy-stagger-fill', snapshot.enemyStagger);
