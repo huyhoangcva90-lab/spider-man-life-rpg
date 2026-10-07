@@ -10,17 +10,17 @@ import { GeocoderAdapter } from './map/GeocoderAdapter.js';
 import { MapEntryRepository } from './data/MapEntryRepository.js';
 import { GeoJsonTransfer } from './data/GeoJsonTransfer.js';
 import { NotionAdapter } from './integrations/notion/NotionAdapter.js';
-import { TrackerFrame } from './ui/TrackerFrame.js?build=hub-systems-1';
+import { TrackerFrame } from './ui/TrackerFrame.js?build=spider-life-reset-2';
 import { SearchPanel } from './ui/SearchPanel.js';
 import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
-import { MarkerDossier } from './ui/MarkerDossier.js';
+import { MarkerDossier } from './ui/MarkerDossier.js?build=spider-life-reset-2';
 import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=static-spiders-nav';
-import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=hub-systems-1';
+import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-reset-2';
 import { MapGuideModal } from './ui/MapGuideModal.js';
 import { HeroAnimationController } from './game/HeroAnimationController.js?build=static-spiders-nav';
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=static-spiders-nav';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=hub-systems-1';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=spider-life-reset-2';
 import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
 
 class App {
