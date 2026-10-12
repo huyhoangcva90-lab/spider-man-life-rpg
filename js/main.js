@@ -18,9 +18,9 @@ import { MarkerDossier } from './ui/MarkerDossier.js?build=spider-life-reset-2';
 import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=static-spiders-nav';
 import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-reset-2';
 import { MapGuideModal } from './ui/MapGuideModal.js';
-import { HeroAnimationController } from './game/HeroAnimationController.js?build=static-spiders-nav';
+import { HeroAnimationController } from './game/HeroAnimationController.js?build=spider-icons-7';
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=static-spiders-nav';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=spider-life-reset-2';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=spider-icons-7';
 import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
 
 class App {
@@ -48,7 +48,7 @@ class App {
     this.unlocatedQueue = new UnlocatedMissionQueue(this.notion, this.bus, this.sound);
     this.hubOverlay = new HubOverlayPanels(this.state, this.bus, this.sound);
     this.mapGuide = new MapGuideModal(this.state, this.bus, this.sound, GeoJsonTransfer, this.repo);
-    this.heroAnimation = new HeroAnimationController(this.bus, this.sound);
+    this.heroAnimation = new HeroAnimationController(this.bus, this.sound, this.campaign);
     this.actionRpg = new ActionRpgController(this.bus, this.campaign, this.sound, this.mapEngine);
     this.chatCenter = new ChatCenter(this.sound);
   }

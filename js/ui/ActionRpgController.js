@@ -85,6 +85,7 @@ export class ActionRpgController {
 
     document.addEventListener('visibilitychange', () => this.syncAutoCombat(this.engine.snapshot().settings));
     this.bus.on('CAMPAIGN_UPDATED', (result) => this.handleUpdate(result));
+    this.bus.on('ENEMY_COUNTERATTACK', () => this.animateEnemy('attack', 520));
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
       if (section === 'CITY') return this.selectSection('CITY');
       if (section === 'ARCHIVE') { section = 'HERO'; tab = 'BADGES'; }
@@ -356,7 +357,6 @@ export class ActionRpgController {
     if (result.phaseChanged) this.animateEnemy('phase', 650);
     else if (result.victory?.next) this.animateEnemy('enter', 550);
     else if (result.victory?.boss) this.animateEnemy('defeat', 800);
-    else if (result.heroDamage > 0 || result.perfectDodge) this.animateEnemy('attack', 520);
     else if (result.damage > 0) this.animateEnemy('hurt', 440);
     if (result.perfectDodge) this.sound.playPerfectDodge();
     if (result.victory?.boss) this.sound.playVictoryCue();
@@ -609,25 +609,25 @@ export class ActionRpgController {
       const elapsed = this.focusElapsedMs();
       const remaining = Math.max(0, 25 * 60 * 1000 - elapsed);
       const clock = `${String(Math.floor(remaining / 60000)).padStart(2, '0')}:${String(Math.floor(remaining % 60000 / 1000)).padStart(2, '0')}`;
-      return `<div class="quest-source-banner"><span>PARKER TIME</span><strong>FOCUS SESSION // 25 MIN</strong><small>Khi lưu phiên, Start/End được ghi vào bảng Time-Tracking của Notion.</small></div><section class="field-focus-card"><span>ĐANG TẬP TRUNG VÀO</span><strong>${this.escapeHtml(this.notionActiveQuests.find((quest) => !quest.done)?.title || 'Nhiệm vụ hôm nay')}</strong><output id="field-focus-clock">${clock}</output><div class="field-focus-actions"><button class="pixel-action-btn" data-focus-toggle>${this.focusSession.running ? 'TẠM DỪNG' : elapsed ? 'TIẾP TỤC' : 'BẮT ĐẦU'}</button><button class="pixel-action-btn pixel-action-btn--blue" data-focus-save ${elapsed < 1000 ? 'disabled' : ''}>LƯU VÀO NOTION</button><button class="pixel-action-btn pixel-action-btn--gold" data-focus-reset ${elapsed < 1000 ? 'disabled' : ''}>ĐẶT LẠI</button></div><small>${this.notionTimeLogs.length} phiên đang có trong Notion</small></section>${html}`;
+      return `<div class="quest-source-banner"><span>PARKER TIME</span><strong>FOCUS SESSION // 25 MIN</strong><small>Khi lưu phiên, Start/End được ghi vào bảng Time-Tracking của Notion.</small></div><a class="pixel-action-btn pixel-action-btn--blue" href="./life-os/index.html#timetable">MỞ LỊCH 24H · CỘT GIỜ + ĐỒNG HỒ TRÒN →</a><section class="field-focus-card"><span>ĐANG TẬP TRUNG VÀO</span><strong>${this.escapeHtml(this.notionActiveQuests.find((quest) => !quest.done)?.title || 'Nhiệm vụ hôm nay')}</strong><output id="field-focus-clock">${clock}</output><div class="field-focus-actions"><button class="pixel-action-btn" data-focus-toggle>${this.focusSession.running ? 'TẠM DỪNG' : elapsed ? 'TIẾP TỤC' : 'BẮT ĐẦU'}</button><button class="pixel-action-btn pixel-action-btn--blue" data-focus-save ${elapsed < 1000 ? 'disabled' : ''}>LƯU VÀO NOTION</button><button class="pixel-action-btn pixel-action-btn--gold" data-focus-reset ${elapsed < 1000 ? 'disabled' : ''}>ĐẶT LẠI</button></div><small>${this.notionTimeLogs.length} phiên đang có trong Notion</small></section>${html}`;
     }
     return this.renderChronicleSection();
   }
 
   renderSpiderSystems() {
     const apps = [
-      { id: '01', icon: '⌖', name: 'PLACE MAP', meta: 'ADDRESS BOOK · ROUTES', source: 'LOCAL + NOTION', tone: 'blue', map: true, desc: 'Quản lý địa chỉ theo danh mục, mở chỉ đường và gửi link sang điện thoại.' },
-      { id: '02', icon: '◉', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './life-os/index.html#routine', desc: 'Morning, work và evening routine đồng bộ qua Gambit cloud.' },
-      { id: '03', icon: '◷', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', section: 'FIELD', tab: 'TIME', desc: 'Focus timer và Time-Tracking lấy từ Notion.' },
-      { id: '04', icon: '▲', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', section: 'FIELD', tab: 'GYM', desc: 'Giáo án và lịch sử tập luyện lấy từ Notion.' },
-      { id: '05', icon: '⚡', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './life-os/index.html#dopamine', desc: 'Chọn hoạt động thay thế việc cuộn vô thức.' },
-      { id: '06', icon: '₫', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GAMBIT APP', tone: 'green', href: 'https://gambit-d9b.pages.dev/apps/finance/index.html', external: true, desc: 'Dòng tiền, tiết kiệm, tài sản và kế hoạch tháng.' },
-      { id: '07', icon: '▣', name: 'TODAY MISSIONS', meta: 'QUICK TASKS', source: 'NOTION', tone: 'red', section: 'QUESTS', tab: 'TODAY', desc: 'Quest hôm nay được lọc theo Type và thời hạn.' },
-      { id: '08', icon: '◆', name: 'LIFE RESET 66', meta: 'HABIT CAMPAIGN', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'TODAY', desc: 'Check-in thói quen để hồi HP, Energy và giữ streak.' },
-      { id: '09', icon: 'A', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: 'https://gambit-d9b.pages.dev/apps/english/index.html', external: true, desc: 'Ngữ pháp, flashcard, tra từ và ôn lại câu sai.' },
-      { id: '10', icon: '✎', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', section: 'FIELD', tab: 'JOURNAL', desc: 'Nhật ký, bài học và chiến công lưu về Notion.' },
-      { id: '11', icon: '✦', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: 'https://gambit-d9b.pages.dev/apps/oracle/index.html', external: true, desc: 'Không gian rút bài và tự chiêm nghiệm.' },
-      { id: '12', icon: '◇', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: 'https://gambit-d9b.pages.dev/apps/style30/index.html', external: true, desc: 'Phối màu, capsule wardrobe và grooming.' }
+      { id: '01', icon: 'icon-compass', name: 'PLACE MAP', meta: 'ADDRESS BOOK · ROUTES', source: 'LOCAL + NOTION', tone: 'blue', map: true, desc: 'Quản lý địa chỉ theo danh mục, mở chỉ đường và gửi link sang điện thoại.' },
+      { id: '02', icon: 'icon-clock', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './life-os/index.html#routine', desc: 'Morning, work và evening routine đồng bộ qua Gambit cloud.' },
+      { id: '03', icon: 'icon-clock', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', section: 'FIELD', tab: 'TIME', desc: 'Focus timer và Time-Tracking lấy từ Notion.' },
+      { id: '04', icon: 'icon-arena', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', section: 'FIELD', tab: 'GYM', desc: 'Giáo án và lịch sử tập luyện lấy từ Notion.' },
+      { id: '05', icon: 'icon-bolt', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './life-os/index.html#dopamine', desc: 'Chọn hoạt động thay thế việc cuộn vô thức.' },
+      { id: '06', icon: 'icon-database', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GAMBIT APP', tone: 'green', href: 'https://gambit-d9b.pages.dev/apps/finance/index.html', external: true, desc: 'Dòng tiền, tiết kiệm, tài sản và kế hoạch tháng.' },
+      { id: '07', icon: 'icon-missions', name: 'TODAY MISSIONS', meta: 'QUICK TASKS', source: 'NOTION', tone: 'red', section: 'QUESTS', tab: 'TODAY', desc: 'Quest hôm nay được lọc theo Type và thời hạn.' },
+      { id: '08', icon: 'icon-spider', name: 'LIFE RESET 66', meta: 'HABIT CAMPAIGN', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'TODAY', desc: 'Check-in thói quen để hồi HP, Energy và giữ streak.' },
+      { id: '09', icon: 'icon-book', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: 'https://gambit-d9b.pages.dev/apps/english/index.html', external: true, desc: 'Ngữ pháp, flashcard, tra từ và ôn lại câu sai.' },
+      { id: '10', icon: 'icon-book', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', section: 'FIELD', tab: 'JOURNAL', desc: 'Nhật ký, bài học và chiến công lưu về Notion.' },
+      { id: '11', icon: 'icon-dice', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: 'https://gambit-d9b.pages.dev/apps/oracle/index.html', external: true, desc: 'Không gian rút bài và tự chiêm nghiệm.' },
+      { id: '12', icon: 'icon-mask', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: 'https://gambit-d9b.pages.dev/apps/style30/index.html', external: true, desc: 'Phối màu, capsule wardrobe và grooming.' }
     ];
     return `
       <section class="spider-system-command">
@@ -644,7 +644,7 @@ export class ActionRpgController {
           const closeTag = app.map || app.section ? 'button' : 'a';
           return `<${attrs} class="spider-app-card spider-app-card--${app.tone}">
             <span class="spider-app-index">${app.id}</span>
-            <span class="spider-app-icon" aria-hidden="true">${app.icon}</span>
+            <span class="spider-app-icon" aria-hidden="true"><svg><use href="#${app.icon}"></use></svg></span>
             <span class="spider-app-copy"><small>${app.meta}</small><strong>${app.name}</strong><em>${app.desc}</em></span>
             <span class="spider-app-source">${app.source}</span>
             <span class="spider-app-arrow" aria-hidden="true">↗</span>

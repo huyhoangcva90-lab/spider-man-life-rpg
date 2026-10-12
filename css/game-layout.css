@@ -172,10 +172,10 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
   filter: drop-shadow(2px 2px 0 rgba(0,0,0,.65));
 }
 .pixel-orb--menu {
-  border-color: #03070d !important;
-  color: #f6fbff !important;
-  background: radial-gradient(circle at 35% 30%, #54b6d0 0 18%, #e9434d 19% 61%, #7e1e30 62% 100%) !important;
-  box-shadow: inset 0 0 0 3px #ffaaa0, 3px 4px 0 rgba(0,0,0,.62) !important;
+  border: 0 !important;
+  background: url('../assets/spideytracker/hub-ui/spidey_head_spritesheet.png') no-repeat 0 0 / auto 64px !important;
+  box-shadow: none !important;
+  image-rendering: pixelated;
 }
 
 .frame-bottom-bar {
@@ -186,12 +186,15 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
 .frame-bottom-bar .spidey-head-turn-sprite {
   position: relative !important;
   inset: auto !important;
-  align-self: end;
+  align-self: center;
   justify-self: center;
-  width: 48px;
-  height: 64px;
-  background-size: 3020px 64px;
+  display: block;
+  width: 32px;
+  height: 50px;
+  background-size: 2363px 50px;
+  animation: footer-spidey-turn 6.35s steps(76) infinite;
 }
+@keyframes footer-spidey-turn { to { background-position-x: var(--footer-sprite-shift, -2363px); } }
 .footer-enemy-counterpart {
   position: relative;
   align-self: stretch;
@@ -214,13 +217,14 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
 .footer-enemy-counterpart img { display: none; }
 .footer-enemy-counterpart.has-art img {
   display: block;
-  width: 58px;
-  height: 70px;
+  width: 42px;
+  height: 50px;
   object-fit: contain;
   object-position: center bottom;
   transform: scaleX(-1);
   filter: drop-shadow(3px 3px 0 rgba(0,0,0,.6));
 }
+.footer-enemy-counterpart.has-art::before { display: none; }
 
 .action-fighter--hero { left: 12% !important; width: 170px !important; }
 .action-fighter--enemy { right: 27% !important; width: 170px !important; }
@@ -443,9 +447,10 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
 @media (max-width: 720px) {
   .system-signal--spider-apps { top: 7px; right: 7px; width: 58px; height: 52px; }
   .top-hanging-spidey { width: 31px; height: 37px; background-size: 1926px 37px; }
+  .pixel-orb--menu { background-size: auto 51px !important; }
   .frame-bottom-bar { grid-template-columns: 46px minmax(0, 1fr) 46px !important; gap: 3px !important; padding: 3px !important; }
-  .frame-bottom-bar .spidey-head-turn-sprite { width: 38px; height: 53px; background-size: 2500px 53px; }
-  .footer-enemy-counterpart.has-art img { width: 44px; height: 55px; }
+  .frame-bottom-bar .spidey-head-turn-sprite { width: 30px; height: 48px; background-size: 2269px 48px; --footer-sprite-shift: -2269px; }
+  .footer-enemy-counterpart.has-art img { width: 36px; height: 48px; }
   .footer-enemy-counterpart::before { display: none; }
   .action-fighter--hero { left: 0 !important; width: 132px !important; }
   .action-fighter--enemy { right: 1% !important; width: 132px !important; }
@@ -523,6 +528,7 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
 .spider-app-card--violet { --app-accent: #a68be8; }
 .spider-app-index { position: absolute; top: 9px; right: 10px; color: #507084; font: 700 8px 'Silkscreen', monospace; }
 .spider-app-icon { display: grid; grid-row: 1 / 3; place-items: center; width: 42px; height: 42px; border: 2px solid #02060b; background: var(--app-accent); color: #05070b; box-shadow: inset 0 0 0 2px rgba(255,255,255,.18); font: 700 18px 'Press Start 2P', monospace; }
+.spider-app-icon svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: square; stroke-linejoin: miter; }
 .spider-app-copy { display: grid; align-content: start; gap: 7px; min-width: 0; }
 .spider-app-copy small { color: var(--app-accent); font: 700 7px/1.3 'Silkscreen', monospace; }
 .spider-app-copy strong { color: #fff; font: 700 11px/1.5 'Press Start 2P', monospace; }
