@@ -28,10 +28,12 @@
   <link rel="stylesheet" href="./css/clawed-hub.css?build=hub-slices-1" />
   <link rel="stylesheet" href="./css/hub-systems.css?build=hub-systems-1" />
   <link rel="stylesheet" href="./css/single-version-polish.css?build=single-root-1" />
-  <link rel="stylesheet" href="./css/game-layout.css?build=game-layout-7" />
+  <link rel="stylesheet" href="./css/game-layout.css?build=game-layout-8" />
   <link rel="stylesheet" href="./css/combat-characters.css?build=animated-enemies-2" />
 </head>
 <body data-game-mode="ARENA">
+  <a class="skip-link" href="#tracker-main">Bỏ qua điều hướng</a>
+  <h1 class="visually-hidden">Spidey Life Tracker</h1>
   <svg class="svg-sprite" aria-hidden="true">
     <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
     <symbol id="icon-spider" viewBox="0 0 24 24"><path d="M9 5 6 2M15 5l3-3M8 9 3 6m13-6 5 6M8 13l-5 4m13-4 5 4M9 17l-3 5m9-5 3 5"/><ellipse cx="12" cy="9" rx="3" ry="4"/><ellipse cx="12" cy="16" rx="4" ry="5"/></symbol>
@@ -79,7 +81,7 @@
         </button>
       </header>
 
-      <main class="frame-main-content" id="tracker-main">
+      <main class="frame-main-content" id="tracker-main" tabindex="-1">
         <div id="map" aria-label="Bản đồ nhiệm vụ đời thực"></div>
         <div class="map-dark-filter map-mode-only"></div>
         <div class="map-scanlines map-mode-only" aria-hidden="true"></div>
@@ -100,7 +102,7 @@
           <div class="action-combat-stage" id="action-combat-stage">
             <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
             <div class="combat-location"><strong id="combat-district">MANHATTAN ROOFTOP</strong><span id="combat-weather">NIGHT // LIGHT RAIN</span></div>
-            <div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span></div>
+            <div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span><button type="button" id="arena-open-habits" hidden>MỞ LIFE 66</button></div>
             <div class="arena-fighter arena-fighter--hero action-fighter--hero"><div class="arena-hero-sprite" id="arena-hero-sprite" role="img" aria-label="Người Nhện đang chiến đấu"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></div><span>SPIDER-MAN</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
             <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div class="combat-placeholder combat-placeholder--enemy" id="combat-enemy-image" role="img" aria-label="Street Thug" data-motion="idle"><b>FOE</b></div><span id="combat-enemy-short">THUG</span></div>
             <aside class="combat-info-panel" aria-label="Combat information">
@@ -414,6 +416,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=spider-icons-7"></script>
+  <script type="module" src="./js/main.js?build=spider-app-8"></script>
 </body>
 </html>

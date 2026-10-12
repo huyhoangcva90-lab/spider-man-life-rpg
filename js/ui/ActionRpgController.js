@@ -41,6 +41,9 @@ export class ActionRpgController {
     this.focusInterval = null;
     this.notionSource = 'snapshot';
     this.notionSyncedAt = null;
+    this.notionConnection = 'checking';
+    this.notionError = '';
+    this.notionLiveKinds = new Set();
     this.skillIcons = {};
     this.effectIcons = {};
     this.skillsCatalog = [];
@@ -75,12 +78,14 @@ export class ActionRpgController {
     document.getElementById('game-panel-close')?.addEventListener('click', () => this.closePanel());
     document.getElementById('game-panel-backdrop')?.addEventListener('click', (event) => { if (event.target.id === 'game-panel-backdrop') this.closePanel(); });
     document.getElementById('btn-next-patrol')?.addEventListener('click', () => this.engine.startNextPatrol());
+    document.getElementById('arena-open-habits')?.addEventListener('click', () => this.selectSection(this.notionConnection === 'connected' ? 'HABITS' : 'QUESTS'));
     document.getElementById('action-rpg-screen')?.addEventListener('pointerdown', () => this.playIntroOnce(), { once: true });
     document.querySelector('.hud-avatar')?.addEventListener('click', () => this.selectSection('HERO'));
     document.getElementById('btn-footer-settings')?.addEventListener('click', () => {
       this.panelSection = 'SETTINGS';
       this.panelTab = 'GAME';
       this.openPanel('SETTINGS');
+      this.updateRoute();
     });
 
     document.addEventListener('visibilitychange', () => this.syncAutoCombat(this.engine.snapshot().settings));
@@ -93,16 +98,76 @@ export class ActionRpgController {
       this.selectSection(section, false);
       this.panelTab = tab || this.defaultTab(section);
       this.renderPanel();
+      this.updateRoute();
     });
 
     // Load rich game datasets
     await this.loadAllGameData();
 
+    // A fresh owner save must remain playable while the private Notion session is unavailable.
+    if (!this.notionHeroProfile && !localStorage.getItem('spidey_offline_hero_ready_v1')) {
+      const hero = this.engine.state.progression;
+      if (hero.hp <= 0 && hero.webEnergy <= 0) {
+        hero.hp = hero.maxHp || 100;
+        hero.webEnergy = this.engine.data.hero.maxWebEnergy;
+        this.engine.commit({ offlineHeroReady: true });
+      }
+      localStorage.setItem('spidey_offline_hero_ready_v1', '1');
+    }
+
+    const initialRoute = new URL(location.href);
     this.selectSection('ARENA', false);
+    this.restoreRoute(initialRoute);
+    window.addEventListener('popstate', () => this.restoreRoute());
     this.render();
     this.focusInterval = window.setInterval(() => this.updateFocusClock(), 1000);
-    // Local preview data is immediately available; live Notion replaces it once connected.
-    void this.syncLiveFromNotion(null, { quiet: true });
+    void this.checkNotionSession();
+  }
+
+  async checkNotionSession() {
+    if (['localhost', '127.0.0.1'].includes(location.hostname)) {
+      this.notionConnection = 'connected';
+      return this.syncLiveFromNotion(null, { quiet: true });
+    }
+    try {
+      const response = await fetch('/api/notion-session', { cache: 'no-store', credentials: 'same-origin' });
+      if (!response.ok) throw new Error('Phiên Notion không khả dụng trên máy chủ này.');
+      const session = await response.json();
+      this.notionConnection = session.connected ? 'connected' : session.configured ? 'locked' : 'unconfigured';
+      if (session.connected) return this.syncLiveFromNotion(null, { quiet: true });
+      this.notionError = session.configured ? 'Nhập mã kết nối riêng để đồng bộ Notion.' : 'Máy chủ chưa cấu hình khóa Notion và mã truy cập riêng.';
+    } catch (error) {
+      this.notionConnection = 'unavailable';
+      this.notionError = error.message;
+    }
+    this.render();
+  }
+
+  canWriteNotion(kind) {
+    return this.notionConnection === 'connected' && this.notionLiveKinds.has(kind);
+  }
+
+  notionAccessHtml() {
+    if (this.notionConnection === 'connected') return '<div class="notion-access-actions"><button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue" type="button">↻ ĐỒNG BỘ NOTION</button><button id="btn-disconnect-notion" class="pixel-action-btn" type="button">NGẮT KẾT NỐI</button></div>';
+    if (this.notionConnection === 'checking') return '<span class="notion-access-note">Đang kiểm tra kết nối riêng…</span>';
+    if (this.notionConnection === 'locked') return '<form id="notion-auth-form" class="notion-auth-form"><label for="notion-access-code">Mã kết nối riêng</label><input id="notion-access-code" name="accessCode" type="password" autocomplete="off" required minlength="8" placeholder="Nhập mã truy cập…"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">KẾT NỐI</button></form>';
+    return '<div class="notion-access-actions"><span class="notion-access-note">Đồng bộ riêng chưa khả dụng trên máy chủ này.</span><button id="btn-recheck-notion" class="pixel-action-btn pixel-action-btn--blue" type="button">THỬ LẠI</button></div>';
+  }
+
+  notionStatusHtml() {
+    const pending = readPendingNotionWrites().length + (localStorage.getItem('spidey_notion_profile_pending') ? 1 : 0);
+    const age = this.notionSyncedAt ? Date.now() - Date.parse(this.notionSyncedAt) : Infinity;
+    const stale = !Number.isFinite(age) || age > 24 * 60 * 60 * 1000;
+    const source = this.notionConnection !== 'connected' ? 'BẢN LƯU CỤC BỘ' : this.notionSource === 'live' ? 'NOTION LIVE' : this.notionSource === 'mixed' ? 'NOTION MỘT PHẦN' : 'BẢN CHỤP NOTION';
+    const time = this.notionSyncedAt && Number.isFinite(Date.parse(this.notionSyncedAt)) ? new Date(this.notionSyncedAt).toLocaleString('vi-VN') : 'chưa rõ';
+    return `<div class="notion-status-line" role="status" aria-live="polite"><strong>${source}${stale ? ' · DỮ LIỆU CŨ' : ''}</strong><span>Lần cập nhật: ${time}${pending ? ` · ${pending} thay đổi chờ gửi` : ''}</span>${this.notionError ? `<small>${this.escapeHtml(this.notionError)}</small>` : ''}${pending && this.notionConnection === 'connected' && this.notionSource === 'live' ? '<button type="button" id="btn-send-pending-notion" class="pixel-action-btn">XEM & GỬI THAY ĐỔI CHỜ</button>' : ''}</div>`;
+  }
+
+  habitDescription(habit) {
+    const name = habit.name || habit.title || '';
+    const description = habit.description || '';
+    if (/facebook|tiktok/i.test(name) && /youtube/i.test(description)) return habit.outcome || `Giảm thời gian lướt ${name.replace(/^Không\s+/i, '')}.`;
+    return description || habit.outcome || 'Duy trì thói quen mỗi ngày.';
   }
 
   async loadAllGameData() {
@@ -307,6 +372,7 @@ export class ActionRpgController {
       this.closePanel();
       document.body.dataset.gameMode = 'MAP';
       this.setActiveNav('CITY');
+      this.updateRoute('CITY');
       requestAnimationFrame(() => this.mapEngine.resize?.());
       return;
     }
@@ -314,12 +380,39 @@ export class ActionRpgController {
       document.body.dataset.gameMode = 'ARENA';
       this.setActiveNav('ARENA');
       this.closePanel();
+      this.updateRoute('ARENA');
       if (playSound) this.playIntroOnce();
       return;
     }
     document.body.dataset.gameMode = 'ARENA';
     this.setActiveNav(section);
     this.openPanel(section);
+    this.updateRoute();
+  }
+
+  updateRoute(section = this.panelSection) {
+    const url = new URL(location.href);
+    if (section === 'ARENA') {
+      url.searchParams.delete('game');
+      url.searchParams.delete('tab');
+    } else {
+      url.searchParams.set('game', section);
+      if (section === 'CITY') url.searchParams.delete('tab');
+      else url.searchParams.set('tab', this.panelTab);
+    }
+    history.replaceState(history.state, '', url);
+  }
+
+  restoreRoute(url = new URL(location.href)) {
+    const section = url.searchParams.get('game');
+    const tab = url.searchParams.get('tab');
+    if (!['QUESTS', 'HERO', 'HABITS', 'FIELD', 'SETTINGS', 'CITY'].includes(section)) return;
+    this.selectSection(section, false);
+    if (section !== 'CITY' && tab) {
+      this.panelTab = tab;
+      this.renderPanel();
+      this.updateRoute();
+    }
   }
 
   setActiveNav(section) {
@@ -385,9 +478,9 @@ export class ActionRpgController {
     this.width('hud-xp-fill', hero.xp / hero.xpToNext * 100);
     this.width('hud-hp-fill', hero.hp / (hero.maxHp || data.hero.maxHp) * 100);
     this.width('hud-web-fill', hero.webEnergy / data.hero.maxWebEnergy * 100);
-    const activeQuest = this.notionActiveQuests.find((quest) => !quest.done);
-    this.text('hud-main-quest', activeQuest?.title || (this.notionSource === 'live' ? 'ALL NOTION QUESTS CLEAR' : 'THE GOBLIN SIGNAL'));
-    this.text('hud-quest-progress', this.notionActiveQuests.length ? `${this.notionActiveQuests.filter((quest) => quest.done).length} / ${this.notionActiveQuests.length} QUESTS` : snapshot.storyComplete ? 'CHAPTER CLEAR' : `WAVE ${snapshot.encounterIndex + 1} / ${data.encounter.length}`);
+    const activeQuest = this.notionConnection === 'connected' && this.notionLiveKinds.has('activeQuests') ? this.notionActiveQuests.find((quest) => !quest.done) : null;
+    this.text('hud-main-quest', activeQuest?.title || (this.notionConnection === 'connected' && this.notionLiveKinds.has('activeQuests') ? 'ALL NOTION QUESTS CLEAR' : 'THE GOBLIN SIGNAL'));
+    this.text('hud-quest-progress', this.notionConnection === 'connected' && this.notionLiveKinds.has('activeQuests') && this.notionActiveQuests.length ? `${this.notionActiveQuests.filter((quest) => quest.done).length} / ${this.notionActiveQuests.length} QUESTS` : snapshot.storyComplete ? 'CHAPTER CLEAR' : `WAVE ${snapshot.encounterIndex + 1} / ${data.encounter.length}`);
     this.text('enemy-tier', notionEnemy?.['Tier Rank'] || notionEnemy?.['Enemy Class'] || enemy.tier);
     this.text('enemy-name', enemyDisplayName);
     this.text('combat-enemy-short', enemyDisplayName.split(' ').slice(-1)[0]);
@@ -399,7 +492,10 @@ export class ActionRpgController {
     this.text('combat-log-line', snapshot.combatLog[0]);
     this.text('arena-turn-value', String(snapshot.turn + 1).padStart(2, '0'));
     const combatExhausted = hero.hp <= 0 || hero.webEnergy <= 0;
-    this.text('arena-turn-tip', combatExhausted ? 'Hoàn thành Habit để hồi HP & Energy' : 'Chọn đòn đánh hoặc hoàn thành Quest');
+    this.text('arena-turn-tip', combatExhausted ? (this.notionConnection === 'connected' ? 'Hoàn thành Habit để hồi HP & Energy' : 'Kết nối Notion để hồi HP & Energy') : this.notionConnection === 'connected' ? 'Chọn đòn đánh hoặc hoàn thành Quest' : 'CHẾ ĐỘ XEM TRƯỚC · Kết nối Notion để lưu tiến độ');
+    const recoveryButton = document.getElementById('arena-open-habits');
+    recoveryButton?.toggleAttribute('hidden', !combatExhausted);
+    if (recoveryButton) recoveryButton.textContent = this.notionConnection === 'connected' ? 'MỞ LIFE 66' : 'KẾT NỐI NOTION';
     this.width('enemy-hp-fill', snapshot.enemyHp / enemy.maxHp * 100);
     this.width('enemy-stagger-fill', snapshot.enemyStagger);
     this.width('ultimate-fill', hero.ultimate);
@@ -474,6 +570,7 @@ export class ActionRpgController {
     panel?.setAttribute('inert', '');
     delete document.body.dataset.gameSection;
     if (document.body.dataset.gameMode !== 'MAP') this.setActiveNav('ARENA');
+    this.updateRoute(document.body.dataset.gameMode === 'MAP' ? 'CITY' : 'ARENA');
   }
 
   defaultTab(section) {
@@ -510,7 +607,7 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: ['TODAY', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
+      QUESTS: ['TODAY', 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
       HERO: ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
       HABITS: ['TODAY', 'PROGRESS', '66 DAYS'],
       FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
@@ -522,11 +619,12 @@ export class ActionRpgController {
     const tabNames = tabMap[this.panelSection] || ['TODO'];
     if (!tabNames.includes(this.panelTab)) this.panelTab = tabNames[0];
 
-    tabs.innerHTML = tabNames.map((tab) => `<button role="tab" aria-selected="${tab === this.panelTab}" class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab}</button>`).join('');
+    tabs.innerHTML = tabNames.map((tab) => `<button role="tab" aria-selected="${tab === this.panelTab}" class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab === 'OVERDUE' ? 'QUÁ HẠN' : tab}</button>`).join('');
     tabs.querySelectorAll('button').forEach((button) => button.addEventListener('click', () => { 
       this.sound.playSelect(); 
       this.panelTab = button.dataset.gamePanelTab; 
       this.renderPanel({ resetScroll: true });
+      this.updateRoute();
     }));
 
     content.innerHTML = this.renderSection();
@@ -558,14 +656,13 @@ export class ActionRpgController {
     try { resetState = { ...resetState, ...JSON.parse(localStorage.getItem('life_reset_screenshot_v5') || '{}') }; } catch { /* use day one */ }
     const day = Math.max(1, Math.min(66, Number(resetState.day) || 1));
     const pct = total ? Math.round(completed / total * 100) : 0;
-    const syncLabel = this.notionSource === 'live' ? 'NOTION LIVE' : 'NOTION SNAPSHOT';
-    const syncBar = `<div class="life-reset-sync"><span><i></i>${syncLabel}</span><b>${total} HABITS</b><button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue">↻ SYNC</button></div>`;
+    const syncBar = `<div class="life-reset-sync"><span><i></i>${this.notionConnection !== 'connected' ? 'BẢN LƯU CỤC BỘ' : this.notionSource === 'live' ? 'NOTION LIVE' : 'NOTION SNAPSHOT'}</span><b>${total} HABITS</b>${this.notionAccessHtml()}</div>${this.notionStatusHtml()}`;
 
     if (this.panelTab === 'PROGRESS') {
       return `${syncBar}<section class="habit-progress-head"><div><small>HELLO HABIT // TODAY</small><strong>${completed}<em>/ ${total}</em></strong><span>HOÀN THÀNH</span></div><div class="habit-progress-ring" style="--habit-progress:${pct * 3.6}deg"><b>${pct}%</b></div></section>
         <div class="habit-square-grid">${habits.map((habit) => {
           const done = habit.today || habit.done;
-          return `<button type="button" class="habit-square ${done ? 'is-done' : ''}" data-checkin-habit="${habit.sourceIndex}" ${done ? 'disabled' : ''}><span class="habit-square-check">${done ? '✓' : ''}</span><small>${this.escapeHtml(habit.category || 'HABIT')}</small><strong>${this.escapeHtml(habit.name || habit.title)}</strong><em>${this.escapeHtml(habit.timeBlock || 'Cả ngày')}</em></button>`;
+          return `<button type="button" class="habit-square ${done ? 'is-done' : ''}" data-checkin-habit="${habit.sourceIndex}" ${done || !this.canWriteNotion('habits') ? 'disabled' : ''}><span class="habit-square-check">${done ? '✓' : ''}</span><small>${this.escapeHtml(habit.category || 'HABIT')}</small><strong>${this.escapeHtml(habit.name || habit.title)}</strong><em>${this.escapeHtml(habit.timeBlock || 'Cả ngày')}</em></button>`;
         }).join('') || '<p class="pixel-card-desc">Chưa có Habit trong Notion.</p>'}</div>`;
     }
 
@@ -580,7 +677,7 @@ export class ActionRpgController {
       <div class="life-reset-card-list">${habits.map((habit) => {
         const done = habit.today || habit.done;
         const bad = /bad/i.test(habit.category || '');
-        return `<article class="life-reset-card ${done ? 'is-done' : ''} ${bad ? 'is-bad' : ''}" data-habit-state="${done ? 'done' : 'todo'}"><div class="life-reset-card-copy"><div><span>${this.escapeHtml(habit.category || 'HABIT')}</span>${habit.streak ? `<em>🔥 ${habit.streak}D</em>` : ''}</div><h3>${this.escapeHtml(habit.name || habit.title)}</h3><p>${this.escapeHtml(habit.description || habit.outcome || 'Daily discipline protocol from Notion.')}</p><small>${this.escapeHtml(habit.timeBlock || 'Cả ngày')} · +${Number(habit.xp) || 1} XP</small></div><button type="button" data-checkin-habit="${habit.sourceIndex}" ${done ? 'disabled' : ''} aria-label="${done ? 'Đã hoàn thành' : `Hoàn thành ${this.escapeHtml(habit.name || habit.title)}`}">${done ? '✓' : '+'}</button></article>`;
+        return `<article class="life-reset-card ${done ? 'is-done' : ''} ${bad ? 'is-bad' : ''}" data-habit-state="${done ? 'done' : 'todo'}"><div class="life-reset-card-copy"><div><span>${this.escapeHtml(habit.category || 'HABIT')}</span>${habit.streak ? `<em>🔥 ${habit.streak}D</em>` : ''}</div><h3>${this.escapeHtml(habit.name || habit.title)}</h3><p>${this.escapeHtml(this.habitDescription(habit))}</p><small>${this.escapeHtml(habit.timeBlock || 'Cả ngày')} · +${Number(habit.xp) || 1} XP</small></div><button type="button" data-checkin-habit="${habit.sourceIndex}" ${done || !this.canWriteNotion('habits') ? 'disabled' : ''} aria-label="${done ? 'Đã hoàn thành' : `Hoàn thành ${this.escapeHtml(habit.name || habit.title)}`}">${done ? '✓' : '+'}</button></article>`;
       }).join('') || '<p class="pixel-card-desc">Đang tải Habit từ Notion.</p>'}</div>`;
   }
 
@@ -597,7 +694,7 @@ export class ActionRpgController {
     if (this.panelTab === 'GYM') {
       const workouts = this.notionHabits.map((habit, index) => ({ habit, index })).filter(({ habit }) => /gym|workout|exercise|push|plank|run|chạy|tập|hít đất|thể dục|cardio/i.test(`${habit.title} ${habit.category} ${habit.description}`));
       return `<div class="quest-source-banner"><span>PARKER TRAINING</span><strong>GYM // NHIỆM VỤ TẬP LUYỆN TỪ NOTION</strong><small>Hoàn thành buổi tập sẽ check-in đúng Habit trong Notion và hồi phục Hero.</small></div>
-        <div class="pixel-card-grid">${workouts.length ? workouts.map(({ habit, index }) => `<article class="pixel-game-card ${habit.today ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${habit.today ? 'DONE' : 'READY'}</span></div><h3 class="pixel-card-title">${this.escapeHtml(habit.title)}</h3><p class="pixel-card-desc">${this.escapeHtml(habit.description || habit.outcome || '')}</p><button class="pixel-action-btn" data-checkin-habit="${index}" ${habit.today ? 'disabled' : ''}>${habit.today ? 'ĐÃ XONG' : 'CHECK-IN NOTION'}</button></article>`).join('') : '<p class="pixel-card-desc">Chưa thấy Habit tập luyện trong Notion.</p>'}</div>
+        <div class="pixel-card-grid">${workouts.length ? workouts.map(({ habit, index }) => `<article class="pixel-game-card ${habit.today ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${habit.today ? 'DONE' : 'READY'}</span></div><h3 class="pixel-card-title">${this.escapeHtml(habit.title)}</h3><p class="pixel-card-desc">${this.escapeHtml(this.habitDescription(habit))}</p><button class="pixel-action-btn" data-checkin-habit="${index}" ${habit.today || !this.canWriteNotion('habits') ? 'disabled' : ''}>${habit.today ? 'ĐÃ XONG' : 'CHECK-IN NOTION'}</button></article>`).join('') : '<p class="pixel-card-desc">Chưa thấy Habit tập luyện trong Notion.</p>'}</div>
         <div class="quest-source-banner"><span>WORKOUT PLANS</span><strong>GIÁO ÁN TỪ NOTION</strong><small>${this.notionWorkoutPlans.length} giáo án · ${this.notionExerciseLogs.length + this.notionCardioLogs.length + this.notionSportLogs.length} buổi đã ghi trong các bảng tập luyện.</small></div>
         <div class="pixel-card-grid">${this.notionWorkoutPlans.map((plan) => `<article class="pixel-game-card"><h3 class="pixel-card-title">${this.escapeHtml(plan.Name || 'Workout plan')}</h3>${plan.sourceUrl ? `<a class="pixel-action-btn pixel-action-btn--blue" href="${this.escapeHtml(plan.sourceUrl)}" target="_blank" rel="noopener noreferrer">XEM GIÁO ÁN</a>` : ''}</article>`).join('') || '<p class="pixel-card-desc">Đang tải giáo án từ Notion.</p>'}</div>`;
     }
@@ -609,7 +706,7 @@ export class ActionRpgController {
       const elapsed = this.focusElapsedMs();
       const remaining = Math.max(0, 25 * 60 * 1000 - elapsed);
       const clock = `${String(Math.floor(remaining / 60000)).padStart(2, '0')}:${String(Math.floor(remaining % 60000 / 1000)).padStart(2, '0')}`;
-      return `<div class="quest-source-banner"><span>PARKER TIME</span><strong>FOCUS SESSION // 25 MIN</strong><small>Khi lưu phiên, Start/End được ghi vào bảng Time-Tracking của Notion.</small></div><a class="pixel-action-btn pixel-action-btn--blue" href="./life-os/index.html#timetable">MỞ LỊCH 24H · CỘT GIỜ + ĐỒNG HỒ TRÒN →</a><section class="field-focus-card"><span>ĐANG TẬP TRUNG VÀO</span><strong>${this.escapeHtml(this.notionActiveQuests.find((quest) => !quest.done)?.title || 'Nhiệm vụ hôm nay')}</strong><output id="field-focus-clock">${clock}</output><div class="field-focus-actions"><button class="pixel-action-btn" data-focus-toggle>${this.focusSession.running ? 'TẠM DỪNG' : elapsed ? 'TIẾP TỤC' : 'BẮT ĐẦU'}</button><button class="pixel-action-btn pixel-action-btn--blue" data-focus-save ${elapsed < 1000 ? 'disabled' : ''}>LƯU VÀO NOTION</button><button class="pixel-action-btn pixel-action-btn--gold" data-focus-reset ${elapsed < 1000 ? 'disabled' : ''}>ĐẶT LẠI</button></div><small>${this.notionTimeLogs.length} phiên đang có trong Notion</small></section>${html}`;
+      return `<div class="quest-source-banner"><span>PARKER TIME</span><strong>FOCUS SESSION // 25 MIN</strong><small>Khi kết nối, Start/End được ghi vào bảng Time-Tracking của Notion.</small></div><a class="pixel-action-btn pixel-action-btn--blue" href="./life-os/index.html#timetable">MỞ LỊCH 24H · CỘT GIỜ + ĐỒNG HỒ TRÒN →</a><section class="field-focus-card"><span>ĐANG TẬP TRUNG VÀO</span><strong>${this.escapeHtml(this.notionConnection === 'connected' && this.notionLiveKinds.has('activeQuests') ? this.notionActiveQuests.find((quest) => !quest.done)?.title || 'Nhiệm vụ hôm nay' : 'Nhiệm vụ hôm nay')}</strong><output id="field-focus-clock">${clock}</output><div class="field-focus-actions"><button class="pixel-action-btn" data-focus-toggle>${this.focusSession.running ? 'TẠM DỪNG' : elapsed ? 'TIẾP TỤC' : 'BẮT ĐẦU'}</button><button class="pixel-action-btn pixel-action-btn--blue" data-focus-save ${elapsed < 1000 || this.notionConnection !== 'connected' ? 'disabled' : ''}>LƯU VÀO NOTION</button><button class="pixel-action-btn pixel-action-btn--gold" data-focus-reset ${elapsed < 1000 ? 'disabled' : ''}>ĐẶT LẠI</button></div><small>${this.notionTimeLogs.length} phiên đang có trong Notion</small></section>${html}`;
     }
     return this.renderChronicleSection();
   }
@@ -631,7 +728,7 @@ export class ActionRpgController {
     ];
     return `
       <section class="spider-system-command">
-        <div><span>GAMBIT LIFE OS // SPIDER NETWORK</span><strong>${apps.length} FIELD SYSTEMS ONLINE</strong><small>Map là một công cụ trong Field. Ứng dụng có database dùng Notion làm nguồn chuẩn.</small></div>
+        <div><span>GAMBIT LIFE OS // SPIDER NETWORK</span><strong>${apps.length} FIELD SYSTEMS</strong><small>Map là một công cụ trong Field. Ứng dụng có database dùng Notion làm nguồn chuẩn.</small></div>
         <div class="spider-system-count"><b>${apps.length}</b><span>APPS</span></div>
       </section>
       <div class="spider-app-grid" aria-label="Danh sách ứng dụng Gambit">
@@ -671,9 +768,7 @@ export class ActionRpgController {
      1. TAB [QUESTS]: TODO (NOTION), HABITS (STREAK), PATROL TIMETABLE
   ------------------------------------------------------------- */
   renderQuestsSection() {
-    const sourceLabel = this.notionSource === 'live' ? 'Notion live' : this.notionSource === 'mixed' ? 'Notion live một phần' : 'Bản chụp Notion';
-    const sourceTime = this.notionSyncedAt ? new Date(this.notionSyncedAt).toLocaleString('vi-VN') : 'Chưa rõ thời điểm';
-    const pendingCount = readPendingNotionWrites().length;
+    const sourceLabel = this.notionConnection !== 'connected' ? 'Bản lưu cục bộ' : this.notionSource === 'live' ? 'Notion live' : this.notionSource === 'mixed' ? 'Notion live một phần' : 'Bản chụp Notion';
     const syncBannerHtml = `
       <div class="sync-online-banner">
         <div>
@@ -681,14 +776,14 @@ export class ActionRpgController {
             <span class="pixel-tag pixel-tag--blue">NOTION</span>
             <strong style="color: #f2c06b; font-size: 10px;">${sourceLabel}</strong>
           </div>
-          <small style="color: #9ed9e7; font-size: 10px;">${this.notionTasks.length} nhiệm vụ · ${this.notionHabits.length} thói quen · ${this.notionGoals.length} mục tiêu · ${sourceTime}${pendingCount ? ` · ${pendingCount} thay đổi chờ đồng bộ` : ''}</small>
+          <small>${this.notionTasks.length} nhiệm vụ · ${this.notionHabits.length} thói quen · ${this.notionGoals.length} mục tiêu</small>
         </div>
-        <button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue">↻ ĐỒNG BỘ NOTION</button>
-      </div>
+        ${this.notionAccessHtml()}
+      </div>${this.notionStatusHtml()}
     `;
 
     if (this.panelTab === 'ACTIVE') {
-      return `${syncBannerHtml}<div class="quest-source-banner"><span>ACTIVE QUESTS</span><strong>QUESTLINE // NOTION</strong><small>${this.notionActiveQuests.length} nhiệm vụ từ bảng Active Quests.</small></div><div class="pixel-card-grid">${this.notionActiveQuests.map((quest, index) => `<article class="pixel-game-card ${quest.done ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(quest.frequency || 'QUEST')}</span><span class="pixel-tag pixel-tag--gold">${Number(quest.xp) || 0} EXP</span></div><h3 class="pixel-card-title">${this.escapeHtml(quest.title)}</h3><p class="pixel-card-desc">${this.escapeHtml(quest.description || '')}</p><button class="pixel-action-btn" data-complete-active-quest="${index}" ${quest.done ? 'disabled' : ''}>${quest.done ? 'ĐÃ HOÀN THÀNH' : 'HOÀN THÀNH TRONG NOTION'}</button></article>`).join('') || '<p class="pixel-card-desc">Đang tải Active Quests từ Notion.</p>'}</div>`;
+      return `${syncBannerHtml}<div class="quest-source-banner"><span>ACTIVE QUESTS</span><strong>QUESTLINE // NOTION</strong><small>${this.notionActiveQuests.length} nhiệm vụ từ bảng Active Quests.</small></div><div class="pixel-card-grid">${this.notionActiveQuests.map((quest, index) => `<article class="pixel-game-card ${quest.done ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(quest.frequency || 'QUEST')}</span><span class="pixel-tag pixel-tag--gold">${Number(quest.xp) || 0} EXP</span></div><h3 class="pixel-card-title">${this.escapeHtml(quest.title)}</h3><p class="pixel-card-desc">${this.escapeHtml(quest.description || '')}</p><button class="pixel-action-btn" data-complete-active-quest="${index}" ${quest.done || !this.canWriteNotion('activeQuests') ? 'disabled' : ''}>${quest.done ? 'ĐÃ HOÀN THÀNH' : 'HOÀN THÀNH TRONG NOTION'}</button></article>`).join('') || '<p class="pixel-card-desc">Chưa có Active Quests trong dữ liệu hiện tại.</p>'}</div>`;
     }
 
     if (this.panelTab === 'HABITS') {
@@ -707,18 +802,18 @@ export class ActionRpgController {
                 ${habit.streak ? `<span class="pixel-tag pixel-tag--gold">STREAK: ${habit.streak}D</span>` : ''}
               </div>
               <h3 class="pixel-card-title">${this.escapeHtml(habit.name || habit.title)}</h3>
-              <p class="pixel-card-desc">${this.escapeHtml(habit.description || habit.outcome || 'Thói quen duy trì kỷ luật bản thân.')}</p>
+              <p class="pixel-card-desc">${this.escapeHtml(this.habitDescription(habit))}</p>
               <div class="pixel-card-footer">
                 <small style="color: #f2c06b; font: 700 8px monospace;">${this.escapeHtml(habit.timeBlock || 'Mỗi ngày')}</small>
                 <button class="pixel-action-btn ${habit.done || habit.today ? 'pixel-action-btn--disabled' : 'pixel-action-btn--green'}" 
-                        data-checkin-habit="${idx}" ${habit.done || habit.today ? 'disabled' : ''}>
+                        data-checkin-habit="${idx}" ${habit.done || habit.today || !this.canWriteNotion('habits') ? 'disabled' : ''}>
                   ${habit.done || habit.today ? '✓ ĐÃ XONG' : '⚡ CHECK-IN'}
                 </button>
               </div>
             </article>
           `).join('')}
         </div>
-        <form class="quest-create-form" id="habit-create-form"><label for="habit-new-title">THÓI QUEN MỚI TRONG NOTION</label><input id="habit-new-title" name="title" required maxlength="150" placeholder="Thói quen bạn muốn xây..." autocomplete="off"><select name="type" aria-label="Loại thói quen"><option value="Good Habit">Good Habit</option><option value="Bad Habit">Bad Habit</option></select><button class="pixel-action-btn pixel-action-btn--green" type="submit">+ TẠO HABIT</button></form>
+        <form class="quest-create-form" id="habit-create-form"><label for="habit-new-title">THÓI QUEN MỚI TRONG NOTION</label><input id="habit-new-title" name="title" required maxlength="150" placeholder="Thói quen bạn muốn xây…" autocomplete="off"><select name="type" aria-label="Loại thói quen"><option value="Good Habit">Good Habit</option><option value="Bad Habit">Bad Habit</option></select><button class="pixel-action-btn pixel-action-btn--green" type="submit" ${!this.canWriteNotion('habits') ? 'disabled' : ''}>+ TẠO HABIT</button></form>
       `;
     }
 
@@ -730,10 +825,10 @@ export class ActionRpgController {
             <div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(goal.status || 'Mục tiêu')}</span></div>
             <h3 class="pixel-card-title">${this.escapeHtml(goal.title || goal.name)}</h3>
             <p class="pixel-card-desc">${this.escapeHtml(goal.description || (goal.date ? `Mốc: ${new Date(goal.date).toLocaleDateString('vi-VN')}` : 'Theo dõi tiến độ trong Notion'))}</p>
-            <button class="pixel-action-btn" data-complete-goal="${index}" ${goal.achieved ? 'disabled' : ''}>${goal.achieved ? 'ĐÃ ĐẠT' : 'ĐÁNH DẤU ĐÃ ĐẠT'}</button>
+            <button class="pixel-action-btn" data-complete-goal="${index}" ${goal.achieved || !this.canWriteNotion('goals') ? 'disabled' : ''}>${goal.achieved ? 'ĐÃ ĐẠT' : 'ĐÁNH DẤU ĐÃ ĐẠT'}</button>
             ${goal.sourceUrl ? `<a class="pixel-action-btn pixel-action-btn--blue" href="${this.escapeHtml(goal.sourceUrl)}" target="_blank" rel="noopener noreferrer">MỞ TRONG NOTION</a>` : ''}
           </article>`).join('') : '<p class="pixel-card-desc">Chưa có mục tiêu trong bản dữ liệu hiện tại.</p>'}</div>
-          <form class="quest-create-form" id="goal-create-form"><label for="goal-new-title">MỤC TIÊU MỚI TRONG NOTION</label><input id="goal-new-title" name="title" required maxlength="150" placeholder="Mục tiêu của bạn..." autocomplete="off"><input name="deadline" type="date" aria-label="Hạn mục tiêu"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">+ TẠO GOAL</button></form>`;
+          <form class="quest-create-form" id="goal-create-form"><label for="goal-new-title">MỤC TIÊU MỚI TRONG NOTION</label><input id="goal-new-title" name="title" required maxlength="150" placeholder="Mục tiêu của bạn…" autocomplete="off"><input name="deadline" type="date" aria-label="Hạn mục tiêu"><button class="pixel-action-btn pixel-action-btn--blue" type="submit" ${!this.canWriteNotion('goals') ? 'disabled' : ''}>+ TẠO GOAL</button></form>`;
     }
 
     if (this.panelTab === 'PATROL') {
@@ -778,12 +873,14 @@ export class ActionRpgController {
     let visibleQuests;
     if (this.panelTab === 'TODAY') {
       visibleQuests = allQuests.filter((quest) => !quest.done && (dateKey(quest.date || quest.dueDate) === todayKey || /daily/i.test(quest.frequency || '')));
-      if (!visibleQuests.length) visibleQuests = allQuests.filter((quest) => !quest.done);
+    } else if (this.panelTab === 'OVERDUE') {
+      visibleQuests = allQuests.filter((quest) => !quest.done && dateKey(quest.date || quest.dueDate) && dateKey(quest.date || quest.dueDate) < todayKey);
     } else {
       visibleQuests = allQuests.filter((quest) => classify(quest) === this.panelTab);
     }
     const sectionCopy = {
-      TODAY: ['TODAY PATROL', 'NHIỆM VỤ CẦN LÀM', 'Ưu tiên nhiệm vụ đến hạn hôm nay; khi không có hạn hôm nay sẽ hiện toàn bộ việc chưa hoàn thành.'],
+      TODAY: ['TODAY PATROL', 'NHIỆM VỤ HÔM NAY', 'Chỉ hiện việc đến hạn hôm nay và nhiệm vụ lặp lại hằng ngày.'],
+      OVERDUE: ['PAST DUE', 'NHIỆM VỤ QUÁ HẠN', 'Các việc quá hạn được tách riêng để bạn sắp xếp lại.'],
       MAIN: ['MAIN QUESTS', 'NHIỆM VỤ CHÍNH', 'Lọc từ Type và Priority trong Notion.'],
       SIDE: ['SIDE QUESTS', 'NHIỆM VỤ PHỤ', 'Các việc phụ, hẹn gặp và nhiệm vụ không thuộc tuyến chính.'],
       DAILY: ['DAILY QUESTS', 'NHIỆM VỤ LẶP LẠI', 'Nhiệm vụ Daily trong Master Calendar và Active Quests.']
@@ -809,14 +906,14 @@ export class ActionRpgController {
             <div class="pixel-card-footer">
               ${quest.address && quest.sourceKind === 'task' ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${quest.sourceIndex}">📍 ĐỊA ĐIỂM</button>` : '<span></span>'}
               <button class="pixel-action-btn ${quest.done ? 'pixel-action-btn--disabled' : ''}"
-                      ${quest.sourceKind === 'active' ? `data-complete-active-quest="${quest.sourceIndex}"` : `data-complete-task="${quest.sourceIndex}"`} ${quest.done ? 'disabled' : ''}>
+                      ${quest.sourceKind === 'active' ? `data-complete-active-quest="${quest.sourceIndex}"` : `data-complete-task="${quest.sourceIndex}"`} ${quest.done || !this.canWriteNotion(quest.sourceKind === 'active' ? 'activeQuests' : 'masterCalendar') ? 'disabled' : ''}>
                 ${quest.done ? '✓ ĐÃ XONG' : 'HOÀN THÀNH'}
               </button>
             </div>
           </article>
-        `).join('') || '<div class="quest-empty-state"><strong>KHÔNG CÓ QUEST TRONG NHÓM NÀY</strong><small>Kiểm tra trường Type/Frequency trong Notion hoặc chuyển sang tab Today.</small></div>'}
+        `).join('') || `<div class="quest-empty-state"><strong>${this.panelTab === 'TODAY' ? 'HÔM NAY CHƯA CÓ QUEST' : 'KHÔNG CÓ QUEST TRONG NHÓM NÀY'}</strong><small>${this.panelTab === 'TODAY' ? 'Xem tab Quá hạn, Main hoặc Side để xử lý các việc khác.' : 'Kiểm tra dữ liệu Notion hoặc chọn tab khác.'}</small></div>`}
       </div>
-      <form class="quest-create-form" id="quest-create-form"><label for="quest-new-title">NHIỆM VỤ MỚI TRONG NOTION</label><input id="quest-new-title" name="title" required maxlength="150" placeholder="Việc bạn sẽ làm..." autocomplete="off"><input name="date" type="date" aria-label="Ngày thực hiện"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">+ TẠO QUEST</button></form>
+      <form class="quest-create-form" id="quest-create-form"><label for="quest-new-title">NHIỆM VỤ MỚI TRONG NOTION</label><input id="quest-new-title" name="title" required maxlength="150" placeholder="Việc bạn sẽ làm…" autocomplete="off"><input name="date" type="date" aria-label="Ngày thực hiện"><button class="pixel-action-btn pixel-action-btn--blue" type="submit" ${!this.canWriteNotion('masterCalendar') ? 'disabled' : ''}>+ TẠO QUEST</button></form>
     `;
   }
 
@@ -836,7 +933,10 @@ export class ActionRpgController {
   renderHeroSection() {
     const profile = this.notionHeroProfile;
     if (this.panelTab === 'PROFILE') {
-      if (!profile) return '<div class="quest-source-banner"><strong>ĐANG TẢI HERO PROFILE TỪ NOTION</strong><small>Kiểm tra kết nối Notion hoặc chọn đồng bộ lại ở màn Quest.</small></div>';
+      if (!profile) {
+        const hero = this.engine.snapshot().hero;
+        return `<div class="quest-source-banner"><strong>HERO ĐANG Ở CHẾ ĐỘ XEM TRƯỚC</strong><small>${this.escapeHtml(this.notionError || 'Kết nối Notion để tải hồ sơ và trang bị thật.')}</small><button class="pixel-action-btn pixel-action-btn--blue" data-open-quests>KẾT NỐI TẠI QUESTS</button></div><div class="spidey-skill-summary"><span><b>LV ${hero.level}</b> LEVEL</span><span><b>${hero.hp}/${hero.maxHp}</b> HP</span><span><b>${hero.webEnergy}</b> ENERGY</span></div>`;
+      }
       const suit = this.notionSuits.find((item) => profile['Equipped Suit']?.includes(item.id));
       const gadgets = this.notionGadgets.filter((item) => profile['Equipped Gadgets']?.includes(item.id));
       const skills = this.notionCombatSkills.filter((item) => [1, 2, 3, 4].some((slot) => profile[`Skill Slot ${slot}`]?.includes(item.id)));
@@ -1272,7 +1372,7 @@ export class ActionRpgController {
             <label style="font: 700 8px 'Silkscreen', monospace; color: #9ed9e7;">3. CHIẾN CÔNG ĐẮC Ý NHẤT:</label>
             <textarea id="journal-input-win" rows="2" class="form-textarea" placeholder="Hôm nay mình đã vượt qua được thói quen xấu nào?" style="border: 2px solid #05070b; background: #050b12; color: #fff; padding: 6px;"></textarea>
             
-            <button class="pixel-action-btn pixel-action-btn--gold" id="btn-save-journal" style="align-self: flex-start; margin-top: 6px;">LƯU VÀO NOTION</button>
+            <button class="pixel-action-btn pixel-action-btn--gold" id="btn-save-journal" style="align-self: flex-start; margin-top: 6px;" ${this.notionConnection !== 'connected' ? 'disabled' : ''}>LƯU VÀO NOTION</button>
           </div>
         </div>
         <div class="pixel-card-grid">
@@ -1385,6 +1485,11 @@ export class ActionRpgController {
      EVENT BINDINGS & NOTION 2-WAY SYNC
   ------------------------------------------------------------- */
   async syncLiveFromNotion(btn = null, { quiet = false } = {}) {
+    if (this.notionConnection !== 'connected') {
+      this.notionError = 'Kết nối riêng trước khi đồng bộ Notion.';
+      this.renderPanel();
+      return;
+    }
     if (btn) {
       btn.disabled = true;
       btn.textContent = '⏳ ĐANG ĐỒNG BỘ...';
@@ -1396,8 +1501,6 @@ export class ActionRpgController {
         // Old demo actions must never be replayed into the owner's clean Notion state.
         localStorage.removeItem('spidey_notion_pending_writes');
         localStorage.removeItem('spidey_notion_profile_pending');
-      } else {
-        await flushPendingNotionWrites();
       }
       const [tasks, habits, goals, profile, activeQuests] = await Promise.allSettled([
         queryAllNotionPages(NOTION_GAME_DATABASES.masterCalendar),
@@ -1407,13 +1510,19 @@ export class ActionRpgController {
         queryAllNotionPages(NOTION_GAME_DATABASES.activeQuests)
       ]);
       const successes = [tasks, habits, goals, profile, activeQuests].filter((result) => result.status === 'fulfilled').length;
-      if (!successes) throw new Error('No Notion database could be read');
+      if (!successes) throw new Error(tasks.reason?.message || 'Không đọc được cơ sở dữ liệu Notion.');
+      this.notionLiveKinds = new Set([
+        ...(tasks.status === 'fulfilled' ? ['masterCalendar'] : []),
+        ...(habits.status === 'fulfilled' ? ['habits'] : []),
+        ...(goals.status === 'fulfilled' ? ['goals'] : []),
+        ...(profile.status === 'fulfilled' ? ['heroProfile'] : []),
+        ...(activeQuests.status === 'fulfilled' ? ['activeQuests'] : [])
+      ]);
       if (tasks.status === 'fulfilled') this.notionTasks = tasks.value.map((page) => normalizeNotionPage(page, 'masterCalendar'));
       if (habits.status === 'fulfilled') this.notionHabits = habits.value.map((page) => normalizeNotionPage(page, 'habits'));
       if (goals.status === 'fulfilled') this.notionGoals = goals.value.map((page) => normalizeNotionPage(page, 'goals'));
       if (activeQuests.status === 'fulfilled') this.notionActiveQuests = activeQuests.value.map((page) => normalizeNotionPage(page, 'activeQuests'));
       if (profile.status === 'fulfilled' && profile.value[0]) {
-        const pendingProfile = localStorage.getItem('spidey_notion_profile_pending');
         this.notionHeroProfile = normalizeNotionCatalogPage(profile.value[0]);
         if (!localStorage.getItem('spidey_notion_authoritative_reset_v1')) {
           // One-time migration requested by the owner: discard demo combat progress.
@@ -1431,9 +1540,6 @@ export class ActionRpgController {
           this.engine.commit({ notionProfileImported: true });
           localStorage.setItem('spidey_notion_authoritative_reset_v1', new Date().toISOString());
         } else {
-          if (pendingProfile) {
-            await this.flushHeroProfileSync();
-          } else {
             // Changes made directly in Notion (or on another device) are authoritative.
             const hero = this.engine.state.progression;
             const source = this.notionHeroProfile;
@@ -1450,7 +1556,6 @@ export class ActionRpgController {
             hero.hp = Number(source.HP) || 0;
             hero.webEnergy = Math.round((Number(source.Energy) || 0) / (Number(source['Max Energy']) || 10) * this.engine.data.hero.maxWebEnergy);
             this.engine.commit({ notionProfileImported: true });
-          }
         }
         this.engine.state.progression.maxHp = Number(this.notionHeroProfile['Max HP']) || this.engine.data.hero.maxHp;
       }
@@ -1462,12 +1567,17 @@ export class ActionRpgController {
 
       this.notionSyncedAt = new Date().toISOString();
       this.notionSource = successes === 5 ? 'live' : 'mixed';
+      this.notionError = successes === 5 ? '' : `Chỉ đọc được ${successes}/5 nguồn. Các mục chưa cập nhật đang ở chế độ chỉ xem.`;
       this.persistNotionCache();
       this.render();
       if (!quiet) { this.sound.playVictoryCue(); this.toast(`NOTION ĐÃ CẬP NHẬT ${successes}/5 DATABASE // ${this.notionTasks.length} TASKS, ${this.notionHabits.length} HABITS`); }
       void this.syncHeroCatalog();
     } catch (err) {
       console.warn('[ActionRpgController] Notion sync error:', err);
+      this.notionLiveKinds.clear();
+      this.notionError = `Không đồng bộ được: ${err.message}. Dữ liệu đã lưu chỉ để xem.`;
+      if (/403|401/.test(err.message)) this.notionConnection = 'locked';
+      if (/503/.test(err.message)) this.notionConnection = 'unconfigured';
       if (!quiet) this.toast('CHƯA KẾT NỐI NOTION // ĐANG DÙNG DỮ LIỆU ĐÃ LƯU');
     } finally {
       if (btn) {
@@ -1525,6 +1635,7 @@ export class ActionRpgController {
   }
 
   async patchNotionPage(pageId, properties) {
+    if (this.notionConnection !== 'connected') throw new Error('Kết nối Notion trước khi lưu.');
     const response = await fetch(`/api/notion?path=${encodeURIComponent(`/v1/pages/${pageId}`)}`, {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ properties })
     });
@@ -1534,6 +1645,7 @@ export class ActionRpgController {
   }
 
   async createNotionPage(databaseId, properties, children = []) {
+    if (this.notionConnection !== 'connected') throw new Error('Kết nối Notion trước khi lưu.');
     const response = await fetch(`/api/notion?path=${encodeURIComponent('/v1/pages')}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ parent: { database_id: databaseId }, properties, ...(children.length ? { children } : {}) })
@@ -1578,6 +1690,7 @@ export class ActionRpgController {
   }
 
   bindEvents(content) {
+    content.querySelector('[data-open-quests]')?.addEventListener('click', () => this.selectSection('QUESTS'));
     content.querySelectorAll('[data-open-map-system]').forEach((button) => button.addEventListener('click', () => {
       this.sound.playSelect();
       this.selectSection('CITY', false);
@@ -1590,12 +1703,66 @@ export class ActionRpgController {
         this.panelTab = button.dataset.openSystemTab || this.defaultTab(this.panelSection);
         document.body.dataset.gameSection = this.panelSection;
         this.renderPanel({ resetScroll: true });
+        this.updateRoute();
       });
     });
 
     // 0. Live Notion Sync Button
     content.querySelectorAll('#btn-sync-notion-live').forEach((btn) => {
       btn.addEventListener('click', () => this.syncLiveFromNotion(btn));
+    });
+    content.querySelector('#btn-recheck-notion')?.addEventListener('click', () => this.checkNotionSession());
+    content.querySelector('#notion-auth-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const accessCode = form.elements.namedItem('accessCode')?.value || '';
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true;
+      try {
+        const response = await fetch('/api/notion-session', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accessCode })
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok || !payload.ok) throw new Error(payload.error || `Kết nối HTTP ${response.status}`);
+        this.notionConnection = 'connected';
+        this.notionError = '';
+        await this.syncLiveFromNotion();
+      } catch (error) {
+        this.notionError = error.message;
+        this.toast('CHƯA KẾT NỐI ĐƯỢC NOTION');
+      } finally {
+        form.reset();
+        this.renderPanel();
+      }
+    });
+    content.querySelector('#btn-disconnect-notion')?.addEventListener('click', async () => {
+      await fetch('/api/notion-session', { method: 'DELETE', credentials: 'same-origin' }).catch(() => {});
+      this.notionConnection = 'locked';
+      this.notionLiveKinds.clear();
+      this.notionHeroProfile = null;
+      this.notionActiveQuests = [];
+      for (const key of ['spidey_notion_tasks', 'spidey_notion_habits', 'spidey_notion_goals', 'spidey_notion_active_quests', 'spidey_notion_cached_at', 'spidey_notion_cache_source', 'spidey_notion_source_at']) localStorage.removeItem(key);
+      try {
+        const response = await fetch('./data/notion-snapshot.json', { cache: 'no-store' });
+        const snapshot = await response.json();
+        this.notionTasks = snapshot.collections?.masterCalendar || [];
+        this.notionHabits = snapshot.collections?.habits || [];
+        this.notionGoals = snapshot.collections?.goals || [];
+        this.notionSyncedAt = snapshot.metadata?.syncedAt || null;
+      } catch { this.notionTasks = []; this.notionHabits = []; this.notionGoals = []; this.notionSyncedAt = null; }
+      this.notionSource = 'snapshot';
+      this.notionError = 'Đã ngắt kết nối. Dữ liệu bản chụp chỉ để xem.';
+      this.render();
+    });
+    content.querySelector('#btn-send-pending-notion')?.addEventListener('click', async () => {
+      const pending = readPendingNotionWrites().length + (localStorage.getItem('spidey_notion_profile_pending') ? 1 : 0);
+      if (!pending || !window.confirm(`Gửi ${pending} thay đổi đang chờ lên Notion?`)) return;
+      await flushPendingNotionWrites();
+      await this.flushHeroProfileSync();
+      const remaining = readPendingNotionWrites().length + (localStorage.getItem('spidey_notion_profile_pending') ? 1 : 0);
+      this.toast(remaining ? `CÒN ${remaining} THAY ĐỔI CHƯA GỬI` : 'ĐÃ GỬI THAY ĐỔI LÊN NOTION');
+      await this.syncLiveFromNotion(null, { quiet: true });
     });
 
     content.querySelectorAll('[data-habit-filter]').forEach((button) => button.addEventListener('click', () => {
@@ -1607,6 +1774,7 @@ export class ActionRpgController {
     // 1. Task Completion -> Attack Enemy in Arena & Sync to Notion
     content.querySelectorAll('[data-complete-task]').forEach((btn) => {
       btn.addEventListener('click', () => {
+        if (!this.canWriteNotion('masterCalendar')) return;
         const idx = parseInt(btn.dataset.completeTask, 10);
         const task = this.notionTasks[idx];
         if (!task || task.done) return;
@@ -1617,12 +1785,12 @@ export class ActionRpgController {
 
         const result = this.engine.completeRealQuest({ id: task.id, title: task.title || task.name, type: 'NOTION_MISSION', status: 'DONE', source: 'NOTION', xp: task.gameXp });
         if (result) this.queueHeroProfileSync();
-        this.toast(result ? 'QUEST DONE // ĐÃ CẬP NHẬT TRẬN ĐẤU' : 'QUEST ĐÃ HOÀN THÀNH');
+        this.toast('ĐÃ GHI NHẬN TRÊN MÁY // ĐANG GỬI NOTION');
 
         // Persist the local completion and retry the Notion write on the next sync.
         if (task.id) {
           queueNotionWrite('masterCalendar', task.id);
-          void flushPendingNotionWrites().then(() => this.renderPanel());
+          void flushPendingNotionWrites().then((remaining) => { this.toast(remaining ? 'QUEST ĐANG CHỜ GỬI NOTION' : 'QUEST ĐÃ ĐỒNG BỘ NOTION'); this.renderPanel(); });
         }
 
         this.renderPanel();
@@ -1630,6 +1798,7 @@ export class ActionRpgController {
     });
 
     content.querySelectorAll('[data-complete-active-quest]').forEach((btn) => btn.addEventListener('click', () => {
+      if (!this.canWriteNotion('activeQuests')) return;
       const quest = this.notionActiveQuests[Number(btn.dataset.completeActiveQuest)];
       if (!quest || quest.done) return;
       quest.done = true;
@@ -1637,12 +1806,13 @@ export class ActionRpgController {
       this.engine.completeRealQuest({ id: quest.id, title: quest.title, type: 'NOTION_MISSION', status: 'DONE', source: 'NOTION', xp: quest.xp });
       this.queueHeroProfileSync();
       this.persistNotionCache();
-      this.toast('ACTIVE QUEST // ĐÃ GHI NHẬN, ĐANG ĐỒNG BỘ NOTION');
+      this.toast('ACTIVE QUEST // ĐÃ GHI NHẬN TRÊN MÁY');
       this.renderPanel();
-      void flushPendingNotionWrites().then(() => this.renderPanel());
+      void flushPendingNotionWrites().then((remaining) => { this.toast(remaining ? 'QUEST ĐANG CHỜ GỬI NOTION' : 'QUEST ĐÃ ĐỒNG BỘ NOTION'); this.renderPanel(); });
     }));
 
     content.querySelectorAll('[data-complete-goal]').forEach((btn) => btn.addEventListener('click', async () => {
+      if (!this.canWriteNotion('goals')) return;
       const goal = this.notionGoals[Number(btn.dataset.completeGoal)];
       if (!goal?.id || goal.achieved) return;
       btn.disabled = true;
@@ -1667,6 +1837,7 @@ export class ActionRpgController {
     // 3. Habit Check-in -> Restore HP & Web + Sync
     content.querySelectorAll('[data-checkin-habit]').forEach((btn) => {
       btn.addEventListener('click', () => {
+        if (!this.canWriteNotion('habits')) return;
         const idx = parseInt(btn.dataset.checkinHabit, 10);
         const habit = this.notionHabits[idx];
         if (!habit || habit.done || habit.today) return;
@@ -1678,12 +1849,12 @@ export class ActionRpgController {
 
         this.engine.recordHabitCheckin(habit.id);
         this.queueHeroProfileSync();
-        this.toast('HABIT CHECKED // HỒI PHỤC HP & ENERGY');
+        this.toast('HABIT ĐÃ GHI NHẬN TRÊN MÁY // ĐANG GỬI NOTION');
 
         // Persist the local check-in and retry the Notion write on the next sync.
         if (habit.id) {
           queueNotionWrite('habits', habit.id);
-          void flushPendingNotionWrites().then(() => this.renderPanel());
+          void flushPendingNotionWrites().then((remaining) => { this.toast(remaining ? 'HABIT ĐANG CHỜ GỬI NOTION' : 'HABIT ĐÃ ĐỒNG BỘ NOTION'); this.renderPanel(); });
         }
 
         this.renderPanel();
@@ -1855,6 +2026,7 @@ export class ActionRpgController {
 
     content.querySelector('#quest-create-form')?.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (!this.canWriteNotion('masterCalendar')) return;
       const form = event.currentTarget;
       const title = form.elements.namedItem('title')?.value?.trim();
       const date = form.elements.namedItem('date')?.value;
@@ -1883,6 +2055,7 @@ export class ActionRpgController {
 
     content.querySelector('#habit-create-form')?.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (!this.canWriteNotion('habits')) return;
       const form = event.currentTarget;
       const title = form.elements.namedItem('title')?.value?.trim();
       const type = form.elements.namedItem('type')?.value || 'Good Habit';
@@ -1911,6 +2084,7 @@ export class ActionRpgController {
 
     content.querySelector('#goal-create-form')?.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (!this.canWriteNotion('goals')) return;
       const form = event.currentTarget;
       const title = form.elements.namedItem('title')?.value?.trim();
       const deadline = form.elements.namedItem('deadline')?.value;
@@ -1982,6 +2156,7 @@ export class ActionRpgController {
     const host = document.getElementById('tracker-main');
     const toast = document.createElement('div'); 
     toast.className = 'combat-toast'; 
+    toast.setAttribute('role', 'status');
     toast.textContent = message; 
     host?.appendChild(toast); 
     setTimeout(() => toast.remove(), 1200);

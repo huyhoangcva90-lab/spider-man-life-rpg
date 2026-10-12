@@ -821,6 +821,42 @@ body[data-game-section] .frame-main-content {
   .spidey-skill-summary b { font-size: 10px; }
 }
 
+/* Owner-only Notion connection and readable mission controls. */
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 1000; padding: 10px 14px; background: #f2c06b; color: #071426; font: 700 13px/1.4 "Silkscreen", sans-serif; }
+.skip-link:focus-visible { top: 12px; outline: 3px solid #fff; }
+.sync-online-banner, .life-reset-sync { flex-wrap: wrap; gap: 10px; }
+.notion-access-actions, .notion-auth-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.notion-auth-form label, .notion-access-note { color: #d7e6ef; font: 700 11px/1.4 "Silkscreen", sans-serif; }
+.notion-auth-form input { min-width: min(220px, 100%); min-height: 44px; padding: 8px 10px; border: 2px solid #54b6d0; background: #071426; color: #fff; font: 14px/1.3 "Be Vietnam Pro", sans-serif; }
+.notion-auth-form input:focus-visible { outline: 3px solid #f2c06b; outline-offset: 2px; }
+.notion-status-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 8px 0 12px; padding: 9px 12px; border: 1px solid #31516a; background: #071426; color: #d7e6ef; font: 11px/1.5 "Be Vietnam Pro", sans-serif; }
+.notion-status-line strong { color: #f2c06b; font: 700 10px/1.5 "Silkscreen", sans-serif; }
+.notion-status-line small { flex-basis: 100%; color: #ffb2ad; font-size: 11px; }
+.notion-status-line .pixel-action-btn { min-height: 36px; margin-left: auto; }
+.quest-board-list { gap: 8px; }
+.quest-board-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 3px 14px; padding: 11px 14px; }
+.quest-board-card .pixel-card-header, .quest-board-card h3, .quest-board-card p, .quest-board-card > small { grid-column: 1; min-width: 0; margin: 0; }
+.quest-board-card .pixel-card-header { justify-content: flex-start; flex-wrap: wrap; }
+.quest-board-card h3 { font-size: clamp(14px, 1.5vw, 18px); }
+.quest-board-card > small { font: 700 10px/1.4 "Silkscreen", sans-serif; }
+.quest-board-card .pixel-card-footer { grid-column: 2; grid-row: 1 / span 4; min-width: 132px; padding: 0; border: 0; }
+.game-primary-nav button { font: 700 clamp(11px, 1vw, 13px)/1.1 "Silkscreen", sans-serif; }
+.hud-bars label { font: 700 11px/1.2 "Silkscreen", sans-serif; }
+#game-panel-tabs button { font: 700 11px/1.2 "Silkscreen", sans-serif; }
+.arena-turn-banner #arena-open-habits { display: block; min-height: 32px; margin: 7px auto 0; padding: 5px 8px; border: 2px solid #05070b; background: #83b96b; color: #071426; font: 700 11px/1.1 "Silkscreen", sans-serif; cursor: pointer; }
+.arena-turn-banner #arena-open-habits[hidden] { display: none !important; }
+.arena-turn-banner #arena-open-habits:focus-visible { outline: 3px solid #f2c06b; outline-offset: 2px; }
+@media (max-width: 620px) {
+  .quest-board-card { grid-template-columns: 1fr; }
+  .quest-board-card .pixel-card-footer { grid-column: 1; grid-row: auto; justify-content: flex-end; width: 100%; }
+  .game-panel h2 { font-size: 13px; line-height: 1.4; }
+  .game-primary-nav button { font-size: 11px; }
+  .hud-bars label { font-size: 10px; }
+  .arena-turn-banner span { font-size: 10px; }
+  .notion-auth-form input { flex: 1 1 180px; }
+}
+
 /* Keep the system-specific game texture after the full-screen panel contract above. */
 .game-panel {
   background:

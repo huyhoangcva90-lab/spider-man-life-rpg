@@ -1,13 +1,21 @@
 // Vercel Serverless Function Proxy for Notion API.
 // Public deployments must not expose the owner's full Notion integration.
+import { hasOwnerSession } from './notion-session.js';
 
 export default async function handler(req, res) {
   const token = process.env.NOTION_API_KEY || '';
   const accessToken = process.env.NOTION_PROXY_ACCESS_TOKEN || '';
   const { path } = req.query;
 
-  if (!accessToken || req.headers['x-spidey-access-token'] !== accessToken) {
+  res.setHeader('Cache-Control', 'no-store');
+  if (!accessToken || !hasOwnerSession(req, accessToken)) {
     return res.status(403).json({ ok: false, error: 'Private Notion proxy is disabled or access is denied' });
+  }
+
+  if (!['GET', 'HEAD'].includes(req.method)) {
+    let origin;
+    try { origin = new URL(req.headers.origin).host; } catch { /* missing or invalid origin */ }
+    if (!origin || origin !== req.headers.host) return res.status(403).json({ ok: false, error: 'Cross-origin writes are not allowed' });
   }
 
   if (!token) {
