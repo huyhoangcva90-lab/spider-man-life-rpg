@@ -20,7 +20,7 @@ import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-res
 import { MapGuideModal } from './ui/MapGuideModal.js';
 import { HeroAnimationController } from './game/HeroAnimationController.js?build=spider-icons-7';
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=static-spiders-nav';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=spider-app-8';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=spider-app-10';
 import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
 
 class App {
