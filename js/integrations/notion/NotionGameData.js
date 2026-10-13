@@ -3,6 +3,7 @@ export const NOTION_GAME_DATABASES = {
   habits: '272d787636c681a29bf8e4d5e588e173',
   goals: '272d787636c681729e4df3566c0d933d',
   heroProfile: '312778043056440d9f8924eae4de7a67',
+  arenaMaps: '2d74dc2af9b74b19b55d0d61172abc4b',
   suits: '81960105f430405990f3d3c88916d1a8',
   gadgets: 'e70aff2a0a0b4492bc4631e2753045f3',
   combatSkills: '48d57df26e7540d4bf7c74ab40957ec2',

@@ -2,7 +2,7 @@ const ASSET_ROOT = new URL('../../assets/spideytracker/', import.meta.url);
 const DATA_URL = new URL('../../data/cosmic-original-spiderman.json', import.meta.url);
 
 const CLIPS = {
-  idle: ['Idle'], combat_idle: ['Idle'], run: ['Sprint'],
+  idle: ['Walkstart'], combat_idle: ['Walkstart'], run: ['Sprint'],
   jump: ['Jump', 'Jumpapex', 'Jumpfall', 'Land'], dodge: ['Dodge'],
   attack_01: ['Attack1'], attack_02: ['Attack2'], attack_03: ['Attack3'], combo_4: ['Attack4'], combo_chain: ['Attack1', 'Attack2', 'Attack3', 'Attack4'],
   ranged_attack: ['Power1start', 'Power1', 'Power1end'], web_shot_2: ['Power2', 'Power2end'],
@@ -180,18 +180,32 @@ export class OriginalCosmicSprite {
     const layer = document.getElementById('combat-vfx-layer');
     this.drawHero(this.data.hero.clips.Webswing.frames[0]);
     if (!layer) { await pause(650 / speed); return; }
-    const stage = layer.getBoundingClientRect();
     const rope = document.createElement('div');
     rope.className = 'cosmic-swing-strand';
     layer.appendChild(rope);
+    this.canvas.classList.add('cosmic-swinging');
+    this.canvas.style.animationDuration = `${650 / speed}ms`;
+    let frameId;
+    const trackRope = () => {
+      if (!this.isCurrent(token)) return;
+      const stage = layer.getBoundingClientRect();
+      const actor = this.canvas.getBoundingClientRect();
+      const anchorX = stage.width * (reverse ? .39 : .28);
+      const handX = actor.left - stage.left + actor.width * (reverse ? .62 : .38);
+      const handY = actor.top - stage.top + actor.height * .46;
+      const dx = handX - anchorX;
+      rope.style.left = `${anchorX}px`;
+      rope.style.height = `${Math.hypot(dx, handY)}px`;
+      rope.style.transform = `rotate(${-Math.atan2(dx, handY)}rad)`;
+      frameId = requestAnimationFrame(trackRope);
+    };
+    frameId = requestAnimationFrame(trackRope);
     try {
-      const canvas = this.canvas.getBoundingClientRect();
-      const handX = canvas.left - stage.left + canvas.width * (reverse ? .65 : .35);
-      const handY = canvas.top - stage.top + canvas.height * .52;
-      rope.style.left = `${handX}px`;
-      rope.style.height = `${Math.max(0, handY)}px`;
       await pause(650 / speed);
     } finally {
+      cancelAnimationFrame(frameId);
+      this.canvas.classList.remove('cosmic-swinging');
+      this.canvas.style.removeProperty('animation-duration');
       rope.remove();
     }
   }

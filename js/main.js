@@ -18,9 +18,9 @@ import { MarkerDossier } from './ui/MarkerDossier.js?build=spider-life-reset-2';
 import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=static-spiders-nav';
 import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-reset-2';
 import { MapGuideModal } from './ui/MapGuideModal.js';
-import { HeroAnimationController } from './game/HeroAnimationController.js?build=spider-icons-7';
+import { HeroAnimationController } from './game/HeroAnimationController.js?build=arena-maps-1';
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=static-spiders-nav';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=spider-app-10';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=arena-maps-1';
 import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
 
 class App {

@@ -1,4 +1,4 @@
-import { OriginalCosmicSprite } from './OriginalCosmicSprite.js';
+import { OriginalCosmicSprite } from './OriginalCosmicSprite.js?build=arena-maps-1';
 
 /* Combat state machine with the original Cosmic Invasion sprite as its primary renderer. */
 
@@ -104,11 +104,20 @@ export class HeroAnimationController {
 
     if (hasAction) {
       let animation = result.finisher ? 'ultimate' : result.animation;
+      if (result.actionId === 'basic-combo') {
+        animation = ['attack_01', 'attack_02', 'web_swing', 'attack_03', 'web_swing_reverse'][this.attackIndex++ % 5];
+      }
       if (animation === 'ally_call') animation = 'skill_02';
       if (!STATE[animation]) {
         animation = result.weaknessMatch
           ? ['skill_01', 'skill_02', 'skill_03'][this.attackIndex++ % 3]
           : ['attack_01', 'attack_02', 'attack_03', 'ranged_attack'][this.attackIndex++ % 4];
+      }
+      if (this.original?.ready && result.damage > 0) {
+        const words = { attack_01: 'POW!', attack_02: 'KICK!', attack_03: 'BAM!', ranged_attack: 'THWIP!', web_shot_2: 'THWIP!', ultimate: 'MAXIMUM SPIDER!', web_swing: 'SWING!', web_swing_reverse: 'SWING!', swing_kick: 'KICK!' };
+        const callout = `${words[animation] || 'HIT!'} ${result.damage} DMG`;
+        const effect = /web|swing/.test(animation) ? 'web' : animation === 'ultimate' ? 'ultimate' : 'impact';
+        window.setTimeout(() => { if (token === this.sequenceToken) this.spawnVfx(callout, effect); }, 170 / this.speed);
       }
       if (result.finisher && !this.original?.ready) await this.play('jump');
       if (token !== this.sequenceToken) return;

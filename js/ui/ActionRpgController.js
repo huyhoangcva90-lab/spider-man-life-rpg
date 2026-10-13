@@ -1,4 +1,4 @@
-import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=spider-life-reset-2';
+import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -24,6 +24,12 @@ export class ActionRpgController {
     this.notionGoals = [];
     this.notionActiveQuests = [];
     this.notionHeroProfile = null;
+    this.notionArenaMaps = [
+      { id: '3f7d787636c681ceb91bc576612416be', Map: 'Manhattan Rooftop', 'Map Key': 'rooftop', District: 'MANHATTAN ROOFTOP', Weather: 'NIGHT // LIGHT RAIN', Description: 'Mái nhà New York, đường chân trời và mưa đêm.', 'Unlock Level': 1, Available: true },
+      { id: '3f7d787636c681788e5be15cf5b2fde6', Map: 'Subway Underground', 'Map Key': 'subway', District: 'NEW YORK SUBWAY', Weather: 'UNDERGROUND // NEON', Description: 'Sân ga ngầm, đèn tín hiệu và đoàn tàu lướt qua.', 'Unlock Level': 1, Available: true },
+      { id: '3f7d787636c68107a607f4a97272d4a5', Map: 'Oscorp Lab', 'Map Key': 'lab', District: 'OSCORP LAB', Weather: 'INTERIOR // ALERT', Description: 'Phòng thí nghiệm Oscorp, ống năng lượng và cảnh báo đỏ.', 'Unlock Level': 1, Available: true }
+    ];
+    this.selectedArenaMapId = localStorage.getItem('spidey_arena_map') || this.notionArenaMaps[0].id;
     this.notionBadges = [];
     this.notionSuits = [];
     this.notionGadgets = [];
@@ -485,11 +491,43 @@ export class ActionRpgController {
     else if (result.victory) this.toast(result.victory.boss ? 'CHAPTER BOSS DEFEATED!' : `WAVE CLEAR // NEXT: ${result.victory.next}`);
   }
 
+  currentArenaMap() {
+    return this.notionArenaMaps.find((map) => map.id === this.selectedArenaMapId) || this.notionArenaMaps[0];
+  }
+
+  applyArenaMap() {
+    const map = this.currentArenaMap();
+    if (!map) return;
+    const stage = document.getElementById('action-combat-stage');
+    const key = String(map['Map Key'] || 'rooftop').toLowerCase();
+    if (stage) stage.dataset.arenaMap = ['rooftop', 'subway', 'lab'].includes(key) ? key : 'rooftop';
+    this.text('combat-district', map.District || map.Map || 'MANHATTAN ROOFTOP');
+    this.text('combat-weather', map.Weather || 'NIGHT // LIGHT RAIN');
+  }
+
+  async selectArenaMap(mapId) {
+    const map = this.notionArenaMaps.find((item) => item.id === mapId && item.Available !== false);
+    const level = Number(this.notionHeroProfile?.Level) || this.engine.snapshot().hero.level || 1;
+    if (!map || level < (Number(map['Unlock Level']) || 1)) return;
+    if (this.notionHeroProfile && this.notionConnection === 'connected') {
+      try {
+        await this.patchNotionPage(this.notionHeroProfile.id, { 'Current Map': { relation: [{ id: map.id }] } });
+        this.notionHeroProfile['Current Map'] = [map.id];
+      } catch (error) { this.toast(`MAP CHƯA LƯU NOTION: ${error.message}`); return; }
+    }
+    this.selectedArenaMapId = map.id;
+    localStorage.setItem('spidey_arena_map', map.id);
+    this.render();
+    this.sound.playSelect();
+    this.toast(`MAP // ${String(map.Map).toUpperCase()}`);
+  }
+
   render(snapshot = this.engine.snapshot()) {
     const { hero, enemy, data } = snapshot;
     const notionEnemy = this.notionEnemyFor(enemy, snapshot.encounterIndex);
     const enemyDisplayName = notionEnemy?.Boss || enemy.name;
     const heroDisplayName = this.notionHeroProfile?.Hero || this.notionHeroProfile?.Name || this.notionHeroProfile?.Profile || 'PETER PARKER';
+    this.applyArenaMap();
     const heroName = document.querySelector('.hud-avatar strong');
     if (heroName) heroName.textContent = String(heroDisplayName).toUpperCase();
     this.renderEnemySprite(enemy);
@@ -515,7 +553,7 @@ export class ActionRpgController {
     this.text('enemy-weakness', enemy.weakness);
     this.text('enemy-resistance', enemy.resistance);
     this.text('enemy-phase', snapshot.phase);
-    this.text('combat-log-line', snapshot.combatLog[0]);
+    this.text('combat-log-line', String(snapshot.combatLog[0] || '').replace('MANHATTAN ROOFTOP', this.currentArenaMap()?.District || 'MANHATTAN ROOFTOP'));
     this.text('arena-turn-value', String(snapshot.turn + 1).padStart(2, '0'));
     const combatExhausted = hero.hp <= 0 || hero.webEnergy <= 0;
     this.text('arena-turn-tip', combatExhausted ? 'Hoàn thành Habit để hồi HP & Energy' : this.notionConnection === 'connected' ? 'Chọn đòn đánh hoặc hoàn thành Quest' : 'TIẾN ĐỘ LƯU TRÊN THIẾT BỊ');
@@ -634,7 +672,7 @@ export class ActionRpgController {
 
     const tabMap = {
       QUESTS: ['TODAY', 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
-      HERO: ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
+      HERO: ['PROFILE', 'MAPS', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
       HABITS: ['TODAY', 'PROGRESS', '66 DAYS'],
       FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
@@ -959,10 +997,26 @@ export class ActionRpgController {
   ------------------------------------------------------------- */
   renderHeroSection() {
     const profile = this.notionHeroProfile;
+    if (this.panelTab === 'MAPS') {
+      const level = Number(profile?.Level) || this.engine.snapshot().hero.level || 1;
+      const cards = this.notionArenaMaps.filter((map) => map.Available !== false).map((map) => {
+        const key = String(map['Map Key'] || '').toLowerCase();
+        if (!['rooftop', 'subway', 'lab'].includes(key)) return '';
+        const selected = this.selectedArenaMapId === map.id;
+        const locked = level < (Number(map['Unlock Level']) || 1);
+        return `<article class="pixel-game-card arena-map-card arena-map-card--${key} ${selected ? 'arena-map-card--selected' : ''}">
+          <div class="arena-map-card__scene" aria-hidden="true"></div>
+          <div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(map.District || map.Map)}</span><span class="pixel-tag ${selected ? 'pixel-tag--gold' : ''}">${selected ? 'ĐANG DÙNG' : locked ? `LV ${Number(map['Unlock Level'])}` : 'CÓ THỂ CHỌN'}</span></div>
+          <h3 class="pixel-card-title">${this.escapeHtml(map.Map)}</h3><p class="pixel-card-desc">${this.escapeHtml(map.Description || map.Weather || '')}</p>
+          <button class="pixel-action-btn" data-select-arena-map="${this.escapeHtml(map.id)}" ${selected || locked ? 'disabled' : ''}>${selected ? 'ĐÃ CHỌN' : locked ? 'CHƯA MỞ KHÓA' : 'CHỌN MAP'}</button>
+        </article>`;
+      }).join('');
+      return `<div class="quest-source-banner"><span>ARENA MAPS</span><strong>CHỌN SÂN ĐẤU CHO HERO</strong><small>${profile && this.notionConnection === 'connected' ? 'Đổi map sẽ lưu vào Current Map trong Hero Profile trên Notion.' : 'Map đổi ngay trên thiết bị. Kết nối Notion để lưu vào Hero Profile.'}</small></div><div class="pixel-card-grid arena-map-grid">${cards || '<p class="pixel-card-desc">Chưa có map khả dụng.</p>'}</div>`;
+    }
     if (this.panelTab === 'PROFILE') {
       if (!profile) {
         const hero = this.engine.snapshot().hero;
-        return `<div class="quest-source-banner"><strong>HERO LƯU TRÊN THIẾT BỊ</strong><small>Chiến đấu, Quest và Habit vẫn dùng được. Trang bị Notion chưa được tải.</small><button class="pixel-action-btn pixel-action-btn--blue" data-open-quests>MỞ QUESTS</button></div><div class="spidey-skill-summary"><span><b>LV ${hero.level}</b> LEVEL</span><span><b>${hero.hp}/${hero.maxHp}</b> HP</span><span><b>${hero.webEnergy}</b> ENERGY</span></div>`;
+        return `<div class="quest-source-banner"><strong>HERO LƯU TRÊN THIẾT BỊ</strong><small>Chiến đấu và chọn Map vẫn dùng được. Trang bị Notion chưa được tải.</small><button class="pixel-action-btn pixel-action-btn--blue" data-open-hero-maps>CHỌN MAP</button></div><div class="spidey-skill-summary"><span><b>LV ${hero.level}</b> LEVEL</span><span><b>${hero.hp}/${hero.maxHp}</b> HP</span><span><b>${hero.webEnergy}</b> ENERGY</span></div>`;
       }
       const suit = this.notionSuits.find((item) => profile['Equipped Suit']?.includes(item.id));
       const gadgets = this.notionGadgets.filter((item) => profile['Equipped Gadgets']?.includes(item.id));
@@ -970,7 +1024,7 @@ export class ActionRpgController {
       return `<div class="quest-source-banner"><span>NOTION HERO PROFILE</span><strong>${this.escapeHtml(profile.Hero || 'SPIDER-MAN')}</strong><small>Chỉ số và trang bị đang đọc trực tiếp từ Notion.</small></div>
         <div class="spidey-skill-summary"><span><b>LV ${Number(profile.Level) || 1}</b> LEVEL</span><span><b>${Number(profile.Exp) || 0}</b> XP</span><span><b>${Number(profile.Gold) || 0}</b> GOLD</span></div>
         <div class="spidey-skill-summary"><span><b>${Number(profile.HP) || 0}/${Number(profile['Max HP']) || 100}</b> HP</span><span><b>${Number(profile.Energy) || 0}/${Number(profile['Max Energy']) || 10}</b> ENERGY</span><span><b>${Number(profile['Skill Point']) || 0}</b> SP</span></div>
-        <div class="pixel-card-grid"><article class="pixel-game-card"><h3 class="pixel-card-title">SUIT</h3><p class="pixel-card-desc">${this.escapeHtml(suit?.Suit || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">GADGETS</h3><p class="pixel-card-desc">${this.escapeHtml(gadgets.map((item) => item.Gadget || item.Name || item.Title).join(', ') || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">SKILLS</h3><p class="pixel-card-desc">${this.escapeHtml(skills.map((item) => item.Skill || item.Name || item.Title).join(', ') || 'Chưa trang bị')}</p></article></div>`;
+        <div class="pixel-card-grid"><article class="pixel-game-card"><h3 class="pixel-card-title">SUIT</h3><p class="pixel-card-desc">${this.escapeHtml(suit?.Suit || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">GADGETS</h3><p class="pixel-card-desc">${this.escapeHtml(gadgets.map((item) => item.Gadget || item.Name || item.Title).join(', ') || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">MAP</h3><p class="pixel-card-desc">${this.escapeHtml(this.currentArenaMap()?.Map || 'Manhattan Rooftop')}</p><button class="pixel-action-btn pixel-action-btn--blue" data-open-hero-maps>ĐỔI MAP</button></article></div>`;
     }
     if (this.panelTab === 'BADGES') {
       return `<div class="quest-source-banner"><span>SPIDER BADGES</span><strong>HUY HIỆU TỪ NOTION</strong><small>${this.notionBadges.length} badge, biểu tượng lấy từ mục Badges & Medals.</small></div><div class="pixel-card-grid">${this.notionBadges.map((badge) => { const art = this.catalogImage(badge); return `<article class="pixel-game-card ${badge.Unlocked ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(badge.Tier || 'BADGE')}</span><span class="pixel-tag">${badge.Unlocked ? 'UNLOCKED' : 'LOCKED'}</span></div>${art ? `<img class="notion-badge-icon" src="${this.escapeHtml(art)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(badge.Medal || 'Badge')}</h3><p class="pixel-card-desc">${this.escapeHtml(badge.Requirement || '')}</p></article>`; }).join('') || '<p class="pixel-card-desc">Đang tải badge từ Notion.</p>'}</div>`;
@@ -1625,6 +1679,7 @@ export class ActionRpgController {
   async loadHeroCatalog() {
     const sources = [
       ['notionEnemies', NOTION_GAME_DATABASES.enemies],
+      ['notionArenaMaps', NOTION_GAME_DATABASES.arenaMaps],
       ['notionBadges', NOTION_GAME_DATABASES.badges],
       ['notionSuits', NOTION_GAME_DATABASES.suits],
       ['notionGadgets', NOTION_GAME_DATABASES.gadgets],
@@ -1640,6 +1695,14 @@ export class ActionRpgController {
     for (const [key, database] of sources) {
       try {
         this[key] = (await queryAllNotionPages(database)).map(normalizeNotionCatalogPage);
+        if (key === 'notionArenaMaps') {
+          const linked = this.notionHeroProfile?.['Current Map']?.[0];
+          if (linked && this.notionArenaMaps.some((map) => map.id === linked)) {
+            this.selectedArenaMapId = linked;
+            localStorage.setItem('spidey_arena_map', linked);
+          }
+          this.applyArenaMap();
+        }
         if (key === 'notionSuits') this.suits = this[key].map((item) => ({
           id: item.id, Suit: item.Suit, Owner: item.Owner || 'Spider-Man',
           ImageUrl: this.catalogImage(item) || './assets/spideytracker/tracker_logo3.png',
@@ -1718,6 +1781,16 @@ export class ActionRpgController {
 
   bindEvents(content) {
     content.querySelector('[data-open-quests]')?.addEventListener('click', () => this.selectSection('QUESTS'));
+    content.querySelectorAll('[data-open-hero-maps]').forEach((button) => button.addEventListener('click', () => {
+      this.panelTab = 'MAPS';
+      this.renderPanel({ resetScroll: true });
+      this.updateRoute();
+    }));
+    content.querySelectorAll('[data-select-arena-map]').forEach((button) => button.addEventListener('click', async () => {
+      button.disabled = true;
+      await this.selectArenaMap(button.dataset.selectArenaMap);
+      if (button.isConnected) button.disabled = false;
+    }));
     content.querySelectorAll('[data-open-map-system]').forEach((button) => button.addEventListener('click', () => {
       this.sound.playSelect();
       this.selectSection('CITY', false);
