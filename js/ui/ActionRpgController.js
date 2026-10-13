@@ -60,6 +60,13 @@ export class ActionRpgController {
     this.visibleEnemyId = null;
     this.enemyMotionTimer = null;
     this.journalEntries = JSON.parse(localStorage.getItem('spidey_journal_entries') || '[]');
+    document.addEventListener('error', (event) => {
+      const image = event.target;
+      if (image?.tagName !== 'IMG' || !image.dataset.badgeFallback) return;
+      const fallback = image.dataset.badgeFallback;
+      delete image.dataset.badgeFallback;
+      image.src = fallback;
+    }, true);
   }
 
   async init() {
@@ -299,6 +306,14 @@ export class ActionRpgController {
 
   catalogImage(item) {
     return item?.Image || item?.['Marvel Snap'] || item?.['Suit Preview'] || item?.coverUrl || item?.iconUrl || '';
+  }
+
+  badgeArtwork(badge) {
+    const name = String(badge.Medal || '').split(' - ')[0].toLowerCase();
+    const local = Object.values(this.badges).find((item) => item.title?.toLowerCase().startsWith(`${name} (`));
+    const fallback = local?.file ? `./assets/sprites/badges/${local.file}` : '';
+    const source = this.catalogImage(badge) || fallback;
+    return source ? `<img class="notion-badge-icon" src="${this.escapeHtml(source)}" ${fallback && fallback !== source ? `data-badge-fallback="${this.escapeHtml(fallback)}"` : ''} alt="${this.escapeHtml(badge.Medal || 'Badge')}" loading="lazy">` : '';
   }
 
   normalizedCatalogName(value = '') {
@@ -1017,7 +1032,7 @@ export class ActionRpgController {
         <div class="pixel-card-grid"><article class="pixel-game-card"><h3 class="pixel-card-title">SUIT</h3><p class="pixel-card-desc">${this.escapeHtml(suit?.Suit || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">GADGETS</h3><p class="pixel-card-desc">${this.escapeHtml(gadgets.map((item) => item.Gadget || item.Name || item.Title).join(', ') || 'Chưa trang bị')}</p></article><article class="pixel-game-card"><h3 class="pixel-card-title">MAP</h3><p class="pixel-card-desc">${this.escapeHtml(this.currentArenaMap()?.Map || 'Manhattan Rooftop')}</p><button class="pixel-action-btn pixel-action-btn--blue" data-open-hero-maps>ĐỔI MAP</button></article></div>`;
     }
     if (this.panelTab === 'BADGES') {
-      return `<div class="quest-source-banner"><span>SPIDER BADGES</span><strong>HUY HIỆU TỪ NOTION</strong><small>${this.notionBadges.length} badge, biểu tượng lấy từ mục Badges & Medals.</small></div><div class="pixel-card-grid">${this.notionBadges.map((badge) => { const art = this.catalogImage(badge); return `<article class="pixel-game-card ${badge.Unlocked ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(badge.Tier || 'BADGE')}</span><span class="pixel-tag">${badge.Unlocked ? 'UNLOCKED' : 'LOCKED'}</span></div>${art ? `<img class="notion-badge-icon" src="${this.escapeHtml(art)}" alt="" loading="lazy">` : ''}<h3 class="pixel-card-title">${this.escapeHtml(badge.Medal || 'Badge')}</h3><p class="pixel-card-desc">${this.escapeHtml(badge.Requirement || '')}</p></article>`; }).join('') || '<p class="pixel-card-desc">Đang tải badge từ Notion.</p>'}</div>`;
+      return `<div class="quest-source-banner"><span>SPIDER BADGES</span><strong>HUY HIỆU TỪ NOTION</strong><small>${this.notionBadges.length} badge, biểu tượng lấy từ mục Badges & Medals.</small></div><div class="pixel-card-grid">${this.notionBadges.map((badge) => `<article class="pixel-game-card ${badge.Unlocked ? 'pixel-game-card--done' : ''}"><div class="pixel-card-header"><span class="pixel-tag">${this.escapeHtml(badge.Tier || 'BADGE')}</span><span class="pixel-tag">${badge.Unlocked ? 'UNLOCKED' : 'LOCKED'}</span></div>${this.badgeArtwork(badge)}<h3 class="pixel-card-title">${this.escapeHtml(badge.Medal || 'Badge')}</h3><p class="pixel-card-desc">${this.escapeHtml(badge.Requirement || '')}</p></article>`).join('') || '<p class="pixel-card-desc">Đang tải badge từ Notion.</p>'}</div>`;
     }
     if (this.panelTab === 'SKILLS') {
       return `<div class="quest-source-banner"><span>SPIDER MOVESET</span><strong>COMBAT SKILLS // NOTION</strong><small>Chọn kỹ năng để gắn vào một trong bốn ô của Hero Profile.</small></div>
@@ -1345,7 +1360,7 @@ export class ActionRpgController {
                 <span class="pixel-tag pixel-tag--gold">${this.escapeHtml(badge.Tier || 'MEDAL')}</span>
                 <span class="pixel-tag ${badge.Unlocked ? 'pixel-tag--green' : ''}">${badge.Unlocked ? 'UNLOCKED' : 'LOCKED'}</span>
               </div>
-              ${this.catalogImage(badge) ? `<img class="notion-badge-icon" src="${this.escapeHtml(this.catalogImage(badge))}" alt="${this.escapeHtml(badge.Medal)}" loading="lazy">` : ''}
+              ${this.badgeArtwork(badge)}
               <h3 class="pixel-card-title" style="font-size: 9px;">${this.escapeHtml(badge.Medal || 'Badge')}</h3>
               <p class="pixel-card-desc" style="font-size: 9px;">${this.escapeHtml(badge.Requirement || '')}</p>
             </article>
