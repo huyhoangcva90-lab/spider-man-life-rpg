@@ -312,7 +312,7 @@ export class ActionRpgController {
     const name = String(badge.Medal || '').split(' - ')[0].toLowerCase();
     const local = Object.values(this.badges).find((item) => item.title?.toLowerCase().startsWith(`${name} (`));
     const fallback = local?.file ? `./assets/sprites/badges/${local.file}` : '';
-    const source = this.catalogImage(badge) || fallback;
+    const source = badge.sourceUrl ? this.catalogImage(badge) || fallback : fallback || this.catalogImage(badge);
     return source ? `<img class="notion-badge-icon" src="${this.escapeHtml(source)}" ${fallback && fallback !== source ? `data-badge-fallback="${this.escapeHtml(fallback)}"` : ''} alt="${this.escapeHtml(badge.Medal || 'Badge')}" loading="lazy">` : '';
   }
 
