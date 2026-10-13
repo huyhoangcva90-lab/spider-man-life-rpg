@@ -212,7 +212,7 @@ export class OriginalCosmicSprite {
 
   spawnWebPull(token) {
     const layer = document.getElementById('combat-vfx-layer');
-    const enemy = document.querySelector('.arena-fighter--villain') || document.getElementById('combat-enemy-image');
+    const enemy = document.querySelector('.arena-foe--selected .arena-foe__sprite') || document.querySelector('.arena-fighter--villain');
     if (!layer || !enemy) return;
     const stage = layer.getBoundingClientRect();
     const webPoints = () => {
@@ -259,7 +259,7 @@ export class OriginalCosmicSprite {
   }  spawnProjectile(type) {
     const layer = document.getElementById('combat-vfx-layer');
     if (!layer) return;
-    const enemy = document.querySelector('.arena-fighter--villain') || document.getElementById('combat-enemy-image');
+    const enemy = document.querySelector('.arena-foe--selected .arena-foe__sprite') || document.querySelector('.arena-fighter--villain');
     const stage = layer.getBoundingClientRect();
     const source = this.hero.getBoundingClientRect();
     const target = enemy?.getBoundingClientRect();

@@ -1,9 +1,9 @@
 import { ContentRegistry, validatePhaseOneContent } from '../registry/ContentRegistry.js';
 import { ACTIONS, DIFFICULTIES } from './actions.js';
 import { HEROES, ALLIES, GADGETS, SKILLS } from './actors.js';
-import { ENEMIES } from './enemies.js';
-import { REWARDS } from './rewards.js';
-import { DISTRICTS, ZONES, QUESTS } from './world.js';
+import { ENEMIES } from './enemies.js?build=cosmic-team-1';
+import { REWARDS } from './rewards.js?build=cosmic-team-1';
+import { DISTRICTS, ZONES, QUESTS } from './world.js?build=cosmic-team-1';
 
 export function createPhaseOneContent() {
   const content = {

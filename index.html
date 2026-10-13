@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="./css/game-layout.css?build=game-layout-8" />
   <link rel="stylesheet" href="./css/combat-characters.css?build=animated-enemies-2" />
   <link rel="stylesheet" href="./css/arena-maps.css?build=arena-maps-1" />
+  <link rel="stylesheet" href="./css/cosmic-enemy-team.css?build=cosmic-team-1" />
 </head>
 <body data-game-mode="ARENA">
   <a class="skip-link" href="#tracker-main">Bỏ qua điều hướng</a>
@@ -99,13 +100,13 @@
             </div>
             <div class="hud-economy"><span><small>WEB COINS</small><b id="hud-coins">0</b></span><span><small>STREAK</small><b><i id="hud-streak">0</i>D</b></span></div>
           </div>
-          <div class="quest-directive"><span>MAIN QUEST</span><strong id="hud-main-quest">THE GOBLIN SIGNAL</strong><em id="hud-quest-progress">WAVE 1 / 5</em></div>
+          <div class="quest-directive"><span>MAIN QUEST</span><strong id="hud-main-quest">THE SYMBIOTE SIGNAL</strong><em id="hud-quest-progress">WAVE 1 / 5</em></div>
           <div class="action-combat-stage" id="action-combat-stage">
             <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
             <div class="combat-location"><strong id="combat-district">MANHATTAN ROOFTOP</strong><span id="combat-weather">NIGHT // LIGHT RAIN</span></div>
             <div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span><button type="button" id="arena-open-habits" hidden>MỞ LIFE 66</button></div>
             <div class="arena-fighter arena-fighter--hero action-fighter--hero"><div class="arena-hero-sprite" id="arena-hero-sprite" role="img" aria-label="Người Nhện đang chiến đấu"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></div><span>SPIDER-MAN</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
-            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div class="combat-placeholder combat-placeholder--enemy" id="combat-enemy-image" role="img" aria-label="Street Thug" data-motion="idle"><b>FOE</b></div><span id="combat-enemy-short">THUG</span></div>
+            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div id="combat-enemy-team" class="arena-enemy-team" aria-label="Đội địch"></div></div>
             <aside class="combat-info-panel" aria-label="Combat information">
               <small id="enemy-tier">TIER 1</small><strong id="enemy-name">STREET THUG</strong>
               <label>HP <span id="enemy-hp-text">85 / 85</span><i><b id="enemy-hp-fill"></b></i></label>
@@ -417,6 +418,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=arena-maps-1"></script>
+  <script type="module" src="./js/main.js?build=cosmic-team-1"></script>
 </body>
 </html>

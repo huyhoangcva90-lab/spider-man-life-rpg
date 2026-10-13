@@ -306,30 +306,7 @@ export class ActionRpgController {
   notionEnemyFor(enemy, encounterIndex = 0) {
     if (!this.notionEnemies.length) return null;
     const target = this.normalizedCatalogName(enemy?.name);
-    const exact = this.notionEnemies.find((item) => this.normalizedCatalogName(item.Boss || item.Enemy || item.Name) === target);
-    if (exact) return exact;
-    const withArt = this.notionEnemies.filter((item) => this.catalogImage(item));
-    if (!withArt.length) return null;
-    if (enemy?.tier === 'BOSS') {
-      return withArt.find((item) => /green goblin/i.test(item.Boss || '')) || withArt.find((item) => /boss/i.test(`${item['Enemy Class']} ${item['Enemy Role']} ${item.Type}`)) || withArt[0];
-    }
-    const minions = withArt.filter((item) => /minion|melee|ranged|bruiser|assassin/i.test(`${item['Enemy Class']} ${item['Enemy Role']} ${item.Type}`));
-    return (minions.length ? minions : withArt)[encounterIndex % (minions.length || withArt.length)];
-  }
-
-  syncArenaEnemyArt(enemyRecord) {
-    const art = this.catalogImage(enemyRecord);
-    const displayArt = art || './assets/spideytracker/street-thug-minion.png';
-    const target = document.getElementById('combat-enemy-image');
-    const rival = document.getElementById('footer-enemy-rival-image');
-    if (target) {
-      target.classList.add('has-notion-art');
-      target.innerHTML = `<img src="${this.escapeHtml(displayArt)}" alt="${this.escapeHtml(enemyRecord?.Boss || 'Street Thug')}">`;
-    }
-    if (rival) {
-      rival.src = displayArt;
-      rival.closest('.footer-enemy-counterpart')?.classList.add('has-art');
-    }
+    return this.notionEnemies.find((item) => this.normalizedCatalogName(item.Boss || item.Enemy || item.Name) === target) || null;
   }
 
   escapeHtml(value = '') {
@@ -479,16 +456,21 @@ export class ActionRpgController {
 
   handleUpdate(result) {
     this.render(result.snapshot);
-    if (result.phaseChanged) this.animateEnemy('phase', 650);
+    if (result.phaseChanged) this.animateEnemy('phase', 650, result.targetIndex);
     else if (result.victory?.next) this.animateEnemy('enter', 550);
-    else if (result.victory?.boss) this.animateEnemy('defeat', 800);
-    else if (result.damage > 0) this.animateEnemy('hurt', 440);
+    else if (result.targetClear) this.animateEnemy('defeat', 800, result.targetIndex);
+    else if (result.damage > 0) this.animateEnemy('hurt', 440, result.targetIndex);
+    if (result.heroDamage && result.attackerId) {
+      const attackerIndex = result.snapshot.opponents.findIndex((foe) => foe.id === result.attackerId && foe.hp > 0);
+      if (attackerIndex >= 0) window.setTimeout(() => this.animateEnemy('attack', 480, attackerIndex), 300);
+    }
     if (result.perfectDodge) this.sound.playPerfectDodge();
     if (result.victory?.boss) this.sound.playVictoryCue();
     else if (result.victory?.next) this.sound.playCrimeAlert();
     if (result.dailyReward) this.toast(`DAILY CLEAR // +${result.dailyReward.xp} XP +${result.dailyReward.coins} COINS`);
     else if (result.questReward) this.toast(`QUEST CLEAR // +${result.questReward.xp} XP +${result.questReward.coins} COINS`);
     else if (result.victory) this.toast(result.victory.boss ? 'CHAPTER BOSS DEFEATED!' : `WAVE CLEAR // NEXT: ${result.victory.next}`);
+    else if (result.targetClear) this.toast(`K.O. ${result.targetClear.enemy} // CÒN ${result.targetClear.remaining} ĐỊCH`);
   }
 
   currentArenaMap() {
@@ -525,12 +507,12 @@ export class ActionRpgController {
   render(snapshot = this.engine.snapshot()) {
     const { hero, enemy, data } = snapshot;
     const notionEnemy = this.notionEnemyFor(enemy, snapshot.encounterIndex);
-    const enemyDisplayName = notionEnemy?.Boss || enemy.name;
+    const enemyDisplayName = enemy.name;
     const heroDisplayName = this.notionHeroProfile?.Hero || this.notionHeroProfile?.Name || this.notionHeroProfile?.Profile || 'PETER PARKER';
     this.applyArenaMap();
     const heroName = document.querySelector('.hud-avatar strong');
     if (heroName) heroName.textContent = String(heroDisplayName).toUpperCase();
-    this.renderEnemySprite(enemy);
+    this.renderEnemyTeam(snapshot);
     this.text('hud-level', hero.level);
     this.text('hud-rank', hero.rank);
     this.text('hud-xp-text', `${hero.xp} / ${hero.xpToNext}`);
@@ -543,11 +525,10 @@ export class ActionRpgController {
     this.width('hud-hp-fill', hero.hp / (hero.maxHp || data.hero.maxHp) * 100);
     this.width('hud-web-fill', hero.webEnergy / data.hero.maxWebEnergy * 100);
     const activeQuest = this.notionConnection === 'connected' && this.notionLiveKinds.has('activeQuests') ? this.notionActiveQuests.find((quest) => !quest.done) : null;
-    this.text('hud-main-quest', activeQuest?.title || (this.notionConnection === 'connected' && this.notionLiveKinds.has('activeQuests') ? 'ALL NOTION QUESTS CLEAR' : 'THE GOBLIN SIGNAL'));
+    this.text('hud-main-quest', activeQuest?.title || (this.notionConnection === 'connected' && this.notionLiveKinds.has('activeQuests') ? 'ALL NOTION QUESTS CLEAR' : 'THE SYMBIOTE SIGNAL'));
     this.text('hud-quest-progress', this.notionConnection === 'connected' && this.notionLiveKinds.has('activeQuests') && this.notionActiveQuests.length ? `${this.notionActiveQuests.filter((quest) => quest.done).length} / ${this.notionActiveQuests.length} QUESTS` : snapshot.storyComplete ? 'CHAPTER CLEAR' : `WAVE ${snapshot.encounterIndex + 1} / ${data.encounter.length}`);
     this.text('enemy-tier', notionEnemy?.['Tier Rank'] || notionEnemy?.['Enemy Class'] || enemy.tier);
     this.text('enemy-name', enemyDisplayName);
-    this.text('combat-enemy-short', enemyDisplayName.split(' ').slice(-1)[0]);
     this.text('enemy-hp-text', `${snapshot.enemyHp} / ${enemy.maxHp}`);
     this.text('enemy-stagger-text', `${Math.round(snapshot.enemyStagger)}%`);
     this.text('enemy-weakness', enemy.weakness);
@@ -567,7 +548,6 @@ export class ActionRpgController {
     this.text('cooldown-web', snapshot.cooldowns.web ? `CD ${snapshot.cooldowns.web}` : `${Math.ceil(data.actions.web.energy / data.hero.maxWebEnergy * maxEnergy)} ENERGY`);
     this.text('cooldown-gadget', snapshot.cooldowns.gadget ? `CD ${snapshot.cooldowns.gadget}` : `${snapshot.charges.gadget} CHARGES`);
     this.text('cooldown-ally', snapshot.cooldowns.ally ? `CD ${snapshot.cooldowns.ally}` : 'READY');
-    this.syncArenaEnemyArt(notionEnemy);
 
     const enemyFighter = document.querySelector('.action-fighter--enemy');
     enemyFighter?.classList.toggle('enemy--grunt', snapshot.encounterIndex < 3);
@@ -590,32 +570,39 @@ export class ActionRpgController {
     if (!document.getElementById('game-panel-backdrop')?.hasAttribute('hidden')) this.renderPanel();
   }
 
-  renderEnemySprite(enemy) {
-    const sprite = document.getElementById('combat-enemy-image');
-    if (!sprite || !enemy) return;
+  renderEnemyTeam(snapshot) {
+    const team = document.getElementById('combat-enemy-team');
+    if (!team) return;
     const sprites = {
-      'street-thug': './assets/spideytracker/street-thug-minion.png',
-      'tech-gunner': './assets/sprites/minions/Fisk_Gunner_B.png',
-      'shield-enemy': './assets/sprites/minions/Hunter_Shieldbearer.png',
-      'hunter-captain': './assets/sprites/minions/Hunter_Swordsman.png',
-      'green-goblin': './assets/spideytracker/green-goblin-pixel.png'
+      'street-thug': ['symbiote-goon-idle.png', 96, 91, 8],
+      'tech-gunner': ['aim-rifle-idle.png', 82, 82, 6],
+      'shield-enemy': ['aim-shock-idle.png', 75, 82, 8],
+      'hunter-captain': ['beetle-idle.png', 96, 106, 8],
+      'green-goblin': ['venom-idle.png', 87, 73, 8]
     };
-    const src = sprites[enemy.id] || sprites['street-thug'];
-    if (this.visibleEnemyId !== enemy.id) {
-      this.visibleEnemyId = enemy.id;
-      sprite.style.setProperty('--enemy-art', `url("${src}")`);
-      sprite.setAttribute('aria-label', enemy.name);
-      sprite.dataset.enemy = enemy.id;
-      this.animateEnemy('enter', 550);
-    }
+    team.dataset.count = String(snapshot.opponents.length);
+    team.innerHTML = snapshot.opponents.map((foe, index) => {
+      const [file, width, height, frames] = sprites[foe.id] || sprites['street-thug'];
+      const selected = index === snapshot.selectedEnemyIndex;
+      const down = foe.hp <= 0;
+      return `<button class="arena-foe ${selected ? 'arena-foe--selected' : ''} ${down ? 'arena-foe--down' : ''}" data-enemy-slot="${index}" type="button" aria-label="${this.escapeHtml(foe.name)}, ${foe.hp} trên ${foe.maxHp} HP${selected ? ', mục tiêu đang chọn' : ''}" ${down ? 'disabled' : ''}>
+        <span class="arena-foe__sprite" aria-hidden="true" style="--foe-sprite:url('/assets/cosmic-enemies/${file}');--cell-w:${width}px;--cell-h:${height}px;--frame-end:-${(frames - 1) * width}px;--frame-steps:${frames - 1}"></span>
+        <span class="arena-foe__name">${selected ? '⌖ ' : ''}${this.escapeHtml(foe.name)}</span>
+        <span class="arena-foe__health"><i style="width:${Math.max(0, foe.hp / foe.maxHp * 100)}%"></i></span>
+        <span class="arena-foe__value">${down ? 'K.O.' : `${foe.hp}/${foe.maxHp}`}</span>
+      </button>`;
+    }).join('');
+    team.querySelectorAll('[data-enemy-slot]').forEach((button) => button.addEventListener('click', () => {
+      if (this.engine.selectEnemy(Number(button.dataset.enemySlot))) this.sound.playSelect();
+    }));
   }
 
-  animateEnemy(state, duration) {
-    const sprite = document.getElementById('combat-enemy-image');
+  animateEnemy(state, duration, index = this.engine.snapshot().selectedEnemyIndex) {
+    const sprite = document.querySelector(`[data-enemy-slot="${index}"]`);
     if (!sprite) return;
     window.clearTimeout(this.enemyMotionTimer);
     sprite.dataset.motion = state;
-    this.enemyMotionTimer = window.setTimeout(() => { sprite.dataset.motion = 'idle'; }, duration);
+    this.enemyMotionTimer = window.setTimeout(() => { if (sprite.isConnected) sprite.dataset.motion = 'idle'; }, duration);
   }
 
   openPanel(section) {

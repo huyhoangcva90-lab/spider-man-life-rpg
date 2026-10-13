@@ -6,7 +6,8 @@ export class CombatEngine {
 
   enemyFor(state) {
     const quest = this.content.quests.get(state.quest.activeQuestId);
-    const id = quest.enemyIds[Math.min(state.battle.encounterIndex, quest.enemyIds.length - 1)];
+    const selected = state.battle.opponents?.[state.battle.selectedEnemyIndex];
+    const id = selected?.id || quest.enemyIds[Math.min(state.battle.encounterIndex, quest.enemyIds.length - 1)];
     return this.content.enemies.get(id);
   }
 
@@ -31,6 +32,8 @@ export class CombatEngine {
     if (finisher) damageResult.damage = Math.max(damageResult.damage, state.battle.enemyHp);
     state.battle.enemyHp = Math.max(0, state.battle.enemyHp - damageResult.damage);
     state.battle.enemyStagger = Math.min(enemy.staggerMax, state.battle.enemyStagger + damageResult.stagger);
+    const target = state.battle.opponents?.[state.battle.selectedEnemyIndex];
+    if (target) { target.hp = state.battle.enemyHp; target.stagger = state.battle.enemyStagger; }
     state.progression.webEnergy = Math.max(0, state.progression.webEnergy - action.energyCost);
     state.progression.ultimate = action.type === 'ULTIMATE' ? 0 : Math.min(100, state.progression.ultimate + 12 + Math.round(damageResult.damage / 8));
     if (action.cooldownTurns) state.battle.cooldowns[action.slot] = action.cooldownTurns;
@@ -38,7 +41,7 @@ export class CombatEngine {
     state.battle.turn += 1;
     if (state.battle.enemyStagger >= enemy.staggerMax) state.progression.ultimate = 100;
 
-    const result = { action: action.slot, actionId, animation: action.animation, comicText: action.comicText, sfx: action.sfx, finisher, ...damageResult };
+    const result = { action: action.slot, actionId, animation: action.animation, comicText: action.comicText, sfx: action.sfx, finisher, targetIndex: state.battle.selectedEnemyIndex, ...damageResult };
     if (state.battle.enemyHp > 0) this.enemyTurn(state, enemy, difficulty, result);
     const phaseBefore = state.battle.phase;
     state.battle.phase = this.phaseFor(enemy, state.battle.enemyHp, state.settings.difficulty);
@@ -54,7 +57,11 @@ export class CombatEngine {
       state.progression.ultimate = Math.min(100, state.progression.ultimate + 18);
       return;
     }
-    const incoming = Math.max(1, Math.round(enemy.power * difficulty.enemyDamage));
+    const alive = state.battle.opponents?.filter((foe) => foe.hp > 0) || [];
+    const attacker = alive.length ? alive[Math.floor(state.battle.turn / 2 - 1) % alive.length] : null;
+    const attackingEnemy = attacker ? this.content.enemies.get(attacker.id) : enemy;
+    const incoming = Math.max(1, Math.round(attackingEnemy.power * difficulty.enemyDamage));
+    result.attackerId = attackingEnemy.id;
     state.progression.hp = Math.max(0, state.progression.hp - incoming);
     result.heroDamage = incoming;
     if (state.progression.hp === 0) {

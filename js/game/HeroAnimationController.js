@@ -1,4 +1,4 @@
-import { OriginalCosmicSprite } from './OriginalCosmicSprite.js?build=arena-maps-1';
+import { OriginalCosmicSprite } from './OriginalCosmicSprite.js?build=cosmic-team-1';
 
 /* Combat state machine with the original Cosmic Invasion sprite as its primary renderer. */
 
@@ -244,7 +244,7 @@ export class HeroAnimationController {
     if (!layer || !this.hero) return;
     const stage = layer.getBoundingClientRect();
     const hero = this.hero.getBoundingClientRect();
-    const enemy = document.getElementById('combat-enemy-image')?.getBoundingClientRect();
+    const enemy = document.querySelector('.arena-foe--selected .arena-foe__sprite')?.getBoundingClientRect();
     const startX = hero.left - stage.left + hero.width * 0.72;
     const startY = hero.top - stage.top + hero.height * 0.6;
     const endX = enemy ? enemy.left - stage.left + enemy.width * 0.42 : stage.width * 0.8;
