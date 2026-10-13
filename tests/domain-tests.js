@@ -155,14 +155,14 @@ test('Legacy save migrates without deleting progress', () => {
   assert(game.state.inventory['tech-scrap'].count === 2, 'inventory migration failed');
 });
 
-test('Difficulty multiplier affects damage and enemy HP', () => {
+test('Difficulty scales enemy HP without reducing hero damage twice', () => {
   const game = engine();
   const action = game.content.actions.get('basic-combo');
   const enemy = game.content.enemies.get('street-thug');
   const damage = new DamageEngine();
   const normal = damage.resolve({ action, enemy, difficulty: game.content.difficulties.NORMAL });
   const heroic = damage.resolve({ action, enemy, difficulty: game.content.difficulties.HEROIC });
-  assert(heroic.damage < normal.damage, 'heroic difficulty did not reduce effective damage');
+  assert(heroic.damage === normal.damage, 'heroic difficulty scaled the hero hit twice');
   assert(game.combatEngine.scaledMaxHp(enemy, 'HEROIC') > enemy.hp, 'heroic enemy HP was not scaled');
 });
 

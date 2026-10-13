@@ -194,7 +194,7 @@ export class ActionRpgController {
 
   async loadAllGameData() {
     try {
-      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, gadgetsRes, snapRes, iconsRes, effectsRes, skillsRes, snapCardsRes] = await Promise.allSettled([
+      const [suitsRes, verseRes, bossesRes, minionsRes, backpacksRes, badgesRes, gadgetsRes, snapRes, iconsRes, effectsRes, skillsRes, snapCardsRes, notionBadgesRes] = await Promise.allSettled([
         fetch('./data/suits.json').then(r => r.json()),
         fetch('./data/spider-verse.json').then(r => r.json()),
         fetch('./data/bosses.json').then(r => r.json()),
@@ -206,7 +206,8 @@ export class ActionRpgController {
         fetch('./data/skill_icons.json').then(r => r.json()),
         fetch('./data/effect_icons.json').then(r => r.json()),
         fetch('./data/skills.json').then(r => r.json()),
-        fetch('./data/marvel_snap_cards.json').then(r => r.json())
+        fetch('./data/marvel_snap_cards.json').then(r => r.json()),
+        fetch('./data/notion-badges.json').then(r => r.json())
       ]);
 
       if (suitsRes.status === 'fulfilled') this.suits = suitsRes.value || [];
@@ -215,6 +216,7 @@ export class ActionRpgController {
       if (minionsRes.status === 'fulfilled') this.minions = minionsRes.value || {};
       if (backpacksRes.status === 'fulfilled') this.backpacks = backpacksRes.value || [];
       if (badgesRes.status === 'fulfilled') this.badges = badgesRes.value?.rename_map || {};
+      if (notionBadgesRes.status === 'fulfilled') this.notionBadges = notionBadgesRes.value?.badges || [];
       if (gadgetsRes.status === 'fulfilled') this.gadgetsCatalog = gadgetsRes.value || [];
       if (iconsRes.status === 'fulfilled') this.skillIcons = iconsRes.value || {};
       if (effectsRes.status === 'fulfilled') this.effectIcons = effectsRes.value || {};
@@ -440,8 +442,8 @@ export class ActionRpgController {
 
   runAction(action) {
     const hero = this.engine.snapshot().hero;
-    if (hero.hp <= 0 || hero.webEnergy <= 0) {
-      this.toast('HERO HẾT HP / ENERGY // HOÀN THÀNH HABIT ĐỂ HỒI PHỤC');
+    if (hero.hp <= 0) {
+      this.toast('HERO HẾT HP // HOÀN THÀNH HABIT ĐỂ HỒI PHỤC');
       return;
     }
     this.playIntroOnce();
@@ -460,6 +462,7 @@ export class ActionRpgController {
     else if (result.victory?.next) this.animateEnemy('enter', 550);
     else if (result.targetClear) this.animateEnemy('defeat', 800, result.targetIndex);
     else if (result.damage > 0) this.animateEnemy('hurt', 440, result.targetIndex);
+    for (const hit of result.splashHits || []) this.animateEnemy(hit.defeated ? 'defeat' : 'hurt', hit.defeated ? 800 : 440, hit.index);
     if (result.heroDamage && result.attackerId) {
       const attackerIndex = result.snapshot.opponents.findIndex((foe) => foe.id === result.attackerId && foe.hp > 0);
       if (attackerIndex >= 0) window.setTimeout(() => this.animateEnemy('attack', 480, attackerIndex), 300);
@@ -536,18 +539,18 @@ export class ActionRpgController {
     this.text('enemy-phase', snapshot.phase);
     this.text('combat-log-line', String(snapshot.combatLog[0] || '').replace('MANHATTAN ROOFTOP', this.currentArenaMap()?.District || 'MANHATTAN ROOFTOP'));
     this.text('arena-turn-value', String(snapshot.turn + 1).padStart(2, '0'));
-    const combatExhausted = hero.hp <= 0 || hero.webEnergy <= 0;
-    this.text('arena-turn-tip', combatExhausted ? 'Hoàn thành Habit để hồi HP & Energy' : this.notionConnection === 'connected' ? 'Chọn đòn đánh hoặc hoàn thành Quest' : 'TIẾN ĐỘ LƯU TRÊN THIẾT BỊ');
+    const combatExhausted = hero.hp <= 0;
+    this.text('arena-turn-tip', combatExhausted ? 'Hoàn thành Habit để hồi HP' : hero.webEnergy < data.actions.web.energy ? 'COMBO hồi tơ · chọn quái để đánh' : 'Chọn quái rồi dùng chiêu phù hợp');
     const recoveryButton = document.getElementById('arena-open-habits');
     recoveryButton?.toggleAttribute('hidden', !combatExhausted);
     if (recoveryButton) recoveryButton.textContent = 'MỞ LIFE 66';
     this.width('enemy-hp-fill', snapshot.enemyHp / enemy.maxHp * 100);
     this.width('enemy-stagger-fill', snapshot.enemyStagger);
     this.width('ultimate-fill', hero.ultimate);
-    this.text('ultimate-charge', snapshot.enemyStagger >= 100 ? 'FINISHER READY' : `${hero.ultimate}%`);
-    this.text('cooldown-web', snapshot.cooldowns.web ? `CD ${snapshot.cooldowns.web}` : `${Math.ceil(data.actions.web.energy / data.hero.maxWebEnergy * maxEnergy)} ENERGY`);
+    this.text('ultimate-charge', snapshot.enemyStagger >= 100 && hero.ultimate >= 100 ? 'FINISHER READY' : `${hero.ultimate}%`);
+    this.text('cooldown-web', snapshot.cooldowns.web ? `CD ${snapshot.cooldowns.web}` : `${Math.ceil(data.actions.web.energy / data.hero.maxWebEnergy * maxEnergy)} ENERGY · TRÓI`);
     this.text('cooldown-gadget', snapshot.cooldowns.gadget ? `CD ${snapshot.cooldowns.gadget}` : `${snapshot.charges.gadget} CHARGES`);
-    this.text('cooldown-ally', snapshot.cooldowns.ally ? `CD ${snapshot.cooldowns.ally}` : 'READY');
+    this.text('cooldown-ally', snapshot.cooldowns.ally ? `CD ${snapshot.cooldowns.ally}` : 'CHOÁNG');
 
     const enemyFighter = document.querySelector('.action-fighter--enemy');
     enemyFighter?.classList.toggle('enemy--grunt', snapshot.encounterIndex < 3);
@@ -561,7 +564,7 @@ export class ActionRpgController {
     ultimate?.toggleAttribute('disabled', combatExhausted || hero.ultimate < 100 || snapshot.storyComplete);
     ultimate?.classList.toggle('ready', hero.ultimate >= 100 && !combatExhausted && !snapshot.storyComplete);
     ultimate?.classList.toggle('finisher-ready', snapshot.enemyStagger >= 100 && hero.ultimate >= 100 && !combatExhausted && !snapshot.storyComplete);
-    ultimate?.querySelector('strong') && (ultimate.querySelector('strong').textContent = snapshot.enemyStagger >= 100 ? 'FINISHER' : 'ULTIMATE');
+    ultimate?.querySelector('strong') && (ultimate.querySelector('strong').textContent = snapshot.enemyStagger >= 100 && hero.ultimate >= 100 ? 'FINISHER' : 'ULTIMATE');
     document.getElementById('btn-next-patrol')?.toggleAttribute('hidden', !snapshot.storyComplete);
     document.body.classList.toggle('game-reduce-motion', snapshot.settings.reduceMotion);
     document.body.classList.toggle('game-no-shake', !snapshot.settings.screenShake);
@@ -1328,25 +1331,23 @@ export class ActionRpgController {
     }
 
     if (this.panelTab === 'BADGES') {
-      const badgeEntries = Object.entries(this.badges);
+      const badgeEntries = this.notionBadges;
       return `
         <div class="quest-source-banner">
           <span>🎖️ BADGES</span>
-          <strong>37 HUY HIỆU DANH DỰ LỊCH SỬ TRUYỆN TRANH</strong>
-          <small>Thành tích mở khóa khi vượt qua các mốc thử thách đời thực</small>
+          <strong>${badgeEntries.length} HUY HIỆU TỪ NOTION</strong>
+          <small>Ảnh và điều kiện từ Badges & Medals · trạng thái cập nhật khi đồng bộ</small>
         </div>
         <div class="pixel-card-grid pixel-card-grid--compact">
-          ${badgeEntries.map(([originalName, badge]) => `
-            <article class="pixel-game-card pixel-game-card--gold">
+          ${badgeEntries.map((badge) => `
+            <article class="pixel-game-card pixel-game-card--gold ${badge.Unlocked ? 'pixel-game-card--done' : ''}">
               <div class="pixel-card-header">
-                <span style="font-size: 20px;">${badge.icon || '🏅'}</span>
-                <span class="pixel-tag pixel-tag--gold">MEDAL</span>
+                <span class="pixel-tag pixel-tag--gold">${this.escapeHtml(badge.Tier || 'MEDAL')}</span>
+                <span class="pixel-tag ${badge.Unlocked ? 'pixel-tag--green' : ''}">${badge.Unlocked ? 'UNLOCKED' : 'LOCKED'}</span>
               </div>
-              <h3 class="pixel-card-title" style="font-size: 9px;">${badge.title || originalName}</h3>
-              <p class="pixel-card-desc" style="font-size: 9px;">${originalName}</p>
-              <div class="pixel-card-footer">
-                <span class="pixel-tag pixel-tag--green">UNLOCKED</span>
-              </div>
+              ${this.catalogImage(badge) ? `<img class="notion-badge-icon" src="${this.escapeHtml(this.catalogImage(badge))}" alt="${this.escapeHtml(badge.Medal)}" loading="lazy">` : ''}
+              <h3 class="pixel-card-title" style="font-size: 9px;">${this.escapeHtml(badge.Medal || 'Badge')}</h3>
+              <p class="pixel-card-desc" style="font-size: 9px;">${this.escapeHtml(badge.Requirement || '')}</p>
             </article>
           `).join('')}
         </div>

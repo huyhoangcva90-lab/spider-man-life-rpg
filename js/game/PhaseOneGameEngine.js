@@ -1,9 +1,9 @@
-import { PHASE_ONE_DATA } from './data/phaseOneData.js?build=cosmic-team-1';
+import { PHASE_ONE_DATA } from './data/phaseOneData.js?build=four-spiders-1';
 import { GameSaveManager, GAME_SAVE_VERSION } from './GameSaveManager.js';
 import { DamageEngine } from './DamageEngine.js';
 import { RewardEngine } from './RewardEngine.js';
 import { QuestEngine } from './QuestEngine.js';
-import { CombatEngine } from './CombatEngine.js?build=cosmic-team-1';
+import { CombatEngine } from './CombatEngine.js?build=four-spiders-1';
 import { GAME_EVENTS } from './GameEvents.js';
 
 export class PhaseOneGameEngine {
@@ -201,7 +201,18 @@ export class PhaseOneGameEngine {
 
     const action = this.content.actions.get(actionId);
     if (action.slot === 'web') this.state.daily.metrics.WEB_USED = (this.state.daily.metrics.WEB_USED || 0) + 1;
-    this.log(`${action.label}: ${result.damage} DMG${result.weaknessMatch ? ' // WEAKNESS!' : result.resisted ? ' // RESISTED' : ''}`);
+    const splashDamage = result.splashHits?.reduce((total, hit) => total + hit.damage, 0) || 0;
+    this.log(`${action.label}: ${result.damage}${splashDamage ? ` + ${splashDamage} LAN` : ''} DMG${result.weaknessMatch ? ' // WEAKNESS!' : result.resisted ? ' // RESISTED' : ''}${action.bindTurns ? action.type === 'ALLY' ? ' // CHOÁNG' : ' // TRÓI' : ''}`);
+    for (const hit of result.splashHits || []) {
+      if (!hit.defeated) continue;
+      const defeated = this.content.enemies.get(hit.id);
+      const reward = this.applyReward(defeated.rewardId);
+      this.state.defeated.push(defeated.id);
+      if (defeated.tier === 'ELITE') this.state.daily.metrics.ELITE_DEFEATED += 1;
+      this.log(`K.O. ${defeated.name} // REWARD SECURED`);
+      this.bus.emit(GAME_EVENTS.ENEMY_DEFEATED, { enemyId: defeated.id, reward });
+    }
+    if (result.enemyBlocked) this.log('ĐỊCH BỊ TRÓI / CHOÁNG // BỎ LƯỢT');
     if (result.heroDamage && result.attackerId) this.log(`${this.content.enemies.get(result.attackerId).name}: ${result.heroDamage} DMG // ENEMY TURN`);
     this.bus.emit(GAME_EVENTS.HIT_CONFIRMED, result);
     this.bus.emit(GAME_EVENTS.DAMAGE_APPLIED, result);

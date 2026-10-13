@@ -2,7 +2,7 @@
 .action-fighter--enemy {
   left: 37% !important;
   right: auto !important;
-  bottom: 12% !important;
+  bottom: calc(28% - 42px) !important;
   width: 40% !important;
   transform: none !important;
   z-index: 7 !important;
@@ -27,12 +27,12 @@
 .action-fighter--enemy .arena-foe .arena-foe__sprite {
   display: block; flex: 0 0 auto; width: var(--cell-w); height: var(--cell-h);
   background: var(--foe-sprite) 0 0 / auto no-repeat transparent;
-  image-rendering: pixelated; transform-origin: center bottom; transform: scale(1.16) !important;
+  image-rendering: pixelated; transform-origin: center bottom; transform: scale(-1.16, 1.16) !important;
   filter: drop-shadow(4px 5px 0 rgba(0,0,0,.75));
   animation: cosmic-foe-idle 1.25s steps(var(--frame-steps),end) infinite alternate;
 }
 .arena-enemy-team[data-count="1"] .arena-foe { flex: 0 0 180px; height: 177px; }
-.action-fighter--enemy .arena-enemy-team[data-count="1"] .arena-foe .arena-foe__sprite { transform: scale(1.6) !important; }
+.action-fighter--enemy .arena-enemy-team[data-count="1"] .arena-foe .arena-foe__sprite { transform: scale(-1.6, 1.6) !important; }
 .action-fighter--enemy .arena-foe .arena-foe__name { display:block; width:100%; overflow:hidden; white-space:nowrap !important; text-overflow:ellipsis; margin-top: 7px; color:#fff1d4; }
 .action-fighter--enemy .arena-foe .arena-foe__health { display:block; width:95%; height:7px; margin-top:4px; border:1px solid #132332; background:#551e24; }
 .arena-foe__health i { display:block; height:100%; background:linear-gradient(90deg,#ec5b59,#ffad70); }
@@ -45,20 +45,20 @@
 body.game-reduce-motion .arena-foe__sprite { animation:none !important; }
 @media (prefers-reduced-motion:reduce) { .arena-foe__sprite { animation:none !important; } }
 @media (max-width:800px) {
-  .action-fighter--enemy { left:38% !important; bottom:19% !important; width:59% !important; }
+  .action-fighter--enemy { left:38% !important; bottom:calc(28% - 34px) !important; width:59% !important; }
   .arena-foe { height:135px; padding:0 1px 2px; font-size:6px; }
-  .action-fighter--enemy .arena-foe .arena-foe__sprite { transform:scale(.83) !important; margin-bottom:-7px; }
+  .action-fighter--enemy .arena-foe .arena-foe__sprite { transform:scale(-.83, .83) !important; margin-bottom:-7px; }
   .arena-enemy-team[data-count="1"] .arena-foe { height:145px; }
-  .action-fighter--enemy .arena-enemy-team[data-count="1"] .arena-foe .arena-foe__sprite { transform:scale(1.15) !important; }
+  .action-fighter--enemy .arena-enemy-team[data-count="1"] .arena-foe .arena-foe__sprite { transform:scale(-1.15, 1.15) !important; }
   .arena-foe__name { margin-top:0; }
   .arena-foe__health { height:6px; margin-top:2px; }
   .arena-foe__value { font-size:6px; }
 }
 @media (max-width:500px) {
-  .action-fighter--enemy { left:35% !important; bottom:21% !important; width:63% !important; }
+  .action-fighter--enemy { left:35% !important; bottom:calc(28% - 30px) !important; width:63% !important; }
   .arena-enemy-team { gap:1px; }
   .arena-foe { height:120px; }
-  .action-fighter--enemy .arena-foe .arena-foe__sprite { transform:scale(.7) !important; margin-bottom:-15px; }
+  .action-fighter--enemy .arena-foe .arena-foe__sprite { transform:scale(-.7, .7) !important; margin-bottom:-15px; }
   .arena-enemy-team[data-count="1"] .arena-foe { height:130px; }
-  .action-fighter--enemy .arena-enemy-team[data-count="1"] .arena-foe .arena-foe__sprite { transform:scale(1.1) !important; }
+  .action-fighter--enemy .arena-enemy-team[data-count="1"] .arena-foe .arena-foe__sprite { transform:scale(-1.1, 1.1) !important; }
 }

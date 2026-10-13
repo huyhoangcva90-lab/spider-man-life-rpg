@@ -1,5 +1,5 @@
 import { ContentRegistry, validatePhaseOneContent } from '../registry/ContentRegistry.js';
-import { ACTIONS, DIFFICULTIES } from './actions.js';
+import { ACTIONS, DIFFICULTIES } from './actions.js?build=four-spiders-1';
 import { HEROES, ALLIES, GADGETS, SKILLS } from './actors.js';
 import { ENEMIES } from './enemies.js?build=cosmic-team-1';
 import { REWARDS } from './rewards.js?build=cosmic-team-1';

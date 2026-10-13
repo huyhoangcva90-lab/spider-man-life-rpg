@@ -28,10 +28,10 @@
   <link rel="stylesheet" href="./css/clawed-hub.css?build=hub-slices-1" />
   <link rel="stylesheet" href="./css/hub-systems.css?build=hub-systems-1" />
   <link rel="stylesheet" href="./css/single-version-polish.css?build=single-root-1" />
-  <link rel="stylesheet" href="./css/game-layout.css?build=game-layout-8" />
+  <link rel="stylesheet" href="./css/game-layout.css?build=four-spiders-1" />
   <link rel="stylesheet" href="./css/combat-characters.css?build=animated-enemies-2" />
   <link rel="stylesheet" href="./css/arena-maps.css?build=arena-maps-1" />
-  <link rel="stylesheet" href="./css/cosmic-enemy-team.css?build=cosmic-team-1" />
+  <link rel="stylesheet" href="./css/cosmic-enemy-team.css?build=four-spiders-1" />
 </head>
 <body data-game-mode="ARENA">
   <a class="skip-link" href="#tracker-main">Bỏ qua điều hướng</a>
@@ -116,11 +116,11 @@
             </aside>
           </div>
           <div class="combat-action-bar" aria-label="Combat actions">
-            <button data-combat-action="attack"><svg><use href="#icon-arena"></use></svg><strong>COMBO</strong><small>READY</small></button>
-            <button data-combat-action="web"><svg><use href="#icon-web-map"></use></svg><strong>WEB SHOT</strong><small id="cooldown-web">18 WEB</small></button>
-            <button data-combat-action="gadget"><svg><use href="#icon-gear"></use></svg><strong>GADGET</strong><small id="cooldown-gadget">3 CHARGES</small></button>
-            <button data-combat-action="ally"><svg><use href="#icon-mask"></use></svg><strong>CALL MILES</strong><small id="cooldown-ally">READY</small></button>
-            <button class="combat-action--ultimate" data-combat-action="ultimate"><svg><use href="#icon-bolt"></use></svg><strong>ULTIMATE</strong><small id="ultimate-charge">0%</small></button>
+            <button data-combat-action="attack" title="Đánh một mục tiêu, không tốn tơ và hồi 7 năng lượng"><svg><use href="#icon-arena"></use></svg><strong>COMBO</strong><small>HỒI TƠ</small></button>
+            <button data-combat-action="web" title="Bắn tơ trói mục tiêu; quái bị trói bỏ lượt tấn công kế tiếp"><svg><use href="#icon-web-map"></use></svg><strong>WEB SHOT</strong><small id="cooldown-web">2 ENERGY · TRÓI</small></button>
+            <button data-combat-action="gadget" title="Sát thương mục tiêu và lan sang quái đứng cạnh"><svg><use href="#icon-gear"></use></svg><strong>GADGET</strong><small id="cooldown-gadget">3 CHARGES</small></button>
+            <button data-combat-action="ally" title="Miles tấn công điện và làm choáng mục tiêu"><svg><use href="#icon-mask"></use></svg><strong>CALL MILES</strong><small id="cooldown-ally">CHOÁNG</small></button>
+            <button class="combat-action--ultimate" data-combat-action="ultimate" title="Đánh mạnh mục tiêu và toàn bộ quái đứng cạnh"><svg><use href="#icon-bolt"></use></svg><strong>ULTIMATE</strong><small id="ultimate-charge">0%</small></button>
           </div>
           <div class="ultimate-meter"><span>ULTIMATE</span><i><b id="ultimate-fill"></b></i><button id="btn-next-patrol" hidden>NEXT PATROL →</button></div>
         </section>
@@ -208,7 +208,7 @@
             TAP TO OPEN CHAT LIST <span id="ticker-gps-readout">• GPS: STANDBY</span> • YOUR FRIENDLY NEIGHBORHOOD IS ONLINE
           </div>
         </button>
-        <div class="footer-enemy-counterpart" aria-hidden="true"><img id="footer-enemy-rival-image" alt="" /></div>
+        <div class="footer-spidey-counterpart" aria-hidden="true"></div>
       </footer>
 
     </div>
@@ -418,6 +418,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=cosmic-team-1"></script>
+  <script type="module" src="./js/main.js?build=four-spiders-1"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-import { createPhaseOneContent } from './phaseOneContent.js?build=cosmic-team-1';
+import { createPhaseOneContent } from './phaseOneContent.js?build=four-spiders-1';
 
 const content = createPhaseOneContent();
 const hero = content.heroes.get('peter-classic');
