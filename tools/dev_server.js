@@ -42,6 +42,7 @@ const server = http.createServer((req, res) => {
   }
 
   const rawUrl = req.url.split('?')[0];
+  const staticPath = /^\/pk\/?$/.test(rawUrl) ? '/index.html' : rawUrl;
 
   // API Proxy for Notion
   if (rawUrl === '/api/notion') {
@@ -91,7 +92,7 @@ const server = http.createServer((req, res) => {
   }
 
   let decodedPath;
-  try { decodedPath = decodeURIComponent(rawUrl); } catch {
+  try { decodedPath = decodeURIComponent(staticPath); } catch {
     res.writeHead(400); res.end('Bad path'); return;
   }
   const segments = decodedPath.split(/[\/]+/).filter(Boolean);

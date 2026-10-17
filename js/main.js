@@ -19,7 +19,7 @@ import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=stati
 import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-reset-2';
 import { MapGuideModal } from './ui/MapGuideModal.js';
 import { HeroAnimationController } from './game/HeroAnimationController.js?build=cosmic-team-1';
-import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=four-spiders-1';
+import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=combat-energy-1';
 import { ActionRpgController } from './ui/ActionRpgController.js?build=badge-fallback-2';
 import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
 

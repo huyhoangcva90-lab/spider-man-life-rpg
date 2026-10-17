@@ -48,7 +48,10 @@ export class CombatEngine {
         splashHits.push({ index, id: foe.id, damage: sideDamage, defeated: foe.hp === 0 });
       });
     }
-    state.progression.webEnergy = Math.max(0, state.progression.webEnergy - action.energyCost);
+    const hero = this.content.heroes.get(state.player.activeHeroId);
+    state.progression.webEnergy = action.slot === 'attack'
+      ? Math.min(hero.maxWebEnergy, state.progression.webEnergy + 7)
+      : Math.max(0, state.progression.webEnergy - action.energyCost);
     state.progression.ultimate = action.type === 'ULTIMATE' ? 0 : Math.min(100, state.progression.ultimate + 12 + Math.round(damageResult.damage / 8));
     if (action.cooldownTurns) state.battle.cooldowns[action.slot] = action.cooldownTurns;
     if (action.charges) state.battle.charges.gadget = Math.max(0, state.battle.charges.gadget - 1);
@@ -97,8 +100,6 @@ export class CombatEngine {
 
   tick(state) {
     Object.keys(state.battle.cooldowns).forEach((key) => { state.battle.cooldowns[key] = Math.max(0, state.battle.cooldowns[key] - 1); });
-    const hero = this.content.heroes.get(state.player.activeHeroId);
-    state.progression.webEnergy = Math.min(hero.maxWebEnergy, state.progression.webEnergy + 7);
   }
 }
 

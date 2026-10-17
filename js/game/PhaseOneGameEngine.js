@@ -3,7 +3,7 @@ import { GameSaveManager, GAME_SAVE_VERSION } from './GameSaveManager.js';
 import { DamageEngine } from './DamageEngine.js';
 import { RewardEngine } from './RewardEngine.js';
 import { QuestEngine } from './QuestEngine.js';
-import { CombatEngine } from './CombatEngine.js?build=four-spiders-1';
+import { CombatEngine } from './CombatEngine.js?build=combat-energy-1';
 import { GAME_EVENTS } from './GameEvents.js';
 
 export class PhaseOneGameEngine {

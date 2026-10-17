@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
   <meta name="theme-color" content="#071426" />
   <title>SPIDEY LIFE TRACKER — Mission Hub</title>
+  <script>if (/^\/pk\/?$/.test(location.pathname)) { document.documentElement.dataset.pkEmbed = 'true'; document.title = 'SPIDEY LIFE — PK ARENA'; }</script>
   <link rel="icon" type="image/png" href="./assets/spideytracker/favicon.png" />
   
   <!-- MapLibre GL JS Engine -->
@@ -32,6 +34,7 @@
   <link rel="stylesheet" href="./css/combat-characters.css?build=animated-enemies-2" />
   <link rel="stylesheet" href="./css/arena-maps.css?build=arena-maps-1" />
   <link rel="stylesheet" href="./css/cosmic-enemy-team.css?build=four-spiders-1" />
+  <link rel="stylesheet" href="./css/pk-embed.css?build=pk-embed-1" />
 </head>
 <body data-game-mode="ARENA">
   <a class="skip-link" href="#tracker-main">Bỏ qua điều hướng</a>
@@ -418,6 +421,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=badge-fallback-2"></script>
+  <script type="module" src="./js/main.js?build=combat-energy-1"></script>
 </body>
 </html>

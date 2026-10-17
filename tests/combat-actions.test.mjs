@@ -28,6 +28,7 @@ test('combo remains usable with no web energy and restores energy', () => {
 test('web shot binds a lone enemy for its next attack', () => {
   const game = state(['tech-gunner']);
   combat.perform('web-shot', game);
+  assert.equal(game.progression.webEnergy, 82);
   const hpBefore = game.progression.hp;
   const result = combat.perform('basic-combo', game);
   assert.equal(result.enemyBlocked, true);
