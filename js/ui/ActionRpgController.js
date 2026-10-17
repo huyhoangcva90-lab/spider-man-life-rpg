@@ -1,4 +1,5 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
+import { NotionGamePresenter } from './NotionGamePresenter.js?build=notion-authority-1';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -6,6 +7,7 @@ export class ActionRpgController {
     this.engine = engine;
     this.sound = soundController;
     this.mapEngine = mapEngine;
+    this.notionPresenter = engine.notionAuthority ? new NotionGamePresenter(this) : null;
     this.panelSection = 'QUESTS';
     this.panelTab = 'TODO';
     this.introPlayed = false;
@@ -70,7 +72,7 @@ export class ActionRpgController {
   }
 
   async init() {
-    if (!localStorage.getItem('spidey_owner_clean_start_v2')) {
+    if (!this.notionPresenter && !localStorage.getItem('spidey_owner_clean_start_v2')) {
       // Owner-approved migration: discard every old demo battle and start from Notion's clean state.
       localStorage.removeItem('spidey_notion_pending_writes');
       localStorage.removeItem('spidey_notion_profile_pending');
@@ -116,9 +118,10 @@ export class ActionRpgController {
 
     // Load rich game datasets
     await this.loadAllGameData();
+    if (this.notionPresenter) await this.notionPresenter.init();
 
     // A fresh owner save must remain playable while the private Notion session is unavailable.
-    if (!this.notionHeroProfile && !localStorage.getItem('spidey_offline_hero_ready_v1')) {
+    if (!this.notionPresenter && !this.notionHeroProfile && !localStorage.getItem('spidey_offline_hero_ready_v1')) {
       const hero = this.engine.state.progression;
       if (hero.hp <= 0 && hero.webEnergy <= 0) {
         hero.hp = hero.maxHp || 100;
@@ -456,6 +459,7 @@ export class ActionRpgController {
   }
 
   runAction(action) {
+    if (this.notionPresenter) { this.toast('DÙNG CHIÊU TRONG NOTION // WEB CHỈ HIỂN THỊ'); return; }
     const hero = this.engine.snapshot().hero;
     if (hero.hp <= 0) {
       this.toast('HERO HẾT HP // HOÀN THÀNH HABIT ĐỂ HỒI PHỤC');
@@ -472,6 +476,7 @@ export class ActionRpgController {
   }
 
   handleUpdate(result) {
+    if (this.notionPresenter) { this.notionPresenter.renderBattle(); return; }
     this.render(result.snapshot);
     if (result.phaseChanged) this.animateEnemy('phase', 650, result.targetIndex);
     else if (result.victory?.next) this.animateEnemy('enter', 550);
@@ -523,6 +528,7 @@ export class ActionRpgController {
   }
 
   render(snapshot = this.engine.snapshot()) {
+    if (this.notionPresenter) { this.notionPresenter.renderBattle(); return; }
     const { hero, enemy, data } = snapshot;
     const notionEnemy = this.notionEnemyFor(enemy, snapshot.encounterIndex);
     const enemyDisplayName = enemy.name;
@@ -644,7 +650,7 @@ export class ActionRpgController {
 
   defaultTab(section) {
     const map = {
-      QUESTS: 'TODAY',
+      QUESTS: this.notionPresenter ? 'MISSIONS' : 'TODAY',
       HERO: 'PROFILE',
       HABITS: 'TODAY',
       FIELD: 'SYSTEMS',
@@ -676,13 +682,13 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: ['TODAY', 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
-      HERO: ['PROFILE', 'MAPS', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
+      QUESTS: this.notionPresenter ? ['MISSIONS', 'TODAY', 'OVERDUE', 'GOALS'] : ['TODAY', 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
+      HERO: this.notionPresenter ? ['PROFILE', 'MAPS', 'SUITS', 'SKILLS', 'BADGES'] : ['PROFILE', 'MAPS', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
       HABITS: ['TODAY', 'PROGRESS', '66 DAYS'],
       FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
       CHRONICLE: ['RHYTHM', 'JOURNAL', 'GYM'],
-      SETTINGS: ['GAME', 'SAVE']
+      SETTINGS: this.notionPresenter ? ['GAME'] : ['GAME', 'SAVE']
     };
 
     const tabNames = tabMap[this.panelSection] || ['TODO'];
@@ -838,6 +844,7 @@ export class ActionRpgController {
      1. TAB [QUESTS]: TODO (NOTION), HABITS (STREAK), PATROL TIMETABLE
   ------------------------------------------------------------- */
   renderQuestsSection() {
+    if (this.notionPresenter && this.panelTab === 'MISSIONS') return this.notionPresenter.renderMissions();
     const sourceLabel = this.notionConnection !== 'connected' ? 'Bản lưu cục bộ' : this.notionSource === 'live' ? 'Notion live' : this.notionSource === 'mixed' ? 'Notion live một phần' : 'Bản chụp Notion';
     const syncBannerHtml = `
       <div class="sync-online-banner">
@@ -1001,6 +1008,7 @@ export class ActionRpgController {
      2. TAB [HERO]: SUITS WARDROBE (WITH SHOWCASE POD), SKILLS (NOTION IMAGES), ROSTER, GADGETS
   ------------------------------------------------------------- */
   renderHeroSection() {
+    if (this.notionPresenter) return this.notionPresenter.renderHero(this.panelTab);
     const profile = this.notionHeroProfile;
     if (this.panelTab === 'MAPS') {
       const level = Number(profile?.Level) || this.engine.snapshot().hero.level || 1;
@@ -1314,6 +1322,7 @@ export class ActionRpgController {
      3. TAB [ARCHIVE]: BESTIARY (BOSS & MINION), BACKPACKS, BADGES
   ------------------------------------------------------------- */
   renderArchiveSection() {
+    if (this.notionPresenter) return this.panelTab === 'BADGES' ? this.notionPresenter.renderHero('BADGES') : this.notionPresenter.renderEnemyRecords();
     if (this.panelTab === 'BESTIARY' && this.notionEnemies.length) {
       const gameReady = this.notionEnemies.filter((enemy) => Number(enemy['Max HP']) > 0 || Number(enemy.ATK) > 0);
       const roster = (gameReady.length ? gameReady : this.notionEnemies).slice(0, 48);
@@ -1549,6 +1558,7 @@ export class ActionRpgController {
      5. SETTINGS SECTION
   ------------------------------------------------------------- */
   renderSettings() {
+    if (this.notionPresenter) return this.notionPresenter.renderPresentationSettings();
     const settings = this.engine.snapshot().settings;
     if (this.panelTab === 'SAVE') return `<div class="game-save-tools">
       <article class="game-card"><small>VERSIONED LOCAL SAVE</small><h3>PROGRESSION BACKUP</h3><p>Export lưu trận đấu, Quest, Habit và Goal vào một file JSON. Import để khôi phục trên thiết bị khác. Reset chỉ xóa tiến độ trận đấu.</p></article>
@@ -1569,6 +1579,7 @@ export class ActionRpgController {
      EVENT BINDINGS & NOTION 2-WAY SYNC
   ------------------------------------------------------------- */
   async syncLiveFromNotion(btn = null, { quiet = false } = {}) {
+    if (this.notionPresenter) { await this.notionPresenter.refresh(); return; }
     if (this.notionConnection !== 'connected') {
       this.notionError = 'Kết nối riêng trước khi đồng bộ Notion.';
       this.renderPanel();
@@ -1749,6 +1760,7 @@ export class ActionRpgController {
   }
 
   queueHeroProfileSync() {
+    if (this.notionPresenter) return;
     if (!this.notionHeroProfile?.id) return;
     const hero = this.engine.snapshot().hero;
     const maxEnergy = Number(this.notionHeroProfile['Max Energy']) || 10;
@@ -1767,6 +1779,7 @@ export class ActionRpgController {
   }
 
   async flushHeroProfileSync() {
+    if (this.notionPresenter) return;
     if (this.profileSyncInFlight || !this.notionHeroProfile?.id) return;
     const serialized = localStorage.getItem('spidey_notion_profile_pending');
     if (!serialized) return;
@@ -2307,6 +2320,7 @@ export class ActionRpgController {
   syncAutoCombat(settings) {
     window.clearInterval(this.autoTimer);
     this.autoTimer = null;
+    if (this.notionPresenter) return;
     if (!settings.autoCombat || document.hidden) return;
     const interval = Math.round(4200 / (settings.combatSpeed || 1));
     this.autoTimer = window.setInterval(() => {

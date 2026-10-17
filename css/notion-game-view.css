@@ -1,0 +1,110 @@
+html[data-notion-authority] .action-rpg-screen:not(.notion-ready) { visibility: hidden; }
+html[data-notion-authority] .hud-economy,
+html[data-notion-authority] .combat-info-panel > label:nth-of-type(2),
+html[data-notion-authority] .combat-info-panel > dl { display: none; }
+html[data-notion-authority] .game-hud-strip { grid-template-columns: minmax(200px, 1fr) 62px minmax(260px, 1.5fr); }
+html[data-notion-authority] .hud-mask svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2; }
+html[data-notion-authority] .quest-directive { min-height: 38px; gap: 12px; }
+html[data-notion-authority] .quest-directive strong { font: 700 12px/1.4 'Be Vietnam Pro', sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html[data-notion-authority] .combat-location strong { max-width: 60vw; font: 700 10px/1.4 'Be Vietnam Pro', sans-serif; }
+html[data-notion-authority] .combat-location span { font: 600 9px/1.4 'Be Vietnam Pro', sans-serif; }
+html[data-notion-authority] .arena-turn-banner { max-width: 250px; }
+html[data-notion-authority] .arena-turn-banner span { font: 600 11px/1.4 'Be Vietnam Pro', sans-serif; }
+html[data-notion-authority] .combat-action-bar { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+html[data-notion-authority] .combat-action-bar button { min-height: 64px; grid-column: auto !important; }
+html[data-notion-authority] .combat-action-bar strong { font: 700 12px/1.3 'Be Vietnam Pro', sans-serif; }
+html[data-notion-authority] .combat-action-bar small { font: 600 10px/1.2 'Be Vietnam Pro', sans-serif; }
+html[data-notion-authority] .combat-action--ultimate:not(:disabled) { opacity: 1; }
+html[data-notion-authority] .ultimate-meter { display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 5px 8px; color: #b8ccda; font: 600 10px/1.3 'Be Vietnam Pro', sans-serif; }
+html[data-notion-authority] .ultimate-meter > span { width: auto; }
+html[data-notion-authority] .ultimate-meter > button { margin-left: auto; min-height: 30px; padding: 5px 12px; background: #14374d; color: #e2f1fa; border: 1px solid #397c9b; cursor: pointer; font: inherit; }
+.notion-status-dot { flex: 0 0 7px; height: 7px; border-radius: 50%; background: #d8ae61; }
+.notion-status-dot.is-live { background: #74d5ad; }
+.notion-source-link { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 7px 12px; border: 1px solid #448da5; background: #14374d; color: #a6e5f5; text-decoration: none; font: 700 12px/1.4 'Be Vietnam Pro', sans-serif; }
+.notion-source-link:hover, .notion-source-link:focus-visible { color: #fff; background: #20516b; outline: 2px solid #f2c06b; outline-offset: 2px; }
+.notion-view-banner { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px; margin-bottom: 20px; border-left: 4px solid #54b6d0; background: #102c40; font: 500 14px/1.6 'Be Vietnam Pro', sans-serif; }
+.notion-view-banner p { margin: 5px 0 0; color: #afc5d4; }
+.notion-view-banner .notion-source-link { flex-shrink: 0; }
+.notion-hero-profile { display: grid; grid-template-columns: 160px 1fr; align-items: center; gap: 24px; padding: 24px; background: #0c2134; border: 1px solid #31516a; }
+.notion-hero-portrait { display: grid; place-items: center; min-height: 160px; background: radial-gradient(ellipse, #1c4960, transparent 70%); }
+.notion-hero-portrait svg { width: 100px; height: 100px; stroke: #f0645c; stroke-width: 1.3; fill: none; }
+.notion-hero-portrait img { max-width: 100%; max-height: 200px; object-fit: contain; }
+.notion-hero-profile h3 { margin: 8px 0; font: 700 26px/1.3 'Be Vietnam Pro', sans-serif; color: #f6d493; }
+.notion-hero-profile p { font: 500 14px/1.6 'Be Vietnam Pro', sans-serif; color: #b8cedf; }
+.notion-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+.notion-stat-grid > span { display: grid; gap: 8px; padding: 12px; background: #071426; font: 600 11px/1.4 'Be Vietnam Pro', sans-serif; color: #8fb0c7; }
+.notion-stat-grid b { color: #fff; font-size: 18px; }
+.notion-section-title { margin: 26px 0 12px; font: 700 15px/1.4 'Be Vietnam Pro', sans-serif; color: #f6d493; }
+.notion-record-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 14px; }
+.notion-record-card, .notion-empty-card { padding: 20px; border: 1px solid #31516a; background: #0b2033; font: 500 14px/1.7 'Be Vietnam Pro', sans-serif; color: #c5d7e4; }
+.notion-record-card { display: flex; flex-direction: column; align-items: flex-start; }
+.notion-record-card small { color: #7dcfe1; font: 600 11px/1.5 'Be Vietnam Pro', sans-serif; }
+.notion-record-card h3, .notion-empty-card h3 { color: #f6d493; margin: 10px 0; font: 700 18px/1.4 'Be Vietnam Pro', sans-serif; }
+.notion-record-card p { margin: 0 0 16px; }
+.notion-record-card .notion-source-link { margin-top: auto; }
+.notion-record-art { width: 128px; height: 140px; object-fit: contain; margin: 0 auto 16px; }
+.notion-record-card .notion-badge-icon { width: 110px; height: 110px; object-fit: contain; margin: 0 auto 16px; }
+.notion-source-warning { padding: 12px; border-left: 3px solid #edba68; background: #362d22; color: #f4d9ae; }
+.notion-mission-card ol { padding-left: 22px; }
+.notion-mission-card li { margin-bottom: 14px; }
+.notion-empty-target { font: 500 13px/1.5 'Be Vietnam Pro', sans-serif; color: #c5d7e4; }
+.action-fighter--enemy .arena-foe .notion-enemy-idle { flex: 0 0 auto; display: block; width: var(--cell-w); height: var(--cell-h); background: var(--notion-idle) 0 0 / auto no-repeat !important; image-rendering: pixelated; transform: scale(-1.3, 1.3) !important; transform-origin: center bottom; animation: cosmic-foe-idle 1.2s steps(var(--frame-steps), end) infinite alternate; filter: drop-shadow(3px 4px 0 #02060b); }
+.notion-enemy-image { width: 120px; height: 135px; object-fit: contain; transform: scaleX(-1); }
+.notion-unknown-art { display: grid; place-items: center; width: 100px; height: 110px; border: 1px dashed #397c9b; font-size: 10px; }
+.notion-equipped-suit { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(3px 5px 2px #02060b); }
+.arena-hero-sprite[data-notion-suit] .cosmic-original-canvas,
+.arena-hero-sprite[data-notion-suit] .hero-sprite-actor { visibility: hidden; }
+.notion-skill-detail { position: absolute; z-index: 50; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(460px, calc(100% - 24px)); padding: 22px; border: 2px solid #54b6d0; box-shadow: 0 10px 80px #000b; background: #071b2df5; color: #dce9f0; font: 500 14px/1.65 'Be Vietnam Pro', sans-serif; }
+.notion-skill-detail[hidden] { display: none; }
+.notion-skill-detail strong { display: block; font-size: 21px; color: #f6d493; margin: 6px 0; }
+.notion-skill-detail small, .notion-skill-detail em { color: #9fbccc; font-size: 11px; font-style: normal; }
+.notion-skill-detail > div { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.notion-skill-detail [data-notion-preview] { min-height: 40px; padding: 8px 12px; background: #54b6d0; color: #071426; border: 0; cursor: pointer; font: 700 12px/1.4 'Be Vietnam Pro', sans-serif; }
+.notion-detail-close { position: absolute; right: 4px; top: 4px; width: 36px; height: 36px; background: transparent; color: white; border: 0; font-size: 25px; cursor: pointer; }
+.notion-skill-effect { pointer-events: none; position: absolute; z-index: 25; left: var(--notion-target-x, 60%); bottom: 29%; width: 160px; transform: translateX(-50%); text-align: center; color: #f6d493; font: 700 12px/1.3 'Be Vietnam Pro', sans-serif; text-shadow: 2px 2px #02060b; }
+.notion-skill-effect--trap::before { content: ''; display: block; height: 80px; border-radius: 50%; border: 2px solid #d3edf9; background: repeating-conic-gradient(from 0deg, transparent 0deg 38deg, #b9e3ef 39deg 41deg, transparent 42deg 45deg), repeating-radial-gradient(ellipse, transparent 0 14px, #b9e3ef 15px 16px, transparent 17px 23px); animation: notion-trap .3s ease-out both; }
+.notion-skill-effect--web::before { content: ''; display: block; height: 70px; border: 3px solid #e0f6ff; border-radius: 50%; transform: scale(.5); animation: notion-trap .35s ease-out both; }
+.notion-skill-effect--kick::before, .notion-skill-effect--impact::before { content: '✦'; display: block; font-size: 90px; line-height: 1; color: #ffe3a0; animation: notion-hit .6s ease-out both; }
+.notion-skill-effect--barrage::before { content: '✦ ✦ ✦'; display: block; font-size: 60px; line-height: 1.4; color: #f3d0a1; animation: notion-hit .24s ease-out 4; }
+html[data-notion-authority] .action-combat-stage[data-notion-effect="kick"] .action-fighter--hero,
+html[data-notion-authority] .action-combat-stage[data-notion-effect="impact"] .action-fighter--hero,
+html[data-notion-authority] .action-combat-stage[data-notion-effect="dash"] .action-fighter--hero { animation: notion-melee .85s ease-in-out both; }
+html[data-notion-authority] .action-combat-stage[data-notion-effect="barrage"] .action-fighter--hero { animation: notion-barrage 1.6s ease-in-out both; }
+@keyframes notion-melee { 0%, 100% { translate: 0 0; } 25%, 75% { translate: var(--notion-lunge, 0px) 0; } }
+@keyframes notion-barrage { 0%, 100% { translate: 0 0; } 15%, 45%, 75% { translate: var(--notion-lunge, 0px) -8px; } 30%, 60% { translate: calc(var(--notion-lunge, 0px) + 25px) 0; } }
+html[data-notion-authority] .hud-bars label:first-child > i { visibility: hidden; }
+@keyframes notion-trap { from { opacity: 0; scale: .3; } to { opacity: 1; scale: 1; } }
+@keyframes notion-hit { from { opacity: 1; scale: .4; } to { opacity: 0; scale: 1.2; } }
+@media (max-width: 800px) {
+  html[data-notion-authority] .game-hud-strip { grid-template-columns: minmax(110px, 1fr) 40px minmax(140px, 1.2fr); }
+  html[data-notion-authority] .quest-directive strong { font-size: 11px; }
+  html[data-notion-authority] .combat-action-bar { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  html[data-notion-authority] .combat-action-bar button { min-height: 48px; grid-column: span 2 !important; }
+  html[data-notion-authority] .combat-action-bar[data-count="5"] button:nth-last-child(-n+2) { grid-column: span 3 !important; }
+  html[data-notion-authority] .combat-action-bar strong { font-size: 11px; }
+  html[data-notion-authority] .combat-action-bar small { font-size: 9px; }
+  html[data-notion-authority] .ultimate-meter { flex-wrap: wrap; gap: 5px; font-size: 9px; }
+  html[data-notion-authority] .ultimate-meter .notion-source-link { min-height: 28px; padding: 3px 7px; font-size: 9px; }
+  .notion-hero-profile { grid-template-columns: 90px 1fr; gap: 14px; padding: 14px; }
+  .notion-hero-portrait { min-height: 100px; }
+  .notion-hero-portrait svg { width: 70px; height: 70px; }
+  .notion-hero-profile h3 { font-size: 22px; }
+  .notion-stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .notion-view-banner { flex-direction: column; align-items: flex-start; padding: 14px; }
+  .notion-enemy-idle { scale: .9; }
+}
+@media (max-width: 500px) {
+  html[data-notion-authority] .combat-info-panel { display: none; }
+  html[data-notion-authority] .game-hud-strip { grid-template-columns: minmax(95px, .8fr) 34px minmax(170px, 1.5fr); }
+  html[data-notion-authority] .hud-bars label { grid-template-columns: 30px minmax(0, 1fr) auto; gap: 3px; }
+  html[data-notion-authority] .hud-bars label > span { display: inline !important; position: static; grid-column: 3; font: 600 9px/1.3 'Be Vietnam Pro', sans-serif; white-space: nowrap; }
+  html[data-notion-authority] .combat-location span { display: none; }
+  html[data-notion-authority] .combat-location strong { font-size: 8px; }
+  html[data-notion-authority] .arena-turn-banner { max-width: 190px; }
+  html[data-notion-authority] .arena-turn-banner span { font-size: 10px; }
+  .notion-enemy-idle { scale: .75; margin-bottom: -15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .notion-enemy-idle, .notion-skill-effect::before { animation: none !important; }
+  html[data-notion-authority] .action-combat-stage .action-fighter--hero { animation: none !important; }
+}

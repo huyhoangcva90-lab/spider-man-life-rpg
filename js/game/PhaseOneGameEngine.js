@@ -152,6 +152,7 @@ export class PhaseOneGameEngine {
   }
 
   completeRealQuest(entry) {
+    if (this.notionAuthority) return { blocked: true, reason: 'NOTION OWNS PROGRESSION' };
     const questEvent = this.questEngine.acceptCompletion(entry, this.state, this.localDay());
     if (!questEvent) return null;
     this.bus.emit(GAME_EVENTS.QUEST_COMPLETED, questEvent);
@@ -176,6 +177,7 @@ export class PhaseOneGameEngine {
   }
 
   recordHabitCheckin(habitId) {
+    if (this.notionAuthority) return { blocked: true, reason: 'NOTION OWNS RECOVERY' };
     if (!habitId) return { blocked: true, reason: 'HABIT ID MISSING' };
     if (this.state.daily.date !== this.localDay()) this.repairState();
     this.state.daily.habitIds ||= [];
@@ -194,6 +196,7 @@ export class PhaseOneGameEngine {
   }
 
   performActionById(actionId, options = {}) {
+    if (this.notionAuthority) return { blocked: true, reason: 'USE THE NOTION ATTACK BUTTON' };
     this.bus.emit(GAME_EVENTS.ATTACK_STARTED, { actionId });
     const previousUltimate = this.state.progression.ultimate;
     const result = this.combatEngine.perform(actionId, this.state, options);
@@ -280,6 +283,7 @@ export class PhaseOneGameEngine {
   }
 
   startNextPatrol() {
+    if (this.notionAuthority) return { blocked: true, reason: 'SELECT MISSION IN NOTION' };
     if (!this.state.battle.storyComplete) return false;
     const kept = {
       progression: { ...this.state.progression }, inventory: structuredClone(this.state.inventory), defeated: [...this.state.defeated],

@@ -1,0 +1,160 @@
+{
+  "metadata": {
+    "source": "Notion",
+    "syncedAt": "2026-10-17T17:15:03.886Z"
+  },
+  "profile": {
+    "id": "3d2d7876-36c6-8160-915e-cd84c823577f",
+    "sourceUrl": "https://www.notion.so/3d2d787636c68160915ecd84c823577f",
+    "Max HP": 100,
+    "Current Map": [
+      "3f7d7876-36c6-81ce-b91b-c576612416be"
+    ],
+    "Exp": 0,
+    "Equipped Suit": [],
+    "🚨 Missions": [
+      "3dcd7876-36c6-8125-a985-e1ea7c150125"
+    ],
+    "🎖️ Badges & Medals": [
+      "3d6d7876-36c6-817e-becf-fe6e0ff3cf9b"
+    ],
+    "HP": 0,
+    "Max Energy": 10,
+    "Level": 1,
+    "👹 Bosses & Minion": [
+      "3f5d7876-36c6-8191-bc2e-efa43ad60aad",
+      "3cbd7876-36c6-81f7-b11f-c1fcc8f302b1"
+    ],
+    "Energy": 0,
+    "Skill Slot 1": [
+      "3efd7876-36c6-8150-96e6-ed0ff991b370",
+      "3efd7876-36c6-8186-b7f0-cb20bf919316",
+      "3d7d7876-36c6-818a-9e6b-faf361fffb0c",
+      "3f0d7876-36c6-8153-bf11-d849dc831f18",
+      "3efd7876-36c6-8123-b3f0-d42759f6a73f"
+    ],
+    "Hero": "Spider - man"
+  },
+  "missions": [
+    {
+      "id": "3dcd7876-36c6-8125-a985-e1ea7c150125",
+      "sourceUrl": "https://www.notion.so/3dcd787636c68125a985e1ea7c150125",
+      "Turn 3 (Boss / Climax)": "1x Doctor Strange (Cloak of Levitation & Mystic Portals)",
+      "Turn 2 (Wave 2)": "1x Mirror Dimension Fractal Barriers",
+      "Status": "Available",
+      "Bosses & Minions": [
+        "3cbd7876-36c6-819e-a958-cd8cb97447a6"
+      ],
+      "Turn 1 (Wave 1)": "2x Folding Skyscrapers Gravity Shift",
+      "Turn 4 (Bonus / Phase 2)": "Objective: D�ng h�nh h?c xo?n ?c Archimedes (Archimedean Spiral) d? giang m?ng to tr�i ch?t Ph� th?y T?i thu?ng",
+      "Encounter": "[CINEMA] MCU: Mirror Dimension Geometry Duel vs Doctor Strange (No Way Home)"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "3f5d7876-36c6-8191-bc2e-efa43ad60aad",
+      "sourceUrl": "https://www.notion.so/3f5d787636c68191bc2eefa43ad60aad",
+      "Max HP": 500,
+      "Idle Pose": "./assets/notion-actors/bug-spiked-shield.png",
+      "Combat Turn": null,
+      "Image": "",
+      "HP - (1)": 450,
+      "Boss": "Bug Spiked Shield (Cosmic Invasion)"
+    },
+    {
+      "id": "3cbd7876-36c6-81f7-b11f-c1fcc8f302b1",
+      "sourceUrl": "https://www.notion.so/3cbd787636c681f7b11fc1fcc8f302b1",
+      "Max HP": 5000,
+      "Idle Pose": "./assets/notion-actors/thanos.png",
+      "Combat Turn": null,
+      "Image": "https://static.marvelsnap.pro/art/Thanos.webp",
+      "HP - (1)": 4900,
+      "Boss": "Thanos"
+    },
+    {
+      "id": "3cbd7876-36c6-819e-a958-cd8cb97447a6",
+      "sourceUrl": "https://www.notion.so/3cbd787636c6819ea958cd8cb97447a6",
+      "Max HP": 800,
+      "Idle Pose": "",
+      "Combat Turn": null,
+      "Image": "https://static.marvelsnap.pro/art/Kingpin.webp",
+      "HP - (1)": null,
+      "Boss": "Kingpin — Wilson Fisk"
+    }
+  ],
+  "skills": [
+    {
+      "id": "3efd7876-36c6-8150-96e6-ed0ff991b370",
+      "sourceUrl": "https://www.notion.so/3efd787636c6815096e6ed0ff991b370",
+      "Cooldown": null,
+      "Energy Cost": null,
+      "image": "",
+      "Skill Type": "Active",
+      "Description": "Đặt hoặc bắn một vùng tơ dính để giữ chân kẻ địch đi vào. Gộp Web Snare, Stick Around, Spider Trap và các tether/trap tương tự.",
+      "Skill": "Web Trap"
+    },
+    {
+      "id": "3efd7876-36c6-8186-b7f0-cb20bf919316",
+      "sourceUrl": "https://www.notion.so/3efd787636c68186b7f0cb20bf919316",
+      "Cooldown": null,
+      "Energy Cost": null,
+      "image": "",
+      "Skill Type": "Passive",
+      "Description": "Tăng hiệu quả các đòn đánh khi mục tiêu đang ở trên không và giúp duy trì Air Combo lâu hơn. Gộp Air Marshal cùng các air-combat mastery gần giống.",
+      "Skill": "Air Combat"
+    },
+    {
+      "id": "3d7d7876-36c6-818a-9e6b-faf361fffb0c",
+      "sourceUrl": "https://www.notion.so/3d7d787636c6818a9e6bfaf361fffb0c",
+      "Cooldown": 0,
+      "Energy Cost": 1,
+      "image": "",
+      "Skill Type": "Active",
+      "Description": "Core Web builder.",
+      "Skill": "Web Shot"
+    },
+    {
+      "id": "3f0d7876-36c6-8153-bf11-d849dc831f18",
+      "sourceUrl": "https://www.notion.so/3f0d787636c68153bf11d849dc831f18",
+      "Cooldown": 0,
+      "Energy Cost": 0,
+      "image": "",
+      "Skill Type": "Basic",
+      "Description": "Đá cơ bản mạnh hơn Punch, dùng để tiếp tục combo và tạo khoảng cách nhẹ.",
+      "Skill": "Kick"
+    },
+    {
+      "id": "3efd7876-36c6-8123-b3f0-d42759f6a73f",
+      "sourceUrl": "https://www.notion.so/3efd787636c68123b3f0d42759f6a73f",
+      "Cooldown": null,
+      "Energy Cost": null,
+      "image": "",
+      "Skill Type": "Ultimate",
+      "Description": "Spider-Man lao qua mục tiêu với chuỗi đòn tốc độ cực cao, gây burst damage lớn. Đại diện cho nhóm ultimate tấn công trực tiếp như Maximum Spider/Crawler Assault.",
+      "Skill": "Maximum Spider"
+    }
+  ],
+  "suits": [],
+  "maps": [
+    {
+      "id": "3f7d7876-36c6-81ce-b91b-c576612416be",
+      "sourceUrl": "https://www.notion.so/3f7d787636c681ceb91bc576612416be",
+      "Weather": "NIGHT // LIGHT RAIN",
+      "Map Key": "rooftop",
+      "District": "MANHATTAN ROOFTOP",
+      "Map": "Manhattan Rooftop"
+    }
+  ],
+  "badges": [
+    {
+      "id": "3d6d7876-36c6-817e-becf-fe6e0ff3cf9b",
+      "sourceUrl": "https://www.notion.so/3d6d787636c6817ebecffe6e0ff3cf9b",
+      "Requirement": "Đạt mốc Hero Rank S và hoàn thành 100 nhiệm vụ bảo vệ công lý.",
+      "Equipped": false,
+      "Image": "https://iili.io/nIU5DDG.png",
+      "Unlocked": false,
+      "Medal": "Cinema Pioneer - [2002] Tobey Maguire (Sam Raimi 1)"
+    }
+  ],
+  "logs": []
+}

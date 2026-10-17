@@ -19,8 +19,8 @@ import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=stati
 import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-reset-2';
 import { MapGuideModal } from './ui/MapGuideModal.js';
 import { HeroAnimationController } from './game/HeroAnimationController.js?build=cosmic-team-1';
-import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=combat-energy-1';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=badge-fallback-2';
+import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=notion-authority-1';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=notion-authority-1';
 import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
 
 class App {
@@ -29,6 +29,7 @@ class App {
     this.state = new StateStore(this.bus);
     this.sound = new SoundController(this.state);
     this.campaign = new PhaseOneGameEngine(this.bus);
+    this.campaign.notionAuthority = true;
     this.sound.setMasterVolume(this.campaign.state.settings.volume);
     this.sound.setMusicEnabled(this.campaign.state.settings.music);
     this.campaign.state.settings.sfx = this.state.get('soundEnabled');
@@ -50,11 +51,18 @@ class App {
     this.mapGuide = new MapGuideModal(this.state, this.bus, this.sound, GeoJsonTransfer, this.repo);
     this.heroAnimation = new HeroAnimationController(this.bus, this.sound, this.campaign);
     this.actionRpg = new ActionRpgController(this.bus, this.campaign, this.sound, this.mapEngine);
+    this.actionRpg.heroAnimation = this.heroAnimation;
     this.chatCenter = new ChatCenter(this.sound);
   }
 
   async init() {
     console.log('[App] Starting WEB OPS TRACKER V6 initialization...');
+
+    if (document.documentElement.dataset.pkEmbed) {
+      this.heroAnimation.init();
+      await this.actionRpg.init();
+      return;
+    }
 
     // 1. Initialize UI components
     this.trackerFrame.init();
