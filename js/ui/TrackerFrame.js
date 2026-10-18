@@ -47,6 +47,7 @@ export class TrackerFrame {
   updateFilterUI(activeFilter) {
     const filterBtns = document.querySelectorAll('.filter-btn');
     filterBtns.forEach(btn => {
+      btn.setAttribute('aria-pressed', String(btn.getAttribute('data-filter') === activeFilter));
       if (btn.getAttribute('data-filter') === activeFilter) {
         btn.classList.add('active');
       } else {
@@ -81,6 +82,10 @@ export class TrackerFrame {
   }
 
   bindRightControls() {
+    document.getElementById('btn-map-world')?.addEventListener('click', () => {
+      this.sound.playClick();
+      this.bus.emit('MAP_WORLD_VIEW');
+    });
     document.getElementById('btn-zoom-in')?.addEventListener('click', () => {
       this.sound.playClick();
       this.bus.emit('MAP_ZOOM_IN');

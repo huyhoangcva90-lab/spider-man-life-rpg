@@ -3,6 +3,13 @@
 export class MapProviderConfig {
   static getProviderConfig(providerType = 'CARTO_DARK', apiKey = '') {
     switch (providerType) {
+      case 'TRACKER_LIGHT':
+        return {
+          name: 'Tracker Light',
+          styleUrl: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+          attribution: '© CARTO © OpenStreetMap contributors',
+          isProductionReady: true
+        };
       case 'MAPTILER':
         return {
           name: 'MapTiler Vector',

@@ -28,7 +28,7 @@ export class MapEngine {
         style: providerConfig.styleUrl,
         center: [this.fallbackCenter.lng, this.fallbackCenter.lat], // Default fallback: Ho Chi Minh City
         zoom: 13,
-        pitch: 15,
+        pitch: 0,
         bearing: 0,
         attributionControl: false
       });
@@ -43,7 +43,9 @@ export class MapEngine {
         this.isLoaded = true;
         document.querySelector('.offline-grid-banner')?.remove();
         console.log('[MapEngine] MapLibre GL initialized successfully');
+        this.updateCameraReadout();
       });
+      this.map.on('moveend', () => this.updateCameraReadout());
 
       window.addEventListener('resize', () => {
         if (this.map) {
@@ -111,6 +113,17 @@ export class MapEngine {
 
   zoomIn() {
     if (this.map) this.map.zoomIn();
+  }
+
+  showWorld() {
+    this.map?.flyTo({ center: [0, 20], zoom: 1.5, pitch: 0, bearing: 0 });
+  }
+
+  updateCameraReadout() {
+    if (!this.map) return;
+    const center = this.map.getCenter();
+    const readout = document.getElementById('map-camera-readout');
+    if (readout) readout.textContent = `${Math.abs(center.lat).toFixed(3)}°${center.lat < 0 ? 'S' : 'N'} / ${Math.abs(center.lng).toFixed(3)}°${center.lng < 0 ? 'W' : 'E'} · Z${this.map.getZoom().toFixed(1)}`;
   }
 
   zoomOut() {

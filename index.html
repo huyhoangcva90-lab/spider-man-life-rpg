@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="./css/cosmic-enemy-team.css?build=four-spiders-1" />
   <link rel="stylesheet" href="./css/pk-embed.css?build=pk-embed-1" />
   <link rel="stylesheet" href="./css/notion-game-view.css?build=notion-authority-1" />
+  <link rel="stylesheet" href="./css/tracker-map.css?build=tracker-map-1" />
 </head>
 <body data-game-mode="ARENA">
   <a class="skip-link" href="#tracker-main">Bỏ qua điều hướng</a>
@@ -130,10 +131,11 @@
         </section>
 
         <div class="map-status-card map-mode-only" aria-live="polite">
-          <span class="map-status-kicker">MISSION MAP</span>
-          <strong><span id="visible-mission-count">0</span> NHIỆM VỤ</strong>
+          <span class="map-status-kicker">SPIDER NETWORK / ĐỊA ĐIỂM</span>
+          <strong><span id="visible-mission-count">0</span> ĐỊA ĐIỂM TRÊN MAP</strong>
           <span id="gps-status-text">GPS CHƯA BẬT</span>
         </div>
+        <output class="map-camera-readout map-mode-only" id="map-camera-readout" aria-label="Tâm bản đồ"></output>
 
         <aside class="rail-left map-mode-only" aria-label="Bộ lọc bản đồ">
           <button class="filter-btn active" data-filter="ALL" style="--filter-color:#f2c06b" aria-label="Hiện tất cả"><svg><use href="#icon-target"></use></svg><span class="filter-label">ALL</span><span class="filter-count">0</span></button>
@@ -145,6 +147,8 @@
           <button class="map-control-btn" id="btn-zoom-in" title="Phóng to" aria-label="Phóng to"><svg><use href="#icon-plus"></use></svg></button>
           <button class="map-control-btn" id="btn-zoom-out" title="Thu nhỏ" aria-label="Thu nhỏ"><span class="minus-glyph"></span></button>
           <button class="map-control-btn map-control-btn--accent" id="btn-center-gps" title="Vị trí của tôi" aria-label="Căn giữa vị trí của tôi"><svg><use href="#icon-compass"></use></svg></button>
+          <button class="map-control-btn map-control-btn--world" id="btn-map-world" title="Xem toàn thế giới" aria-label="Xem toàn thế giới"><img src="./assets/spideytracker/map-ui/globe_btn.png" alt="" /></button>
+          <button class="map-control-btn" id="btn-reset-north" title="Đặt hướng Bắc" aria-label="Đặt hướng Bắc"><span aria-hidden="true">N ↑</span></button>
         </aside>
 
         <div class="frame-search-row map-mode-only">
@@ -164,6 +168,7 @@
           <button class="game-primary-nav__arena active" data-game-section="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>BATTLE</span></button>
           <button data-game-section="HABITS" aria-label="Mở Life Reset: 66 Day Habit" title="Life Reset: 66 Day Habit"><svg><use href="#icon-bolt"></use></svg><span>LIFE 66</span></button>
           <button data-game-section="FIELD"><svg><use href="#icon-clock"></use></svg><span>FIELD</span></button>
+          <button data-game-section="CITY"><svg><use href="#icon-web-map"></use></svg><span>MAP</span></button>
         </nav>
         <div class="game-panel-backdrop" id="game-panel-backdrop" hidden inert><section class="game-panel" aria-labelledby="game-panel-title"><header><div><small id="game-panel-kicker">SPIDEY LIFE</small><h2 id="game-panel-title">MISSIONS</h2></div><button id="game-panel-close" aria-label="Về màn Battle">← BATTLE</button></header><nav id="game-panel-tabs" role="tablist" aria-label="Các mục của màn hình"></nav><div class="game-panel-content" id="game-panel-content"></div></section></div>
 

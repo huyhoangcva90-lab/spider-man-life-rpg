@@ -1,0 +1,63 @@
+/* SpideyTracker-inspired navigation, limited to the real-world map screen. */
+body[data-game-mode="MAP"] { --map-ink:#101c24; --map-ice:#96e0f7; --map-paper:#e7e9df; }
+body[data-game-mode="MAP"] #map { background:#dce1e0; }
+body[data-game-mode="MAP"] #map .maplibregl-canvas { filter:saturate(.8) contrast(1.04); }
+body[data-game-mode="MAP"] .map-dark-filter { background:radial-gradient(ellipse at center,transparent 50%,#18344333); }
+body[data-game-mode="MAP"] .map-scanlines { opacity:.035; mix-blend-mode:multiply; }
+body[data-game-mode="MAP"] .hanging-spidey { display:none; }
+body[data-game-mode="MAP"] .map-status-card {
+  top:18px; left:18px; transform:none; width:240px; max-width:calc(100% - 96px);
+  padding:12px 14px; gap:6px; text-align:left; color:var(--map-paper);
+  background:#101c24f5; border:2px solid var(--map-ink); border-radius:0;
+  box-shadow:inset 0 0 0 1px #568697,3px 3px 0 #101c2444; clip-path:none;
+}
+body[data-game-mode="MAP"] .map-status-card::before { display:none; }
+body[data-game-mode="MAP"] .map-status-kicker { color:var(--map-ice); font:700 10px/1.4 'Silkscreen',monospace; }
+body[data-game-mode="MAP"] .map-status-card strong { font:700 15px/1.4 'Be Vietnam Pro',sans-serif; }
+body[data-game-mode="MAP"] .map-status-card > span:last-child { display:block; color:#c2cec9; font:500 11px/1.4 'Be Vietnam Pro',sans-serif; }
+body[data-game-mode="MAP"] .rail-left { top:130px; left:18px; gap:10px; width:60px; max-height:none; overflow:visible; }
+body[data-game-mode="MAP"] .filter-btn { width:52px; height:52px; border:0; background:transparent url('../assets/spideytracker/filter_white.png') center/contain no-repeat; box-shadow:none; outline:0; }
+body[data-game-mode="MAP"] .filter-btn[data-filter="WORK"] { background-image:url('../assets/spideytracker/filter_red.png'); }
+body[data-game-mode="MAP"] .filter-btn[data-filter="NOTION_MISSION"] { background-image:url('../assets/spideytracker/filter_green.png'); }
+body[data-game-mode="MAP"] .filter-btn svg { display:none; }
+body[data-game-mode="MAP"] .filter-btn .filter-label { opacity:1; transform:none; }
+body[data-game-mode="MAP"] .filter-btn .filter-label { display:block; position:absolute; left:60px; top:12px; width:max-content; padding:5px 8px; background:var(--map-ink); color:var(--map-paper); font:700 10px/1.4 'Silkscreen',monospace; }
+body[data-game-mode="MAP"] .filter-btn.active .filter-label { color:var(--map-ice); box-shadow:inset 3px 0 var(--map-ice); }
+body[data-game-mode="MAP"] .filter-count { top:-3px; right:-4px; min-width:18px; min-height:18px; font-size:10px; }
+body[data-game-mode="MAP"] .rail-right { top:auto; bottom:142px; right:18px; display:grid; grid-template-columns:44px 44px; gap:6px; }
+body[data-game-mode="MAP"] .map-control-btn { width:44px; height:44px; min-height:44px; color:var(--map-ink); background:var(--map-paper); border:2px solid var(--map-ink); box-shadow:inset 0 0 0 2px #fff,2px 2px 0 #101c2433; font:700 13px 'Silkscreen',monospace; }
+body[data-game-mode="MAP"] #btn-center-gps { background:var(--map-ice); }
+body[data-game-mode="MAP"] .map-control-btn--world { padding:0; background:transparent; border:0; box-shadow:none; }
+body[data-game-mode="MAP"] .map-control-btn--world img { width:44px; height:44px; image-rendering:pixelated; }
+body[data-game-mode="MAP"] #btn-reset-north { grid-column:1/-1; width:94px; }
+body[data-game-mode="MAP"] .frame-search-row { top:auto; bottom:82px; left:18px; transform:none; width:min(480px,calc(100% - 36px)); }
+body[data-game-mode="MAP"] .search-input-wrap { height:48px; border:2px solid var(--map-ink); box-shadow:inset 0 0 0 1px #568697,3px 3px 0 #101c2444; }
+body[data-game-mode="MAP"] .search-input-field { font:500 12px 'Be Vietnam Pro',sans-serif; }
+.map-camera-readout { position:absolute; z-index:10; bottom:138px; left:18px; padding:5px 8px; background:#101c24e8; color:#c5e4eb; font:500 10px/1.4 monospace; pointer-events:none; }
+body[data-game-mode="MAP"] .maplibregl-ctrl-bottom-right { bottom:71px; right:3px; }
+body[data-game-mode="MAP"] .maplibregl-ctrl-attrib { color:#202f35; background:#fffffff0; font:10px/1.5 sans-serif; }
+body[data-game-mode="MAP"] .maplibregl-ctrl-attrib a { color:#202f35; }
+body[data-game-mode="MAP"] .offline-grid-banner { top:auto; bottom:200px; max-width:70%; font:500 12px/1.5 'Be Vietnam Pro',sans-serif; }
+/* MapLibre owns the outer marker transform; only its child should scale. */
+body[data-game-mode="MAP"] .custom-pixel-marker { width:44px; height:48px; transition:none; }
+body[data-game-mode="MAP"] .custom-pixel-marker:hover .marker-pin-body { transform:translateY(-3px) scale(1.08); }
+body[data-game-mode="MAP"] .custom-pixel-marker.active-selected .marker-pin-body { filter:drop-shadow(0 0 5px #fff); }
+body[data-game-mode="MAP"] .marker-pin-body { transition:transform .15s; }
+body[data-game-mode="MAP"] button:focus-visible,body[data-game-mode="MAP"] .custom-pixel-marker:focus-visible { outline:3px solid #e49d44; outline-offset:3px; }
+.game-primary-nav { grid-template-columns:repeat(6,minmax(0,1fr)); }
+@media(max-width:600px) {
+  body[data-game-mode="MAP"] .map-status-card { top:10px; left:10px; padding:9px 10px; width:215px; }
+  body[data-game-mode="MAP"] .map-status-kicker { font-size:8px; }
+  body[data-game-mode="MAP"] .map-status-card strong { font-size:12px; }
+  body[data-game-mode="MAP"] .rail-left { top:112px; left:8px; gap:8px; flex-direction:column; }
+  body[data-game-mode="MAP"] .filter-btn .filter-label { left:56px; font-size:9px; }
+  body[data-game-mode="MAP"] .rail-right { bottom:158px; right:10px; }
+  body[data-game-mode="MAP"] .frame-search-row { left:10px; bottom:77px; width:calc(100% - 20px); }
+  body[data-game-mode="MAP"] .search-input-field { font-size:10px; }
+  .map-camera-readout { left:10px; bottom:133px; font-size:9px; }
+  .game-primary-nav button { min-width:0; padding-inline:2px; font-size:9px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  body[data-game-mode="MAP"] .marker-pin-body { transition:none; }
+  body[data-game-mode="MAP"] .marker-selected-ring { animation:none; }
+}

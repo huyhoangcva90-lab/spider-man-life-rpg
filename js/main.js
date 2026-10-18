@@ -79,7 +79,7 @@ class App {
     this.sound.playBootSound();
 
     // 2. Initialize Map Engine (Defaults to HCMC fallback: lng 106.7009, lat 10.7769)
-    await this.mapEngine.init('map', 'OSM_RASTER');
+    await this.mapEngine.init('map', 'TRACKER_LIGHT');
     window.requestAnimationFrame(() => this.mapEngine.resize());
 
     // 3. Load Notion snapshot & update Notion queue & badge immediately
@@ -157,6 +157,7 @@ class App {
     // Map camera controls
     this.bus.on('MAP_ZOOM_IN', () => this.mapEngine.zoomIn());
     this.bus.on('MAP_ZOOM_OUT', () => this.mapEngine.zoomOut());
+    this.bus.on('MAP_WORLD_VIEW', () => this.mapEngine.showWorld());
     this.bus.on('RESET_NORTH', () => this.mapEngine.resetNorth());
 
     // Center GPS clicked by user gesture
