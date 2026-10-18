@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24100b"/>
+      <stop offset="100%" stop-color="#0d0503"/>
+    </linearGradient>
+    <linearGradient id="coral" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffedd5"/>
+      <stop offset="50%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="32" fill="url(#bg)"/>
+  <rect width="124" height="124" x="2" y="2" rx="30" fill="none" stroke="url(#coral)" stroke-width="2" stroke-opacity="0.35"/>
+
+  <!-- Flask Lab Icon -->
+  <g transform="translate(64, 64)">
+    <path d="M -12 -34 L 12 -34 M -8 -34 L -8 -16 L -28 26 C -32 32, -26 38, -18 38 L 18 38 C 26 38, 32 32, 28 26 L 8 -16 L 8 -34" 
+          fill="none" stroke="url(#coral)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Bubbling Liquid -->
+    <path d="M -22 18 C -14 14, -6 22, 0 18 C 6 14, 14 22, 22 18 L 26 26 C 28 30, 24 34, 18 34 L -18 34 C -24 34, -28 30, -26 26 Z" 
+          fill="url(#coral)" opacity="0.6"/>
+
+    <circle cx="-6" cy="4" r="3" fill="url(#coral)"/>
+    <circle cx="8" cy="-4" r="4" fill="url(#coral)"/>
+    <circle cx="2" cy="-14" r="2.5" fill="url(#coral)"/>
+  </g>
+</svg>

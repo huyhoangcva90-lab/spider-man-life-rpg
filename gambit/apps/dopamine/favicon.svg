@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071a17"/>
+      <stop offset="100%" stop-color="#020908"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5dcaa5"/>
+      <stop offset="50%" stop-color="#00e5b4"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="32" fill="url(#bg)"/>
+  <rect width="124" height="124" x="2" y="2" rx="30" fill="none" stroke="url(#teal)" stroke-width="2" stroke-opacity="0.3"/>
+
+  <!-- 4 Tile Shuffle Grid & Spark -->
+  <g transform="translate(64, 64)">
+    <rect x="-30" y="-30" width="26" height="26" rx="8" fill="url(#teal)" opacity="0.9"/>
+    <rect x="4" y="-30" width="26" height="26" rx="8" fill="url(#teal)" opacity="0.6"/>
+    <rect x="-30" y="4" width="26" height="26" rx="8" fill="url(#teal)" opacity="0.6"/>
+    <rect x="4" y="4" width="26" height="26" rx="8" fill="url(#teal)" opacity="0.9"/>
+    
+    <!-- Central Dopamine Spark -->
+    <polygon points="0,-10 3,-3 10,0 3,3 0,10 -3,3 -10,0 -3,-3" fill="#ffffff"/>
+  </g>
+</svg>

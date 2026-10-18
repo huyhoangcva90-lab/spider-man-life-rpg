@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141923"/>
+      <stop offset="100%" stop-color="#080b12"/>
+    </linearGradient>
+    <linearGradient id="silver" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="32" fill="url(#bg)"/>
+  <rect width="124" height="124" x="2" y="2" rx="30" fill="none" stroke="url(#silver)" stroke-width="2" stroke-opacity="0.35"/>
+
+  <!-- Leather Notebook & Pen -->
+  <g transform="translate(64, 64)">
+    <rect x="-30" y="-36" width="60" height="72" rx="10" fill="none" stroke="url(#silver)" stroke-width="6"/>
+    <!-- Bookmark ribbon -->
+    <path d="M 8 -36 L 8 4 L 0 -4 L -8 4 L -8 -36" fill="url(#silver)" opacity="0.4"/>
+    <line x1="-16" y1="-14" x2="16" y2="-14" stroke="url(#silver)" stroke-width="4" stroke-linecap="round"/>
+    <line x1="-16" y1="0" x2="16" y2="0" stroke="url(#silver)" stroke-width="4" stroke-linecap="round"/>
+    <line x1="-16" y1="14" x2="6" y2="14" stroke="url(#silver)" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

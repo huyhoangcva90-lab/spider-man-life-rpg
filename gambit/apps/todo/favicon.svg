@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1329"/>
+      <stop offset="100%" stop-color="#040814"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#93c5fd"/>
+      <stop offset="50%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="32" fill="url(#bg)"/>
+  <rect width="124" height="124" x="2" y="2" rx="30" fill="none" stroke="url(#blue)" stroke-width="2" stroke-opacity="0.35"/>
+
+  <!-- Checkbox Container & Checkmark -->
+  <g transform="translate(64, 64)">
+    <rect x="-34" y="-34" width="68" height="68" rx="20" fill="none" stroke="url(#blue)" stroke-width="6"/>
+    <rect x="-26" y="-26" width="52" height="52" rx="14" fill="url(#blue)" opacity="0.25"/>
+    <path d="M -18 2 L -4 16 L 22 -14" fill="none" stroke="url(#blue)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

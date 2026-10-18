@@ -1,0 +1,20 @@
+/* An open tool occupies the screen; Spider navigation returns with the back button. */
+body[data-field-immersive="true"] { overflow:hidden; }
+body[data-field-immersive="true"] .claw-slice-frame { display:none !important; }
+body[data-field-immersive="true"] .tracker-device-frame { position:fixed !important; inset:0 !important; display:block !important; width:100vw !important; height:100dvh !important; margin:0 !important; }
+body[data-field-immersive="true"] .frame-main-content { position:fixed !important; inset:0 !important; width:100% !important; height:100dvh !important; contain:none !important; overflow:hidden !important; }
+body[data-field-immersive="true"] :is(.frame-top-bar,.frame-bottom-bar,.game-primary-nav,#action-rpg-screen) { display:none !important; }
+body[data-field-immersive="true"] #game-panel-backdrop { position:fixed !important; inset:0 !important; width:100% !important; height:100dvh !important; padding:0 !important; background:#071426; z-index:20000 !important; }
+body[data-field-immersive="true"] .game-panel { display:block !important; width:100% !important; height:100% !important; padding:0 !important; margin:0 !important; border:0 !important; box-shadow:none !important; border-radius:0 !important; background:#071426 !important; }
+body[data-field-immersive="true"] .game-panel > header,
+body[data-field-immersive="true"] #game-panel-tabs { display:none !important; }
+body[data-field-immersive="true"] #game-panel-content { position:relative; width:100%; height:100%; max-height:none; padding:0 !important; margin:0; overflow:hidden; border:0; background:#071426; }
+.spider-field-app { position:relative; display:block; width:100%; height:100%; min-width:0; margin:0; padding:0; }
+.spider-field-app-frame { position:absolute; top:56px; left:0; display:block; width:100%; height:calc(100% - 56px); min-height:0; margin:0; border:0; background:#071426; color-scheme:dark; }
+.spider-field-app-return { position:absolute; z-index:10; top:max(12px,env(safe-area-inset-top)); left:max(12px,env(safe-area-inset-left)); display:grid; place-items:center; width:44px; height:44px; padding:0; border:1px solid #397c9b; border-radius:12px; box-shadow:3px 3px 0 #02060b; background:#0d2239; color:#f0645c; font:600 24px/1 system-ui,sans-serif; cursor:pointer; }
+.spider-field-app-return:hover { background:#18354c; border-color:#f0645c; }
+.spider-field-app-return:focus-visible { outline:3px solid #f2c06b; outline-offset:3px; }
+.spider-field-app-loading { position:absolute; inset:0; display:grid; place-items:center; margin:0; background:#071426; color:#d9e0df; font:500 14px/1.6 'Be Vietnam Pro',sans-serif; pointer-events:none; }
+.spider-field-app-loading[hidden] { display:none; }
+.spider-field-app { background:#071426; }
+.spider-field-app-connection { position:absolute; top:18px; right:12px; max-width:calc(100% - 82px); color:#b9c6d4; font:500 11px/1.5 'Be Vietnam Pro',sans-serif; text-align:right; }

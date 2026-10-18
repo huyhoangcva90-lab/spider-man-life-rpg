@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0e17"/>
+      <stop offset="100%" stop-color="#05060a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3e5c8"/>
+      <stop offset="50%" stop-color="#c4a882"/>
+      <stop offset="100%" stop-color="#9a7b56"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5b4"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Container -->
+  <rect width="128" height="128" rx="32" fill="url(#bg)"/>
+  <rect width="124" height="124" x="2" y="2" rx="30" fill="none" stroke="url(#gold)" stroke-width="2" stroke-opacity="0.35"/>
+
+  <!-- Outer Ring Accent -->
+  <circle cx="64" cy="64" r="44" fill="none" stroke="url(#gold)" stroke-width="1.5" stroke-dasharray="6 4" stroke-opacity="0.4"/>
+
+  <!-- Central Emblem: Gambit G & Star -->
+  <g filter="url(#shadow)">
+    <!-- Stylized Gambit 'G' -->
+    <path d="M 76 42 C 70 34, 52 34, 44 44 C 34 56, 36 74, 48 84 C 60 94, 76 86, 78 74 L 62 74" 
+          fill="none" stroke="url(#gold)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Center Mint Spark Dot -->
+    <circle cx="82" cy="44" r="5" fill="url(#glow)"/>
+    <!-- Top Gold Crown Diamond -->
+    <polygon points="64,24 69,32 64,40 59,32" fill="url(#gold)"/>
+  </g>
+</svg>

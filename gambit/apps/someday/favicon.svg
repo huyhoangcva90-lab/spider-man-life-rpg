@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#190e24"/>
+      <stop offset="100%" stop-color="#08040d"/>
+    </linearGradient>
+    <linearGradient id="violet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ddd6fe"/>
+      <stop offset="50%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="32" fill="url(#bg)"/>
+  <rect width="124" height="124" x="2" y="2" rx="30" fill="none" stroke="url(#violet)" stroke-width="2" stroke-opacity="0.35"/>
+
+  <!-- Lightbulb & Idea Spark -->
+  <g transform="translate(64, 64)">
+    <path d="M -18 -10 C -26 -30, 26 -30, 18 -10 C 12 0, 10 10, 10 20 L -10 20 C -10 10, -12 0, -18 -10 Z" 
+          fill="none" stroke="url(#violet)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="-8" y="24" width="16" height="8" rx="2" fill="url(#violet)"/>
+    <path d="M -4 -8 L 0 -18 L 4 -8" stroke="url(#violet)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,58 @@
+{
+  "name": "Gambit",
+  "short_name": "Gambit",
+  "description": "Personal dashboard and habit tracker",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui", "browser"],
+  "orientation": "portrait",
+  "background_color": "#07070f",
+  "theme_color": "#07070f",
+  "categories": ["productivity", "lifestyle", "health"],
+  "icons": [
+    {
+      "src": "apps/habits/icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Todo",
+      "short_name": "Todo",
+      "description": "Open quick task list",
+      "url": "apps/todo/index.html",
+      "icons": [{ "src": "apps/todo/icon.png", "sizes": "1024x1024", "type": "image/png" }]
+    },
+    {
+      "name": "Gym OS",
+      "short_name": "Gym",
+      "description": "Log workouts and activities",
+      "url": "apps/gym/index.html",
+      "icons": [{ "src": "apps/gym/icon.png", "sizes": "1024x1024", "type": "image/png" }]
+    },
+    {
+      "name": "Finance",
+      "short_name": "Finance",
+      "description": "Open finance dashboard",
+      "url": "apps/finance/index.html",
+      "icons": [{ "src": "apps/finance/icon.png", "sizes": "1024x1024", "type": "image/png" }]
+    },
+    {
+      "name": "Habits",
+      "short_name": "Habits",
+      "description": "Track daily habits",
+      "url": "apps/habits/index.html",
+      "icons": [{ "src": "apps/habits/icon.png", "sizes": "1024x1024", "type": "image/png" }]
+    },
+    {
+      "name": "Style 30",
+      "short_name": "Style",
+      "description": "Open 30-day style course",
+      "url": "apps/style30/index.html",
+      "icons": [{ "src": "apps/style30/icon.png", "sizes": "1024x1024", "type": "image/png" }]
+    }
+  ]
+}

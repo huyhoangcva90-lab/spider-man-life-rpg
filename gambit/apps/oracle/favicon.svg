@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#240b0f"/>
+      <stop offset="100%" stop-color="#0a0305"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fca5a5"/>
+      <stop offset="50%" stop-color="#f87171"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="32" fill="url(#bg)"/>
+  <rect width="124" height="124" x="2" y="2" rx="30" fill="none" stroke="url(#red)" stroke-width="2" stroke-opacity="0.35"/>
+
+  <!-- Mystic Tarot 8-Point Star & Eye -->
+  <g transform="translate(64, 64)">
+    <polygon points="0,-36 9,-12 33,-33 12,-9 36,0 12,9 33,33 9,12 0,36 -9,12 -33,33 -12,9 -36,0 -12,-9 -33,-33 -9,-12" 
+             fill="none" stroke="url(#red)" stroke-width="3"/>
+    
+    <!-- Central Cosmic Eye -->
+    <path d="M -20 0 Q 0 -18 20 0 Q 0 18 -20 0 Z" fill="none" stroke="url(#red)" stroke-width="4"/>
+    <circle cx="0" cy="0" r="7" fill="url(#red)"/>
+    <circle cx="-2" cy="-2" r="2" fill="#ffffff"/>
+  </g>
+</svg>
