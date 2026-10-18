@@ -981,7 +981,7 @@ export class ActionRpgController {
             <p>${this.escapeHtml(quest.description || '')}</p>
             <small>${quest.date || quest.dueDate ? `HẠN ${new Date(quest.date || quest.dueDate).toLocaleDateString('vi-VN')}` : 'NOTION QUEST'}</small>
             <div class="pixel-card-footer">
-              ${quest.sourceKind === 'task' ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${quest.sourceIndex}">📍 CHỌN QUÁN / ĐỊA ĐIỂM</button>${quest.address ? `<a class="pixel-action-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=${encodeURIComponent(quest.address)}" target="_blank" rel="noopener noreferrer">CHỈ ĐƯỜNG ↗</a>` : ''}` : '<span></span>'}
+              ${quest.sourceKind === 'task' ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${quest.sourceIndex}">📍 CHỌN QUÁN / ĐỊA ĐIỂM</button>${this.realWorldDirectionsLink(quest)}` : '<span></span>'}
               <button class="pixel-action-btn ${quest.done ? 'pixel-action-btn--disabled' : ''}"
                       ${quest.sourceKind === 'active' ? `data-complete-active-quest="${quest.sourceIndex}"` : `data-complete-task="${quest.sourceIndex}"`} ${quest.done || !this.canUseData(quest.sourceKind === 'active' ? 'activeQuests' : 'masterCalendar') ? 'disabled' : ''}>
                 ${quest.done ? '✓ ĐÃ XONG' : 'HOÀN THÀNH'}
@@ -1793,6 +1793,16 @@ export class ActionRpgController {
       this.profileSyncInFlight = false;
       if (localStorage.getItem('spidey_notion_profile_pending') && localStorage.getItem('spidey_notion_profile_pending') !== serialized) void this.flushHeroProfileSync();
     }
+  }
+
+  realWorldDirectionsLink(task) {
+    const saved = task.sourceUrl && this.placeRepo?.getAll().find(entry => entry.notionPageUrl === task.sourceUrl);
+    const place = saved || task;
+    const destination = Number.isFinite(place.lat) && Number.isFinite(place.lng) ? `${place.lat},${place.lng}` : place.address;
+    if (!destination) return '';
+    const url = new URL('https://www.google.com/maps/dir/');
+    url.search = new URLSearchParams({api:'1',destination});
+    return `<a class="pixel-action-btn" href="${this.escapeHtml(url.href)}" target="_blank" rel="noopener noreferrer">CHỈ ĐƯỜNG ↗</a>`;
   }
 
   bindEvents(content) {

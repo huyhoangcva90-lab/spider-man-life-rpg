@@ -53,6 +53,7 @@ class App {
     this.mapGuide = new MapGuideModal(this.state, this.bus, this.sound, GeoJsonTransfer, this.repo);
     this.heroAnimation = new HeroAnimationController(this.bus, this.sound, this.campaign);
     this.actionRpg = new ActionRpgController(this.bus, this.campaign, this.sound, this.mapEngine);
+    this.actionRpg.placeRepo = this.repo;
     this.actionRpg.heroAnimation = this.heroAnimation;
     this.chatCenter = new ChatCenter(this.sound);
     this.mapChrome = new TrackerMapChrome(this.bus, this.mapEngine, this.repo, this.state);
