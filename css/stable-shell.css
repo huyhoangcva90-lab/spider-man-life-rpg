@@ -36,3 +36,9 @@ body[data-field-standalone="true"] .spider-field-toolbar { padding-inline:64px; 
 body[data-field-standalone="true"] .spider-field-app-return { display:none; }
 body[data-field-standalone="true"] .tracker-corner-menu { position:fixed; top:64px; z-index:110; max-height:calc(100dvh - 80px); overflow:auto; }
 #btn-hub-menu { touch-action:manipulation; -webkit-touch-callout:none; user-select:none; }
+
+/* Keep the artwork in front of destination panels; tools without a frame are excluded. */
+html:not([data-pk-embed]) body:not([data-field-standalone="true"]) .tracker-device-frame{isolation:isolate}
+html:not([data-pk-embed]) body:not([data-field-standalone="true"]) .claw-slice-frame{z-index:85}
+html:not([data-pk-embed]) body:not([data-field-standalone="true"]) :is(.frame-top-bar,.frame-bottom-bar){z-index:90}
+html:not([data-pk-embed]) body:not([data-field-standalone="true"]) .tracker-corner-menu{z-index:100}

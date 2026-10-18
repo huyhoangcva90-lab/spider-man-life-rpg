@@ -1,4 +1,4 @@
-import { HeroLoadout } from './HeroLoadout.js?v=gambit-native-1';
+import { HeroLoadout } from './HeroLoadout.js?v=hero-build-preview-5';
 import { selectedGameView, linkedRecords, sameId, logFingerprint } from '../integrations/notion/NotionGameAuthority.mjs';
 import { notionSkillAnimation } from '../game/NotionSkillAnimation.js';
 
@@ -103,6 +103,7 @@ export class NotionGamePresenter {
     this.ui.text('arena-turn-tip', p.HP === 0 ? 'HP = 0 theo Hero. Hồi phục trong Notion.' : 'Chọn chiêu và dùng nút Attack trong Notion.');
     this.ui.text('combat-district', view.map?.District || view.map?.Map || 'CHƯA CHỌN CURRENT MAP');
     this.ui.text('combat-weather', view.map?.Weather || 'KẾT QUẢ TRẬN ĐẤU DO NOTION QUYẾT ĐỊNH');
+    if(this.ui.panelSection==='HERO')this.loadout.updateLiveNote(document.getElementById('game-panel-content'));
     this.renderEnemies(view.enemies);
     this.renderSkillBar(view.skills);
     const footer = root.querySelector('.ultimate-meter');
