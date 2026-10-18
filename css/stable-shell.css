@@ -22,3 +22,17 @@ html:not([data-pk-embed]) body[data-field-immersive="true"] .game-panel { height
   html:not([data-pk-embed]) body .claw-slice-frame { grid-template-columns:27px minmax(0,1fr) 27px !important; grid-template-rows:27px minmax(0,1fr) 14px 40px 5px !important; }
   html:not([data-pk-embed]) body .tracker-device-frame { height:100% !important; }
 }
+
+/* Individual Field tools use the full viewport; the Field directory keeps its frame. */
+html:not([data-pk-embed]) body[data-field-standalone="true"] .tracker-viewport { padding:0!important; }
+html:not([data-pk-embed]) body[data-field-standalone="true"] .tracker-device-frame { display:block!important; width:100vw!important; height:100dvh!important; max-width:none; background:#071426; border:0; box-shadow:none; }
+html:not([data-pk-embed]) body[data-field-standalone="true"] :is(.claw-slice-frame,.frame-bottom-bar,.brand-plaque) { display:none!important; }
+html:not([data-pk-embed]) body[data-field-standalone="true"] .frame-main-content { position:fixed!important; inset:0!important; width:100vw!important; height:100dvh!important; }
+html:not([data-pk-embed]) body[data-field-standalone="true"] #game-panel-backdrop { position:absolute!important; inset:0!important; height:100%!important; }
+html:not([data-pk-embed]) body[data-field-standalone="true"] .frame-top-bar { position:fixed!important; inset:0 0 auto!important; height:60px; width:100%; z-index:100; pointer-events:none; background:none; border:0; box-shadow:none; }
+body[data-field-standalone="true"] #btn-hub-menu { --menu-cell:44px; position:absolute; top:8px; left:8px; width:44px; height:45px; pointer-events:auto; }
+body[data-field-standalone="true"] #btn-field-mode { position:absolute; top:8px; right:8px; width:44px; height:44px; pointer-events:auto; }
+body[data-field-standalone="true"] .spider-field-toolbar { padding-inline:64px; }
+body[data-field-standalone="true"] .spider-field-app-return { display:none; }
+body[data-field-standalone="true"] .tracker-corner-menu { position:fixed; top:64px; z-index:110; max-height:calc(100dvh - 80px); overflow:auto; }
+#btn-hub-menu { touch-action:manipulation; -webkit-touch-callout:none; user-select:none; }

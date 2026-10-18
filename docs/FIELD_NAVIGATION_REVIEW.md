@@ -12,3 +12,11 @@
 - [x] Browser checks: desktop-sized viewport and real 390 × 844 inner viewport; Routine back navigation and Todo connection dialog.
 
 Private Notion record writes and financial operations were not performed during this UI check. Original frame assets, game authority and user data remain intact.
+
+## 2026-10-19 update
+
+- Individual tools (including Todo/Habits) now occupy the full viewport; Field directory and game pages retain the original frame.
+- Left corner: tap opens menu, hold 700 ms returns Home. Movement, pointer cancellation and blur cancel the pending hold.
+- Right corner: shortcuts for tasks, habits, timetable, finance, settings, and existing map tools.
+- Three existing Spider clips are named in settings, with preview and stop controls. Clips no longer overlap; volume updates active clips and mute stops playback. A blocked boot greeting is no longer replayed on an unrelated click.
+- Browser verified short tap, long hold, sound play/stop, 390 × 844 Finance layout. Two audio tests and thirteen Field/Notion authority tests passed; twelve tool routes passed.

@@ -162,10 +162,22 @@ export class TrackerFrame {
     });
 
     // Hub Overlay Menu
-    document.getElementById('btn-hub-menu')?.addEventListener('click', () => {
-      this.sound.playClick();
-      this.bus.emit('TOGGLE_TRACKER_MENU');
+    const menu=document.getElementById('btn-hub-menu');
+    let holdTimer=null,held=false,origin=null;
+    const cancelHold=()=>{clearTimeout(holdTimer);holdTimer=null;};
+    menu?.setAttribute('aria-label','Mở menu; nhấn giữ để về Home');
+    if(menu)menu.title='Menu · giữ 0,7 giây để về Home';
+    menu?.addEventListener('pointerdown',event=>{
+      if(!event.isPrimary||event.button!==0)return;
+      cancelHold();held=false;origin={x:event.clientX,y:event.clientY};
+      menu.setPointerCapture(event.pointerId);
+      holdTimer=setTimeout(()=>{held=true;holdTimer=null;location.assign('/');},700);
     });
+    menu?.addEventListener('pointermove',event=>{if(origin&&Math.hypot(event.clientX-origin.x,event.clientY-origin.y)>12)cancelHold();});
+    ['pointerup','pointercancel','lostpointercapture'].forEach(type=>menu?.addEventListener(type,cancelHold));
+    window.addEventListener('blur',cancelHold);
+    menu?.addEventListener('contextmenu',event=>event.preventDefault());
+    menu?.addEventListener('click',()=>{if(held){held=false;return;}this.sound.playClick();this.bus.emit('TOGGLE_TRACKER_MENU');});
   }
 
   updateSoundBtn(enabled) {

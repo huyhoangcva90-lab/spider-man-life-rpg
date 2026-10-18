@@ -2,7 +2,7 @@
 
 import { EventBus } from './core/EventBus.js';
 import { StateStore } from './core/StateStore.js?build=hub-systems-1';
-import { SoundController } from './core/SoundController.js?build=hub-systems-1';
+import { SoundController } from './core/SoundController.js?build=field-tools-fullscreen-4';
 import { MapEngine } from './map/MapEngine.js?build=static-spiders-nav';
 import { MarkerLayer } from './map/MarkerLayer.js?build=static-spiders-nav';
 import { GeolocationController } from './map/GeolocationController.js';
@@ -10,7 +10,7 @@ import { GeocoderAdapter } from './map/GeocoderAdapter.js';
 import { MapEntryRepository } from './data/MapEntryRepository.js';
 import { GeoJsonTransfer } from './data/GeoJsonTransfer.js';
 import { NotionAdapter } from './integrations/notion/NotionAdapter.js';
-import { TrackerFrame } from './ui/TrackerFrame.js?build=spider-life-reset-2';
+import { TrackerFrame } from './ui/TrackerFrame.js?build=field-tools-fullscreen-4';
 import { SearchPanel } from './ui/SearchPanel.js';
 import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
@@ -20,9 +20,9 @@ import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-res
 import { MapGuideModal } from './ui/MapGuideModal.js';
 import { HeroAnimationController } from './game/HeroAnimationController.js?build=cosmic-team-1';
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=notion-authority-1';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=gambit-native-1';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=field-tools-fullscreen-4';
 import { ChatCenter } from './ui/ChatCenter.js?build=karen-clean-1';
-import { TrackerMapChrome } from './ui/TrackerMapChrome.js';
+import { TrackerMapChrome } from './ui/TrackerMapChrome.js?build=field-tools-fullscreen-4';
 import { NearbyPlaces } from './ui/NearbyPlaces.js';
 
 class App {
@@ -35,7 +35,7 @@ class App {
     this.sound.setMasterVolume(this.campaign.state.settings.volume);
     this.sound.setMusicEnabled(this.campaign.state.settings.music);
     this.campaign.state.settings.sfx = this.state.get('soundEnabled');
-    
+
     this.repo = new MapEntryRepository(this.bus);
     this.geocoder = new GeocoderAdapter();
     this.notion = new NotionAdapter(this.bus, this.repo);
@@ -141,6 +141,7 @@ class App {
     this.bus.on('ENTRY_CREATED', (entry) => this.campaign.completeRealQuest(entry));
     this.bus.on('ENTRY_UPDATED', (entry) => this.campaign.completeRealQuest(entry));
     this.bus.on('SOUND_TOGGLED', (enabled) => {
+      if(!enabled)this.sound.stopSamples();
       if (this.campaign.state.settings.sfx !== enabled) this.campaign.updateSettings({ sfx: enabled });
     });
     this.bus.on('SFX_REQUESTED', ({ id }) => this.sound.playGameSfx(id));

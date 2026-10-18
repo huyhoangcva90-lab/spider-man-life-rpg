@@ -16,8 +16,8 @@ export class TrackerMapChrome {
     this.ctx = this.canvas.getContext('2d');
     this.head.setAttribute('aria-controls', 'tracker-map-menu');
     this.alertButton.setAttribute('aria-controls', 'tracker-map-alerts');
-    this.alertButton.setAttribute('aria-label', 'Mở trung tâm thông tin');
-    this.alertButton.title = 'MESSAGE CENTER';
+    this.alertButton.setAttribute('aria-label', 'Mở lối tắt');
+    this.alertButton.title = 'LỐI TẮT';
     this.bus.on('TOGGLE_TRACKER_MENU', () => this.toggle('left'));
     this.bus.on('TOGGLE_TRACKER_ALERTS', () => this.toggle('right'));
     document.querySelectorAll('[data-tracker-section]').forEach(button => button.addEventListener('click', () => {
@@ -25,6 +25,7 @@ export class TrackerMapChrome {
       if (button.dataset.trackerSection === 'ARENA') { location.assign('/'); return; }
       this.bus.emit('GAME_MENU_TARGET', { section: button.dataset.trackerSection });
     }));
+    document.querySelectorAll('[data-tracker-app]').forEach(button=>button.addEventListener('click',()=>{this.close();this.bus.emit('OPEN_FIELD_APP',{id:button.dataset.trackerApp});}));
     document.querySelectorAll('[data-tracker-event]').forEach(button => button.addEventListener('click', () => {
       this.close(); this.bus.emit('TOGGLE_DRAWER', button.dataset.trackerEvent);
     }));

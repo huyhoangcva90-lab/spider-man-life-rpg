@@ -1,5 +1,5 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
-import { NotionGamePresenter } from './NotionGamePresenter.js?build=gambit-native-1';
+import { NotionGamePresenter } from './NotionGamePresenter.js?build=field-tools-fullscreen-4';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -73,6 +73,7 @@ export class ActionRpgController {
 
   async init() {
     this.fieldAppId = null;
+    this.bus.on('OPEN_FIELD_APP',({id})=>this.openEmbeddedFieldApp(id));
     window.addEventListener('message', event => {
       const frame = document.querySelector('[data-field-app-frame]');
       if (event.origin !== location.origin || event.source !== frame?.contentWindow) return;
@@ -669,6 +670,7 @@ export class ActionRpgController {
     panel?.setAttribute('inert', '');
     this.fieldAppId = null;
     delete document.body.dataset.fieldImmersive;
+    delete document.body.dataset.fieldStandalone;
     delete document.body.dataset.gameSection;
     if (document.body.dataset.gameMode !== 'MAP') this.setActiveNav('ARENA');
     this.updateRoute(document.body.dataset.gameMode === 'MAP' ? 'CITY' : 'ARENA');
@@ -748,6 +750,8 @@ export class ActionRpgController {
     const requestedApp = this.panelSection === 'QUESTS' ? 'todo' : this.panelSection === 'HABITS' ? 'habits' : this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
     if (FIELD_APPS[requestedApp]) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
+    if (FIELD_APPS[requestedApp] && requestedApp !== 'launcher') document.body.dataset.fieldStandalone='true';
+    else delete document.body.dataset.fieldStandalone;
     const keepCurrentApp = requestedApp && content.querySelector('[data-field-app]')?.dataset.fieldApp === requestedApp;
     if (!keepCurrentApp) {
       content.innerHTML = this.renderSection();
@@ -2364,6 +2368,12 @@ export class ActionRpgController {
   }
 
   bindSettings(content) {
+    content.querySelectorAll('[data-sound-preview]').forEach(button=>button.addEventListener('click',async()=>{
+      const output=content.querySelector('[data-sound-status]');
+      const played=await this.sound.playSample(button.dataset.soundPreview);
+      if(output)output.textContent=played?'Đang phát: '+button.textContent:'Bật âm thanh trước khi nghe thử. Nếu vẫn im lặng, hãy thử lại.';
+    }));
+    content.querySelector('[data-sound-stop]')?.addEventListener('click',()=>{this.sound.stopSamples();const output=content.querySelector('[data-sound-status]');if(output)output.textContent='Đã dừng âm thanh.';});
     content.querySelectorAll('[data-setting]').forEach((control) => control.addEventListener('change', () => {
       const key = control.dataset.setting;
       const value = control.type === 'checkbox' ? control.checked : key === 'volume' || key === 'combatSpeed' ? Number(control.value) : control.value;

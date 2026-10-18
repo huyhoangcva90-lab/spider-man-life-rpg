@@ -38,12 +38,15 @@ export class SoundController {
         audio.preload = 'auto';
         this.samples.set(name, audio);
       }
-      audio.pause();
+      this.stopSamples();
       audio.currentTime = 0;
+      audio.sampleVolume=volume;
       audio.volume = Math.max(0, Math.min(1, volume * this.masterVolume));
       return audio.play().then(() => true).catch(() => false);
     } catch { return Promise.resolve(false); }
   }
+
+  stopSamples() { for(const audio of this.samples.values()){audio.pause();audio.currentTime=0;} }
 
   playTrackerJingle() { return this.playSample('jingle', 0.58); }
   playActivityVoice() { this.playSample('activity', 0.78); }
@@ -59,9 +62,10 @@ export class SoundController {
 
   setMasterVolume(value) {
     this.masterVolume = Math.max(0, Math.min(1, Number(value) || 0));
+    for(const audio of this.samples.values())audio.volume=Math.max(0,Math.min(1,(audio.sampleVolume??0.72)*this.masterVolume));
   }
 
-  setMusicEnabled(enabled) { this.musicEnabled = Boolean(enabled); }
+  setMusicEnabled(enabled) { this.musicEnabled = Boolean(enabled); if(!this.musicEnabled)this.samples.get('jingle')?.pause(); }
 
   playTone(freq, type = 'square', duration = 0.1, gainVal = 0.1) {
     if (!this.isEnabled()) return;
@@ -93,14 +97,8 @@ export class SoundController {
 
   async playBootSound() {
     this.init();
-    const played = await this.playTrackerJingle();
-    if (!played && !this.entryFallbackBound) {
-      this.entryFallbackBound = true;
-      window.addEventListener('pointerdown', () => {
-        this.audioCtx?.resume?.();
-        this.playTrackerJingle();
-      }, { once: true, capture: true });
-    }
+    // Never replay a blocked greeting on an unrelated click later.
+    if(this.musicEnabled)await this.playTrackerJingle();
   }
 
   playClick() {

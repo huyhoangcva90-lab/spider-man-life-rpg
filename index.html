@@ -39,8 +39,8 @@
   <link rel="stylesheet" href="./css/tracker-map.css?build=tracker-map-1" />
   <link rel="stylesheet" href="./css/shared-tracker-shell.css?build=shared-shell-1" />
   <link rel="stylesheet" href="./css/mobile-game-ui.css?build=mission-hub-1" />
-  <link rel="stylesheet" href="./css/field-apps.css?build=field-navigation-3" />
-  <link rel="stylesheet" href="./css/stable-shell.css?build=field-navigation-3" />
+  <link rel="stylesheet" href="./css/field-apps.css?build=field-tools-fullscreen-4" />
+  <link rel="stylesheet" href="./css/stable-shell.css?build=field-tools-fullscreen-4" />
   <link rel="stylesheet" href="./css/hero-loadout.css?build=gambit-native-1" />
 </head>
 <body data-game-mode="ARENA">
@@ -87,7 +87,7 @@
           <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
         </a>
 
-        <button class="system-signal system-signal--spider-apps" id="btn-field-mode" aria-label="Mở trung tâm Spider Apps" title="SPIDER APPS">
+        <button class="system-signal system-signal--spider-apps" id="btn-field-mode" aria-label="Mở lối tắt" title="LỐI TẮT">
           <span class="top-hanging-spidey" aria-hidden="true"></span>
           <span class="system-signal-label">APPS</span>
         </button>
@@ -155,13 +155,18 @@
           <button data-tracker-section="ARENA">HOME / BATTLE <span>↗</span></button>
           <button data-tracker-section="QUESTS">NHIỆM VỤ <span>↗</span></button>
           <button data-tracker-section="HERO">HERO <span>↗</span></button>
-          <button data-tracker-section="HABITS">LIFE 66 <span>↗</span></button>
+          <button data-tracker-section="HABITS">THÓI QUEN <span>↗</span></button>
           <button data-tracker-section="FIELD">SPIDER APPS <span>↗</span></button>
           <button data-tracker-section="CITY">BẢN ĐỒ <span>↗</span></button>
           <button data-tracker-section="SETTINGS">CÀI ĐẶT <span>↗</span></button>
         </aside>
-        <aside class="tracker-corner-menu tracker-corner-menu--right" id="tracker-map-alerts" aria-label="Trung tâm thông tin" hidden inert>
-          <strong>MESSAGE CENTER</strong>
+        <aside class="tracker-corner-menu tracker-corner-menu--right" id="tracker-map-alerts" aria-label="Lối tắt Spider" hidden inert>
+          <strong>LỐI TẮT</strong>
+          <button data-tracker-app="todo">THÊM / XEM VIỆC <span>↗</span></button>
+          <button data-tracker-app="habits">ĐÁNH DẤU THÓI QUEN <span>↗</span></button>
+          <button data-tracker-app="timetable">LỊCH TRONG NGÀY <span>↗</span></button>
+          <button data-tracker-app="finance">TÀI CHÍNH <span>↗</span></button>
+          <button data-tracker-section="SETTINGS">ÂM THANH & HIỂN THỊ <span>↗</span></button>
           <button data-tracker-event="ACTIVITY_LOG">NHẬT KÝ ĐỊA ĐIỂM <span>↗</span></button>
           <button data-tracker-event="UNLOCATED_QUEUE">NOTION CHƯA ĐỊNH VỊ <span>↗</span></button>
         </aside>
@@ -454,6 +459,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=gambit-native-1"></script>
+  <script type="module" src="./js/main.js?build=field-tools-fullscreen-4"></script>
 </body>
 </html>
