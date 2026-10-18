@@ -50,12 +50,24 @@ approved projection as Spider. It cannot query arbitrary IDs or personal databas
 This supports public PK embeds without exposing the private Field APIs. Spider also
 filters the returned projection again before responding to public visitors.
 
-**Cloudflare release is prepared, not deployed yet:** the CLI session expired and
-the browser remains signed out. Automatic approval rejected the original broad OAuth
-scope request. A Pages-only authentication flow was prepared as the safer alternative.
-Do not report the old website retired or Google reconnect/public live embeds migrated
-until this release has actually been deployed and verified. Existing authenticated
-Cloudflare APIs can already be used by the Spider bridge without moving their keys.
+**Deployed and verified:** Spider commit `eabe017` is live on Vercel. The existing
+Gambit repository already had a working Cloudflare Git integration; its successful
+check on the previous commit established the authorized deployment path. Service
+commit `e5a31a4` was pushed to that repository's existing `main` branch and the
+Cloudflare Pages check completed successfully (deployment
+`6bb3918f-3fdc-44a5-88a6-a2f087dcc489`). No additional Cloudflare OAuth grant was used.
+
+Live checks confirm old root/Todo/Habits/Finance routes redirect to the right Spider
+screen, `/migrate` returns the export utility, private cloud reads still return 401
+without a session, and both Cloudflare `/api/spider-game` and Spider `/api/game-state`
+return 200 with the approved Notion game projection. Actual Calendar reconnection
+and private record writes were not exercised against the owner's accounts.
+
+The old GitHub Pages workflow was removed from the service repository; the GitHub
+repository reports no active GitHub Pages website. The existing Cloudflare service,
+its bindings/secrets and stored data remain as Spider's backend. It no longer exposes
+the independent Gambit application UI. The original local Gambit checkout remains
+untouched, including all uncommitted Finance changes.
 
 ## Verification
 
