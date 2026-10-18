@@ -19,6 +19,16 @@
   // Set managed mode before app-guard runs
   document.documentElement.setAttribute('data-gambit-back-mode', 'managed');
 
+  // The host owns app navigation. Suppress only legacy home controls,
+  // including controls mounted later by React; app menus/settings stay intact.
+  var navigationStyle=document.createElement('style');
+  navigationStyle.textContent='html[data-gambit-back-mode="managed"] :is([data-gambit-home],a.hub-back,a.back-home,a[href="../../index.html"]){display:none!important}';
+  (document.head||document.documentElement).appendChild(navigationStyle);
+
+  function announceReady(){window.parent.postMessage({type:'spider:field-ready'},location.origin);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',announceReady,{once:true});
+  else announceReady();
+
   // Add spider-embedded class to root html element
   if (params.get('spiderTheme') !== 'original') document.documentElement.classList.add('spider-embedded');
 

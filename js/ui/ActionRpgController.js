@@ -77,6 +77,7 @@ export class ActionRpgController {
       const frame = document.querySelector('[data-field-app-frame]');
       if (event.origin !== location.origin || event.source !== frame?.contentWindow) return;
       if (event.data?.type === 'spider:gambit-open' && FIELD_APPS[event.data.id] && event.data.id !== 'launcher') this.openEmbeddedFieldApp(event.data.id);
+      if (event.data?.type === 'spider:field-ready') document.querySelector('.spider-field-app-loading')?.setAttribute('hidden','');
       if (event.data?.type === 'spider:gambit-home') this.closeEmbeddedFieldApp();
       if (event.data?.type === 'spider:notion-status') {
         const auto=['todo','habits'].includes(document.querySelector('[data-field-app]')?.dataset.fieldApp);
@@ -831,7 +832,7 @@ export class ActionRpgController {
     this.panelTab = 'SYSTEMS';
     this.renderPanel({ resetScroll:true });
     this.updateRoute();
-    document.querySelector('.spider-app-card')?.focus();
+    document.querySelector('[data-field-app-back]')?.focus();
   }
 
   renderFieldSection() {

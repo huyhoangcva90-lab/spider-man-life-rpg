@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi" data-gambit-app="habits">
 <head>
-<script src="../../spider-embedded.js?v=spider-field-unified-1"></script>
+<script src="../../spider-embedded.js?v=field-navigation-3"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ededeb">
@@ -255,6 +255,11 @@ body{display:block;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI"
 .tab.on span,.tab.on .field-vector-icon{color:var(--ink)}
 @media(min-width:768px){.tab.on span,.tab.on .field-vector-icon{color:#fff}}
 .mc .field-vector-icon{width:20px;height:20px}.h-check .field-vector-icon{width:16px;height:16px;color:transparent}.h-check.done .field-vector-icon{color:#fff}
+/* The Spider toolbar owns back navigation; keep habit actions clear of headings. */
+html[data-gambit-back-mode="managed"] .navbar, html[data-gambit-back-mode="managed"] #pg-today .navbar { padding-top:28px; flex-wrap:wrap; gap:12px; }
+html[data-gambit-back-mode="managed"] .navbar > div:first-child { flex:1 1 200px; min-width:0; }
+html[data-gambit-back-mode="managed"] .navbar > div:last-child { flex-shrink:0; }
+html[data-gambit-back-mode="managed"] .page-title { overflow-wrap:anywhere; }
 </style>
 <link rel="preload" href="../../assets/vendor/tabler/fonts/tabler-icons.woff2?v3.26.0" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../assets/vendor/tabler/tabler-icons.min.css">

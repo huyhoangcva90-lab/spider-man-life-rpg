@@ -13,11 +13,8 @@ body[data-destination-open="true"] .game-primary-nav { display:none !important; 
 html:not([data-pk-embed]) body[data-destination-open="true"] .action-rpg-screen { bottom:0; }
 body[data-game-section] #game-panel-close { display:inline-flex !important; align-items:center; justify-content:center; }
 /* Gambit keeps its own UI and scroll area inside this same outer frame. */
-html:not([data-pk-embed]) body[data-field-immersive="true"] #game-panel-backdrop { position:absolute !important; inset:var(--shell-clearance) 0 0 !important; width:100% !important; height:auto !important; z-index:50 !important; }
+html:not([data-pk-embed]) body[data-field-immersive="true"] #game-panel-backdrop { position:absolute !important; inset:max(var(--shell-clearance),34px) 0 0 !important; width:100% !important; height:auto !important; z-index:50 !important; }
 html:not([data-pk-embed]) body[data-field-immersive="true"] .game-panel { height:100% !important; }
-.spider-field-app-connection { border:0; background:transparent; cursor:pointer; min-height:36px; top:8px; font:500 11px/1.4 'Be Vietnam Pro',sans-serif; }
-.spider-field-app-return { top:4px; left:4px; }
-.spider-field-app-frame { top:52px; height:calc(100% - 52px); }
 @media(max-width:800px) {
   :root { --shell-clearance:20px; }
   html:not([data-pk-embed]) body .tracker-viewport { padding:2px 2px 0 !important; }
