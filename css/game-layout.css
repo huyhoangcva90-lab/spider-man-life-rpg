@@ -189,7 +189,9 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
   display: block;
   width: 71px;
   height: 105px;
-  background: url('../assets/spideytracker/SpiderMan_web.png') no-repeat 0 0 / 5467px 105px !important;
+  background-image: url('../assets/spideytracker/SpiderMan_web.png') !important;
+  background-size: 5467px 105px !important;
+  background-repeat: no-repeat;
   transform: none;
   filter: drop-shadow(3px 4px 0 rgba(0,0,0,.65));
   animation: footer-spidey-web 4.2s steps(77) infinite !important;

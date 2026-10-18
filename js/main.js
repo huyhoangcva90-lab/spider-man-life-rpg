@@ -22,6 +22,7 @@ import { HeroAnimationController } from './game/HeroAnimationController.js?build
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=notion-authority-1';
 import { ActionRpgController } from './ui/ActionRpgController.js?build=notion-authority-1';
 import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
+import { TrackerMapChrome } from './ui/TrackerMapChrome.js';
 
 class App {
   constructor() {
@@ -53,6 +54,7 @@ class App {
     this.actionRpg = new ActionRpgController(this.bus, this.campaign, this.sound, this.mapEngine);
     this.actionRpg.heroAnimation = this.heroAnimation;
     this.chatCenter = new ChatCenter(this.sound);
+    this.mapChrome = new TrackerMapChrome(this.bus, this.mapEngine, this.repo, this.state);
   }
 
   async init() {
@@ -66,6 +68,7 @@ class App {
 
     // 1. Initialize UI components
     this.trackerFrame.init();
+    this.mapChrome.init();
     this.searchPanel.init();
     this.entryEditor.init();
     this.activityLog.init();

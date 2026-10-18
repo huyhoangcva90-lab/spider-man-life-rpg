@@ -77,10 +77,10 @@
           <svg><use href="#icon-menu"></use></svg>
         </button>
 
-        <div class="brand-plaque" aria-label="Spidey Life Tracker">
+        <a class="brand-plaque" href="/" aria-label="Về Home Spider Life" title="Về Home">
           <img class="tracker-logo-image" src="./assets/spideytracker/tracker_logo3.png" alt="Spidey Tracker" />
           <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
-        </div>
+        </a>
 
         <button class="system-signal system-signal--spider-apps" id="btn-field-mode" aria-label="Mở trung tâm Spider Apps" title="SPIDER APPS">
           <span class="top-hanging-spidey" aria-hidden="true"></span>
@@ -136,6 +136,24 @@
           <span id="gps-status-text">GPS CHƯA BẬT</span>
         </div>
         <output class="map-camera-readout map-mode-only" id="map-camera-readout" aria-label="Tâm bản đồ"></output>
+        <aside class="tracker-corner-menu tracker-corner-menu--left map-mode-only" id="tracker-map-menu" aria-label="Điều hướng Spider Life" hidden inert>
+          <button data-tracker-section="ARENA">HOME / BATTLE <span>↗</span></button>
+          <button data-tracker-section="QUESTS">NHIỆM VỤ <span>↗</span></button>
+          <button data-tracker-section="HERO">HERO <span>↗</span></button>
+          <button data-tracker-section="HABITS">LIFE 66 <span>↗</span></button>
+          <button data-tracker-section="FIELD">SPIDER APPS <span>↗</span></button>
+          <button data-tracker-section="SETTINGS">CÀI ĐẶT <span>↗</span></button>
+        </aside>
+        <aside class="tracker-corner-menu tracker-corner-menu--right map-mode-only" id="tracker-map-alerts" aria-label="Trung tâm thông tin" hidden inert>
+          <strong>MESSAGE CENTER</strong>
+          <button data-tracker-event="ACTIVITY_LOG">NHẬT KÝ ĐỊA ĐIỂM <span>↗</span></button>
+          <button data-tracker-event="UNLOCATED_QUEUE">NOTION CHƯA ĐỊNH VỊ <span>↗</span></button>
+        </aside>
+        <div class="tracker-radar map-mode-only" aria-label="Radar địa điểm quanh tâm bản đồ">
+          <canvas id="tracker-radar-canvas" width="200" height="200" role="img" aria-label="Radar hiển thị địa điểm thực đang được lọc"></canvas>
+          <button id="btn-radar-world" aria-label="Radar: xem toàn thế giới" title="Xem toàn thế giới"><img src="./assets/spideytracker/map-ui/globe_btn.png" alt="" /></button>
+          <button id="btn-radar-center" aria-label="Radar: về vị trí của tôi" title="Vị trí của tôi"><img src="./assets/spideytracker/map-ui/map_center.png" alt="" /></button>
+        </div>
 
         <aside class="rail-left map-mode-only" aria-label="Bộ lọc bản đồ">
           <button class="filter-btn active" data-filter="ALL" style="--filter-color:#f2c06b" aria-label="Hiện tất cả"><svg><use href="#icon-target"></use></svg><span class="filter-label">ALL</span><span class="filter-count">0</span></button>
