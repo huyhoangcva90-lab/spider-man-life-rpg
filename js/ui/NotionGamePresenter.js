@@ -159,6 +159,8 @@ export class NotionGamePresenter {
     const bar = document.querySelector('.combat-action-bar');
     if (!bar) return;
     bar.dataset.count = String(skills.length);
+    bar.dataset.layout = skills.length > 5 ? 'scroll' : 'row';
+    bar.style.setProperty('--selected-skill-count', String(Math.max(1, skills.length)));
     bar.innerHTML = skills.map((skill) => `<button type="button" data-notion-skill="${e(skill.id)}" class="${/ultimate/i.test(skill['Skill Type']) ? 'combat-action--ultimate' : ''}" title="${e(skill.Description)}"><svg aria-hidden="true"><use href="#${/passive/i.test(skill['Skill Type']) ? 'icon-gear' : /web/i.test(skill.Skill) ? 'icon-web-map' : /ultimate/i.test(skill['Skill Type']) ? 'icon-bolt' : 'icon-arena'}"></use></svg><strong>${e(skill.Skill)}</strong><small>${/passive/i.test(skill['Skill Type']) ? 'NỘI TẠI' : Number.isFinite(skill['Energy Cost']) ? `${skill['Energy Cost']} ENERGY` : e(skill['Skill Type'])}</small></button>`).join('') || '<p>Chưa chọn Skill Slot trong Hero Notion.</p>';
     bar.querySelectorAll('[data-notion-skill]').forEach((button) => button.addEventListener('click', () => { this.detailSkillId = button.dataset.notionSkill; this.showSkillDetail(); }));
   }

@@ -1,5 +1,5 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
-import { NotionGamePresenter } from './NotionGamePresenter.js?build=notion-authority-1';
+import { NotionGamePresenter } from './NotionGamePresenter.js?build=mission-hub-1';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -101,7 +101,10 @@ export class ActionRpgController {
     document.getElementById('btn-next-patrol')?.addEventListener('click', () => this.engine.startNextPatrol());
     document.getElementById('arena-open-habits')?.addEventListener('click', () => this.selectSection('HABITS'));
     document.getElementById('action-rpg-screen')?.addEventListener('pointerdown', () => this.playIntroOnce(), { once: true });
-    document.querySelector('.hud-avatar')?.addEventListener('click', () => this.selectSection('HERO'));
+    document.querySelectorAll('.hud-avatar,.hud-stat--level').forEach(control => {
+      if (document.documentElement.hasAttribute('data-pk-embed')) { control.disabled = true; return; }
+      control.addEventListener('click', () => this.selectSection('HERO'));
+    });
     document.getElementById('btn-footer-settings')?.addEventListener('click', () => {
       this.panelSection = 'SETTINGS';
       this.panelTab = 'GAME';
@@ -662,7 +665,7 @@ export class ActionRpgController {
 
   defaultTab(section) {
     const map = {
-      QUESTS: this.notionPresenter ? 'MISSIONS' : 'TODAY',
+      QUESTS: 'TODAY',
       HERO: 'PROFILE',
       HABITS: 'TODAY',
       FIELD: 'SYSTEMS',
@@ -694,8 +697,8 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: this.notionPresenter ? ['MISSIONS', 'TODAY', 'OVERDUE', 'GOALS'] : ['TODAY', 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
-      HERO: this.notionPresenter ? ['PROFILE', 'MAPS', 'SUITS', 'SKILLS', 'BADGES'] : ['PROFILE', 'MAPS', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
+      QUESTS: this.notionPresenter ? ['TODAY', 'MISSIONS', 'OVERDUE', 'GOALS'] : ['TODAY', 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
+      HERO: this.notionPresenter ? ['PROFILE', 'SUITS', 'SKILLS', 'MAPS', 'BADGES'] : ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'MAPS', 'BADGES'],
       HABITS: ['TODAY', 'PROGRESS', '66 DAYS'],
       FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
@@ -706,14 +709,29 @@ export class ActionRpgController {
     const tabNames = tabMap[this.panelSection] || ['TODO'];
     if (!tabNames.includes(this.panelTab)) this.panelTab = tabNames[0];
 
-    tabs.innerHTML = tabNames.map((tab) => `<button role="tab" aria-selected="${tab === this.panelTab}" class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab === 'OVERDUE' ? 'QUÁ HẠN' : tab}</button>`).join('');
+    tabs.innerHTML = tabNames.map((tab) => `<button type="button" role="tab" id="game-tab-${tab.replaceAll(' ', '-')}" aria-controls="game-panel-content" tabindex="${tab === this.panelTab ? '0' : '-1'}" aria-selected="${tab === this.panelTab}" class="${tab === this.panelTab ? 'active' : ''}" data-game-panel-tab="${tab}">${tab === 'OVERDUE' ? 'QUÁ HẠN' : tab}</button>`).join('');
+    content.setAttribute('role', 'tabpanel');
+    content.setAttribute('aria-labelledby', `game-tab-${this.panelTab.replaceAll(' ', '-')}`);
     tabs.querySelectorAll('button').forEach((button) => button.addEventListener('click', () => { 
       this.sound.playSelect(); 
       this.fieldAppId = null;
       this.panelTab = button.dataset.gamePanelTab; 
       this.renderPanel({ resetScroll: true });
       this.updateRoute();
+      if (!document.body.dataset.fieldImmersive) {
+        const active = tabs.querySelector('[aria-selected="true"]');
+        active?.focus({ preventScroll: true });
+        active?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      }
     }));
+    tabs.onkeydown = event => {
+      const controls = [...tabs.querySelectorAll('[role="tab"]')];
+      const index = controls.indexOf(document.activeElement);
+      if (index < 0 || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? controls.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + controls.length) % controls.length;
+      controls[next].click();
+    };
 
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
     const requestedApp = this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId : tabApps[this.panelTab]) : null;
@@ -1019,7 +1037,7 @@ export class ActionRpgController {
             <div class="pixel-card-header">
               <span class="pixel-tag ${classify(quest) === 'MAIN' ? 'pixel-tag--red' : classify(quest) === 'DAILY' ? 'pixel-tag--green' : 'pixel-tag--blue'}">${this.escapeHtml(classify(quest))}</span>
               <span class="pixel-tag">${this.escapeHtml(quest.type || quest.frequency || 'QUEST')}</span>
-              <span class="pixel-tag pixel-tag--gold">+${Number(quest.gameXp ?? quest.xp) || 1} XP</span>
+              ${Number.isFinite(Number(quest.gameXp ?? quest.xp)) ? `<span class="pixel-tag pixel-tag--gold">+${Number(quest.gameXp ?? quest.xp)} XP</span>` : ''}
             </div>
             <h3>${this.escapeHtml(quest.title || quest.name)}</h3>
             <p>${this.escapeHtml(quest.description || '')}</p>
@@ -1032,9 +1050,9 @@ export class ActionRpgController {
               </button>
             </div>
           </article>
-        `).join('') || `<div class="quest-empty-state"><strong>${this.panelTab === 'TODAY' ? 'HÔM NAY CHƯA CÓ QUEST' : 'KHÔNG CÓ QUEST TRONG NHÓM NÀY'}</strong><small>${this.panelTab === 'TODAY' ? 'Xem tab Quá hạn, Main hoặc Side để xử lý các việc khác.' : 'Kiểm tra dữ liệu Notion hoặc chọn tab khác.'}</small></div>`}
+        `).join('') || `<div class="quest-empty-state"><strong>${this.panelTab === 'TODAY' ? 'HÔM NAY CHƯA CÓ QUEST' : 'KHÔNG CÓ QUEST TRONG NHÓM NÀY'}</strong><small>${this.panelTab === 'TODAY' ? 'Xem Quá hạn và các nhóm nhiệm vụ khác ở thanh tab phía trên.' : 'Kiểm tra dữ liệu Notion hoặc chọn tab khác.'}</small></div>`}
       </div>
-      <form class="quest-create-form" id="quest-create-form"><label for="quest-new-title">NHIỆM VỤ MỚI</label><input id="quest-new-title" name="title" required maxlength="150" placeholder="Việc bạn sẽ làm…" autocomplete="off"><input name="date" type="date" aria-label="Ngày thực hiện"><button class="pixel-action-btn pixel-action-btn--blue" type="submit" ${!this.canUseData('masterCalendar') ? 'disabled' : ''}>+ TẠO QUEST</button></form>
+      <details class="quest-create-drawer"><summary>+ THÊM NHIỆM VỤ</summary><form class="quest-create-form" id="quest-create-form"><label for="quest-new-title">NHIỆM VỤ MỚI</label><input id="quest-new-title" name="title" required maxlength="150" placeholder="Việc bạn sẽ làm…" autocomplete="off"><input name="date" type="date" aria-label="Ngày thực hiện"><button class="pixel-action-btn pixel-action-btn--blue" type="submit" ${!this.canUseData('masterCalendar') ? 'disabled' : ''}>+ TẠO QUEST</button></form></details>
     `;
   }
 

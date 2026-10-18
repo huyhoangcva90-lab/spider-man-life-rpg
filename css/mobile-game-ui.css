@@ -1,0 +1,122 @@
+/* Refines the Antigravity mobile-game-ui direction without changing the tracker
+   artwork, frame, palette or Notion authority. This file owns spatial layout. */
+:root { --mission-hud-height:76px; --mission-dock-height:68px; }
+.game-hud-strip { position:absolute; z-index:65; inset:6px 8px auto; height:var(--mission-hud-height); min-height:0; margin:0; box-sizing:border-box; }
+html[data-notion-authority] body:not(:has(.notion-ready)) .game-hud-strip { visibility:hidden; }
+body[data-game-section] .action-rpg-screen { display:none; }
+body[data-game-mode="MAP"] .game-hud-strip,
+body[data-field-immersive="true"] .game-hud-strip { display:none !important; }
+.hud-avatar { cursor:pointer; text-align:left; color:inherit; font:inherit; }
+.hud-avatar-label { display:grid; min-width:0; gap:2px; }
+.hud-avatar:focus-visible { outline:2px solid #f2c06b; outline-offset:2px; }
+html[data-notion-authority] .game-hud-strip { grid-template-columns:minmax(125px,1fr) 48px minmax(180px,1.6fr); }
+.game-hud-strip .hud-bars { min-width:0; }
+.game-hud-strip .hud-bars label { grid-template-columns:50px minmax(10px,1fr) auto; font-size:11px; }
+.game-hud-strip .hud-bars label > span { white-space:nowrap; font:600 11px/1.2 'Be Vietnam Pro',sans-serif; }
+.game-hud-strip .hud-bars label > i { min-width:0; }
+body[data-game-mode="ARENA"]:not([data-field-immersive="true"]) .action-rpg-screen {
+  top:calc(var(--mission-hud-height) + 12px); bottom:var(--mission-dock-height);
+  grid-template-rows:auto minmax(0,1fr) auto auto; min-height:0; padding:0 8px 6px;
+}
+body[data-game-section]:not([data-field-immersive="true"]) #game-panel-backdrop {
+  inset:calc(var(--mission-hud-height) + 12px) 0 var(--mission-dock-height);
+  width:100%; padding:0; background:#071426; backdrop-filter:none; z-index:50;
+}
+#game-panel-backdrop[hidden] { display:none !important; }
+body[data-game-section]:not([data-field-immersive="true"]) .game-panel {
+  width:100%; height:100%; min-height:0; max-height:none;
+  display:grid; grid-template-rows:auto auto minmax(0,1fr); border:0; border-radius:0;
+}
+body[data-game-section]:not([data-field-immersive="true"]) .game-panel > header { padding:12px 18px; min-height:54px; }
+body[data-game-section]:not([data-game-section="SETTINGS"]) #game-panel-close { display:none; }
+.game-panel > header h2 { font-size:clamp(12px,1.4vw,16px); overflow-wrap:anywhere; }
+#game-panel-tabs { display:flex; flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; padding:8px 16px; gap:6px; scroll-padding-inline:16px; overscroll-behavior-inline:contain; }
+#game-panel-tabs button { flex:0 0 auto; min-height:44px; white-space:nowrap; }
+.game-panel-content { min-width:0; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+body[data-game-mode="ARENA"] .game-primary-nav,
+body[data-game-section]:not([data-field-immersive="true"]) .game-primary-nav {
+  grid-template-columns:repeat(5,minmax(0,1fr)); height:calc(var(--mission-dock-height) - 6px);
+  min-height:0; width:min(780px,calc(100% - 16px)); bottom:2px; padding:4px 0 0; gap:5px;
+}
+.game-primary-nav button { min-width:0; min-height:48px; }
+.game-primary-nav button:active:not(:disabled), .pixel-action-btn:active:not(:disabled) { translate:0 2px; }
+.game-primary-nav__arena { translate:0 -4px; }
+.game-primary-nav button:focus-visible, #game-panel-tabs button:focus-visible { outline:2px solid #f2c06b; outline-offset:-3px; }
+.game-panel-content :is(p,.pixel-card-desc,.notion-record-card p) { font-size: max(12px,1em); }
+.notion-view-banner { padding:12px 16px; margin-bottom:14px; }
+.notion-view-banner p { font-size:12px; }
+.notion-record-card { min-width:0; overflow-wrap:anywhere; }
+.notion-hero-profile { grid-template-columns:minmax(100px,180px) minmax(0,1fr); }
+.notion-mission-card ol { padding-left:20px; }
+.notion-mission-card li { margin-block:12px; }
+.quest-create-drawer { margin-top:18px; border:1px solid #397c9b; background:#0c2134; }
+.quest-create-drawer summary { min-height:44px; padding:12px; color:#9ed9e7; cursor:pointer; font:700 12px/1.6 'Be Vietnam Pro',sans-serif; }
+.quest-create-drawer summary:focus-visible { outline:2px solid #f2c06b; outline-offset:-3px; }
+.quest-create-drawer .quest-create-form { margin:0; }
+.combat-action-bar { overflow-x:auto; overscroll-behavior-inline:contain; }
+html[data-notion-authority] .combat-action-bar { display:flex; gap:6px; padding:6px; }
+html[data-notion-authority] .combat-action-bar button { flex:1 0 108px; min-width:0; min-height:60px; }
+html[data-notion-authority] .combat-action-bar[data-layout="row"] { display:grid; grid-template-columns:repeat(var(--selected-skill-count),minmax(0,1fr)); }
+html[data-notion-authority] .combat-action-bar[data-layout="row"] button { padding-inline:4px; }
+html[data-notion-authority] .combat-action-bar[data-layout="row"][data-count] button { grid-column:auto !important; }
+html[data-notion-authority] .combat-action-bar strong { white-space:normal; overflow-wrap:anywhere; }
+html[data-notion-authority] .ultimate-meter { flex-wrap:wrap; gap:4px 8px; }
+.mission-panel-context { color:#9ed9e7; font:500 12px/1.5 'Be Vietnam Pro',sans-serif; }
+.quest-directive { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:4px 8px; }
+.quest-directive > strong { min-width:0; }
+.quest-directive > em { white-space:nowrap; }
+.quest-directive > .arena-turn-banner { position:static; grid-column:1/-1; display:flex; align-items:center; justify-content:flex-start; gap:8px; transform:none; width:auto; max-width:none; padding:4px 0 0; border:0; border-top:1px solid #ffffff24; background:transparent; box-shadow:none; text-align:left; }
+html[data-notion-authority] .quest-directive > .arena-turn-banner { max-width:none; }
+.quest-directive .arena-turn-banner small { color:#9ed9e7; font-size:9px; white-space:nowrap; }
+.quest-directive .arena-turn-banner strong { flex:0 0 auto; font-size:12px; }
+html[data-notion-authority] .quest-directive .arena-turn-banner span { display:block; min-width:0; color:#d9e0df; font:500 11px/1.4 'Be Vietnam Pro',sans-serif; white-space:normal; }
+@media(max-width:680px) {
+  :root { --mission-hud-height:80px; --mission-dock-height:64px; }
+  /* Retain all four animated corner characters and the original slice frame. */
+  .game-hud-strip { inset:4px 4px auto; gap:4px; }
+  html[data-notion-authority] .game-hud-strip { grid-template-columns:minmax(72px,.8fr) 34px minmax(142px,1.6fr); }
+  .game-hud-strip .hud-avatar { gap:5px; padding:5px; }
+  .game-hud-strip .hud-mask { width:26px; height:32px; flex-basis:26px; }
+  .game-hud-strip .hud-mask svg { width:23px; height:23px; }
+  .game-hud-strip .hud-avatar strong { white-space:normal; font:700 11px/1.3 'Be Vietnam Pro',sans-serif; }
+  .game-hud-strip .hud-avatar small,.game-hud-strip .hud-avatar em { display:none; }
+  .game-hud-strip .hud-stat--level { padding:3px; }
+  .game-hud-strip .hud-stat--level strong { font-size:14px; }
+  .game-hud-strip .hud-stat--level small { font-size:9px; }
+  .game-hud-strip .hud-bars { padding:5px; gap:4px; }
+  .game-hud-strip .hud-bars label { grid-template-columns:38px minmax(10px,1fr) auto; gap:3px; font-size:9px; letter-spacing:0; }
+  .game-hud-strip .hud-bars label > span { font-size:10px; }
+  body[data-game-section]:not([data-field-immersive="true"]) .game-panel > header { padding:10px 12px; min-height:48px; }
+  .game-panel > header small { display:none; }
+  .quest-directive { grid-template-columns:minmax(0,1fr) auto; }
+  .quest-directive > span { display:none; }
+  .quest-directive > strong { grid-column:1; }
+  .quest-directive > em { grid-column:2; }
+  .quest-directive .arena-turn-banner small { display:none; }
+  #game-panel-tabs { padding:6px 10px; }
+  #game-panel-tabs button { padding:8px 10px; font-size:10px; }
+  .game-panel-content { padding:12px 10px 24px; scrollbar-gutter:auto; }
+  .game-primary-nav button { min-height:50px; padding:4px 1px; font-size:10px; }
+  .game-primary-nav button svg { width:20px; height:20px; }
+  .notion-view-banner { flex-direction:column; align-items:stretch; gap:8px; font-size:12px; padding:10px; }
+  .notion-view-banner .notion-source-link { align-self:flex-start; }
+  .notion-hero-profile { grid-template-columns:1fr; gap:10px; padding:14px; }
+  .notion-hero-portrait { min-height:110px; }
+  .notion-hero-portrait img { max-height:160px; }
+  .notion-hero-profile h3 { font-size:22px; }
+  .notion-stat-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin-top:12px; }
+  .notion-stat-grid > span { padding:9px; }
+  .notion-record-grid { grid-template-columns:minmax(0,1fr); gap:10px; }
+  .notion-record-card { padding:14px; }
+  .notion-record-card h3 { font-size:17px; }
+  .notion-skill-detail { padding:14px; max-height:90%; overflow:auto; }
+  html[data-notion-authority] .combat-action-bar button { flex-basis:96px; min-height:58px; }
+  html[data-notion-authority] .combat-action-bar[data-layout="row"] button { min-height:78px; }
+  html[data-notion-authority] .combat-action-bar[data-layout="row"] strong { font-size:9px; overflow-wrap:normal; }
+  html[data-notion-authority] .combat-action-bar[data-layout="row"] small { font-size:8px; }
+  html[data-notion-authority] .ultimate-meter > .notion-source-link { min-height:32px; font-size:10px; }
+}
+/* PK remains a dedicated battle embed; tools retain their separate full screen. */
+html[data-pk-embed] .game-hud-strip { top:4px; height:var(--mission-hud-height); }
+html[data-pk-embed] body .action-rpg-screen { inset:calc(var(--mission-hud-height) + 10px) 0 0; height:auto; grid-template-rows:auto minmax(0,1fr) auto auto; }
+@media(prefers-reduced-motion:reduce) { .game-primary-nav button { transition:none; } }

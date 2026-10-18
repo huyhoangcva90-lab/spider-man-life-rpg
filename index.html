@@ -38,6 +38,7 @@
   <link rel="stylesheet" href="./css/notion-game-view.css?build=notion-authority-1" />
   <link rel="stylesheet" href="./css/tracker-map.css?build=tracker-map-1" />
   <link rel="stylesheet" href="./css/shared-tracker-shell.css?build=shared-shell-1" />
+  <link rel="stylesheet" href="./css/mobile-game-ui.css?build=mission-hub-1" />
   <link rel="stylesheet" href="./css/field-apps.css?build=spider-field-2" />
 </head>
 <body data-game-mode="ARENA">
@@ -96,22 +97,22 @@
         <div class="map-scanlines map-mode-only" aria-hidden="true"></div>
         <div class="hanging-spidey map-mode-only" aria-hidden="true"></div>
 
-        <section class="action-rpg-screen" id="action-rpg-screen" aria-label="Spider-Man Action Arena">
           <div class="game-hud-strip">
-            <div class="hud-avatar"><span class="hud-mask">◉</span><div><small>HERO</small><strong>PETER // CLASSIC</strong><em id="hud-rank">FRIENDLY NEIGHBORHOOD</em></div></div>
-            <div class="hud-stat hud-stat--level"><small>LV</small><strong id="hud-level">1</strong></div>
+            <button class="hud-avatar" type="button" aria-label="Mở hồ sơ Hero"><span class="hud-mask" id="hud-mask">◉</span><span class="hud-avatar-label"><small>HERO</small><strong>PETER // CLASSIC</strong><em id="hud-rank">FRIENDLY NEIGHBORHOOD</em></span></button>
+            <button type="button" class="hud-stat hud-stat--level" id="hud-stat--level" aria-label="Xem cấp độ trong hồ sơ Hero"><small>LV</small><strong id="hud-level">1</strong></button>
             <div class="hud-bars">
               <label>EXP <span id="hud-xp-text">0 / 100</span><i><b id="hud-xp-fill"></b></i></label>
               <label>HP <span id="hud-hp-text">120 / 120</span><i><b id="hud-hp-fill"></b></i></label>
-              <label>ENERGY <span id="hud-web-text">0 / 10</span><i><b id="hud-web-fill"></b></i></label>
+              <label title="Web Energy">WEB <span id="hud-web-text">0 / 10</span><i><b id="hud-web-fill"></b></i></label>
             </div>
             <div class="hud-economy"><span><small>WEB COINS</small><b id="hud-coins">0</b></span><span><small>STREAK</small><b><i id="hud-streak">0</i>D</b></span></div>
           </div>
-          <div class="quest-directive"><span>MAIN QUEST</span><strong id="hud-main-quest">THE SYMBIOTE SIGNAL</strong><em id="hud-quest-progress">WAVE 1 / 5</em></div>
+
+        <section class="action-rpg-screen" id="action-rpg-screen" aria-label="Spider-Man Action Arena">
+          <div class="quest-directive"><span>MAIN QUEST</span><strong id="hud-main-quest">THE SYMBIOTE SIGNAL</strong><em id="hud-quest-progress">WAVE 1 / 5</em><div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span><button type="button" id="arena-open-habits" hidden>MỞ LIFE 66</button></div></div>
           <div class="action-combat-stage" id="action-combat-stage">
             <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
             <div class="combat-location"><strong id="combat-district">MANHATTAN ROOFTOP</strong><span id="combat-weather">NIGHT // LIGHT RAIN</span></div>
-            <div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span><button type="button" id="arena-open-habits" hidden>MỞ LIFE 66</button></div>
             <div class="arena-fighter arena-fighter--hero action-fighter--hero"><div class="arena-hero-sprite" id="arena-hero-sprite" role="img" aria-label="Người Nhện đang chiến đấu"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></div><span>SPIDER-MAN</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
             <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div id="combat-enemy-team" class="arena-enemy-team" aria-label="Đội địch"></div></div>
             <aside class="combat-info-panel" aria-label="Combat information">
@@ -199,7 +200,6 @@
           <button class="game-primary-nav__arena active" data-game-section="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>BATTLE</span></button>
           <button data-game-section="HABITS" aria-label="Mở Life Reset: 66 Day Habit" title="Life Reset: 66 Day Habit"><svg><use href="#icon-bolt"></use></svg><span>LIFE 66</span></button>
           <button data-game-section="FIELD"><svg><use href="#icon-clock"></use></svg><span>FIELD</span></button>
-          <button data-game-section="CITY"><svg><use href="#icon-web-map"></use></svg><span>MAP</span></button>
         </nav>
         <div class="game-panel-backdrop" id="game-panel-backdrop" hidden inert><section class="game-panel" aria-labelledby="game-panel-title"><header><div><small id="game-panel-kicker">SPIDEY LIFE</small><h2 id="game-panel-title">MISSIONS</h2></div><button id="game-panel-close" aria-label="Về màn Battle">← BATTLE</button></header><nav id="game-panel-tabs" role="tablist" aria-label="Các mục của màn hình"></nav><div class="game-panel-content" id="game-panel-content"></div></section></div>
 
@@ -452,6 +452,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=notion-authority-1"></script>
+  <script type="module" src="./js/main.js?build=mission-hub-1"></script>
 </body>
 </html>
