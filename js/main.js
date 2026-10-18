@@ -23,6 +23,7 @@ import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=notion-au
 import { ActionRpgController } from './ui/ActionRpgController.js?build=notion-authority-1';
 import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
 import { TrackerMapChrome } from './ui/TrackerMapChrome.js';
+import { NearbyPlaces } from './ui/NearbyPlaces.js';
 
 class App {
   constructor() {
@@ -55,6 +56,7 @@ class App {
     this.actionRpg.heroAnimation = this.heroAnimation;
     this.chatCenter = new ChatCenter(this.sound);
     this.mapChrome = new TrackerMapChrome(this.bus, this.mapEngine, this.repo, this.state);
+    this.nearbyPlaces = new NearbyPlaces(this.bus, this.mapEngine, this.repo);
   }
 
   async init() {
@@ -69,6 +71,7 @@ class App {
     // 1. Initialize UI components
     this.trackerFrame.init();
     this.mapChrome.init();
+    this.nearbyPlaces.init();
     this.searchPanel.init();
     this.entryEditor.init();
     this.activityLog.init();
@@ -81,7 +84,7 @@ class App {
     this.chatCenter.init();
     this.sound.playBootSound();
 
-    // 2. Initialize Map Engine (Defaults to HCMC fallback: lng 106.7009, lat 10.7769)
+    // 2. Initialize the area map; GPS is requested only by a user gesture.
     await this.mapEngine.init('map', 'TRACKER_LIGHT');
     window.requestAnimationFrame(() => this.mapEngine.resize());
 

@@ -2,7 +2,7 @@
 import { MapProviderConfig } from './MapProviderConfig.js';
 
 export class MapEngine {
-  constructor(eventBus, soundController, fallbackCenter = { lng: 106.7009, lat: 10.7769 }) {
+  constructor(eventBus, soundController, fallbackCenter = { lng: 105.9055552, lat: 20.9648722 }) {
     this.bus = eventBus;
     this.sound = soundController;
     this.map = null;
@@ -26,7 +26,7 @@ export class MapEngine {
       this.map = new window.maplibregl.Map({
         container: containerId,
         style: providerConfig.styleUrl,
-        center: [this.fallbackCenter.lng, this.fallbackCenter.lat], // Default fallback: Ho Chi Minh City
+        center: [this.fallbackCenter.lng, this.fallbackCenter.lat], // Kim Lan area, not a personal GPS fix.
         zoom: 13,
         pitch: 0,
         bearing: 0,
@@ -124,6 +124,12 @@ export class MapEngine {
     const center = this.map.getCenter();
     const readout = document.getElementById('map-camera-readout');
     if (readout) readout.textContent = `${Math.abs(center.lat).toFixed(3)}°${center.lat < 0 ? 'S' : 'N'} / ${Math.abs(center.lng).toFixed(3)}°${center.lng < 0 ? 'W' : 'E'} · Z${this.map.getZoom().toFixed(1)}`;
+    const googleLink = document.getElementById('map-open-google');
+    if (googleLink) {
+      const url = new URL('https://www.google.com/maps/@');
+      url.search = new URLSearchParams({ api: '1', map_action: 'map', center: `${center.lat},${center.lng}`, zoom: String(Math.round(this.map.getZoom())) });
+      googleLink.href = url.href;
+    }
   }
 
   zoomOut() {

@@ -981,7 +981,7 @@ export class ActionRpgController {
             <p>${this.escapeHtml(quest.description || '')}</p>
             <small>${quest.date || quest.dueDate ? `HẠN ${new Date(quest.date || quest.dueDate).toLocaleDateString('vi-VN')}` : 'NOTION QUEST'}</small>
             <div class="pixel-card-footer">
-              ${quest.address && quest.sourceKind === 'task' ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${quest.sourceIndex}">📍 ĐỊA ĐIỂM</button>` : '<span></span>'}
+              ${quest.sourceKind === 'task' ? `<button class="pixel-action-btn pixel-action-btn--blue" data-open-task-map="${quest.sourceIndex}">📍 CHỌN QUÁN / ĐỊA ĐIỂM</button>${quest.address ? `<a class="pixel-action-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=${encodeURIComponent(quest.address)}" target="_blank" rel="noopener noreferrer">CHỈ ĐƯỜNG ↗</a>` : ''}` : '<span></span>'}
               <button class="pixel-action-btn ${quest.done ? 'pixel-action-btn--disabled' : ''}"
                       ${quest.sourceKind === 'active' ? `data-complete-active-quest="${quest.sourceIndex}"` : `data-complete-task="${quest.sourceIndex}"`} ${quest.done || !this.canUseData(quest.sourceKind === 'active' ? 'activeQuests' : 'masterCalendar') ? 'disabled' : ''}>
                 ${quest.done ? '✓ ĐÃ XONG' : 'HOÀN THÀNH'}
@@ -1958,8 +1958,10 @@ export class ActionRpgController {
     // 2. Open map overlay for located tasks
     content.querySelectorAll('[data-open-task-map]').forEach((btn) => {
       btn.addEventListener('click', () => {
+        const task = this.notionTasks[Number(btn.dataset.openTaskMap)];
         this.closePanel();
         this.selectSection('CITY');
+        if (task) this.bus.emit('MAP_PLAN_MISSION', { title:task.title || task.name, address:task.address || '', lat:task.lat, lng:task.lng, sourceUrl:task.sourceUrl || '' });
       });
     });
 

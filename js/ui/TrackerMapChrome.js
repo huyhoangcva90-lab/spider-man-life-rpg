@@ -16,6 +16,8 @@ export class TrackerMapChrome {
     this.ctx = this.canvas.getContext('2d');
     this.head.setAttribute('aria-controls', 'tracker-map-menu');
     this.alertButton.setAttribute('aria-controls', 'tracker-map-alerts');
+    this.alertButton.setAttribute('aria-label', 'Mở trung tâm thông tin');
+    this.alertButton.title = 'MESSAGE CENTER';
     this.bus.on('TOGGLE_TRACKER_MENU', () => this.toggle('left'));
     this.bus.on('TOGGLE_TRACKER_ALERTS', () => this.toggle('right'));
     document.querySelectorAll('[data-tracker-section]').forEach(button => button.addEventListener('click', () => {
@@ -28,6 +30,10 @@ export class TrackerMapChrome {
     }));
     document.getElementById('btn-radar-world')?.addEventListener('click', () => this.engine.showWorld());
     document.getElementById('btn-radar-center')?.addEventListener('click', () => this.bus.emit('CENTER_GPS'));
+    document.getElementById('btn-map-kim-lan')?.addEventListener('click', () => {
+      const center = this.engine.fallbackCenter;
+      this.engine.flyTo(center.lat, center.lng, 15);
+    });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && this.openSide) { const side = this.openSide; this.close(); (side === 'left' ? this.head : this.alertButton).focus(); }
     });
@@ -35,17 +41,13 @@ export class TrackerMapChrome {
       if (this.openSide && !event.target.closest('.tracker-corner-menu,#btn-hub-menu,#btn-field-mode')) this.close();
     });
     new MutationObserver(() => {
-      const inMap = document.body.dataset.gameMode === 'MAP';
-      this.head.setAttribute('aria-expanded', String(inMap && this.openSide === 'left'));
-      this.alertButton.setAttribute('aria-expanded', String(inMap && this.openSide === 'right'));
-      this.alertButton.setAttribute('aria-label', inMap ? 'Mở trung tâm thông tin' : 'Mở trung tâm Spider Apps');
-      if (!inMap) this.close();
+      this.close();
     }).observe(document.body, { attributes: true, attributeFilter: ['data-game-mode'] });
     this.reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const loop = now => {
-      if (!document.hidden && document.body.dataset.gameMode === 'MAP') {
+      if (!document.hidden) {
         this.animateHead(now);
-        if (!this.lastDraw || now - this.lastDraw > 50) { this.drawRadar(now); this.lastDraw = now; }
+        if (document.body.dataset.gameMode === 'MAP' && (!this.lastDraw || now - this.lastDraw > 50)) { this.drawRadar(now); this.lastDraw = now; }
       }
       requestAnimationFrame(loop);
     };

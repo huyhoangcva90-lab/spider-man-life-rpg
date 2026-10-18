@@ -127,8 +127,7 @@ export class TrackerFrame {
 
     document.getElementById('btn-field-mode')?.addEventListener('click', () => {
       this.sound.playSelect();
-      if (document.body.dataset.gameMode === 'MAP') { this.bus.emit('TOGGLE_TRACKER_ALERTS'); return; }
-      this.bus.emit('GAME_MENU_TARGET', { section: 'FIELD', tab: 'SYSTEMS' });
+      this.bus.emit('TOGGLE_TRACKER_ALERTS');
     });
 
     document.getElementById('btn-footer-settings')?.addEventListener('click', () => {
@@ -165,8 +164,7 @@ export class TrackerFrame {
     // Hub Overlay Menu
     document.getElementById('btn-hub-menu')?.addEventListener('click', () => {
       this.sound.playClick();
-      if (document.body.dataset.gameMode === 'MAP') { this.bus.emit('TOGGLE_TRACKER_MENU'); return; }
-      this.bus.emit('OPEN_HUB_PANEL', 'LIFE_OS');
+      this.bus.emit('TOGGLE_TRACKER_MENU');
     });
   }
 

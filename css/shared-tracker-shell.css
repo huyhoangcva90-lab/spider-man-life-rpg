@@ -1,0 +1,66 @@
+/* One shell across Battle, Hero, Quests and Spider Apps. */
+body[data-game-section] .tracker-viewport { padding:5px 15px 0; background:#02060b; }
+body[data-game-section] .tracker-device-frame { position:relative; inset:auto; display:grid; grid-template-columns:36px minmax(0,1fr) 36px; grid-template-rows:76px minmax(0,1fr) 19px 50px 7px; width:min(100%,1420px); height:min(100%,920px); overflow:visible; background:transparent; }
+body[data-game-section] .claw-slice-frame { display:grid; }
+body[data-game-section] .frame-top-bar { display:block; }
+body[data-game-section] .frame-bottom-bar { display:grid; }
+body[data-game-section] .frame-main-content { position:relative; inset:auto; grid-area:2/2; height:100%; width:100%; overflow:hidden; }
+body[data-game-section] .game-panel-backdrop { position:absolute; inset:0 0 72px; z-index:50; width:100%; height:auto; }
+body[data-game-section] .game-panel { width:100%; }
+body[data-game-section] .game-primary-nav { position:absolute; left:50%; right:auto; bottom:5px; transform:translateX(-50%); width:min(780px,calc(100% - 24px)); min-height:58px; padding:0; background:transparent; border:0; z-index:55; }
+.tracker-corner-menu { z-index:80; }
+.pixel-orb--menu { --menu-cell:62px; width:var(--menu-cell); height:calc(var(--menu-cell)*83/81); background-size:calc(var(--menu-cell)*46) 100% !important; background-position:calc(var(--menu-frame,0)*var(--menu-cell)*-1) 0 !important; }
+.system-signal--spider-apps { top:13px; right:23px; width:64px; height:64px; padding:0; border:0; background:url('../assets/spideytracker/hub-ui/alert_btn_white.png') center/contain no-repeat; box-shadow:none; }
+.system-signal--spider-apps::before,.system-signal--spider-apps::after,.system-signal--spider-apps span { display:none !important; }
+.system-signal--spider-apps:hover,.system-signal--spider-apps[aria-expanded="true"] { background-image:url('../assets/spideytracker/map-ui/alert_btn_black.png'); }
+.frame-bottom-bar { height:50px; min-height:0; padding-block:5px !important; }
+.frame-bottom-bar .spidey-head-turn-sprite { left:-29px !important; bottom:-5px !important; width:59.2px; height:95.2px; background-image:url('../assets/spideytracker/SpiderMan_HeadTurn.png') !important; background-size:4499.2px 95.2px !important; animation:map-spidey-look 6.3333s steps(76) infinite !important; }
+.footer-spidey-counterpart { width:46px; height:69.56px; background-image:url('../assets/spideytracker/SpiderMan_web.png'); background-size:3542px 69.56px; animation:map-spidey-dangle 6.4167s steps(77) infinite; }
+.map-link-actions { display:flex; flex-wrap:wrap; gap:4px 10px; align-items:center; }
+.map-link-actions a,.map-link-actions button { min-height:32px; display:inline-flex; align-items:center; padding:0; border:0; color:#96e0f7; background:transparent; font:700 10px 'Silkscreen',monospace; text-decoration:underline; cursor:pointer; }
+@media(max-width:800px) {
+  body[data-game-section] .tracker-viewport { padding:0; }
+  body[data-game-section] .tracker-device-frame { grid-template-columns:27px minmax(0,1fr) 27px; grid-template-rows:62px minmax(0,1fr) 14px 40px 5px; height:100dvh; }
+  body[data-game-section] .game-panel-backdrop { bottom:62px; }
+  body[data-game-section] .game-primary-nav { min-height:52px; width:calc(100% - 8px); }
+  .pixel-orb--menu { --menu-cell:50px; }
+  .system-signal--spider-apps { top:14px; right:12px; width:48px; height:48px; }
+  .frame-bottom-bar { height:40px; padding-block:3px !important; }
+  .frame-bottom-bar .spidey-head-turn-sprite { left:-22px !important; bottom:0 !important; width:37.31px; height:60px; background-size:2835.29px 60px !important; animation-name:map-spidey-look-mobile !important; }
+  body[data-game-mode="MAP"] .map-status-card { left:60px; max-width:calc(100% - 70px); }
+  .map-link-actions { gap:0 8px; }
+  .map-link-actions a,.map-link-actions button { font-size:8px; }
+  body[data-game-mode="MAP"] .rail-left { top:160px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .frame-bottom-bar .spidey-head-turn-sprite,.footer-spidey-counterpart { animation:none !important; }
+}
+/* The focused PK embed gets the same border without extra navigation. */
+html[data-pk-embed] .tracker-device-frame { display:grid; grid-template-columns:24px minmax(0,1fr) 24px; grid-template-rows:24px minmax(0,1fr) 13px 0 5px; }
+html[data-pk-embed] .claw-slice-frame { display:grid !important; grid-template-columns:24px minmax(0,1fr) 24px; grid-template-rows:24px minmax(0,1fr) 13px 0 5px; }
+html[data-pk-embed] .claw-slice-frame i { background-size:100% 100%; }
+html[data-pk-embed] .frame-main-content { position:relative; grid-area:2/2; inset:auto; min-height:0; }
+.map-find-places { min-height:34px; padding:6px 8px; border:1px solid #96e0f7; background:#163845; color:#e7e9df; font:700 10px 'Silkscreen',monospace; cursor:pointer; }
+.nearby-places { position:absolute; z-index:45; top:160px; bottom:80px; left:70px; width:min(400px,calc(100% - 150px)); padding:14px; overflow:auto; background:#0c1c25fa; color:#e7e9df; border:2px solid #96e0f7; box-shadow:4px 5px #0005; font:500 12px/1.5 'Be Vietnam Pro',sans-serif; }
+.nearby-places[hidden] { display:none; }
+.nearby-places header { display:flex; align-items:start; justify-content:space-between; gap:8px; }
+.nearby-places header strong { font:700 13px/1.5 'Silkscreen',monospace; color:#96e0f7; overflow-wrap:anywhere; }
+.nearby-places button,.nearby-places a { min-height:36px; display:inline-flex; align-items:center; padding:6px 8px; border:1px solid #568697; background:#173745; color:#e7e9df; text-decoration:none; font:700 10px/1.5 'Be Vietnam Pro',sans-serif; cursor:pointer; }
+.nearby-places header button { min-width:36px; justify-content:center; }
+.nearby-places form { display:grid; grid-template-columns:1fr 85px; gap:8px; }
+.nearby-places label { display:grid; gap:4px; }
+.nearby-places select,.nearby-places input { min-width:0; width:100%; min-height:36px; padding:6px; background:#0b1821; color:#e7e9df; border:1px solid #568697; box-sizing:border-box; font:500 12px 'Be Vietnam Pro',sans-serif; }
+.nearby-places form button { grid-column:1/-1; justify-content:center; }
+.nearby-places input { margin:10px 0; }
+.nearby-places article { margin:10px 0; padding:12px 0; border-top:1px solid #568697; }
+.nearby-places h3 { margin:0; font-size:14px; }
+.nearby-places small { display:block; color:#b5c9d0; }
+.nearby-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.nearby-places .nearby-primary { background:#96e0f7; color:#071426; }
+.nearby-places footer { display:grid; gap:8px; margin-top:16px; }
+.nearby-places button:disabled { opacity:.6; cursor:default; }
+.quest-board-card .pixel-card-footer { flex-wrap:wrap; gap:6px; }
+@media(max-width:800px) {
+  body[data-game-mode="MAP"] .rail-left { top:196px; }
+  .nearby-places { top:190px; bottom:80px; left:6px; width:calc(100% - 12px); padding:10px; box-sizing:border-box; }
+}

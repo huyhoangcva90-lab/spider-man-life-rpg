@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="./css/pk-embed.css?build=pk-embed-1" />
   <link rel="stylesheet" href="./css/notion-game-view.css?build=notion-authority-1" />
   <link rel="stylesheet" href="./css/tracker-map.css?build=tracker-map-1" />
+  <link rel="stylesheet" href="./css/shared-tracker-shell.css?build=shared-shell-1" />
 </head>
 <body data-game-mode="ARENA">
   <a class="skip-link" href="#tracker-main">Bỏ qua điều hướng</a>
@@ -134,17 +135,28 @@
           <span class="map-status-kicker">SPIDER NETWORK / ĐỊA ĐIỂM</span>
           <strong><span id="visible-mission-count">0</span> ĐỊA ĐIỂM TRÊN MAP</strong>
           <span id="gps-status-text">GPS CHƯA BẬT</span>
+          <div class="map-link-actions"><button type="button" id="btn-map-kim-lan">KIM LAN · BÁT TRÀNG</button><a id="map-open-google" href="https://www.google.com/maps/search/?api=1&amp;query=Kim+Lan+Bat+Trang+Ha+Noi" target="_blank" rel="noopener noreferrer">GOOGLE MAPS ↗</a></div>
+          <button class="map-find-places" type="button" id="btn-find-places">TÌM QUÁN / ĐỊA ĐIỂM</button>
         </div>
+        <aside class="nearby-places map-mode-only" id="nearby-places" aria-label="Tìm và chọn quán quanh bản đồ" hidden inert>
+          <header><strong data-nearby-heading>CHỌN QUÁN QUANH MAP</strong><button type="button" data-nearby-close aria-label="Đóng danh sách quán">✕</button></header>
+          <p>Quán trong bán kính quanh tâm map. Xem đánh giá thật trên Google Maps trước khi chọn.</p>
+          <form><label>Loại quán<select data-nearby-category><option value="cafe">Cà phê / gặp gỡ</option><option value="food">Quán ăn / nhà hàng</option></select></label><label>Bán kính<select data-nearby-radius><option value="1000">1 km</option><option value="3000" selected>3 km</option><option value="5000">5 km</option></select></label><button type="submit">TÌM QUANH ĐÂY</button></form>
+          <input data-nearby-name aria-label="Lọc tên quán hoặc món ăn" placeholder="Lọc tên quán hoặc món ăn…" />
+          <div data-nearby-results><p>Chọn loại quán và bấm Tìm quanh đây.</p></div>
+          <footer><a data-nearby-google href="https://www.google.com/maps/search/?api=1&amp;query=quán+cà+phê+Kim+Lan+Bát+Tràng" target="_blank" rel="noopener noreferrer">TÌM THÊM TRÊN GOOGLE MAPS ↗</a><small>Data © OpenStreetMap contributors · Lựa chọn lưu trên thiết bị, không tự sửa nhiệm vụ Notion.</small></footer>
+        </aside>
         <output class="map-camera-readout map-mode-only" id="map-camera-readout" aria-label="Tâm bản đồ"></output>
-        <aside class="tracker-corner-menu tracker-corner-menu--left map-mode-only" id="tracker-map-menu" aria-label="Điều hướng Spider Life" hidden inert>
+        <aside class="tracker-corner-menu tracker-corner-menu--left" id="tracker-map-menu" aria-label="Điều hướng Spider Life" hidden inert>
           <button data-tracker-section="ARENA">HOME / BATTLE <span>↗</span></button>
           <button data-tracker-section="QUESTS">NHIỆM VỤ <span>↗</span></button>
           <button data-tracker-section="HERO">HERO <span>↗</span></button>
           <button data-tracker-section="HABITS">LIFE 66 <span>↗</span></button>
           <button data-tracker-section="FIELD">SPIDER APPS <span>↗</span></button>
+          <button data-tracker-section="CITY">BẢN ĐỒ <span>↗</span></button>
           <button data-tracker-section="SETTINGS">CÀI ĐẶT <span>↗</span></button>
         </aside>
-        <aside class="tracker-corner-menu tracker-corner-menu--right map-mode-only" id="tracker-map-alerts" aria-label="Trung tâm thông tin" hidden inert>
+        <aside class="tracker-corner-menu tracker-corner-menu--right" id="tracker-map-alerts" aria-label="Trung tâm thông tin" hidden inert>
           <strong>MESSAGE CENTER</strong>
           <button data-tracker-event="ACTIVITY_LOG">NHẬT KÝ ĐỊA ĐIỂM <span>↗</span></button>
           <button data-tracker-event="UNLOCATED_QUEUE">NOTION CHƯA ĐỊNH VỊ <span>↗</span></button>
