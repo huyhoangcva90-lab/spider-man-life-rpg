@@ -1,4 +1,4 @@
-import { HERO_PAGE_ID, GAME_LOG_DATABASE_ID, publicGameRecord, relationIds, skillIds, cleanId } from '../js/integrations/notion/NotionGameAuthority.js';
+import { HERO_PAGE_ID, GAME_LOG_DATABASE_ID, publicGameRecord, relationIds, skillIds, cleanId } from '../js/integrations/notion/NotionGameAuthority.mjs';
 
 // Server-side owner-approved display. No arbitrary IDs/paths, private tasks or writes.
 export async function readNotionGameState(token, { fetcher = fetch } = {}) {

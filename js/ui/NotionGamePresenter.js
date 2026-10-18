@@ -1,4 +1,4 @@
-import { selectedGameView, linkedRecords, sameId, logFingerprint } from '../integrations/notion/NotionGameAuthority.js';
+import { selectedGameView, linkedRecords, sameId, logFingerprint } from '../integrations/notion/NotionGameAuthority.mjs';
 import { notionSkillAnimation } from '../game/NotionSkillAnimation.js';
 
 const HERO_URL = 'https://www.notion.so/3d2d787636c68160915ecd84c823577f';

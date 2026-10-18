@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { publicGameRecord, selectedGameView, skillIds, logFingerprint } from '../js/integrations/notion/NotionGameAuthority.js';
+import { publicGameRecord, selectedGameView, skillIds, logFingerprint } from '../js/integrations/notion/NotionGameAuthority.mjs';
 import { notionSkillAnimation } from '../js/game/NotionSkillAnimation.js';
 import { PhaseOneGameEngine } from '../js/game/PhaseOneGameEngine.js';
 import { readNotionGameState } from '../server/notion-game-reader.mjs';
