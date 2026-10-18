@@ -15,7 +15,11 @@ export class ChatCenter {
       }
     } catch { /* A storage failure must not block opening Telegram. */ }
     for (const id of ['btn-chat-list', 'btn-chat-compose']) {
-      document.getElementById(id)?.addEventListener('click', () => this.open());
+      const control = document.getElementById(id);
+      control?.addEventListener('click', () => {
+        if (control.tagName === 'A') this.sound?.playClick?.();
+        else this.open();
+      });
     }
   }
 
