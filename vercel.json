@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/game-state", "destination": "/api/game-state.mjs" },
     { "source": "/pk", "destination": "/index.html" },
     { "source": "/pk/", "destination": "/index.html" }
   ]

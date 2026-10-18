@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
   const rawUrl = req.url.split('?')[0];
   const staticPath = /^\/pk\/?$/.test(rawUrl) ? '/index.html' : rawUrl;
 
-  if (rawUrl === '/api/game-state') {
+  if (rawUrl === '/api/game-state' || rawUrl === '/api/game-state.mjs') {
     import('../api/game-state.mjs').then(({ default: handler }) => {
       const adapter = { setHeader: (key, value) => res.setHeader(key, value), status(code) { res.statusCode = code; return this; }, json(value) { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(value)); } };
       return handler(req, adapter);
