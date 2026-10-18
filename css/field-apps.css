@@ -1,9 +1,6 @@
 /* An open tool occupies the screen; Spider navigation returns with the back button. */
 body[data-field-immersive="true"] { overflow:hidden; }
-body[data-field-immersive="true"] .claw-slice-frame { display:none !important; }
-body[data-field-immersive="true"] .tracker-device-frame { position:fixed !important; inset:0 !important; display:block !important; width:100vw !important; height:100dvh !important; margin:0 !important; }
-body[data-field-immersive="true"] .frame-main-content { position:fixed !important; inset:0 !important; width:100% !important; height:100dvh !important; contain:none !important; overflow:hidden !important; }
-body[data-field-immersive="true"] :is(.frame-top-bar,.frame-bottom-bar,.game-primary-nav,#action-rpg-screen) { display:none !important; }
+body[data-field-immersive="true"] :is(.game-primary-nav,#action-rpg-screen) { display:none !important; }
 body[data-field-immersive="true"] #game-panel-backdrop { position:fixed !important; inset:0 !important; width:100% !important; height:100dvh !important; padding:0 !important; background:#071426; z-index:20000 !important; }
 body[data-field-immersive="true"] .game-panel { display:block !important; width:100% !important; height:100% !important; padding:0 !important; margin:0 !important; border:0 !important; box-shadow:none !important; border-radius:0 !important; background:#071426 !important; }
 body[data-field-immersive="true"] .game-panel > header,

@@ -20,7 +20,7 @@ import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-res
 import { MapGuideModal } from './ui/MapGuideModal.js';
 import { HeroAnimationController } from './game/HeroAnimationController.js?build=cosmic-team-1';
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=notion-authority-1';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=mission-hub-1';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=gambit-native-1';
 import { ChatCenter } from './ui/ChatCenter.js?build=karen-clean-1';
 import { TrackerMapChrome } from './ui/TrackerMapChrome.js';
 import { NearbyPlaces } from './ui/NearbyPlaces.js';

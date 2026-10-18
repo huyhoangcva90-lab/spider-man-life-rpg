@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="vi" data-gambit-app="todo">
+<head>
+<script src="../../spider-embedded.js?v=spider-field-unified-1"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="theme-color" content="#000000"/>
+<title>Việc cần làm</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+:root{
+  --bg:#000000;
+  --surface:rgba(var(--tint-rgb),.055);
+  --surface-2:rgba(var(--tint-rgb),.09);
+  --stroke:rgba(var(--tint-rgb),.11);
+  --stroke-soft:rgba(var(--tint-rgb),.06);
+  --ink-0:#FFFFFF;
+  --ink-1:rgba(var(--tint-rgb),.58);
+  --ink-2:rgba(var(--tint-rgb),.32);
+  --fill:#FFFFFF;
+  --fill-ink:#000000;
+  --tint-rgb:255,255,255;
+  --sheet-bg:#0A0A0A;
+  --sheet-radius:30px;
+  --card-radius:20px;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --out:cubic-bezier(.16,1,.3,1);
+}
+html[data-theme="light"]{
+  --bg:#FFFFFF;
+  --surface:rgba(0,0,0,.04);
+  --surface-2:rgba(0,0,0,.065);
+  --stroke:rgba(0,0,0,.12);
+  --stroke-soft:rgba(0,0,0,.07);
+  --ink-0:#000000;
+  --ink-1:rgba(0,0,0,.6);
+  --ink-2:rgba(0,0,0,.36);
+  --fill:#000000;
+  --fill-ink:#FFFFFF;
+  --tint-rgb:0,0,0;
+  --sheet-bg:#FFFFFF;
+}
+html[data-theme="light"] .glow{background:radial-gradient(ellipse 70% 40% at 50% -8%, rgba(0,0,0,.06), transparent 60%),radial-gradient(ellipse 60% 30% at 90% 100%, rgba(0,0,0,.035), transparent 65%)}
+html[data-theme="light"] .grain{opacity:.02;mix-blend-mode:multiply}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+html,body{height:100%;background:var(--bg)}
+body{
+  font-family:-apple-system,'SF Pro Display','SF Pro Text',ui-sans-serif,system-ui,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--ink-0);
+  overflow-x:hidden;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+/* ambient — pure monochrome glow, no color */
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 40% at 50% -8%, rgba(var(--tint-rgb),.10), transparent 60%),
+             radial-gradient(ellipse 60% 30% at 90% 100%, rgba(var(--tint-rgb),.05), transparent 65%);
+}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.025;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.app{position:relative;z-index:1;max-width:400px;margin:0 auto;padding:env(safe-area-inset-top,0) 0 112px;min-height:100vh}
+
+/* ---- Top ---- */
+.topbar{display:flex;align-items:center;gap:10px;padding:24px 20px 4px}
+.page-title{flex:1;min-width:0;font-size:28px;font-weight:800;letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.date-time{text-align:right;flex-shrink:0;background:transparent;border:none;cursor:pointer;padding:6px 4px;border-radius:10px;transition:transform .2s var(--spring),background .2s}
+.date-time:active{transform:scale(.93);background:var(--surface)}
+.dt-time{font-size:18px;font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.dt-date{font-size:11px;color:var(--ink-2);font-weight:500;margin-top:1px;white-space:nowrap}
+.gear-btn{width:38px;height:38px;border-radius:50%;background:var(--surface);border:1px solid var(--stroke);display:flex;align-items:center;justify-content:center;color:var(--ink-1);backdrop-filter:blur(14px);transition:transform .2s var(--spring),opacity .25s}
+.gear-btn:active{transform:scale(.88)}
+.gear-btn.dim{opacity:.35}
+.gear-btn svg{width:17px;height:17px}
+
+/* ---- Ring summary card ---- */
+.summary{margin:14px 20px 8px;padding:18px;border-radius:var(--card-radius);background:linear-gradient(155deg,var(--surface-2),var(--surface));border:1px solid var(--stroke);backdrop-filter:blur(22px);display:flex;align-items:center;gap:16px;box-shadow:0 14px 34px -18px rgba(0,0,0,.9)}
+.ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg);overflow:visible}
+.ring-track{fill:none;stroke:rgba(var(--tint-rgb),.1);stroke-width:6}
+.ring-fill{fill:none;stroke-width:6;stroke-linecap:round;stroke:var(--fill);transition:stroke-dashoffset .7s var(--out);filter:drop-shadow(0 0 6px rgba(var(--tint-rgb),.45))}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;transition:transform .3s var(--spring)}
+.ring-pct.pop{transform:scale(1.22)}
+.summary-stats{flex:1;display:flex;justify-content:space-between}
+.sum-stat .n{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.sum-stat .l{font-size:11px;color:var(--ink-2);margin-top:2px;font-weight:500}
+
+/* ---- Project segmented tabs ---- */
+.tabs{display:flex;gap:6px;padding:14px 20px 6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:7px 15px;border-radius:999px;font-size:13px;font-weight:600;color:var(--ink-1);background:var(--surface);border:1px solid var(--stroke-soft);transition:all .25s var(--spring);white-space:nowrap}
+.tab:active{transform:scale(.93)}
+.tab.active{background:var(--fill);color:var(--fill-ink);border-color:transparent}
+
+/* ---- list ---- */
+.section-label{font-size:12px;font-weight:700;color:var(--ink-2);padding:18px 20px 8px;text-transform:uppercase;letter-spacing:.07em}
+.todo-list{padding:0 14px;display:flex;flex-direction:column;gap:9px}
+
+.todo-card{position:relative;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--card-radius);overflow:hidden;backdrop-filter:blur(16px);transition:opacity .35s,border-color .3s;animation:rise .4s var(--out) backwards}
+.todo-card.done-card{opacity:.4;border-color:var(--stroke-soft)}
+@keyframes rise{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes popOut{to{opacity:0;transform:scale(.85) translateY(4px)}}
+.todo-card.removing{animation:popOut .25s var(--out) forwards}
+
+
+
+.todo-main{display:flex;align-items:flex-start;gap:12px;padding:14px 14px;position:relative}
+
+/* ---- the checkmark button — fully custom SVG, always visible & crisp ---- */
+.check-btn{width:26px;height:26px;border-radius:50%;border:2px solid rgba(var(--tint-rgb),.28);background:transparent;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;padding:0;position:relative;transition:transform .35s var(--spring),background .25s,border-color .25s;cursor:pointer}
+.check-btn:active{transform:scale(.78)}
+.check-btn svg{width:14px;height:14px;overflow:visible}
+.check-btn path{fill:none;stroke:var(--fill-ink);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:16;stroke-dashoffset:16;transition:stroke-dashoffset .3s var(--out) .05s}
+.done-card .check-btn{background:var(--fill);border-color:var(--fill);transform:scale(1.06)}
+.done-card .check-btn path{stroke-dashoffset:0}
+@keyframes checkPulse{0%{box-shadow:0 0 0 0 rgba(var(--tint-rgb),.5)}100%{box-shadow:0 0 0 10px rgba(var(--tint-rgb),0)}}
+.check-btn.just-checked{animation:checkPulse .5s var(--out)}
+
+.todo-body{flex:1;min-width:0;padding-top:1px}
+.todo-text{font-size:15px;font-weight:600;line-height:1.4;letter-spacing:-.01em;word-break:break-word;transition:color .3s}
+.done-card .todo-text{text-decoration:line-through;color:var(--ink-2)}
+.todo-meta{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:wrap}
+
+/* priority — monochrome via filled bars, no color */
+.prio-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 8px 3px 6px;border-radius:999px;background:rgba(var(--tint-rgb),.07);color:var(--ink-1);text-transform:uppercase;letter-spacing:.03em}
+.prio-bars{display:flex;align-items:center;gap:1.5px}
+.prio-bars span{width:2.5px;border-radius:1px;background:rgba(var(--tint-rgb),.22)}
+.prio-bars span:nth-child(1){height:5px} .prio-bars span:nth-child(2){height:8px} .prio-bars span:nth-child(3){height:11px}
+.p1 .prio-bars span{background:var(--fill)}
+.p2 .prio-bars span:nth-child(1),.p2 .prio-bars span:nth-child(2){background:var(--fill)}
+.p3 .prio-bars span:nth-child(1){background:var(--fill)}
+.p1{color:var(--ink-0);background:rgba(var(--tint-rgb),.13)}
+
+.chip{font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;background:rgba(var(--tint-rgb),.06);color:var(--ink-1);display:inline-flex;align-items:center;gap:4px}
+.chip svg{width:10px;height:10px;opacity:.8}
+
+.todo-actions{display:flex;flex-direction:column;gap:2px;flex-shrink:0;position:relative;z-index:3}
+.icon-btn{width:30px;height:30px;border-radius:10px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;color:var(--ink-2);transition:all .2s var(--spring);cursor:pointer}
+.icon-btn:active{background:rgba(var(--tint-rgb),.1);color:var(--ink-0);transform:scale(.88)}
+.icon-btn svg{width:16px;height:16px;pointer-events:none}
+.icon-btn.has-active{color:var(--ink-0);background:rgba(var(--tint-rgb),.08)}
+.edit-btn{flex-shrink:0;margin-top:1px;color:var(--ink-1);background:rgba(var(--tint-rgb),.06);border:1px solid var(--stroke-soft);position:relative;z-index:3}
+.edit-btn svg{width:14.5px;height:14.5px;pointer-events:none}
+.edit-btn:active{background:rgba(var(--tint-rgb),.14);border-color:rgba(var(--tint-rgb),.18)}
+
+.subtask-area{border-top:1px solid var(--stroke-soft);padding:0 14px 0 50px}
+.subtask-item{display:flex;align-items:center;gap:12px;min-height:44px}
+.subtask-item:not(:last-child){border-bottom:1px solid rgba(var(--tint-rgb),.065)}
+.sub-check{appearance:none;-webkit-appearance:none;box-sizing:border-box;width:20px;height:20px;min-width:20px;min-height:20px;max-width:20px;max-height:20px;aspect-ratio:1/1;border-radius:50%;border:1.6px solid rgba(var(--tint-rgb),.3);background:transparent;padding:0;margin:0;font:inherit;line-height:0;display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px;cursor:pointer;transition:background .25s var(--spring),border-color .25s var(--spring),transform .2s var(--spring)}
+.sub-check:active{transform:scale(.8)}
+.sub-check svg{width:10px;height:10px;display:block;pointer-events:none;overflow:visible}
+.sub-check path{fill:none;stroke:var(--fill-ink);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:12;stroke-dashoffset:12;transition:stroke-dashoffset .25s var(--out)}
+.sub-check.on{background:var(--fill);border-color:var(--fill)}
+.sub-check.on path{stroke-dashoffset:0}
+.subtask-text{font-size:14px;color:var(--ink-1);flex:1;font-weight:450;transition:color .3s;line-height:1.3}
+.subtask-text.done-sub{text-decoration:line-through;color:var(--ink-2)}
+.subtask-empty{font-size:12.5px;color:var(--ink-2);font-style:italic;padding:12px 2px}
+.subtask-add{display:flex;gap:6px;margin-top:3px}
+.subtask-add input{flex:1;height:32px;border:1px solid var(--stroke-soft);border-radius:10px;padding:0 11px;font-size:12.5px;background:rgba(var(--tint-rgb),.05);color:var(--ink-0);outline:none}
+.subtask-add input:focus{border-color:rgba(var(--tint-rgb),.3)}
+.subtask-add input::placeholder{color:var(--ink-2)}
+.subtask-add button{height:32px;padding:0 12px;font-size:12px;font-weight:700;border-radius:10px;border:none;background:var(--fill);color:var(--fill-ink)}
+.subtask-add button:active{transform:scale(.94)}
+
+.empty{text-align:center;padding:3.2rem 1rem;color:var(--ink-2)}
+.empty svg{width:42px;height:42px;display:block;margin:0 auto 12px;opacity:.3}
+.empty .t1{font-size:14px;font-weight:600;color:var(--ink-1)}
+.empty .t2{font-size:12px;margin-top:4px}
+
+/* ---- FAB ---- */
+.undo-toast{position:fixed;left:20px;right:20px;bottom:28px;max-width:360px;margin:0 auto;background:var(--sheet-bg);border:1px solid var(--stroke);border-radius:16px;padding:12px 10px 12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:8;box-shadow:0 14px 34px -10px rgba(0,0,0,.55);transform:translateY(120%) scale(.96);opacity:0;transition:transform .35s var(--spring),opacity .3s;pointer-events:none}
+.undo-toast.show{transform:translateY(0) scale(1);opacity:1;pointer-events:auto}
+.undo-toast span{font-size:13px;font-weight:600;color:var(--ink-1);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.undo-toast button{flex-shrink:0;height:32px;padding:0 14px;border-radius:10px;border:none;background:var(--fill);color:var(--fill-ink);font-size:12.5px;font-weight:800}
+.undo-toast button:active{transform:scale(.93)}
+
+.fab{position:fixed;bottom:34px;right:24px;width:60px;height:60px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--fill-ink);box-shadow:0 12px 30px -8px rgba(var(--tint-rgb),.25),0 4px 12px rgba(0,0,0,.5);z-index:5;border:none;transition:transform .25s var(--spring)}
+.fab:active{transform:scale(.86) rotate(10deg)}
+.fab svg{width:25px;height:25px}
+
+/* ---- Sheet modal ---- */
+.sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:10;opacity:0;pointer-events:none;transition:opacity .3s var(--out)}
+.sheet-backdrop.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:400px;margin:0 auto;background:var(--sheet-bg);border-radius:var(--sheet-radius) var(--sheet-radius) 0 0;border:1px solid var(--stroke);border-bottom:none;z-index:11;padding:10px 20px calc(26px + env(safe-area-inset-bottom,0));transform:translateY(105%);transition:transform .45s var(--spring);box-shadow:0 -25px 70px -10px rgba(0,0,0,.9)}
+.sheet.open{transform:translateY(0)}
+.sheet-handle{width:36px;height:5px;border-radius:3px;background:rgba(var(--tint-rgb),.22);margin:6px auto 16px}
+.sheet h3{font-size:19px;font-weight:800;margin-bottom:14px;letter-spacing:-.01em}
+.sheet-input{width:100%;height:52px;border-radius:15px;border:1px solid var(--stroke);background:rgba(var(--tint-rgb),.06);color:var(--ink-0);font-size:15px;font-weight:500;padding:0 15px;outline:none;margin-bottom:16px;transition:border-color .2s}
+.sheet-input:focus{border-color:rgba(var(--tint-rgb),.45)}
+.sheet-input::placeholder{color:var(--ink-2)}
+.sheet-row-label{font-size:11.5px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px}
+.chip-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.chip-opt{padding:9px 15px;border-radius:999px;font-size:13px;font-weight:700;background:rgba(var(--tint-rgb),.06);border:1px solid var(--stroke-soft);color:var(--ink-1);transition:all .2s var(--spring)}
+.chip-opt:active{transform:scale(.93)}
+.chip-opt.sel{color:var(--fill-ink);border-color:transparent;background:var(--fill)}
+.sheet-submit{width:100%;height:52px;border-radius:15px;border:none;font-size:15px;font-weight:800;color:var(--fill-ink);background:var(--fill);display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .2s var(--spring)}
+.sheet-submit:active{transform:scale(.97)}
+.sheet-submit svg{width:16px;height:16px}
+.sheet-delete{width:100%;height:46px;border-radius:15px;border:1px solid var(--stroke);background:transparent;color:var(--ink-1);font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;transition:all .2s var(--spring)}
+.sheet-delete:active{transform:scale(.96);background:rgba(var(--tint-rgb),.07);color:var(--ink-0)}
+.sheet-delete svg{width:15px;height:15px}
+.new-subtask-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.new-subtask-list .ns-item{display:flex;align-items:center;gap:10px;background:rgba(var(--tint-rgb),.05);border:1px solid var(--stroke-soft);border-radius:11px;padding:8px 10px}
+.new-subtask-list .ns-item span{flex:1;font-size:13px;font-weight:500;color:var(--ink-0)}
+.new-subtask-list .ns-item .ns-input{flex:1;font-size:13px;font-weight:500;color:var(--ink-0);background:transparent;border:none;outline:none;padding:0;font-family:inherit;min-width:0}
+.new-subtask-list .ns-item .ns-input.done-sub{color:var(--ink-2);text-decoration:line-through}
+.new-subtask-list .ns-item .ns-input:focus{color:var(--ink-0)}
+.new-subtask-list .ns-item .ns-del{width:22px;height:22px;border-radius:8px;border:none;background:transparent;color:var(--ink-2);display:flex;align-items:center;justify-content:center;flex:0 0 22px}
+.new-subtask-list .ns-item .ns-del svg{width:11px;height:11px}
+.new-subtask-list .ns-item .ns-del:active{background:rgba(var(--tint-rgb),.1);color:var(--ink-0)}
+</style>
+<link rel="stylesheet" href="../../assets/gambit-app-polish.css"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<div class="glow"></div>
+<div class="grain"></div>
+
+<div class="app">
+
+  <div class="topbar">
+    <button class="gear-btn" id="back-btn" data-gambit-home aria-label="Về Gambit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h1 class="page-title" id="page-title">Tất cả</h1>
+    <button class="date-time" id="theme-toggle" type="button" aria-label="Đổi giao diện; giữ để xoá task trong tab hiện tại">
+      <div class="dt-time" id="dt-time">--:--</div>
+      <div class="dt-date" id="dt-date"></div>
+    </button>
+  </div>
+
+  <div class="summary">
+    <div class="ring-wrap">
+      <svg width="72" height="72" viewBox="0 0 72 72">
+        <circle class="ring-track" cx="36" cy="36" r="30"/>
+        <circle class="ring-fill" id="ring-fill" cx="36" cy="36" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <div class="ring-pct" id="ring-pct">0%</div>
+    </div>
+    <div class="summary-stats">
+      <div class="sum-stat"><div class="n" id="st-done">0</div><div class="l">Đã hoàn thành</div></div>
+      <div class="sum-stat"><div class="n" id="st-total">0</div><div class="l">Còn lại</div></div>
+    </div>
+  </div>
+
+  <div class="tabs" id="proj-tabs"></div>
+
+  <div class="section-label" id="sec-label">Tất cả công việc</div>
+  <div class="todo-list" id="todo-list"></div>
+
+</div>
+
+<div class="undo-toast" id="undo-toast">
+  <span id="undo-toast-text">Đã xoá</span>
+  <button onclick="undoDelete()">Hoàn tác</button>
+</div>
+
+<button class="fab" id="fab-add" aria-label="Thêm việc">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+<div class="sheet-backdrop" id="sheet-backdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="new-sheet-title">
+  <div class="sheet-handle"></div>
+  <h3 id="new-sheet-title">Việc mới</h3>
+  <label class="sr-only" for="todo-input">Tên công việc mới</label>
+  <input class="sheet-input" id="todo-input" name="todo" type="text" placeholder="Bạn cần làm gì?" maxlength="120" autocomplete="off"/>
+  <div class="sheet-row-label">Mức ưu tiên</div>
+  <div class="chip-row" id="prio-chips">
+    <button class="chip-opt" data-p="p3">Bình thường</button>
+    <button class="chip-opt" data-p="p2">Quan trọng</button>
+    <button class="chip-opt" data-p="p1">Khẩn cấp</button>
+  </div>
+  <div class="sheet-row-label">Dự án</div>
+  <div class="chip-row" id="proj-chips"></div>
+  <div class="sheet-row-label">Việc con <span style="opacity:.6;text-transform:none;font-weight:500">(không bắt buộc)</span></div>
+  <div id="new-subtask-list" class="new-subtask-list"></div>
+  <div class="subtask-add" style="margin-bottom:18px">
+    <label class="sr-only" for="new-subtask-input">Tên việc con mới</label>
+    <input id="new-subtask-input" name="new-subtask" type="text" placeholder="Thêm việc con…" autocomplete="off"/>
+    <button id="new-subtask-add-btn" type="button">Thêm</button>
+  </div>
+  <button class="sheet-submit" id="sheet-submit-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    Thêm việc
+  </button>
+</div>
+
+<div class="sheet-backdrop" id="edit-backdrop"></div>
+<div class="sheet" id="edit-sheet" role="dialog" aria-modal="true" aria-labelledby="edit-sheet-title">
+  <div class="sheet-handle"></div>
+  <h3 id="edit-sheet-title">Sửa việc</h3>
+  <label class="sr-only" for="edit-input">Tên công việc</label>
+  <input class="sheet-input" id="edit-input" name="edit-todo" type="text" placeholder="Bạn cần làm gì?" maxlength="120" autocomplete="off"/>
+  <div class="sheet-row-label">Mức ưu tiên</div>
+  <div class="chip-row" id="edit-prio-chips">
+    <button class="chip-opt" data-p="p3">Bình thường</button>
+    <button class="chip-opt" data-p="p2">Quan trọng</button>
+    <button class="chip-opt" data-p="p1">Khẩn cấp</button>
+  </div>
+  <div class="sheet-row-label">Dự án</div>
+  <div class="chip-row" id="edit-proj-chips"></div>
+  <div class="sheet-row-label">Việc con</div>
+  <div id="edit-subtask-list" class="new-subtask-list"></div>
+  <div class="subtask-add" style="margin-bottom:18px">
+    <label class="sr-only" for="edit-subtask-input">Tên việc con</label>
+    <input id="edit-subtask-input" name="edit-subtask" type="text" placeholder="Thêm việc con…" autocomplete="off"/>
+    <button id="edit-subtask-add-btn" type="button">Thêm</button>
+  </div>
+  <button class="sheet-submit" id="edit-save-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    Lưu thay đổi
+  </button>
+  <button class="sheet-delete" id="edit-delete-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+    Xoá việc này
+  </button>
+</div>
+
+<div class="clear-backdrop" id="clear-backdrop"></div>
+<div class="clear-dialog" id="clear-dialog" role="alertdialog" aria-modal="true" aria-labelledby="clear-title" aria-describedby="clear-desc">
+  <div class="clear-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6"/></svg>
+  </div>
+  <h3 id="clear-title">Xoá tất cả task?</h3>
+  <p id="clear-desc">Thao tác này không thể hoàn tác.</p>
+  <div class="clear-actions">
+    <button class="clear-cancel" id="clear-cancel" type="button">Huỷ</button>
+    <button class="clear-confirm" id="clear-confirm" type="button">Xoá tất cả</button>
+  </div>
+</div>
+
+<script>
+/* ====================== SOUND ENGINE (synthesized, no files) ====================== */
+const Sound=(()=>{
+  let ctx=null;
+  function ac(){if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}return ctx;}
+  function tone(freq,dur,type,gain,t0=0,glideTo=null){
+    const c=ac();if(!c)return;
+    const o=c.createOscillator(),g=c.createGain();
+    o.type=type||'sine';o.frequency.setValueAtTime(freq,c.currentTime+t0);
+    if(glideTo)o.frequency.exponentialRampToValueAtTime(glideTo,c.currentTime+t0+dur);
+    g.gain.setValueAtTime(0,c.currentTime+t0);
+    g.gain.linearRampToValueAtTime(gain,c.currentTime+t0+.008);
+    g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+t0+dur);
+    o.connect(g);g.connect(c.destination);
+    o.start(c.currentTime+t0);o.stop(c.currentTime+t0+dur+.02);
+  }
+  return{
+    tap(){tone(800,.045,'sine',.05);},
+    check(){tone(720,.07,'sine',.09,0,1180);tone(1180,.09,'sine',.05,.05);},
+    uncheck(){tone(560,.06,'sine',.06,0,360);},
+    add(){tone(500,.05,'sine',.07,0,760);tone(900,.08,'sine',.05,.06);},
+    delete(){tone(420,.09,'sine',.07,0,160);},
+    open(){tone(380,.07,'sine',.05,0,620);},
+    close(){tone(500,.06,'sine',.04,0,300);},
+    tick(){tone(1000,.02,'square',.02);},
+    finish(){tone(700,.1,'sine',.08,0,1000);tone(1000,.12,'sine',.07,.09);tone(1300,.14,'sine',.05,.18);}
+  };
+})();
+function unlockAudio(){const c=Sound;document.removeEventListener('pointerdown',unlockAudio);}
+document.addEventListener('pointerdown',unlockAudio,{once:true});
+function playTap(){Sound.tap();vibrate(5);}
+
+function vibrate(ms){if(navigator.vibrate)navigator.vibrate(ms);}
+
+/* ====================== APP STATE ====================== */
+const days=['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'];
+const months=['tháng 1','tháng 2','tháng 3','tháng 4','tháng 5','tháng 6','tháng 7','tháng 8','tháng 9','tháng 10','tháng 11','tháng 12'];
+const now=new Date();
+function pad2(n){return n<10?'0'+n:''+n;}
+function updateClock(){
+  const d=new Date();
+  document.getElementById('dt-time').textContent=pad2(d.getHours())+':'+pad2(d.getMinutes());
+  document.getElementById('dt-date').textContent=days[d.getDay()]+', '+d.getDate()+' '+months[d.getMonth()];
+}
+updateClock();
+setInterval(updateClock,1000*15);
+
+/* ---- Theme (đen/trắng) — lưu trong localStorage ---- */
+const THEME_KEY='todo_mono_theme';
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme',theme);
+  try{localStorage.setItem(THEME_KEY,theme);}catch(e){}
+}
+function initTheme(){
+  let saved=null;
+  try{saved=localStorage.getItem(THEME_KEY);}catch(e){}
+  applyTheme(saved==='light'?'light':'dark');
+}
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme')==='light'?'light':'dark';
+  const next=cur==='light'?'dark':'light';
+  Sound.tap();vibrate(8);
+  applyTheme(next);
+}
+initTheme();
+const themeToggleEl=document.getElementById('theme-toggle');
+let themeHoldTimer=null;
+let themeHoldTriggered=false;
+function cancelThemeHold(){clearTimeout(themeHoldTimer);themeHoldTimer=null;}
+themeToggleEl.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  themeHoldTriggered=false;
+  cancelThemeHold();
+  themeHoldTimer=setTimeout(()=>{
+    themeHoldTriggered=true;
+    vibrate(24);
+    openClearConfirm();
+  },620);
+});
+['pointerup','pointercancel','pointerleave'].forEach(type=>themeToggleEl.addEventListener(type,cancelThemeHold));
+themeToggleEl.addEventListener('contextmenu',e=>e.preventDefault());
+themeToggleEl.addEventListener('click',e=>{
+  if(themeHoldTriggered){
+    themeHoldTriggered=false;
+    e.preventDefault();
+    return;
+  }
+  toggleTheme();
+});
+
+/* ---- Lưu cache dữ liệu việc cần làm ---- */
+const DATA_KEY='todo_mono_data';
+function saveCache(){
+  try{localStorage.setItem(DATA_KEY,JSON.stringify({todos,nid}));}catch(e){}
+}
+function loadCache(){
+  try{
+    const raw=localStorage.getItem(DATA_KEY);
+    if(!raw)return false;
+    const data=JSON.parse(raw);
+    if(data&&Array.isArray(data.todos)){
+      todos=data.todos;
+      nid=data.nid||(Math.max(0,...todos.flatMap(t=>[t.id,...t.subtasks.map(s=>s.id)]))+1);
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+const PROJECTS=['Tất cả','Cá nhân','Công việc','Học tập'];
+const NOTION_TASK_DB='272d787636c681d9ae35d494508b25d0';
+let activeProj='Tất cả';
+let todos=[];
+let nid=1;
+let selPrio='p3', selProj='Cá nhân';
+let editingId=null;
+let firstRender=true;
+let lastDeleted=null;
+let undoTimer=null;
+let notionSyncText='Notion: chưa đồng bộ';
+
+const clearBackdrop=document.getElementById('clear-backdrop');
+const clearDialog=document.getElementById('clear-dialog');
+function openClearConfirm(){
+  const count=getVisible().length;
+  const scope=activeProj==='Tất cả'?'toàn bộ danh sách':'dự án '+activeProj;
+  document.getElementById('clear-title').textContent=count?'Xoá '+count+' task?':'Không có task để xoá';
+  document.getElementById('clear-desc').textContent=count
+    ?'Tất cả task trong '+scope+' sẽ bị xoá vĩnh viễn.'
+    :'Tab hiện tại đang trống.';
+  document.getElementById('clear-confirm').hidden=count===0;
+  document.body.classList.add('sheet-open');
+  clearBackdrop.classList.add('open');
+  clearDialog.classList.add('open');
+}
+function closeClearConfirm(){
+  document.body.classList.remove('sheet-open');
+  clearBackdrop.classList.remove('open');
+  clearDialog.classList.remove('open');
+}
+function clearCurrentTasks(){
+  if(activeProj==='Tất cả')todos=[];
+  else todos=todos.filter(t=>t.proj!==activeProj);
+  Sound.delete();vibrate(18);
+  closeClearConfirm();
+  render();
+}
+clearBackdrop.onclick=closeClearConfirm;
+document.getElementById('clear-cancel').onclick=closeClearConfirm;
+document.getElementById('clear-confirm').onclick=clearCurrentTasks;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&clearDialog.classList.contains('open'))closeClearConfirm();});
+
+const RING_LEN=2*Math.PI*30;
+const ICON_FOLDER='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>';
+const ICON_SUB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>';
+const ICON_PLUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+const ICON_X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+const ICON_EDIT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+const ICON_MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>';
+const ICON_TRASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>';
+const CHECK_SVG='<svg viewBox="0 0 14 14"><path d="M2.5 7.2L5.4 10 11.5 3.5"/></svg>';
+
+function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escAttr(s){return escH(s).replace(/"/g,'&quot;');}
+function fmtTime(sec){const m=Math.floor(sec/60),s=sec%60;return(m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+
+function notionFetch(method,path,body){
+  return fetch('/api/notion?path='+encodeURIComponent(path),{
+    method,
+    headers:body?{'Content-Type':'application/json'}:{},
+    body:body?JSON.stringify(body):undefined
+  }).then(r=>r.json().then(data=>({ok:r.ok,data:data.data || data})));
+}
+function nTitle(page){
+  const props=page.properties||{};
+  const key=Object.keys(props).find(k=>props[k].type==='title');
+  return key?(props[key].title||[]).map(t=>t.plain_text||'').join('').trim():'';
+}
+function nPlain(prop){
+  if(!prop)return'';
+  if(prop.type==='status')return prop.status?prop.status.name:'';
+  if(prop.type==='select')return prop.select?prop.select.name:'';
+  if(prop.type==='multi_select')return(prop.multi_select||[]).map(x=>x.name).join(', ');
+  if(prop.type==='checkbox')return prop.checkbox?'true':'';
+  if(prop.type==='date')return prop.date?prop.date.start:'';
+  if(prop.type==='rich_text')return(prop.rich_text||[]).map(t=>t.plain_text||'').join('');
+  if(prop.type==='formula'){const f=prop.formula||{};return String(f.string||f.number||f.boolean||'');}
+  return'';
+}
+function nFind(props,names){
+  const keys=Object.keys(props||{});
+  for(const name of names){
+    const k=keys.find(x=>new RegExp(name,'i').test(x));
+    if(k)return props[k];
+  }
+  return null;
+}
+function nDone(props){
+  const done=nFind(props,['^Done$']);
+  const status=nPlain(nFind(props,['^Status$'])).toLowerCase();
+  if(done?.type==='checkbox')return !!done.checkbox;
+  return /done|review|complete|hoàn thành/.test(status);
+}
+function nProject(props){
+  const type=nPlain(nFind(props,['^Type$'])).toLowerCase();
+  const tags=nPlain(nFind(props,['Tags'])).toLowerCase();
+  if(/work|website|content|meeting|project/.test(type+' '+tags))return'Công việc';
+  if(/study|read|education|english|course/.test(type+' '+tags))return'Học tập';
+  return'Cá nhân';
+}
+function nPrio(props){
+  const p=nPlain(nFind(props,['Priority'])).toLowerCase();
+  const important=!!(nFind(props,['Important'])||{}).checkbox;
+  const urgent=!!(nFind(props,['Urgent'])||{}).checkbox;
+  if(urgent||/high|the one thing|quick|1st/.test(p))return'p1';
+  if(important||/medium|morning|afternoon|evening/.test(p))return'p2';
+  return'p3';
+}
+function nDate(props){return nPlain(nFind(props,['^Date$','Deadline','Start']));}
+function nParentId(props){
+  const p=nFind(props,['Parent task','Parent']);
+  return p&&p.relation&&p.relation[0]?p.relation[0].id:'';
+}
+function mapNotionTask(page){
+  const props=page.properties||{},date=nDate(props);
+  return{
+    id:nid++,
+    notionId:page.id,
+    text:nTitle(page)||'Untitled task',
+    prio:nPrio(props),
+    proj:nProject(props),
+    done:nDone(props),
+    subtasks:[],
+    notionParentId:nParentId(props),
+    notionDate:date?date.slice(0,16):''
+  };
+}
+function mergeNotionTasks(rows){
+  const localByNotion={};
+  todos.forEach(t=>{if(t.notionId)localByNotion[t.notionId]=t;});
+  const mapped=rows.map(mapNotionTask).map(t=>Object.assign(localByNotion[t.notionId]||{},t));
+  const byId={};
+  mapped.forEach(t=>byId[t.notionId]=t);
+  mapped.forEach(t=>t.subtasks=[]);
+  const roots=[];
+  mapped.forEach(t=>{
+    if(t.notionParentId&&byId[t.notionParentId]){
+      byId[t.notionParentId].subtasks.push({id:nid++,notionId:t.notionId,text:t.text,done:t.done});
+    }else roots.push(t);
+  });
+  const localOnly=todos.filter(t=>!t.notionId);
+  todos=roots.concat(localOnly);
+  nid=Math.max(nid,Math.max(0,...todos.flatMap(t=>[t.id,...(t.subtasks||[]).map(s=>s.id)]))+1);
+}
+function syncMasterCalendar(){
+  notionSyncText='Notion: đang đồng bộ...';render();
+  return notionFetch('POST','/v1/databases/'+NOTION_TASK_DB+'/query',{page_size:100})
+    .then(res=>{
+      if(!res.ok)throw new Error('notion query failed');
+      mergeNotionTasks(res.data.results||[]);
+      notionSyncText='Notion: '+(res.data.results||[]).length+' task';
+      saveCache();render();
+    })
+    .catch(()=>{notionSyncText='Notion: lỗi, dùng cache';render();});
+}
+function pushTaskDone(t){
+  if(!t||!t.notionId)return;
+  notionFetch('PATCH','/v1/pages/'+t.notionId,{properties:{Done:{checkbox:!!t.done}}}).catch(()=>{});
+}
+
+function getVisible(){
+  let list=todos;
+  if(activeProj!=='Tất cả')list=list.filter(t=>t.proj===activeProj);
+  return list;
+}
+
+function toggle(id,btnEl){
+  const t=todos.find(x=>x.id===id);if(!t)return;
+  t.done=!t.done;
+  t.subtasks.forEach(s=>s.done=t.done);
+  pushTaskDone(t);
+  t.subtasks.forEach(pushTaskDone);
+  if(t.done){Sound.check();vibrate(12);}else{Sound.uncheck();vibrate(6);}
+  if(btnEl){btnEl.classList.add('just-checked');setTimeout(()=>btnEl.classList.remove('just-checked'),500);}
+  if(editingId===id)renderEditSubtaskList();
+  setTimeout(render,t.done?160:0);
+}
+function remove(id){
+  const idx=todos.findIndex(x=>x.id===id);if(idx<0)return;
+  const item=todos[idx];
+  Sound.delete();vibrate(15);
+  closeEditSheet();
+  const card=document.querySelector(`.todo-card[data-id="${id}"]`);
+  const finish=()=>{
+    todos=todos.filter(x=>x.id!==id);
+    lastDeleted={item,idx};
+    render();
+    showUndoToast(item.text);
+  };
+  if(card){card.classList.add('removing');setTimeout(finish,230);}else{finish();}
+}
+function showUndoToast(text){
+  clearTimeout(undoTimer);
+  const toast=document.getElementById('undo-toast');
+  document.getElementById('undo-toast-text').textContent='Đã xoá "'+(text.length>26?text.slice(0,26)+'…':text)+'"';
+  toast.classList.add('show');
+  undoTimer=setTimeout(()=>{toast.classList.remove('show');lastDeleted=null;},4000);
+}
+function undoDelete(){
+  if(!lastDeleted)return;
+  Sound.add();vibrate(8);
+  todos.splice(Math.min(lastDeleted.idx,todos.length),0,lastDeleted.item);
+  lastDeleted=null;
+  clearTimeout(undoTimer);
+  document.getElementById('undo-toast').classList.remove('show');
+  render();
+}
+function toggleSubtask(tid,sid){
+  const t=todos.find(x=>x.id===tid);
+  if(t){const s=t.subtasks.find(x=>x.id===sid);if(s){s.done=!s.done;pushTaskDone(s);s.done?Sound.check():Sound.uncheck();vibrate(8);}}
+  render();
+  if(editingId===tid)renderEditSubtaskList();
+}
+function editAddSubtask(){
+  const t=todos.find(x=>x.id===editingId);if(!t)return;
+  const inp=document.getElementById('edit-subtask-input');
+  const v=inp.value.trim();if(!v)return;
+  t.subtasks.push({id:nid++,text:v,done:false});
+  inp.value='';Sound.add();vibrate(6);
+  renderEditSubtaskList();render();
+  inp.focus();
+}
+function editRemoveSubtask(sid){
+  const t=todos.find(x=>x.id===editingId);if(!t)return;
+  t.subtasks=t.subtasks.filter(x=>x.id!==sid);
+  Sound.delete();vibrate(8);
+  renderEditSubtaskList();render();
+}
+function editToggleSubtask(sid){
+  const t=todos.find(x=>x.id===editingId);if(!t)return;
+  const s=t.subtasks.find(x=>x.id===sid);
+  if(s){s.done=!s.done;s.done?Sound.check():Sound.uncheck();vibrate(8);}
+  renderEditSubtaskList();render();
+}
+function editRenameSubtask(sid,value){
+  const t=todos.find(x=>x.id===editingId);if(!t)return;
+  const s=t.subtasks.find(x=>x.id===sid);if(!s)return;
+  const v=value.trim();
+  if(v&&v!==s.text){s.text=v;Sound.tap();vibrate(4);}
+  render();
+}
+function renderEditSubtaskList(){
+  const t=todos.find(x=>x.id===editingId);
+  const el=document.getElementById('edit-subtask-list');
+  if(!el)return;
+  if(!t||t.subtasks.length===0){el.innerHTML='<div class="subtask-empty">Chưa có việc con nào</div>';return;}
+  el.innerHTML=t.subtasks.map(s=>`<div class="ns-item"><button class="sub-check${s.done?' on':''}" onclick="editToggleSubtask(${s.id})" aria-label="Tích việc con">${CHECK_SVG}</button><input class="ns-input${s.done?' done-sub':''}" type="text" value="${escAttr(s.text)}" onblur="editRenameSubtask(${s.id},this.value)" onkeydown="if(event.key==='Enter')this.blur()"/><button class="ns-del" onclick="editRemoveSubtask(${s.id})" aria-label="Xoá việc con">${ICON_X}</button></div>`).join('');
+}
+
+function setProj(p){Sound.tap();vibrate(5);activeProj=p;render();}
+
+function render(){
+  saveCache();
+  const vis=getVisible();
+  let total=0,doneC=0;
+  vis.forEach(t=>{
+    total+=1+t.subtasks.length;
+    doneC+=(t.done?1:0)+t.subtasks.filter(s=>s.done).length;
+  });
+  document.getElementById('st-done').textContent=doneC;
+  document.getElementById('st-total').textContent=Math.max(0,total-doneC);
+  const pct=total>0?Math.round(doneC/total*100):0;
+  const pctEl=document.getElementById('ring-pct');
+  if(pctEl.textContent!==pct+'%'){pctEl.classList.add('pop');setTimeout(()=>pctEl.classList.remove('pop'),300);}
+  pctEl.textContent=pct+'%';
+  document.getElementById('ring-fill').setAttribute('stroke-dashoffset', RING_LEN-(RING_LEN*pct/100));
+
+  document.getElementById('page-title').textContent=activeProj;
+  const openCount=vis.filter(t=>!t.done).length;
+  document.getElementById('sec-label').textContent=(activeProj==='Tất cả'?'Tất cả công việc':'Dự án: '+activeProj)+' · '+openCount+' chưa xong · '+notionSyncText;
+  document.getElementById('back-btn').classList.remove('dim');
+  document.getElementById('back-btn').setAttribute('aria-label',activeProj==='Tất cả'?'Về Gambit':'Về tất cả công việc');
+  document.getElementById('back-btn').setAttribute('title',activeProj==='Tất cả'?'Về Gambit':'Về tất cả công việc');
+
+  const tabs=document.getElementById('proj-tabs');
+  tabs.innerHTML=PROJECTS.map(p=>`<button class="tab${p===activeProj?' active':''}" aria-pressed="${p===activeProj}" onclick="setProj('${p}')">${p}</button>`).join('');
+  requestAnimationFrame(()=>tabs.querySelector('.tab.active')?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}));
+
+  const list=document.getElementById('todo-list');
+  if(vis.length===0){
+    list.innerHTML=`<div class="empty">${ICON_MOON}<div class="t1">Chưa có việc gì ở đây</div><div class="t2">Chạm nút + để thêm việc mới</div></div>`;
+    return;
+  }
+
+  const sorted=[...vis].sort((a,b)=>{
+    if(a.done!==b.done)return a.done?1:-1;
+    const po={p1:0,p2:1,p3:2};return po[a.prio]-po[b.prio];
+  });
+
+  const prioLabel={p1:'Khẩn cấp',p2:'Quan trọng',p3:'Bình thường'};
+
+  list.innerHTML=sorted.map((t,i)=>{
+    const subDone=t.subtasks.filter(s=>s.done).length;
+    const subTotal=t.subtasks.length;
+    const subPct=subTotal>0?Math.round(subDone/subTotal*100):0;
+    return`<div class="todo-card${t.done?' done-card':''}" data-id="${t.id}" style="${firstRender?'animation-delay:'+(i*30)+'ms':'animation:none'}">
+  <div class="todo-main">
+    <button class="check-btn" onclick="toggle(${t.id},this)" aria-label="${t.done?'Bỏ xong':'Đánh dấu xong'}">${CHECK_SVG}</button>
+    <div class="todo-body" data-edit="${t.id}">
+      <div class="todo-text">${escH(t.text)}</div>
+      <div class="todo-meta">
+        <span class="prio-tag ${t.prio}"><span class="prio-bars"><span></span><span></span><span></span></span>${prioLabel[t.prio]}</span>
+        <span class="chip">${ICON_FOLDER}${escH(t.proj)}</span>
+        ${subTotal>0?`<span class="chip">${ICON_SUB}${subDone}/${subTotal}</span>`:''}
+      </div>
+    </div>
+    <div class="todo-actions">
+      <button class="icon-btn edit-btn" onclick="openEdit(${t.id})" aria-label="Sửa">${ICON_EDIT}</button>
+    </div>
+  </div>
+  ${subTotal>0?`<div class="subtask-area">
+    ${t.subtasks.map(s=>`<div class="subtask-item"><button class="sub-check${s.done?' on':''}" onclick="toggleSubtask(${t.id},${s.id})" aria-label="Tích việc con">${CHECK_SVG}</button><span class="subtask-text${s.done?' done-sub':''}">${escH(s.text)}</span></div>`).join('')}
+  </div>`:''}
+</div>`;
+  }).join('');
+  firstRender=false;
+}
+
+/* ---- Bottom sheet add-todo ---- */
+const sheet=document.getElementById('sheet');
+const backdrop=document.getElementById('sheet-backdrop');
+let newSubtasks=[];
+function renderNewSubtaskList(){
+  const el=document.getElementById('new-subtask-list');
+  el.innerHTML=newSubtasks.map((s,idx)=>`<div class="ns-item"><span>${escH(s)}</span><button class="ns-del" onclick="removeNewSubtask(${idx})" aria-label="Xoá việc con">${ICON_X}</button></div>`).join('');
+}
+function removeNewSubtask(idx){Sound.tap();vibrate(5);newSubtasks.splice(idx,1);renderNewSubtaskList();}
+function addNewSubtaskFromInput(){
+  const inp=document.getElementById('new-subtask-input');
+  const v=inp.value.trim();if(!v)return;
+  newSubtasks.push(v);inp.value='';Sound.add();vibrate(6);renderNewSubtaskList();
+  inp.focus();
+}
+document.getElementById('new-subtask-add-btn').onclick=addNewSubtaskFromInput;
+document.getElementById('new-subtask-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addNewSubtaskFromInput();}});
+
+function openSheet(){
+  Sound.open();
+  newSubtasks=[];renderNewSubtaskList();
+  document.body.classList.add('sheet-open');
+  sheet.classList.add('open');backdrop.classList.add('open');
+  setTimeout(()=>document.getElementById('todo-input').focus(),380);
+}
+function closeSheet(){
+  Sound.close();
+  document.body.classList.remove('sheet-open');
+  sheet.classList.remove('open');backdrop.classList.remove('open');
+  document.getElementById('todo-input').value='';
+  document.getElementById('new-subtask-input').value='';
+  newSubtasks=[];renderNewSubtaskList();
+}
+document.getElementById('fab-add').onclick=()=>{vibrate(10);openSheet();};
+document.getElementById('back-btn').onclick=()=>{
+  if(activeProj!=='Tất cả'){Sound.tap();vibrate(6);setProj('Tất cả');}
+  else {window.location.href='../../index.html';}
+};
+backdrop.onclick=closeSheet;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet.classList.contains('open'))closeSheet();});
+
+/* ---- Tap to edit ---- */
+const listEl=document.getElementById('todo-list');
+listEl.addEventListener('click',e=>{
+  if(e.target.closest('.icon-btn,.check-btn,.subtask-area'))return;
+  const body=e.target.closest('[data-edit]');if(!body)return;
+  openEdit(Number(body.dataset.edit));
+});
+
+const projChipsEl=document.getElementById('proj-chips');
+projChipsEl.innerHTML=PROJECTS.filter(p=>p!=='Tất cả').map(p=>`<button class="chip-opt" data-proj="${p}">${p}</button>`).join('');
+
+function refreshChips(){
+  document.querySelectorAll('#prio-chips .chip-opt').forEach(b=>b.classList.toggle('sel',b.dataset.p===selPrio));
+  document.querySelectorAll('#proj-chips .chip-opt').forEach(b=>b.classList.toggle('sel',b.dataset.proj===selProj));
+}
+document.getElementById('prio-chips').addEventListener('click',e=>{
+  const b=e.target.closest('.chip-opt');if(!b)return;Sound.tap();vibrate(5);selPrio=b.dataset.p;refreshChips();
+});
+projChipsEl.addEventListener('click',e=>{
+  const b=e.target.closest('.chip-opt');if(!b)return;Sound.tap();vibrate(5);selProj=b.dataset.proj;refreshChips();
+});
+refreshChips();
+
+function submitTodo(){
+  const inp=document.getElementById('todo-input');
+  const text=inp.value.trim();
+  if(!text){inp.style.animation='none';requestAnimationFrame(()=>{inp.style.animation='shake .35s';});return;}
+  const subs=newSubtasks.map(s=>({id:nid++,text:s,done:false}));
+  todos.unshift({id:nid++,text,prio:selPrio,proj:selProj,done:false,subtasks:subs});
+  Sound.add();vibrate(10);
+  closeSheet();
+  render();
+}
+document.getElementById('sheet-submit-btn').onclick=submitTodo;
+document.getElementById('todo-input').addEventListener('keydown',e=>{if(e.key==='Enter')submitTodo();});
+
+/* ---- Edit sheet ---- */
+const editSheet=document.getElementById('edit-sheet');
+const editBackdrop=document.getElementById('edit-backdrop');
+const editProjChipsEl=document.getElementById('edit-proj-chips');
+editProjChipsEl.innerHTML=PROJECTS.filter(p=>p!=='Tất cả').map(p=>`<button class="chip-opt" data-proj="${p}">${p}</button>`).join('');
+
+function refreshEditChips(prio,proj){
+  document.querySelectorAll('#edit-prio-chips .chip-opt').forEach(b=>b.classList.toggle('sel',b.dataset.p===prio));
+  document.querySelectorAll('#edit-proj-chips .chip-opt').forEach(b=>b.classList.toggle('sel',b.dataset.proj===proj));
+}
+document.getElementById('edit-prio-chips').addEventListener('click',e=>{
+  const b=e.target.closest('.chip-opt');if(!b)return;Sound.tap();vibrate(5);
+  document.querySelectorAll('#edit-prio-chips .chip-opt').forEach(x=>x.classList.toggle('sel',x===b));
+});
+editProjChipsEl.addEventListener('click',e=>{
+  const b=e.target.closest('.chip-opt');if(!b)return;Sound.tap();vibrate(5);
+  document.querySelectorAll('#edit-proj-chips .chip-opt').forEach(x=>x.classList.toggle('sel',x===b));
+});
+
+function openEdit(id){
+  const t=todos.find(x=>x.id===id);if(!t)return;
+  editingId=id;
+  document.getElementById('edit-input').value=t.text;
+  document.getElementById('edit-subtask-input').value='';
+  refreshEditChips(t.prio,t.proj);
+  renderEditSubtaskList();
+  Sound.open();vibrate(6);
+  document.body.classList.add('sheet-open');
+  editSheet.classList.add('open');editBackdrop.classList.add('open');
+  setTimeout(()=>document.getElementById('edit-input').focus(),380);
+}
+function closeEditSheet(){
+  editingId=null;
+  document.body.classList.remove('sheet-open');
+  editSheet.classList.remove('open');editBackdrop.classList.remove('open');
+}
+editBackdrop.onclick=closeEditSheet;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&editSheet.classList.contains('open'))closeEditSheet();});
+document.getElementById('edit-subtask-add-btn').onclick=editAddSubtask;
+document.getElementById('edit-subtask-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();editAddSubtask();}});
+
+document.getElementById('edit-save-btn').onclick=()=>{
+  const t=todos.find(x=>x.id===editingId);if(!t)return;
+  const text=document.getElementById('edit-input').value.trim();
+  if(!text)return;
+  const pBtn=document.querySelector('#edit-prio-chips .chip-opt.sel');
+  const jBtn=document.querySelector('#edit-proj-chips .chip-opt.sel');
+  t.text=text;
+  if(pBtn)t.prio=pBtn.dataset.p;
+  if(jBtn)t.proj=jBtn.dataset.proj;
+  Sound.add();vibrate(8);
+  Sound.close();
+  document.body.classList.remove('sheet-open');
+  editSheet.classList.remove('open');editBackdrop.classList.remove('open');
+  editingId=null;
+  render();
+};
+document.getElementById('edit-delete-btn').onclick=()=>{
+  if(editingId!=null)remove(editingId);
+};
+document.getElementById('edit-input').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('edit-save-btn').click();});
+
+const shakeStyle=document.createElement('style');
+shakeStyle.textContent='@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}';
+document.head.appendChild(shakeStyle);
+
+loadCache();
+todos=todos.filter(t=>t.notionId || !['Báo cáo tuần gửi sếp','Ôn tập JavaScript ES2025','Mua sắm cuối tuần','Họp nhóm lúc 9h sáng'].includes(t.text));
+render();
+setTimeout(syncMasterCalendar,350);
+</script>
+<script src="../../notion-connection.js?v=gambit-native-1"></script>
+<script src="../../app-guard.js"></script>
+<script src="../../assets/gambit-app-polish.js"></script>
+</body>
+</html>

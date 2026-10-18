@@ -1,6 +1,7 @@
 // Vercel Serverless Function Proxy for Notion API.
 // Public deployments must not expose the owner's full Notion integration.
 import { hasOwnerSession } from './notion-session.mjs';
+import {fieldSession,fieldRequest,fieldStatus} from '../server/field-backend.mjs';
 
 export default async function handler(req, res) {
   const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN || '';
@@ -8,7 +9,8 @@ export default async function handler(req, res) {
   const { path } = req.query;
 
   res.setHeader('Cache-Control', 'no-store');
-  if (!accessToken || !hasOwnerSession(req, accessToken)) {
+  const local=Boolean(token&&accessToken&&hasOwnerSession(req,accessToken)),remote=fieldSession(req);
+  if (!local && !remote) {
     return res.status(403).json({ ok: false, error: 'Private Notion proxy is disabled or access is denied' });
   }
 
@@ -18,12 +20,21 @@ export default async function handler(req, res) {
     if (!origin || origin !== req.headers.host) return res.status(403).json({ ok: false, error: 'Cross-origin writes are not allowed' });
   }
 
-  if (!token) {
+  if (!local && !remote) {
     return res.status(503).json({ ok: false, error: 'Notion is not configured on this server' });
   }
 
   if (!path) {
     return res.status(400).json({ ok: false, error: 'Missing path query parameter' });
+  }
+
+  if(!local){
+    if(!path.startsWith('/v1/'))return res.status(400).json({ok:false,error:'Invalid Notion path'});
+    try{
+      if(!(await fieldStatus(req)).connected)return res.status(401).json({ok:false,error:'Kết nối riêng đã hết hạn.'});
+      const response=await fieldRequest('/api/notion?path='+encodeURIComponent(path),{method:req.method,body:['GET','HEAD'].includes(req.method)?undefined:req.body,session:remote});
+      const data=await response.json();return res.status(response.status).json({ok:response.ok,data,...(!response.ok?{error:data.error||data.message||'Notion request failed'}:{})});
+    }catch{return res.status(502).json({ok:false,error:'Notion connection unavailable'});}
   }
 
   try {

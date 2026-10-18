@@ -22,7 +22,7 @@ test('private Notion session gates reads and writes without exposing the server 
     const headers = { host: 'spider.example', origin: 'https://spider.example' };
     const locked = response();
     sessionHandler({ method: 'GET', headers }, locked);
-    assert.deepEqual(locked.body, { ok: true, configured: true, connected: false });
+    assert.deepEqual(locked.body, { ok: true, configured: true, connected: false, backend:'notion' });
 
     const denied = response();
     sessionHandler({ method: 'POST', headers, body: { accessCode: 'wrong-code' } }, denied);
@@ -54,7 +54,7 @@ test('private Notion session gates reads and writes without exposing the server 
 
     const logout = response();
     sessionHandler({ method: 'DELETE', headers }, logout);
-    assert.match(logout.headers['Set-Cookie'], /Max-Age=0/);
+    assert.ok(logout.headers['Set-Cookie'].every(cookie=>/Max-Age=0/.test(cookie)));
   } finally {
     if (oldSecret === undefined) delete process.env.NOTION_PROXY_ACCESS_TOKEN; else process.env.NOTION_PROXY_ACCESS_TOKEN = oldSecret;
     if (oldKey === undefined) delete process.env.NOTION_API_KEY; else process.env.NOTION_API_KEY = oldKey;

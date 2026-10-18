@@ -1,3 +1,4 @@
+import { HeroLoadout } from './HeroLoadout.js?v=gambit-native-1';
 import { selectedGameView, linkedRecords, sameId, logFingerprint } from '../integrations/notion/NotionGameAuthority.mjs';
 import { notionSkillAnimation } from '../game/NotionSkillAnimation.js';
 
@@ -20,9 +21,11 @@ export class NotionGamePresenter {
     this.detailSkillId = null;
     this.inFlight = null;
     this.previewToken = 0;
+    this.loadout = new HeroLoadout(this);
   }
 
   async init() {
+    void this.loadout.init();
     try {
       const response = await fetch('./data/notion-game-state.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('No saved Notion state');
@@ -54,12 +57,13 @@ export class NotionGamePresenter {
     const previous = this.data;
     this.data = data;
     this.mode = mode;
+    if(mode==='live'&&!this.loadout.busy&&Date.parse(data.metadata?.syncedAt)>=this.loadout.ownedProfileAt)this.loadout.ownedProfile=null;
     this.ui.engine.state.progression.hp = data.profile.HP ?? 0;
     this.ui.engine.state.progression.webEnergy = data.profile.Energy ?? 0;
     this.ui.notionArenaMaps = data.maps || [];
     this.ui.selectedArenaMapId = data.profile['Current Map']?.[0] || null;
     this.renderBattle();
-    if (!document.getElementById('game-panel-backdrop')?.hasAttribute('hidden')) this.ui.renderPanel();
+    if (!document.getElementById('game-panel-backdrop')?.hasAttribute('hidden') && !document.getElementById('game-panel-content')?.contains(document.activeElement)) this.ui.renderPanel();
     const log = data.logs?.[0];
     const previousLog = previous?.logs?.[0];
     // Initial loads and repeated polls never replay old attacks.
@@ -217,6 +221,7 @@ export class NotionGamePresenter {
   }
 
   renderHero(tab) {
+    if (['SUITS','SKILLS','MAPS','BADGES'].includes(tab)) return this.loadout.render(tab);
     const v = this.view(), p = v.profile;
     const header = `<div class="notion-view-banner"><div><strong>${e(this.sourceNote())}</strong><p>Đổi lựa chọn trong Hero trên Notion; trang tự đọc lại khi kết nối.</p></div>${link(HERO_URL, 'CHỌN TRONG HERO')}</div>`;
     if (tab === 'SKILLS') return header + `<div class="notion-record-grid">${v.skills.map((skill) => this.skillCard(skill)).join('') || '<p>Chưa có chiêu được chọn trong Skill Slot.</p>'}</div>`;

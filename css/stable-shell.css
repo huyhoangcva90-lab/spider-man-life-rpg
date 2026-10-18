@@ -1,0 +1,27 @@
+/* One geometry, copied from Map. Destinations never resize or replace the shell. */
+:root { --shell-clearance:36px; }
+html:not([data-pk-embed]) body .tracker-viewport { display:grid !important; place-items:center; padding:5px 15px 0 !important; width:100vw; height:100dvh; }
+html:not([data-pk-embed]) body .tracker-device-frame { position:relative !important; inset:auto !important; display:grid !important; grid-template-columns:36px minmax(0,1fr) 36px !important; grid-template-rows:36px minmax(0,1fr) 19px 50px 7px !important; width:min(100%,1420px) !important; height:min(100%,920px) !important; margin:0 !important; overflow:visible !important; }
+html:not([data-pk-embed]) body .claw-slice-frame { display:grid !important; grid-template-columns:36px minmax(0,1fr) 36px !important; grid-template-rows:36px minmax(0,1fr) 19px 50px 7px !important; }
+html:not([data-pk-embed]) body .frame-main-content { position:relative !important; grid-area:2/2 !important; inset:auto !important; width:100% !important; height:100% !important; margin:0 !important; min-height:0; contain:none !important; overflow:hidden !important; }
+html:not([data-pk-embed]) body .frame-top-bar { display:block !important; }
+html:not([data-pk-embed]) body .frame-bottom-bar { display:grid !important; }
+html:not([data-pk-embed]) body .game-hud-strip { top:var(--shell-clearance); }
+html:not([data-pk-embed]) body:not([data-field-immersive="true"]) .action-rpg-screen { top:calc(var(--shell-clearance) + var(--mission-hud-height) + 8px); }
+html:not([data-pk-embed]) body[data-game-section]:not([data-field-immersive="true"]) #game-panel-backdrop { top:calc(var(--shell-clearance) + var(--mission-hud-height) + 8px); bottom:0; }
+body[data-destination-open="true"] .game-primary-nav { display:none !important; }
+html:not([data-pk-embed]) body[data-destination-open="true"] .action-rpg-screen { bottom:0; }
+body[data-game-section] #game-panel-close { display:inline-flex !important; align-items:center; justify-content:center; }
+/* Gambit keeps its own UI and scroll area inside this same outer frame. */
+html:not([data-pk-embed]) body[data-field-immersive="true"] #game-panel-backdrop { position:absolute !important; inset:var(--shell-clearance) 0 0 !important; width:100% !important; height:auto !important; z-index:50 !important; }
+html:not([data-pk-embed]) body[data-field-immersive="true"] .game-panel { height:100% !important; }
+.spider-field-app-connection { border:0; background:transparent; cursor:pointer; min-height:36px; top:8px; font:500 11px/1.4 'Be Vietnam Pro',sans-serif; }
+.spider-field-app-return { top:4px; left:4px; }
+.spider-field-app-frame { top:52px; height:calc(100% - 52px); }
+@media(max-width:800px) {
+  :root { --shell-clearance:20px; }
+  html:not([data-pk-embed]) body .tracker-viewport { padding:2px 2px 0 !important; }
+  html:not([data-pk-embed]) body .tracker-device-frame,
+  html:not([data-pk-embed]) body .claw-slice-frame { grid-template-columns:27px minmax(0,1fr) 27px !important; grid-template-rows:27px minmax(0,1fr) 14px 40px 5px !important; }
+  html:not([data-pk-embed]) body .tracker-device-frame { height:100% !important; }
+}

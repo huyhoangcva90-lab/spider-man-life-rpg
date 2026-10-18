@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
+import {fieldStatus,fieldRequest,fieldCookie} from '../server/field-backend.mjs';
 
 const COOKIE_NAME = 'spidey_notion_session';
 const SESSION_SECONDS = 12 * 60 * 60;
@@ -28,19 +29,27 @@ export function hasOwnerSession(req, secret = process.env.NOTION_PROXY_ACCESS_TO
   return supplied.length === expected.length && timingSafeEqual(supplied, expected);
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   const secret = process.env.NOTION_PROXY_ACCESS_TOKEN || '';
-  if (req.method === 'GET') return res.status(200).json({ ok: true, configured: Boolean(secret && (process.env.NOTION_API_KEY || process.env.NOTION_TOKEN)), connected: hasOwnerSession(req, secret) });
+  const local=Boolean(secret && (process.env.NOTION_API_KEY || process.env.NOTION_TOKEN));
+  if (req.method === 'GET') return res.status(200).json({ ok: true, ...(local?{configured:true,connected:hasOwnerSession(req,secret),backend:'notion'}:{...await fieldStatus(req),backend:'field'}) });
   if (!sameOrigin(req)) return res.status(403).json({ ok: false, error: 'Request must come from this site' });
   if (req.method === 'DELETE') {
-    res.setHeader('Set-Cookie', `${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=0`);
+    res.setHeader('Set-Cookie', [`${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=0`,fieldCookie('',0)]);
     return res.status(200).json({ ok: true });
   }
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
-  if (!secret || !(process.env.NOTION_API_KEY || process.env.NOTION_TOKEN)) return res.status(503).json({ ok: false, error: 'Notion owner access is not configured on this deployment' });
   const supplied = req.body?.accessCode;
   if (typeof supplied !== 'string' || supplied.length > 512) return res.status(400).json({ ok: false, error: 'Invalid access code' });
+  if(!local){
+    try{
+      const state=await fieldStatus(req);if(!state.configured)return res.status(503).json({ok:false,error:'Kết nối Field chưa sẵn sàng.'});
+      const response=await fieldRequest('/api/auth/login',{method:'POST',body:{password:supplied}});
+      const data=await response.json();if(!response.ok||!data.ok||!/^[A-Za-z0-9_.-]{20,4096}$/.test(data.token||''))return res.status(response.ok?502:response.status).json({ok:false,error:'Chưa mở được phiên riêng. Kiểm tra mật khẩu đang dùng.'});
+      res.setHeader('Set-Cookie',fieldCookie(data.token));return res.status(200).json({ok:true});
+    }catch{return res.status(502).json({ok:false,error:'Chưa kết nối được Field.'});}
+  }
   const actual = Buffer.from(supplied);
   const expected = Buffer.from(secret);
   if (actual.length !== expected.length || !timingSafeEqual(actual, expected)) return res.status(401).json({ ok: false, error: 'Access code is incorrect' });

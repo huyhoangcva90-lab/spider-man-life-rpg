@@ -1,5 +1,8 @@
 # Arena Mission Hub — layout only
 
+> Historical first pass. The owner's subsequent correction supersedes the persistent
+> five-item dock and custom Field/Habits screens below. See `SPIDER_FIELD_MERGE.md`.
+
 ## Sources reviewed
 
 - Owner attachment: “YÊU CẦU THIẾT KẾ & TÁI CẤU TRÚC GIAO DIỆN UI/UX”, supplied 18 October 2026.

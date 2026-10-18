@@ -1,5 +1,5 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
-import { NotionGamePresenter } from './NotionGamePresenter.js?build=mission-hub-1';
+import { NotionGamePresenter } from './NotionGamePresenter.js?build=gambit-native-1';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -75,8 +75,15 @@ export class ActionRpgController {
     this.fieldAppId = null;
     window.addEventListener('message', event => {
       const frame = document.querySelector('[data-field-app-frame]');
-      if (event.origin !== location.origin || event.source !== frame?.contentWindow || event.data?.type !== 'spider:gambit-home') return;
-      this.closeEmbeddedFieldApp();
+      if (event.origin !== location.origin || event.source !== frame?.contentWindow) return;
+      if (event.data?.type === 'spider:gambit-open' && FIELD_APPS[event.data.id] && event.data.id !== 'launcher') this.openEmbeddedFieldApp(event.data.id);
+      if (event.data?.type === 'spider:gambit-home') this.closeEmbeddedFieldApp();
+      if (event.data?.type === 'spider:notion-status') {
+        const auto=['todo','habits'].includes(document.querySelector('[data-field-app]')?.dataset.fieldApp);
+        const labels = { connected:auto?'Notion · tự cập nhật 30s':'Đã mở kết nối Field', locked:'Mở kết nối riêng', unconfigured:'Chưa mở được kết nối', error:'Kiểm tra kết nối' };
+        const button = document.querySelector('[data-notion-connect]');
+        if (button && labels[event.data.state]) button.textContent = labels[event.data.state];
+      }
     });
     if (!this.notionPresenter && !localStorage.getItem('spidey_owner_clean_start_v2')) {
       // Owner-approved migration: discard every old demo battle and start from Notion's clean state.
@@ -96,7 +103,7 @@ export class ActionRpgController {
     }
     document.querySelectorAll('[data-game-section]').forEach((button) => button.addEventListener('click', () => this.selectSection(button.dataset.gameSection)));
     document.querySelectorAll('[data-combat-action]').forEach((button) => button.addEventListener('click', () => this.runAction(button.dataset.combatAction)));
-    document.getElementById('game-panel-close')?.addEventListener('click', () => this.closePanel());
+    document.getElementById('game-panel-close')?.addEventListener('click', () => this.returnToHome());
     document.getElementById('game-panel-backdrop')?.addEventListener('click', (event) => { if (event.target.id === 'game-panel-backdrop') this.closePanel(); });
     document.getElementById('btn-next-patrol')?.addEventListener('click', () => this.engine.startNextPatrol());
     document.getElementById('arena-open-habits')?.addEventListener('click', () => this.selectSection('HABITS'));
@@ -141,7 +148,7 @@ export class ActionRpgController {
     }
 
     const initialRoute = new URL(location.href);
-    this.selectSection('ARENA', false);
+    this.selectSection('ARENA', false, false);
     this.restoreRoute(initialRoute);
     window.addEventListener('popstate', () => this.restoreRoute());
     this.render();
@@ -404,7 +411,8 @@ export class ActionRpgController {
   }
 
 
-  selectSection(section, playSound = true) {
+  selectSection(section, playSound = true, openDestination = true) {
+    if (openDestination) document.body.dataset.destinationOpen = 'true';
     if (playSound) this.sound.playClick();
     if (section === 'CITY') {
       this.closePanel();
@@ -433,7 +441,8 @@ export class ActionRpgController {
     if (section === 'FIELD' && FIELD_APPS[this.fieldAppId]) url.searchParams.set('spiderApp', this.fieldAppId);
     else url.searchParams.delete('spiderApp');
     if (section === 'ARENA') {
-      url.searchParams.delete('game');
+      if (document.body.dataset.destinationOpen) url.searchParams.set('game', 'ARENA');
+      else url.searchParams.delete('game');
       url.searchParams.delete('tab');
     } else {
       url.searchParams.set('game', section);
@@ -448,7 +457,7 @@ export class ActionRpgController {
     if (FIELD_APPS[appId]) { this.openEmbeddedFieldApp(appId); return; }
     const section = url.searchParams.get('game');
     const tab = url.searchParams.get('tab');
-    if (!['QUESTS', 'HERO', 'HABITS', 'FIELD', 'SETTINGS', 'CITY'].includes(section)) return;
+    if (!['ARENA', 'QUESTS', 'HERO', 'HABITS', 'FIELD', 'SETTINGS', 'CITY'].includes(section)) return;
     this.selectSection(section, false);
     if (section !== 'CITY' && tab) {
       this.panelTab = tab;
@@ -644,6 +653,7 @@ export class ActionRpgController {
 
   openPanel(section) {
     this.panelSection = section;
+    document.body.dataset.destinationOpen = 'true';
     this.panelTab = this.defaultTab(section);
     document.body.dataset.gameSection = section;
     const panel = document.getElementById('game-panel-backdrop');
@@ -686,7 +696,7 @@ export class ActionRpgController {
     const titles = { 
       QUESTS: 'FRIENDLY NEIGHBORHOOD // QUESTS',
       HERO: 'SPIDER SUIT // HERO BUILD',
-      HABITS: 'LIFE RESET // 66 DAY HABIT',
+      HABITS: 'SPIDER LIFE // HABITS',
       FIELD: 'SPIDER OS // FIELD SYSTEMS',
       ARCHIVE: 'SPIDEY ARCHIVE & BESTIARY', 
       CHRONICLE: 'PETER PARKER CHRONICLE', 
@@ -734,7 +744,7 @@ export class ActionRpgController {
     };
 
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
-    const requestedApp = this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId : tabApps[this.panelTab]) : null;
+    const requestedApp = this.panelSection === 'QUESTS' ? 'todo' : this.panelSection === 'HABITS' ? 'habits' : this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
     if (FIELD_APPS[requestedApp]) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
     const keepCurrentApp = requestedApp && content.querySelector('[data-field-app]')?.dataset.fieldApp === requestedApp;
@@ -746,6 +756,8 @@ export class ActionRpgController {
   }
 
   renderSection() {
+    if (this.panelSection === 'QUESTS') return renderFieldApp('todo');
+    if (this.panelSection === 'HABITS') return renderFieldApp('habits');
     switch (this.panelSection) {
       case 'QUESTS': return this.renderQuestsSection();
       case 'HERO': return this.renderHeroSection();
@@ -806,7 +818,15 @@ export class ActionRpgController {
     this.updateRoute();
   }
 
+  returnToHome() {
+    this.fieldAppId = null;
+    delete document.body.dataset.destinationOpen;
+    document.body.dataset.gameMode = 'ARENA';
+    this.closePanel();
+  }
+
   closeEmbeddedFieldApp() {
+    if (this.panelSection !== 'FIELD' || !this.fieldAppId) return this.returnToHome();
     this.fieldAppId = null;
     this.panelTab = 'SYSTEMS';
     this.renderPanel({ resetScroll:true });
@@ -818,7 +838,7 @@ export class ActionRpgController {
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
     const appId = this.panelTab === 'SYSTEMS' ? this.fieldAppId : tabApps[this.panelTab];
     if (FIELD_APPS[appId]) return renderFieldApp(appId);
-    if (this.panelTab === 'SYSTEMS') return this.renderSpiderSystems();
+    if (this.panelTab === 'SYSTEMS') return renderFieldApp('launcher');
     if (this.panelTab === 'PLACES') return `<section class="place-command-card"><div><small>SPIDER FIELD // PLACES</small><strong>SỔ ĐỊA ĐIỂM & ĐIỀU HƯỚNG</strong><p>Lưu địa chỉ theo danh mục, tìm kiếm trên bản đồ và mở chỉ đường bằng Google Maps hoặc Apple Maps. Nút chia sẻ trong hồ sơ địa điểm có thể gửi link sang điện thoại.</p></div><button class="pixel-action-btn pixel-action-btn--blue" data-open-map-system>MỞ PLACE MAP</button></section>`;
     if (this.panelTab === 'ENEMIES' || this.panelTab === 'BESTIARY' || this.panelTab === 'BACKPACKS') {
       const originalTab = this.panelTab;
@@ -850,19 +870,19 @@ export class ActionRpgController {
   renderSpiderSystems() {
     const apps = [
       { id: '01', icon: 'icon-compass', name: 'PLACE MAP', meta: 'ADDRESS BOOK · ROUTES', source: 'LOCAL + NOTION', tone: 'blue', map: true, desc: 'Quản lý địa chỉ theo danh mục, mở chỉ đường và gửi link sang điện thoại.' },
-      { id: '02', icon: 'icon-clock', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './gambit/apps/routine/index.html', desc: 'Sắp xếp các chuỗi hoạt động cho từng thời điểm trong ngày.' },
-      { id: '03', icon: 'icon-clock', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', href: './gambit/apps/timetable/index.html', desc: 'Xem lịch, khung giờ và nhiệm vụ trong ngày.' },
-      { id: '04', icon: 'icon-arena', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', href: './gambit/apps/gym/index.html', desc: 'Quản lý bài tập, giáo án và lịch sử luyện tập.' },
-      { id: '05', icon: 'icon-bolt', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './gambit/apps/dopamine/index.html', desc: 'Chọn hoạt động giúp nạp lại năng lượng và đổi tâm trạng.' },
-      { id: '06', icon: 'icon-database', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GAMBIT APP', tone: 'green', href: './gambit/apps/finance/index.html', desc: 'Theo dõi thu chi, ngân sách và kế hoạch tài chính.' },
-      { id: '07', icon: 'icon-missions', name: 'TODAY MISSIONS', meta: 'QUICK TASKS', source: 'NOTION', tone: 'red', href: './gambit/apps/todo/index.html', desc: 'Sắp xếp và theo dõi những việc cần hoàn thành.' },
+      { id: '02', icon: 'icon-clock', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './field-tools/apps/routine/index.html', desc: 'Sắp xếp các chuỗi hoạt động cho từng thời điểm trong ngày.' },
+      { id: '03', icon: 'icon-clock', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', href: './field-tools/apps/timetable/index.html', desc: 'Xem lịch, khung giờ và nhiệm vụ trong ngày.' },
+      { id: '04', icon: 'icon-arena', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', href: './field-tools/apps/gym/index.html', desc: 'Quản lý bài tập, giáo án và lịch sử luyện tập.' },
+      { id: '05', icon: 'icon-bolt', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './field-tools/apps/dopamine/index.html', desc: 'Chọn hoạt động giúp nạp lại năng lượng và đổi tâm trạng.' },
+      { id: '06', icon: 'icon-database', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GAMBIT APP', tone: 'green', href: './field-tools/apps/finance/index.html', desc: 'Theo dõi thu chi, ngân sách và kế hoạch tài chính.' },
+      { id: '07', icon: 'icon-missions', name: 'TODAY MISSIONS', meta: 'QUICK TASKS', source: 'NOTION', tone: 'red', href: './field-tools/apps/todo/index.html', desc: 'Sắp xếp và theo dõi những việc cần hoàn thành.' },
       { id: '08', icon: 'icon-spider', name: 'LIFE RESET 66', meta: 'HABIT CAMPAIGN', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'TODAY', desc: 'Check-in thói quen để hồi HP, Energy và giữ streak.' },
-      { id: '09', icon: 'icon-book', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: './gambit/apps/english/index.html', desc: 'Học ngữ pháp, ôn flashcard và tra cứu từ vựng.' },
-      { id: '10', icon: 'icon-book', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', href: './gambit/apps/journal/index.html', desc: 'Ghi chép suy nghĩ, trải nghiệm và bài học mỗi ngày.' },
-      { id: '11', icon: 'icon-dice', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: './gambit/apps/oracle/index.html', desc: 'Rút bài và dành thời gian tự chiêm nghiệm.' },
-      { id: '12', icon: 'icon-mask', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: './gambit/apps/style30/index.html', desc: 'Khám phá phối đồ và xây dựng phong cách cá nhân.' }
-      ,{ id: '13', icon: 'icon-missions', name: 'HABIT TRACKER', meta: 'DAILY HABITS', source: 'GAMBIT APP', tone: 'green', href: './gambit/apps/habits/index.html', desc: 'Theo dõi thói quen, tiến độ và chuỗi ngày liên tiếp.' }
-      ,{ id: '14', icon: 'icon-clock', name: 'AMBIENT FOCUS', meta: 'SOUNDSCAPES · POMODORO', source: 'GAMBIT APP', tone: 'blue', href: './gambit/apps/someday/index.html', desc: 'Âm thanh thư giãn và Pomodoro cho buổi tập trung.' }
+      { id: '09', icon: 'icon-book', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: './field-tools/apps/english/index.html', desc: 'Học ngữ pháp, ôn flashcard và tra cứu từ vựng.' },
+      { id: '10', icon: 'icon-book', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', href: './field-tools/apps/journal/index.html', desc: 'Ghi chép suy nghĩ, trải nghiệm và bài học mỗi ngày.' },
+      { id: '11', icon: 'icon-dice', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: './field-tools/apps/oracle/index.html', desc: 'Rút bài và dành thời gian tự chiêm nghiệm.' },
+      { id: '12', icon: 'icon-mask', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: './field-tools/apps/style30/index.html', desc: 'Khám phá phối đồ và xây dựng phong cách cá nhân.' }
+      ,{ id: '13', icon: 'icon-missions', name: 'HABIT TRACKER', meta: 'DAILY HABITS', source: 'GAMBIT APP', tone: 'green', href: './field-tools/apps/habits/index.html', desc: 'Theo dõi thói quen, tiến độ và chuỗi ngày liên tiếp.' }
+      ,{ id: '14', icon: 'icon-clock', name: 'AMBIENT FOCUS', meta: 'SOUNDSCAPES · POMODORO', source: 'GAMBIT APP', tone: 'blue', href: './field-tools/apps/someday/index.html', desc: 'Âm thanh thư giãn và Pomodoro cho buổi tập trung.' }
     ];
     return `
       <section class="spider-system-command">
@@ -1869,6 +1889,7 @@ export class ActionRpgController {
 
   bindEvents(content) {
     bindFieldApps(this, content);
+    this.notionPresenter?.loadout?.bind(content);
     content.querySelector('[data-open-quests]')?.addEventListener('click', () => this.selectSection('QUESTS'));
     content.querySelectorAll('[data-open-hero-maps]').forEach((button) => button.addEventListener('click', () => {
       this.panelTab = 'MAPS';
@@ -2417,4 +2438,4 @@ export class ActionRpgController {
   text(id, value) { const el = document.getElementById(id); if (el) el.textContent = String(value); }
   width(id, value) { const el = document.getElementById(id); if (el) el.style.width = `${Math.max(0,Math.min(100,value))}%`; }
 }
-import { FIELD_APPS, renderFieldApp, bindFieldApps } from './FieldApps.js?v=spider-field-2';
+import { FIELD_APPS, renderFieldApp, bindFieldApps } from './FieldApps.js?v=gambit-native-1';

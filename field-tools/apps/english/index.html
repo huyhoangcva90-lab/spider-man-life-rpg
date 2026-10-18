@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="vi" data-gambit-app="english">
+<head>
+<script src="../../spider-embedded.js?v=spider-field-unified-1"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="description" content="English 32 – Khóa ngữ pháp giao tiếp & tra từ trực tuyến">
+  <title>English 32 – Grammar & Lookup</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
+<link rel="preload" href="../../assets/vendor/tabler/fonts/tabler-icons.woff2?v3.26.0" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../assets/vendor/tabler/tabler-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    :root{
+      --bg:#0f172a;--bg2:#1e293b;--paper:#1e293b;--card:#1e293b;
+      --ink:#f1f5f9;--muted:#94a3b8;--line:#334155;--soft:#334155;
+      --green:#10b981;--green2:rgba(16,185,129,.12);--green-glow:rgba(16,185,129,.25);
+      --orange:#f97316;--orange2:rgba(249,115,22,.12);--orange-glow:rgba(249,115,22,.2);
+      --yellow:#fbbf24;--red:#ef4444;--blue:#3b82f6;--blue2:rgba(59,130,246,.1);
+      --purple:#a78bfa;--purple2:rgba(167,139,250,.12);
+      --cyan:#22d3ee;--cyan2:rgba(34,211,238,.1);
+      --r:12px;--r-lg:16px;
+      --sh:0 4px 20px rgba(0,0,0,.2);--sh-lg:0 12px 48px rgba(0,0,0,.3);
+      --glass:rgba(30,41,59,.85);
+      --gradient-hero:linear-gradient(135deg,#10b981 0%,#3b82f6 50%,#a78bfa 100%)
+    }
+    html,body{min-height:100%;background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+    button,input,select{font:inherit;color:inherit}
+    a{color:inherit;text-decoration:none}
+
+    /* === BACK BUTTON === */
+    .hub-back{position:fixed;top:max(14px,env(safe-area-inset-top));left:max(14px,calc((100vw - 1200px)/2));z-index:60;width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--glass);color:var(--ink);text-decoration:none;backdrop-filter:blur(8px);transition:all .2s;font-size:18px}
+    .hub-back:hover{transform:translateX(-2px);border-color:var(--green);color:var(--green)}
+
+    /* === HEADER === */
+    .app-header{position:sticky;top:0;z-index:50;background:rgba(15,23,42,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+    .header-row{display:flex;align-items:center;gap:12px;padding:11px 20px 11px 68px;max-width:1200px;margin:0 auto}
+    .brand{font-family:'Outfit',sans-serif;font-weight:900;font-size:20px;letter-spacing:-.03em;flex:1;background:linear-gradient(135deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .brand em{font-style:normal}
+    .streak-pill{display:flex;align-items:center;gap:5px;background:var(--orange2);color:var(--orange);padding:5px 13px;border-radius:999px;font:700 13px 'Inter',sans-serif;white-space:nowrap;border:1px solid rgba(249,115,22,.2);transition:transform .2s}
+
+    /* === TABS === */
+    .tabs{display:flex;overflow-x:auto;scrollbar-width:none;max-width:1200px;margin:0 auto;padding:0 20px 0 68px;gap:2px}
+    .tabs::-webkit-scrollbar{display:none}
+    .nav-tab{display:flex;align-items:center;gap:6px;padding:10px 14px;font:600 12px 'Inter',sans-serif;color:var(--muted);background:none;border:none;border-bottom:2.5px solid transparent;cursor:pointer;white-space:nowrap;transition:color .18s,border-color .18s}
+    .nav-tab.active{color:var(--green);border-bottom-color:var(--green)}
+    .nav-tab:hover:not(.active){color:var(--ink)}
+
+    /* === SHELL === */
+    .shell{max-width:1200px;margin:0 auto;padding:22px 20px calc(40px + env(safe-area-inset-bottom))}
+    .content-grid{display:grid;gap:28px}
+    @media(min-width:900px){
+      .content-grid{grid-template-columns:1fr 320px}
+      .stats-sidebar{position:sticky;top:100px;align-self:start}
+    }
+    .page{display:none;animation:fadeUp .28s ease}.page.on{display:block}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    /* === TYPOGRAPHY === */
+    .eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:6px}
+    .title{font-family:'Outfit',sans-serif;font-size:clamp(24px,4vw,34px);font-weight:900;letter-spacing:-.03em;margin-bottom:4px;line-height:1.15}
+    .lead{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+
+    /* === CARDS === */
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);transition:border-color .2s,box-shadow .2s}
+    .card:hover{border-color:rgba(148,163,184,.3)}
+    .hero{padding:24px;margin-bottom:14px;background:var(--gradient-hero);color:#fff;border:0;border-radius:var(--r-lg);position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.15) 0%,transparent 60%);pointer-events:none}
+    .hero .eyebrow{color:rgba(255,255,255,.7)}.hero h2{margin:0 0 8px;font-family:'Outfit',sans-serif;font-size:26px;font-weight:800;line-height:1.18}.hero p{margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.5}
+    .hero-foot{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-top:22px}
+    .hero-score{font-size:38px;font-weight:800;line-height:1}.hero-score small{display:block;margin-top:5px;font-size:10px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase}
+
+    /* === BUTTONS === */
+    .btn{min-height:46px;padding:0 18px;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--ink);font-weight:800;cursor:pointer;transition:all .15s}
+    .btn:hover{border-color:var(--muted)}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 4px 16px var(--orange-glow)}
+    .btn.primary:hover{filter:brightness(1.1)}
+    .btn.green{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 4px 16px var(--green-glow)}
+    .btn.green:hover{filter:brightness(1.1)}
+    .btn.wide{width:100%}
+
+    /* === STATS === */
+    .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .stat{padding:16px;position:relative;overflow:hidden}
+    .stat::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0}
+    .stat:nth-child(1)::before{background:var(--green)}
+    .stat:nth-child(2)::before{background:var(--blue)}
+    .stat:nth-child(3)::before{background:var(--orange)}
+    .stat:nth-child(4)::before{background:var(--purple)}
+    .stat-label{color:var(--muted);font-size:11px;font-weight:700}
+    .stat-value{margin-top:6px;font-size:26px;font-weight:800;font-family:'Outfit',sans-serif}
+    .stat-value small{font-size:12px;color:var(--green);font-weight:600}
+
+    /* === SIDEBAR STATS (desktop) === */
+    .sidebar-card{padding:20px;margin-bottom:14px}
+    .sidebar-card h3{font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+    .sidebar-stat{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+    .sidebar-stat:last-child{border-bottom:0}
+    .sidebar-stat .label{color:var(--muted);font-size:13px}
+    .sidebar-stat .value{font-weight:800;font-size:15px;font-family:'Outfit',sans-serif}
+    .mini-progress{height:6px;background:var(--soft);border-radius:3px;overflow:hidden;margin-top:12px}
+    .mini-progress span{display:block;height:100%;border-radius:3px;transition:width .4s ease}
+    .mini-progress .bar-green{background:var(--green)}
+    .mini-progress .bar-blue{background:var(--blue)}
+
+    /* === SECTION === */
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:24px 2px 10px}
+    .section-head h2{margin:0;font-size:19px;font-family:'Outfit',sans-serif;font-weight:800}
+    .section-head span{color:var(--muted);font-size:12px}
+
+    /* === PLAN === */
+    .plan{overflow:hidden}.plan-row{display:grid;grid-template-columns:39px 1fr auto;align-items:center;gap:11px;padding:13px 14px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .15s}
+    .plan-row:last-child{border-bottom:0}.plan-row:hover{background:rgba(148,163,184,.06)}
+    .num{width:36px;height:36px;border-radius:8px;background:var(--green2);color:var(--green);display:grid;place-items:center;font-size:13px;font-weight:900}
+    .plan-row h3{margin:0 0 3px;font-size:14px}.plan-row p{margin:0;color:var(--muted);font-size:11px}
+    .badge{padding:4px 8px;border-radius:6px;background:var(--blue2);color:var(--blue);font-size:10px;font-weight:900}
+    .badge.done{background:var(--green2);color:var(--green)}
+
+    /* === FILTERS === */
+    .filters{display:flex;gap:8px;margin-bottom:14px;overflow:auto;padding-bottom:2px}
+    .chip{min-height:38px;padding:0 14px;border:1px solid var(--line);border-radius:20px;background:var(--bg2);white-space:nowrap;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);transition:all .15s}
+    .chip:hover{border-color:var(--muted)}
+    .chip.on{background:var(--green);border-color:var(--green);color:#fff}
+
+    /* === UNIT LIST === */
+    .unit-list{display:grid;gap:10px}
+    .unit{padding:16px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;cursor:pointer;transition:border-color .15s}
+    .unit:hover{border-color:var(--green)}
+    .unit h3{margin:0 0 4px;font-size:16px;font-weight:700}.unit p{margin:0;color:var(--muted);font-size:12px;line-height:1.4}
+    .unit-meta{margin-top:8px;color:var(--green);font-size:10px;font-weight:800;text-transform:uppercase}
+    .unit-arrow{font-size:13px;font-weight:900;color:var(--muted)}
+
+    /* === LESSON === */
+    .lesson-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .back{width:42px;height:42px;flex:0 0 auto;border:1px solid var(--line);border-radius:8px;background:var(--bg2);font-weight:900;cursor:pointer;color:var(--ink);transition:all .15s}
+    .back:hover{border-color:var(--green);color:var(--green)}
+    .lesson-name h1{margin:0;font-size:21px;font-family:'Outfit',sans-serif;font-weight:800}.lesson-name p{margin:3px 0 0;color:var(--muted);font-size:12px}
+    .lesson-card{padding:18px;margin-bottom:10px}
+    .lesson-card h2{margin:0 0 12px;font-size:17px;font-family:'Outfit',sans-serif;font-weight:700}
+    .goal{padding:13px;border-left:4px solid var(--orange);background:var(--orange2);border-radius:0 8px 8px 0;font-size:14px;line-height:1.5}
+    .formula{display:grid;gap:7px}
+    .formula div{padding:10px 12px;border-radius:8px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.15);font-family:'Cascadia Code',Consolas,monospace;font-size:12px;font-weight:600;color:var(--cyan);overflow-wrap:anywhere}
+    .example{padding:12px 0;border-bottom:1px solid var(--line)}.example:last-child{border-bottom:0}
+    .example strong{display:block;font-size:14px;line-height:1.45}.example span{display:block;margin-top:4px;color:var(--muted);font-size:12px;line-height:1.4}
+    .tip{padding:13px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;font-size:13px;line-height:1.5;color:var(--yellow)}
+    .wrong{color:var(--red);text-decoration:line-through;text-decoration-thickness:2px}
+    .lesson-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+
+    /* === PRACTICE === */
+    .practice-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .square{width:40px;height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg2);font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);transition:all .15s}
+    .square:hover{border-color:var(--green);color:var(--green)}
+    .progress{height:7px;background:var(--soft);border-radius:4px;overflow:hidden}
+    .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .25s}
+    .question{padding:18px}.q-count{color:var(--green);font-size:11px;font-weight:900;text-transform:uppercase}
+    .question h2{margin:10px 0 18px;font-size:20px;line-height:1.4}
+    .options{display:grid;gap:9px}
+    .option{min-height:50px;padding:10px 13px;border:1px solid var(--line);border-radius:8px;background:var(--bg2);text-align:left;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;color:var(--ink)}
+    .option:hover{border-color:var(--muted)}
+    .option.selected{border-color:var(--green);background:var(--green2);color:var(--green)}
+    .option.correct{border-color:var(--green);background:var(--green2);color:var(--green)}
+    .option.wrong-answer{border-color:var(--red);background:rgba(239,68,68,.1);color:var(--red)}
+    .answer-input{width:100%;min-height:50px;padding:0 13px;border:1px solid var(--line);border-radius:8px;background:var(--bg2);font-size:16px;color:var(--ink)}
+    .answer-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow)}
+    .feedback{display:none;margin-top:13px;padding:13px;border-radius:8px;font-size:13px;line-height:1.5}
+    .feedback.show{display:block}
+    .feedback.good{background:var(--green2);color:var(--green);border:1px solid rgba(16,185,129,.2)}
+    .feedback.bad{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+    .next-row{display:flex;justify-content:flex-end;margin-top:12px}
+
+    /* === REVIEW === */
+    .review-empty{padding:30px 20px;text-align:center}
+    .review-empty h2{margin:0 0 8px;font-size:19px;font-family:'Outfit',sans-serif}
+    .review-empty p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+
+    /* === FLASHCARDS === */
+    .flash-shell{max-width:620px;margin:0 auto}
+    .flash-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
+    .flash-tools select{min-height:40px;max-width:180px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg2);font-size:12px;font-weight:800;color:var(--ink)}
+    .flash-count{color:var(--muted);font-size:12px;font-weight:800}
+    .flash-scene{perspective:1100px}
+    .flashcard{position:relative;min-height:390px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);box-shadow:var(--sh-lg);transform-style:preserve-3d;transition:transform .42s ease;cursor:pointer}
+    .flashcard.flipped{transform:rotateY(180deg)}
+    .flash-face{position:absolute;inset:0;padding:22px;display:flex;flex-direction:column;backface-visibility:hidden}
+    .flash-back{transform:rotateY(180deg);background:var(--bg2)}
+    .flash-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase}
+    .flash-english{margin:auto 0;text-align:center;font-size:27px;font-weight:800;line-height:1.35;font-family:'Outfit',sans-serif}
+    .flash-vietnamese{margin:auto 0 12px;text-align:center;font-size:23px;font-weight:800;line-height:1.4;font-family:'Outfit',sans-serif}
+    .flash-grammar{text-align:center;color:var(--muted);font-size:13px;line-height:1.5}
+    .flash-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px}
+    .audio{width:44px;height:44px;border:0;border-radius:50%;background:var(--green);color:#fff;font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 4px 12px var(--green-glow);transition:transform .15s}
+    .audio:hover{transform:scale(1.08)}
+    .ratings{display:none;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+    .ratings.show{display:grid}
+    .rating-btn{min-height:54px;padding:5px;border:1px solid var(--line);border-radius:8px;background:var(--bg2);font-size:11px;font-weight:900;cursor:pointer;color:var(--ink);transition:all .15s}
+    .rating-btn:hover{border-color:var(--green)}
+    .rating-btn small{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:700}
+    .flash-hint{text-align:center;color:var(--muted);font-size:11px}
+
+    /* === ONLINE RESOURCES === */
+    .resource-list{display:grid;gap:10px}
+    .resource{padding:16px;text-decoration:none;color:inherit;display:block;transition:border-color .15s}
+    .resource:hover{border-color:var(--green)}
+    .resource-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .resource h3{margin:0;font-size:16px;font-weight:700}.resource p{margin:7px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+    .resource .source{margin-top:10px;color:var(--blue);font-size:10px;font-weight:900;text-transform:uppercase}
+    .online-note{padding:14px;margin-bottom:12px;background:var(--blue2);border:1px solid rgba(59,130,246,.2);border-radius:8px;color:var(--blue);font-size:13px;line-height:1.55}
+
+    /* ========== LOOKUP PAGE ========== */
+    .lookup-search{display:flex;gap:8px;margin-bottom:18px}
+    .lookup-input{flex:1;min-height:52px;padding:0 16px;border:2px solid var(--line);border-radius:12px;background:var(--bg2);font-size:17px;font-weight:600;color:var(--ink);transition:all .2s}
+    .lookup-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px var(--green-glow)}
+    .lookup-input::placeholder{color:var(--muted)}
+    .lookup-btn{min-width:52px;border:none;border-radius:12px;background:var(--green);color:#fff;font-size:20px;font-weight:900;cursor:pointer;box-shadow:0 4px 16px var(--green-glow);transition:all .15s}
+    .lookup-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .lookup-btn:active{transform:translateY(0)}
+
+    .lookup-result{animation:fadeUp .3s ease}
+    .lookup-word-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+    .lookup-word{font-family:'Outfit',sans-serif;font-size:36px;font-weight:900;letter-spacing:-.02em}
+    .lookup-phonetic{font-family:'Cascadia Code',Consolas,monospace;font-size:16px;color:var(--cyan);background:var(--cyan2);padding:4px 12px;border-radius:8px}
+    .lookup-audio-btn{width:44px;height:44px;border:none;border-radius:50%;background:var(--orange);color:#fff;font-size:18px;cursor:pointer;box-shadow:0 4px 12px var(--orange-glow);transition:all .15s}
+    .lookup-audio-btn:hover{transform:scale(1.1)}
+    .lookup-pos{margin-bottom:16px;padding:18px;border-left:4px solid var(--purple);background:var(--purple2);border-radius:0 12px 12px 0}
+    .lookup-pos-title{font-weight:800;font-size:14px;text-transform:uppercase;color:var(--purple);margin-bottom:10px;letter-spacing:.05em}
+    .lookup-def{margin-bottom:10px;font-size:14px;line-height:1.6}
+    .lookup-def-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--purple2);color:var(--purple);font-size:11px;font-weight:900;margin-right:8px;flex-shrink:0}
+    .lookup-example{margin-left:30px;padding:8px 12px;border-radius:8px;background:rgba(148,163,184,.06);color:var(--muted);font-size:13px;font-style:italic;line-height:1.5;margin-bottom:8px}
+    .lookup-save-btn{margin-top:16px;width:100%;min-height:50px;border:2px dashed var(--green);border-radius:12px;background:var(--green2);color:var(--green);font-weight:800;font-size:14px;cursor:pointer;transition:all .15s}
+    .lookup-save-btn:hover{background:var(--green);color:#fff;border-style:solid}
+
+    .lookup-loading{text-align:center;padding:40px 20px;color:var(--muted)}
+    .lookup-loading .spinner{display:inline-block;width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .lookup-error{text-align:center;padding:30px 20px;color:var(--red);background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);border-radius:12px}
+    .lookup-error h3{font-family:'Outfit',sans-serif;margin-bottom:6px}
+    .lookup-empty{text-align:center;padding:50px 20px;color:var(--muted)}
+    .lookup-empty .big-icon{font-size:56px;margin-bottom:12px;display:block}
+    .lookup-empty h2{font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;color:var(--ink)}
+    .lookup-empty p{font-size:14px;line-height:1.6}
+
+    .lookup-history{margin-top:20px}
+    .lookup-history h3{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
+    .history-chips{display:flex;flex-wrap:wrap;gap:6px}
+    .history-chip{padding:6px 12px;border:1px solid var(--line);border-radius:20px;background:var(--bg2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--ink)}
+    .history-chip:hover{border-color:var(--green);color:var(--green)}
+
+    /* === TOAST === */
+    .toast{position:fixed;left:50%;bottom:32px;z-index:50;max-width:calc(100% - 28px);padding:11px 18px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:700;transform:translate(-50%,15px);opacity:0;pointer-events:none;transition:.2s;box-shadow:var(--sh-lg)}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+
+    /* === IPA DISPLAY === */
+    .ipa-line{display:none;margin-top:4px;padding:4px 8px;border-radius:6px;background:rgba(34,211,238,.06);font-family:'Cascadia Code',Consolas,monospace;font-size:12px;color:var(--cyan);letter-spacing:.03em;line-height:1.5;transition:all .2s ease}
+    .ipa-visible .ipa-line{display:block;animation:ipaFadeIn .25s ease}
+    @keyframes ipaFadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+    .ipa-toggle{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid var(--line);border-radius:6px;background:var(--bg2);cursor:pointer;font-size:14px;vertical-align:middle;margin-left:6px;transition:all .15s;color:var(--ink)}
+    .ipa-toggle:hover{background:var(--soft);border-color:var(--muted)}
+    .ipa-toggle.on{background:var(--orange);border-color:var(--orange);color:#fff}
+    .ipa-char{cursor:pointer;border-radius:3px;padding:0 2px;transition:background .12s}
+    .ipa-char:hover{background:rgba(249,115,22,.18)}
+
+    /* === IPA TOOLTIP === */
+    .ipa-tooltip{position:fixed;z-index:100;max-width:280px;padding:12px 14px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:12px;line-height:1.55;box-shadow:0 8px 28px rgba(0,0,0,.4);pointer-events:none;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s}
+    .ipa-tooltip.show{opacity:1;transform:none;pointer-events:auto}
+    .ipa-tooltip .tt-symbol{display:block;font-size:22px;font-weight:800;margin-bottom:5px;color:var(--orange);font-family:Consolas,monospace}
+    .ipa-tooltip .tt-name{display:block;font-weight:700;margin-bottom:3px}
+    .ipa-tooltip .tt-desc{color:rgba(15,23,42,.7)}
+    .ipa-tooltip .tt-example{display:block;margin-top:6px;padding-top:6px;border-top:1px solid rgba(15,23,42,.1);font-style:italic;color:rgba(15,23,42,.6)}
+
+    /* === COMM HACKS === */
+    .comm-hack{padding:13px;margin-top:10px;background:var(--green2);border:1px solid rgba(16,185,129,.2);border-radius:8px;font-size:13px;line-height:1.55;color:var(--green)}
+    .comm-hack::before{content:"💡 Mẹo giao tiếp: ";font-weight:800}
+
+    /* === FLASH IPA === */
+    .flash-ipa{text-align:center;font-family:Consolas,monospace;font-size:13px;color:var(--cyan);margin-top:6px;line-height:1.4}
+
+    /* === RESPONSIVE MOBILE === */
+    @media(max-width:899px){
+      .header-row{padding-left:60px}
+      .tabs{padding-left:60px}
+      .stats-sidebar{display:none}
+      .hub-back{left:12px}
+    }
+    @media(max-width:599px){
+      .header-row{padding:9px 14px 9px 56px}
+      .tabs{padding:0 14px 0 56px}
+      .shell{padding:16px 14px calc(30px + env(safe-area-inset-bottom))}
+      .hub-back{left:10px;width:36px;height:36px;font-size:16px}
+      .nav-tab{padding:9px 10px;font-size:11px}
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/gambit-app-polish.css">
+</head>
+<body>
+
+<a class="hub-back" href="../../index.html" aria-label="Trở về trang chủ">←</a>
+
+<header class="app-header">
+  <div class="header-row">
+    <div class="brand">English <em>32</em></div>
+    <div class="streak-pill">🔥 <span id="streak">0 ngày</span></div>
+  </div>
+  <nav class="tabs">
+    <button class="nav-tab active" data-page="today"><i class="ti ti-calendar-check" aria-hidden="true"></i>Hôm nay</button>
+    <button class="nav-tab" data-page="flashcards"><i class="ti ti-cards" aria-hidden="true"></i>Flashcard</button>
+    <button class="nav-tab" data-page="course"><i class="ti ti-book-2" aria-hidden="true"></i>Ngữ pháp</button>
+    <button class="nav-tab" data-page="lookup"><i class="ti ti-search" aria-hidden="true"></i>Tra từ</button>
+    <button class="nav-tab" data-page="review"><i class="ti ti-refresh" aria-hidden="true"></i>Ôn sai</button>
+    <button class="nav-tab" data-page="online"><i class="ti ti-world" aria-hidden="true"></i>Online</button>
+  </nav>
+</header>
+
+<div class="shell">
+  <div class="content-grid">
+    <div class="main-col">
+
+      <!-- ===== TODAY ===== -->
+      <section class="page on" id="todayPage">
+        <p class="eyebrow">Lộ trình ngữ pháp cá nhân</p>
+        <h1 class="title" id="greeting">Học chắc từng cấu trúc</h1>
+        <p class="lead">Không học thuộc định nghĩa. Học cách chọn đúng cấu trúc khi bạn thực sự cần nói hoặc viết.</p>
+        <div class="card hero">
+          <p class="eyebrow">Bài tiếp theo</p>
+          <h2 id="nextTitle">Present simple</h2>
+          <p id="nextGoal">Nói về thói quen, sự thật và lịch cố định.</p>
+          <div class="hero-foot"><div class="hero-score"><span id="todayDone">0</span><small>bài tập hôm nay</small></div><button class="btn primary" id="continueBtn">HỌC NGAY</button></div>
+        </div>
+        <div class="stat-grid">
+          <div class="card stat"><div class="stat-label">Đã hoàn thành</div><div class="stat-value"><span id="unitsDone">0</span><small> / <span id="unitTotal">32</span> bài</small></div></div>
+          <div class="card stat"><div class="stat-label">Độ chính xác</div><div class="stat-value"><span id="accuracy">0</span><small>%</small></div></div>
+          <div class="card stat"><div class="stat-label">Cần ôn lại</div><div class="stat-value"><span id="wrongCount">0</span><small> câu</small></div></div>
+          <div class="card stat"><div class="stat-label">Tổng bài tập</div><div class="stat-value"><span id="totalQuestions">128</span><small> câu</small></div></div>
+        </div>
+        <div class="section-head"><h2>7 ngày khởi động</h2><span>20 phút / ngày</span></div>
+        <div class="card plan" id="weekPlan"></div>
+      </section>
+
+      <!-- ===== FLASHCARDS ===== -->
+      <section class="page" id="flashcardsPage">
+        <p class="eyebrow">English on the front, meaning on the back</p>
+        <h1 class="title">English Flashcards</h1>
+        <p class="lead">Đọc câu tiếng Anh, tự nhớ nghĩa và điểm ngữ pháp, sau đó lật thẻ. App tự lên lịch ôn lại.</p>
+        <div class="flash-shell">
+          <div class="flash-tools">
+            <select id="flashLevel"><option value="all">Tất cả cấp độ</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option><option value="B2-C1">B2-C1</option><option value="C1">C1</option></select>
+            <span class="flash-count" id="flashCount">1 / 78</span>
+          </div>
+          <div class="flash-scene">
+            <article class="flashcard" id="flashcard" tabindex="0">
+              <div class="flash-face">
+                <div class="flash-meta"><span id="flashTopic">Present simple</span><span class="badge" id="flashCardLevel">A2</span></div>
+                <div class="flash-english" id="flashEnglish">I usually work from home on Fridays.</div>
+                <div class="flash-foot"><span>Đọc thành tiếng trước khi lật</span><button class="audio" id="flashAudio">▶</button></div>
+              </div>
+              <div class="flash-face flash-back">
+                <div class="flash-meta"><span id="flashBackTopic">Hiện tại đơn</span><span class="badge">MEANING</span></div>
+                <div class="flash-vietnamese" id="flashVietnamese">Tôi thường làm việc ở nhà vào thứ Sáu.</div>
+                <div class="flash-grammar" id="flashGrammar">Nói về thói quen, sự thật và lịch cố định.</div>
+                <div class="flash-foot"><span id="flashFormula">I/You/We/They + verb</span><button class="audio" id="flashBackAudio">▶</button></div>
+              </div>
+            </article>
+          </div>
+          <div class="ratings" id="flashRatings">
+            <button class="rating-btn" data-rate="0">AGAIN<small>1 phút</small></button>
+            <button class="rating-btn" data-rate="1">HARD<small>1 ngày</small></button>
+            <button class="rating-btn" data-rate="2">GOOD<small>3 ngày</small></button>
+            <button class="rating-btn" data-rate="3">EASY<small>7 ngày</small></button>
+          </div>
+          <p class="flash-hint" id="flashHint">Chạm vào thẻ để xem nghĩa</p>
+        </div>
+      </section>
+
+      <!-- ===== COURSE ===== -->
+      <section class="page" id="coursePage">
+        <p class="eyebrow"><span id="courseTotal">32</span> chuyên đề, A2 → C1</p>
+        <h1 class="title">Khóa Ngữ Pháp</h1>
+        <p class="lead">Học theo thứ tự hoặc chọn đúng điểm bạn thường dùng sai.</p>
+        <div class="filters"><button class="chip on" data-level="all">Tất cả</button><button class="chip" data-level="A2">A2 nền tảng</button><button class="chip" data-level="B1">B1 giao tiếp</button><button class="chip" data-level="B2">B2 tự nhiên</button><button class="chip" data-level="B2-C1">B2-C1</button><button class="chip" data-level="C1">C1 nâng cao</button></div>
+        <div class="unit-list" id="unitList"></div>
+      </section>
+
+      <!-- ===== LESSON ===== -->
+      <section class="page" id="lessonPage">
+        <div class="lesson-top"><button class="back" id="lessonBack">←</button><div class="lesson-name"><h1 id="lessonTitle">Present simple</h1><p id="lessonSubtitle">A2 - Hiện tại đơn</p></div></div>
+        <div class="card lesson-card"><h2>Mục tiêu</h2><div class="goal" id="lessonGoal"></div></div>
+        <div class="card lesson-card"><h2>Công thức cần nhớ</h2><div class="formula" id="lessonFormula"></div></div>
+        <div class="card lesson-card"><h2>Ví dụ giao tiếp</h2><div id="lessonExamples"></div></div>
+        <div class="card lesson-card"><h2>Lỗi cần tránh</h2><div class="tip" id="lessonTip"></div><div id="lessonMistakes" style="margin-top:12px"></div></div>
+        <div id="lessonCommHack"></div>
+        <div class="lesson-actions"><button class="btn" id="hearExamples">🔊 NGHE VÍ DỤ</button><button class="btn green" id="startLessonPractice">✍️ LÀM BÀI TẬP</button></div>
+      </section>
+
+      <!-- ===== PRACTICE ===== -->
+      <section class="page" id="practicePage">
+        <div class="practice-head"><div><p class="eyebrow" id="practiceLevel">Bài luyện tập</p><h1 class="title" id="practiceTitle">Mixed grammar</h1></div><button class="square" id="newPractice">🔄</button></div>
+        <div class="progress"><span id="practiceProgress"></span></div>
+        <div class="card question" style="margin-top:12px">
+          <div class="q-count" id="qCount">Câu 1 / 10</div>
+          <h2 id="qText"></h2>
+          <div class="options" id="options"></div>
+          <input class="answer-input" id="answerInput" autocomplete="off" placeholder="Nhập đáp án tiếng Anh..." style="display:none">
+          <div class="feedback" id="feedback"></div>
+          <div class="next-row"><button class="btn green" id="checkBtn">KIỂM TRA</button><button class="btn primary" id="nextBtn" style="display:none">CÂU TIẾP →</button></div>
+        </div>
+      </section>
+
+      <!-- ===== LOOKUP (NEW) ===== -->
+      <section class="page" id="lookupPage">
+        <p class="eyebrow">Free Dictionary API – Miễn phí, không giới hạn</p>
+        <h1 class="title">Tra Từ Trực Tuyến</h1>
+        <p class="lead">Nhập từ tiếng Anh để xem phiên âm IPA, nghe phát âm chuẩn, đọc định nghĩa gốc và lưu vào flashcard.</p>
+        <div class="lookup-search">
+          <input class="lookup-input" id="lookupInput" type="text" placeholder="Nhập từ tiếng Anh..." autocomplete="off">
+          <button class="lookup-btn" id="lookupBtn">🔍</button>
+        </div>
+        <div id="lookupResult">
+          <div class="lookup-empty">
+            <span class="big-icon">📖</span>
+            <h2>Bắt đầu tra từ</h2>
+            <p>Nhập một từ tiếng Anh bất kỳ vào ô tìm kiếm phía trên.<br>Bạn sẽ nhận được phiên âm IPA, âm thanh phát âm chuẩn, và định nghĩa chi tiết.</p>
+          </div>
+        </div>
+        <div class="lookup-history" id="lookupHistory" style="display:none">
+          <h3>🕑 Từ đã tra gần đây</h3>
+          <div class="history-chips" id="historyChips"></div>
+        </div>
+      </section>
+
+      <!-- ===== REVIEW ===== -->
+      <section class="page" id="reviewPage">
+        <p class="eyebrow">Ôn đúng điểm yếu</p><h1 class="title">Câu Đã Làm Sai</h1><p class="lead">Mỗi câu sai được giữ lại ở đây cho đến khi bạn trả lời đúng hai lần.</p>
+        <div id="reviewContent"></div>
+      </section>
+
+      <!-- ===== ONLINE ===== -->
+      <section class="page" id="onlinePage">
+        <p class="eyebrow">Học tiếp trên web</p><h1 class="title">Nguồn Online Chọn Lọc</h1><p class="lead">Dùng sau bài học trong app. Mở đúng nguồn cho đúng mục tiêu, không lang thang xem quá nhiều tài liệu.</p>
+        <div class="online-note"><strong>Luồng đề xuất:</strong> học cấu trúc trong app → làm 10 câu → mở British Council làm thêm → tìm câu mẫu trên YouGlish để nghe người thật nói.</div>
+        <div class="resource-list">
+          <a class="card resource" href="https://ankiweb.net/" target="_blank" rel="noopener"><div class="resource-top"><h3>AnkiWeb Flashcards</h3><span class="badge">OPEN</span></div><p>Học và đồng bộ flashcard online nếu bạn muốn dùng chung với ứng dụng Anki trên điện thoại.</p><div class="source">AnkiWeb</div></a>
+          <a class="card resource" href="https://learnenglish.britishcouncil.org/grammar/a1-a2-grammar" target="_blank" rel="noopener"><div class="resource-top"><h3>A1-A2 Grammar</h3><span class="badge">OPEN</span></div><p>Bài giải thích và bài tập nền tảng có cấu trúc rõ ràng.</p><div class="source">British Council LearnEnglish</div></a>
+          <a class="card resource" href="https://learnenglish.britishcouncil.org/grammar/b1-b2-grammar" target="_blank" rel="noopener"><div class="resource-top"><h3>B1-B2 Grammar</h3><span class="badge">OPEN</span></div><p>Luyện các cấu trúc cần để giao tiếp, đọc tài liệu và viết tốt hơn.</p><div class="source">British Council LearnEnglish</div></a>
+          <a class="card resource" href="https://learningenglish.voanews.com/z/4729" target="_blank" rel="noopener"><div class="resource-top"><h3>Everyday Grammar</h3><span class="badge">OPEN</span></div><p>Ngữ pháp qua tình huống, tin tức và cách người Mỹ dùng thực tế.</p><div class="source">VOA Learning English</div></a>
+          <a class="card resource" href="https://dictionary.cambridge.org/grammar/british-grammar/" target="_blank" rel="noopener"><div class="resource-top"><h3>Grammar Reference</h3><span class="badge">OPEN</span></div><p>Tra cứu sâu hơn khi bạn muốn hiểu khác biệt giữa các cấu trúc gần giống nhau.</p><div class="source">Cambridge Dictionary</div></a>
+          <a class="card resource" id="youglishLink" href="https://youglish.com/pronounce/present%20simple/english" target="_blank" rel="noopener"><div class="resource-top"><h3>Nghe cấu trúc đang học</h3><span class="badge">OPEN</span></div><p id="youglishText">Tìm ví dụ phát âm trong video thật cho bài Present simple.</p><div class="source">YouGlish</div></a>
+        </div>
+      </section>
+
+    </div><!-- /main-col -->
+
+    <!-- ===== STATS SIDEBAR (desktop) ===== -->
+    <aside class="stats-sidebar">
+      <div class="card sidebar-card">
+        <h3>📊 Tiến độ tổng</h3>
+        <div class="sidebar-stat"><span class="label">Bài đã hoàn thành</span><span class="value" id="sideUnitsDone">0 / 32</span></div>
+        <div class="mini-progress"><span class="bar-green" id="sideProgressBar" style="width:0%"></span></div>
+        <div class="sidebar-stat"><span class="label">Độ chính xác</span><span class="value" id="sideAccuracy">0%</span></div>
+        <div class="sidebar-stat"><span class="label">Chuỗi ngày học</span><span class="value" id="sideStreak">0 ngày</span></div>
+        <div class="sidebar-stat"><span class="label">Câu cần ôn lại</span><span class="value" id="sideWrong">0</span></div>
+      </div>
+      <div class="card sidebar-card">
+        <h3>🎯 Bài hôm nay</h3>
+        <div class="sidebar-stat"><span class="label">Số bài tập đã làm</span><span class="value" id="sideTodayDone">0</span></div>
+        <div class="sidebar-stat"><span class="label">Tổng câu trong khóa</span><span class="value" id="sideTotalQ">128</span></div>
+      </div>
+      <div class="card sidebar-card">
+        <h3>💾 Từ đã lưu</h3>
+        <div class="sidebar-stat"><span class="label">Flashcard từ tra cứu</span><span class="value" id="sideCustomCards">0</span></div>
+      </div>
+    </aside>
+
+  </div><!-- /content-grid -->
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="ipa-tooltip" id="ipaTooltip"></div>
+
+<script src="data/english-course.js"></script>
+<script src="data/english-course-new-units.js" onerror=""></script>
+<script>
+if(window.ENGLISH_COURSE_NEW && window.ENGLISH_COURSE) {
+  window.ENGLISH_COURSE = window.ENGLISH_COURSE.concat(window.ENGLISH_COURSE_NEW);
+}
+</script>
+<script>
+// Helper: đọc example hỗ trợ cả format cũ [en,vi] và mới {en,ipa,vi}
+function exEn(e){return typeof e==="object"&&!Array.isArray(e)?e.en:e[0]}
+function exVi(e){return typeof e==="object"&&!Array.isArray(e)?e.vi:e[1]}
+function exIpa(e){return typeof e==="object"&&!Array.isArray(e)?(e.ipa||""):""}
+let ipaVisible=false;
+const course=window.ENGLISH_COURSE||[],flashDeck=course.flatMap(u=>u.examples.map((e,i)=>({id:u.id+"-card-"+i,unit:u.id,level:u.level,title:u.title,viTitle:u.vi,english:exEn(e),vietnamese:exVi(e),ipa:exIpa(e),goal:u.goal,formula:u.formula[0]}))),KEY="english28-grammar-v3",defaults={completed:{},wrong:{},cardReviews:{},correct:0,total:0,streak:0,lastDay:"",daily:{date:"",count:0},lastUnit:"present-simple",customCards:[],lookupHistory:[]};
+
+// === BỘ TỪ ĐIỂN IPA TIẾNG VIỆT ===
+const IPA_DICT={
+  "θ":{name:"Voiceless dental fricative",desc:"Đặt đầu lưỡi giữa hai răng cửa, đẩy hơi nhẹ ra. Không rung dây thanh.",ex:"think /θɪŋk/, three /θriː/"},
+  "ð":{name:"Voiced dental fricative",desc:"Giống /θ/ nhưng rung dây thanh. Lưỡi đặt giữa hai răng.",ex:"this /ðɪs/, the /ðə/"},
+  "ʃ":{name:"Voiceless postalveolar fricative",desc:"Cong lưỡi lên gần vòm miệng, đẩy hơi ra. Giống âm 'sh' trong 'shhh'.",ex:"she /ʃiː/, nation /ˈneɪ.ʃən/"},
+  "ʒ":{name:"Voiced postalveolar fricative",desc:"Giống /ʃ/ nhưng rung dây thanh. Âm 'gi' trong tiếng Việt gần giống.",ex:"vision /ˈvɪ.ʒən/, measure /ˈmeʒ.ər/"},
+  "dʒ":{name:"Voiced postalveolar affricate",desc:"Kết hợp /d/ + /ʒ/. Giống âm 'tr' trong 'trời' (miền Nam).",ex:"job /dʒɒb/, bridge /brɪdʒ/"},
+  "tʃ":{name:"Voiceless postalveolar affricate",desc:"Kết hợp /t/ + /ʃ/. Giống âm 'ch' trong 'cha'.",ex:"chat /tʃæt/, church /tʃɜːtʃ/"},
+  "ŋ":{name:"Velar nasal",desc:"Âm mũi phát ra phía sau lưỡi gà. Giống âm 'ng' trong 'ngày'.",ex:"sing /sɪŋ/, think /θɪŋk/"},
+  "æ":{name:"Near-open front vowel",desc:"Mở miệng rộng, lưỡi hạ thấp phía trước. Giữa /a/ và /e/.",ex:"cat /kæt/, bad /bæd/"},
+  "ʌ":{name:"Open-mid back vowel",desc:"Miệng mở vừa, lưỡi ở giữa. Giống âm 'ơ' ngắn trong tiếng Việt.",ex:"cup /kʌp/, but /bʌt/"},
+  "ɑː":{name:"Open back vowel (long)",desc:"Miệng mở rộng, lưỡi hạ thấp phía sau. Kéo dài. Giống 'a' trong 'ba'.",ex:"car /kɑːr/, father /ˈfɑː.ðər/"},
+  "ɒ":{name:"Open back rounded vowel",desc:"Miệng mở tròn, lưỡi phía sau. Giống 'o' ngắn trong 'con'.",ex:"hot /hɒt/, dog /dɒɡ/"},
+  "ɔː":{name:"Open-mid back rounded vowel (long)",desc:"Miệng mở tròn, kéo dài. Giống 'ô' dài trong tiếng Việt.",ex:"call /kɔːl/, four /fɔːr/"},
+  "ə":{name:"Schwa (âm lướt)",desc:"Âm phổ biến nhất! Miệng thả lỏng, phát âm rất nhẹ và nhanh. Đây là lý do người bản xứ nói nhanh.",ex:"about /əˈbaʊt/, banana /bəˈnɑː.nə/"},
+  "ɜː":{name:"Open-mid central vowel (long)",desc:"Lưỡi ở giữa miệng, kéo dài. Giống 'ơ' dài.",ex:"bird /bɜːd/, work /wɜːk/"},
+  "ɪ":{name:"Near-close front vowel",desc:"Giống 'i' nhưng ngắn và lỏng hơn. Không căng môi.",ex:"sit /sɪt/, fish /fɪʃ/"},
+  "iː":{name:"Close front vowel (long)",desc:"Giống 'i' dài, kéo dài và căng. Giống 'i' trong 'xi'.",ex:"see /siː/, eat /iːt/"},
+  "ʊ":{name:"Near-close back vowel",desc:"Giống 'u' nhưng ngắn và lỏng hơn.",ex:"book /bʊk/, put /pʊt/"},
+  "uː":{name:"Close back vowel (long)",desc:"Giống 'u' dài, tròn môi. Giống 'u' trong 'bú'.",ex:"food /fuːd/, too /tuː/"},
+  "eɪ":{name:"Diphthong",desc:"Bắt đầu từ /e/ trượt sang /ɪ/. Giống 'ây' trong 'cây'.",ex:"say /seɪ/, day /deɪ/"},
+  "aɪ":{name:"Diphthong",desc:"Bắt đầu từ /a/ trượt sang /ɪ/. Giống 'ai' trong 'hai'.",ex:"my /maɪ/, time /taɪm/"},
+  "ɔɪ":{name:"Diphthong",desc:"Bắt đầu từ /ɔ/ trượt sang /ɪ/. Giống 'oi' trong 'toi'.",ex:"boy /bɔɪ/, coin /kɔɪn/"},
+  "aʊ":{name:"Diphthong",desc:"Bắt đầu từ /a/ trượt sang /ʊ/. Giống 'ao' trong 'cao'.",ex:"now /naʊ/, house /haʊs/"},
+  "əʊ":{name:"Diphthong",desc:"Bắt đầu từ /ə/ trượt sang /ʊ/. Giống 'ô-u' nói nhanh.",ex:"go /ɡəʊ/, home /həʊm/"},
+  "ˈ":{name:"Trọng âm chính (Primary stress)",desc:"Ký hiệu đặt TRƯỚC âm tiết được nhấn mạnh nhất. Đây là âm tiết bạn cần nói to và rõ nhất.",ex:"banana /bəˈnɑː.nə/ → nhấn ở 'NA'"},
+  "ˌ":{name:"Trọng âm phụ (Secondary stress)",desc:"Ký hiệu đặt trước âm tiết nhấn nhẹ hơn trọng âm chính.",ex:"understand /ˌʌn.dəˈstænd/"}
+};
+
+// === TOOLTIP IPA ===
+function showIpaTooltip(char,rect){
+  const info=IPA_DICT[char];if(!info)return;
+  const tip=$("ipaTooltip");
+  tip.innerHTML=`<span class="tt-symbol">/${char}/</span><span class="tt-name">${info.name}</span><span class="tt-desc">${info.desc}</span><span class="tt-example">${info.ex}</span>`;
+  tip.classList.add("show");
+  const x=Math.min(rect.left,window.innerWidth-290),y=rect.bottom+8;
+  tip.style.left=x+"px";tip.style.top=y+"px";
+}
+function hideIpaTooltip(){$("ipaTooltip").classList.remove("show")}
+document.addEventListener("click",e=>{if(!e.target.closest(".ipa-char")&&!e.target.closest(".ipa-tooltip"))hideIpaTooltip()});
+
+// === RENDER IPA LINE (với ký tự có thể click) ===
+function renderIpaLine(ipa){
+  if(!ipa)return "";
+  const specialChars=Object.keys(IPA_DICT).sort((a,b)=>b.length-a.length);
+  let html=ipa;
+  for(const ch of specialChars){
+    const escaped=ch.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    html=html.replace(new RegExp(escaped,'g'),`<span class="ipa-char" data-ipa="${ch}">${ch}</span>`);
+  }
+  return `<div class="ipa-line">${html}</div>`;
+}
+
+// === TOGGLE IPA ===
+function toggleIpa(){
+  ipaVisible=!ipaVisible;
+  document.querySelectorAll(".ipa-toggle").forEach(b=>b.classList.toggle("on",ipaVisible));
+  document.querySelectorAll(".ipa-container").forEach(c=>c.classList.toggle("ipa-visible",ipaVisible));
+}
+
+// Delegate click cho IPA chars
+document.addEventListener("click",e=>{
+  const ch=e.target.closest(".ipa-char");
+  if(ch){e.stopPropagation();showIpaTooltip(ch.dataset.ipa,ch.getBoundingClientRect())}
+});
+
+let state=load(),activeUnit=course[0],practice=[],qIndex=0,selected="",answered=false,practiceSource="mixed",levelFilter="all",flashCards=[],flashIndex=0,flashLevel="all";
+const $=id=>document.getElementById(id),dayKey=()=>new Date().toISOString().slice(0,10);
+function load(){try{const s={...defaults,...JSON.parse(localStorage.getItem(KEY)||"{}"),};s.customCards=s.customCards||[];s.lookupHistory=s.lookupHistory||[];return s}catch(e){return{...defaults}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function norm(v){return String(v||"").toLowerCase().replace(/['']/g,"'").replace(/[.,!?]/g,"").replace(/\s+/g," ").trim()}
+function toast(text){$("toast").textContent=text;$("toast").classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>$("toast").classList.remove("show"),1800)}
+function updateDay(){const today=dayKey();if(state.daily.date!==today)state.daily={date:today,count:0};if(state.lastDay!==today){const d=new Date();d.setDate(d.getDate()-1);state.streak=state.lastDay===d.toISOString().slice(0,10)?state.streak+1:1;state.lastDay=today}}
+
+function showPage(name){
+  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("on",p.id===name+"Page"));
+  document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+  if(name==="course")renderCourse();
+  if(name==="review")renderReview();
+  if(name==="practice"&&!practice.length)startMixed();
+  if(name==="lookup")renderLookupHistory();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function buildFlashDeck(){
+  const now=Date.now();
+  // Merge custom cards from lookup
+  const customFlash=(state.customCards||[]).map((c,i)=>({
+    id:"custom-"+i,unit:"lookup",level:"★",title:c.word,viTitle:"Từ tra cứu",
+    english:c.word,vietnamese:c.definitions?c.definitions[0]:"",
+    ipa:c.phonetic||"",goal:c.partOfSpeech||"",formula:""
+  }));
+  const allDeck=flashDeck.concat(customFlash);
+  const filtered=allDeck.filter(c=>flashLevel==="all"||c.level===flashLevel);
+  const due=filtered.filter(c=>!state.cardReviews[c.id]||state.cardReviews[c.id].due<=now);
+  flashCards=due.length?due:filtered;flashIndex=0;renderFlashcard();
+}
+
+function renderFlashcard(){
+  const c=flashCards[flashIndex];
+  $("flashcard").classList.remove("flipped");$("flashRatings").classList.remove("show");
+  $("flashHint").textContent="Chạm vào thẻ để xem nghĩa";
+  if(!c){$("flashEnglish").textContent="Bạn đã ôn xong";$("flashVietnamese").textContent="Quay lại vào ngày mai.";$("flashCount").textContent="DONE";return}
+  $("flashTopic").textContent=c.title;$("flashBackTopic").textContent=c.viTitle;$("flashCardLevel").textContent=c.level;
+  $("flashEnglish").innerHTML=c.english+(c.ipa?renderIpaLine(c.ipa):"");
+  $("flashVietnamese").textContent=c.vietnamese;$("flashGrammar").textContent=c.goal;$("flashFormula").textContent=c.formula;
+  $("flashCount").textContent=(flashIndex+1)+" / "+flashCards.length;
+  $("flashEnglish").classList.toggle("ipa-container",!!c.ipa);
+  $("flashEnglish").classList.toggle("ipa-visible",ipaVisible&&!!c.ipa);
+}
+function flipFlashcard(){if(!flashCards[flashIndex])return;const on=$("flashcard").classList.toggle("flipped");$("flashRatings").classList.toggle("show",on);$("flashHint").textContent=on?"Bạn nhớ câu này tốt đến đâu?":"Chạm vào thẻ để xem nghĩa"}
+function rateFlashcard(rate){const c=flashCards[flashIndex],days=[1/1440,1,3,7],old=state.cardReviews[c.id]||{reps:0};state.cardReviews[c.id]={due:Date.now()+days[rate]*86400000*Math.max(1,old.reps*.7),reps:rate===0?0:old.reps+1,rate};updateDay();state.daily.count++;save();flashIndex++;renderFlashcard();dashboard()}
+function speakCard(text){if(!("speechSynthesis"in window)){toast("Trình duyệt không hỗ trợ phát âm");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.88;speechSynthesis.speak(u)}
+function nextUnit(){return course.find(u=>!state.completed[u.id])||course[0]}
+
+function dashboard(){
+  const next=nextUnit(),done=Object.keys(state.completed).length,wrong=Object.keys(state.wrong).length,acc=state.total?Math.round(state.correct/state.total*100):0;
+  $("nextTitle").textContent=next.title+" - "+next.vi;$("nextGoal").textContent=next.goal;
+  $("todayDone").textContent=state.daily.count||0;$("unitsDone").textContent=done;$("unitTotal").textContent=course.length;
+  $("courseTotal").textContent=course.length;$("accuracy").textContent=acc;$("wrongCount").textContent=wrong;
+  $("streak").textContent=(state.streak||0)+" ngày";$("totalQuestions").textContent=course.reduce((n,u)=>n+u.questions.length,0);
+  const hour=new Date().getHours();
+  $("greeting").textContent=hour<12?"Buổi sáng học một cấu trúc":hour<18?"Tiếp tục lộ trình hôm nay":"Ôn ngữ pháp trước khi nghỉ";
+  const plan=course.slice(0,7);
+  $("weekPlan").innerHTML=plan.map((u,i)=>`<div class="plan-row" data-unit="${u.id}"><span class="num">${i+1}</span><div><h3>${u.title}</h3><p>${u.vi}</p></div><span class="badge ${state.completed[u.id]?"done":""}">${state.completed[u.id]?"DONE":u.level}</span></div>`).join("");
+  const query=encodeURIComponent((activeUnit||next).title);
+  $("youglishLink").href="https://youglish.com/pronounce/"+query+"/english";
+  $("youglishText").textContent="Tìm ví dụ phát âm trong video thật cho bài "+(activeUnit||next).title+".";
+  // Sidebar stats (desktop)
+  $("sideUnitsDone").textContent=done+" / "+course.length;
+  $("sideProgressBar").style.width=Math.round(done/course.length*100)+"%";
+  $("sideAccuracy").textContent=acc+"%";
+  $("sideStreak").textContent=(state.streak||0)+" ngày";
+  $("sideWrong").textContent=wrong;
+  $("sideTodayDone").textContent=state.daily.count||0;
+  $("sideTotalQ").textContent=course.reduce((n,u)=>n+u.questions.length,0);
+  $("sideCustomCards").textContent=(state.customCards||[]).length;
+}
+
+function renderCourse(){
+  const list=course.filter(u=>levelFilter==="all"||u.level===levelFilter);
+  $("unitList").innerHTML=list.map((u,i)=>`<article class="card unit" data-unit="${u.id}"><div><h3>${String(i+1).padStart(2,"0")}. ${u.title}</h3><p>${u.vi} - ${u.goal}</p><div class="unit-meta">${u.level} – ${u.questions.length} bài tập ${state.completed[u.id]?"✅ Đã hoàn thành":""}</div></div><span class="unit-arrow">→</span></article>`).join("");
+}
+
+function openLesson(id){
+  activeUnit=course.find(u=>u.id===id)||course[0];state.lastUnit=activeUnit.id;save();
+  $("lessonTitle").textContent=activeUnit.title;$("lessonSubtitle").textContent=activeUnit.level+" - "+activeUnit.vi;
+  $("lessonGoal").textContent=activeUnit.goal;
+  $("lessonFormula").innerHTML=activeUnit.formula.map(f=>`<div>${f}</div>`).join("");
+  $("lessonExamples").innerHTML='<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:12px;color:var(--muted);font-weight:700">Phiên âm IPA</span><button class="ipa-toggle'+(ipaVisible?' on':'')+'" onclick="toggleIpa()" title="Bật/tắt phiên âm IPA">👁️</button></div>'+activeUnit.examples.map(e=>`<div class="example ipa-container${ipaVisible?' ipa-visible':''}"><strong>${exEn(e)}</strong>${renderIpaLine(exIpa(e))}<span>${exVi(e)}</span></div>`).join("");
+  $("lessonTip").textContent=activeUnit.tip;
+  $("lessonMistakes").innerHTML=activeUnit.mistakes.map(m=>`<div class="example"><strong class="wrong">${m}</strong></div>`).join("");
+  const hackContainer=document.getElementById("lessonCommHack");
+  if(hackContainer){hackContainer.innerHTML=activeUnit.commHacks?`<div class="comm-hack">${activeUnit.commHacks}</div>`:""}
+  dashboard();showPage("lesson");
+}
+
+function shuffle(items){return [...items].sort(()=>Math.random()-.5)}
+function startUnitPractice(){practice=shuffle(activeUnit.questions.map((q,i)=>({...q,key:activeUnit.id+"-"+i,unit:activeUnit.id,title:activeUnit.title})));practiceSource="unit";qIndex=0;renderQuestion();showPage("practice")}
+function startMixed(){practice=shuffle(course.flatMap(u=>u.questions.map((q,i)=>({...q,key:u.id+"-"+i,unit:u.id,title:u.title})))).slice(0,10);practiceSource="mixed";qIndex=0;renderQuestion()}
+function startReview(){const keys=Object.keys(state.wrong);practice=keys.map(key=>{const [unitId,index]=key.split(/-(?=\d+$)/),u=course.find(x=>x.id===unitId),q=u&&u.questions[Number(index)];return q?{...q,key,unit:u.id,title:u.title}:null}).filter(Boolean);if(!practice.length){toast("Chưa có câu sai để ôn");return}practice=shuffle(practice);practiceSource="review";qIndex=0;renderQuestion();showPage("practice")}
+
+function renderQuestion(){
+  answered=false;selected="";const q=practice[qIndex];if(!q){finishPractice();return}
+  $("practiceLevel").textContent=q.title;$("practiceTitle").textContent=practiceSource==="review"?"Ôn lại điểm sai":practiceSource==="unit"?"Bài tập theo bài":"Luyện tập tổng hợp";
+  $("qCount").textContent="Câu "+(qIndex+1)+" / "+practice.length;$("practiceProgress").style.width=((qIndex)/practice.length*100)+"%";
+  $("qText").textContent=q.q;$("feedback").className="feedback";$("feedback").textContent="";$("checkBtn").style.display="inline-flex";$("nextBtn").style.display="none";
+  if(q.type==="choice"){$("answerInput").style.display="none";$("options").style.display="grid";$("options").innerHTML=q.options.map(o=>`<button class="option" data-answer="${encodeURIComponent(o)}">${o}</button>`).join("")}
+  else{$("options").style.display="none";$("options").innerHTML="";$("answerInput").style.display="block";$("answerInput").value="";setTimeout(()=>$("answerInput").focus(),50)}
+}
+
+function checkAnswer(){
+  if(answered)return;const q=practice[qIndex],value=q.type==="choice"?selected:$("answerInput").value;
+  if(!value){toast("Chọn hoặc nhập một đáp án");return}
+  const accepted=[q.answer,...(q.accept||[])].map(norm),correct=accepted.includes(norm(value));answered=true;state.total++;state.daily.count++;
+  if(correct){state.correct++;if(state.wrong[q.key]){state.wrong[q.key].wins=(state.wrong[q.key].wins||0)+1;if(state.wrong[q.key].wins>=2)delete state.wrong[q.key]}}
+  else state.wrong[q.key]={wins:0,unit:q.unit};
+  updateDay();save();$("feedback").className="feedback show "+(correct?"good":"bad");
+  $("feedback").innerHTML="<strong>"+(correct?"Chính xác.":"Chưa đúng. Đáp án: "+q.answer)+"</strong><br>"+q.why;
+  if(q.type==="choice")document.querySelectorAll(".option").forEach(b=>{const v=decodeURIComponent(b.dataset.answer);if(norm(v)===norm(q.answer))b.classList.add("correct");else if(b.classList.contains("selected")&&!correct)b.classList.add("wrong-answer")});
+  $("checkBtn").style.display="none";$("nextBtn").style.display="inline-flex";dashboard()
+}
+
+function finishPractice(){
+  if(practiceSource==="unit"){state.completed[activeUnit.id]=true;save();toast("Đã hoàn thành bài "+activeUnit.title)}
+  practice=[];dashboard();showPage(practiceSource==="review"?"review":"today")
+}
+
+function renderReview(){
+  const keys=Object.keys(state.wrong);
+  if(!keys.length){$("reviewContent").innerHTML='<div class="card review-empty"><h2>Chưa có câu cần ôn</h2><p>Làm bài tập trước. Các câu sai sẽ tự động xuất hiện tại đây.</p></div>';return}
+  const grouped={};keys.forEach(k=>{const unitId=k.replace(/-\d+$/,""),u=course.find(x=>x.id===unitId);if(u)(grouped[u.id]||(grouped[u.id]={unit:u,count:0})).count++});
+  $("reviewContent").innerHTML='<div class="unit-list">'+Object.values(grouped).map(g=>`<div class="card unit"><div><h3>${g.unit.title}</h3><p>${g.unit.vi}</p><div class="unit-meta">${g.count} câu cần ôn</div></div><span class="badge">${g.unit.level}</span></div>`).join("")+'</div><button class="btn primary wide" id="reviewStart" style="margin-top:12px">🔄 BẮT ĐẦU ÔN '+keys.length+' CÂU</button>';
+  $("reviewStart").onclick=startReview
+}
+
+function speakExamples(){if(!("speechSynthesis"in window)){toast("Trình duyệt này không hỗ trợ phát âm");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(activeUnit.examples.map(e=>exEn(e)).join(" "));u.lang="en-US";u.rate=.88;speechSynthesis.speak(u)}
+
+// =============== LOOKUP (TRA TỪ ONLINE) ===============
+async function lookupWord(word){
+  if(!word||!word.trim())return;
+  word=word.trim().toLowerCase();
+  const result=$("lookupResult");
+  result.innerHTML='<div class="lookup-loading"><div class="spinner"></div><p style="margin-top:12px">Đang tra từ <strong>'+word+'</strong>...</p></div>';
+
+  try{
+    const res=await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word));
+    if(!res.ok){
+      result.innerHTML='<div class="lookup-error"><h3>😕 Không tìm thấy</h3><p>Từ "<strong>'+word+'</strong>" không có trong từ điển. Hãy thử từ khác hoặc kiểm tra chính tả.</p></div>';
+      return;
+    }
+    const data=await res.json();
+    const entry=data[0];
+    // Extract phonetic
+    let phonetic=entry.phonetic||"";
+    let audioUrl="";
+    if(entry.phonetics){
+      for(const p of entry.phonetics){
+        if(p.text&&!phonetic)phonetic=p.text;
+        if(p.audio&&!audioUrl)audioUrl=p.audio;
+      }
+    }
+    // Build HTML
+    let html='<div class="lookup-result">';
+    html+='<div class="lookup-word-head">';
+    html+=`<span class="lookup-word">${entry.word}</span>`;
+    if(phonetic)html+=`<span class="lookup-phonetic">${phonetic}</span>`;
+    if(audioUrl)html+=`<button class="lookup-audio-btn" onclick="playLookupAudio('${audioUrl}')">🔊</button>`;
+    html+='</div>';
+
+    // Meanings
+    for(const meaning of entry.meanings||[]){
+      html+=`<div class="lookup-pos"><div class="lookup-pos-title">${meaning.partOfSpeech}</div>`;
+      (meaning.definitions||[]).slice(0,5).forEach((def,i)=>{
+        html+=`<div class="lookup-def"><span class="lookup-def-num">${i+1}</span>${def.definition}</div>`;
+        if(def.example)html+=`<div class="lookup-example">"${def.example}"</div>`;
+      });
+      html+='</div>';
+    }
+
+    // Save to flashcard button
+    html+=`<button class="lookup-save-btn" onclick="saveToFlashcard('${entry.word.replace(/'/g,"\\'")}','${(phonetic||"").replace(/'/g,"\\'")}',this)">💾 Lưu vào Flashcard</button>`;
+    html+='</div>';
+    result.innerHTML=html;
+
+    // Add to lookup history
+    addLookupHistory(word);
+    // Store latest result for save
+    window._lastLookup={word:entry.word,phonetic,audioUrl,meanings:entry.meanings};
+
+  }catch(err){
+    result.innerHTML='<div class="lookup-error"><h3>⚠️ Lỗi kết nối</h3><p>Không thể kết nối tới từ điển. Kiểm tra kết nối mạng rồi thử lại.</p></div>';
+  }
+}
+
+function playLookupAudio(url){
+  const a=new Audio(url);
+  a.play().catch(()=>toast("Không thể phát âm thanh"));
+}
+
+function saveToFlashcard(word,phonetic,btn){
+  state.customCards=state.customCards||[];
+  // Check duplicate
+  if(state.customCards.some(c=>c.word.toLowerCase()===word.toLowerCase())){
+    toast("Từ này đã có trong Flashcard rồi!");
+    return;
+  }
+  const lookup=window._lastLookup||{};
+  const defs=[];
+  const pos=[];
+  (lookup.meanings||[]).forEach(m=>{
+    pos.push(m.partOfSpeech);
+    (m.definitions||[]).slice(0,2).forEach(d=>defs.push(d.definition));
+  });
+  state.customCards.push({
+    word,phonetic,
+    partOfSpeech:pos.join(", "),
+    definitions:defs,
+    audioUrl:lookup.audioUrl||"",
+    addedAt:Date.now()
+  });
+  save();
+  btn.textContent="✅ Đã lưu!";
+  btn.style.background="var(--green)";btn.style.color="#fff";btn.style.borderStyle="solid";
+  btn.disabled=true;
+  dashboard();
+  toast("Đã lưu \""+word+"\" vào Flashcard!");
+}
+
+function addLookupHistory(word){
+  state.lookupHistory=state.lookupHistory||[];
+  state.lookupHistory=state.lookupHistory.filter(w=>w!==word);
+  state.lookupHistory.unshift(word);
+  if(state.lookupHistory.length>20)state.lookupHistory=state.lookupHistory.slice(0,20);
+  save();
+  renderLookupHistory();
+}
+
+function renderLookupHistory(){
+  const hist=state.lookupHistory||[];
+  const container=$("lookupHistory");
+  if(!hist.length){container.style.display="none";return}
+  container.style.display="block";
+  $("historyChips").innerHTML=hist.map(w=>`<button class="history-chip" onclick="$('lookupInput').value='${w.replace(/'/g,"\\'")}';lookupWord('${w.replace(/'/g,"\\'")}')">${w}</button>`).join("");
+}
+
+// =============== EVENT LISTENERS ===============
+document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+$("continueBtn").onclick=()=>openLesson(nextUnit().id);
+$("lessonBack").onclick=()=>showPage("course");
+$("startLessonPractice").onclick=startUnitPractice;
+$("hearExamples").onclick=speakExamples;
+$("newPractice").onclick=startMixed;
+$("checkBtn").onclick=checkAnswer;
+$("nextBtn").onclick=()=>{qIndex++;renderQuestion()};
+$("answerInput").onkeydown=e=>{if(e.key==="Enter")(answered?$("nextBtn").click():checkAnswer())};
+$("options").onclick=e=>{const b=e.target.closest(".option");if(!b||answered)return;document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");selected=decodeURIComponent(b.dataset.answer)};
+$("unitList").onclick=e=>{const u=e.target.closest("[data-unit]");if(u)openLesson(u.dataset.unit)};
+$("weekPlan").onclick=e=>{const u=e.target.closest("[data-unit]");if(u)openLesson(u.dataset.unit)};
+document.querySelectorAll("[data-level]").forEach(b=>b.onclick=()=>{levelFilter=b.dataset.level;document.querySelectorAll("[data-level]").forEach(x=>x.classList.toggle("on",x===b));renderCourse()});
+$("flashcard").onclick=e=>{if(!e.target.closest(".audio"))flipFlashcard()};
+$("flashcard").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();flipFlashcard()}};
+$("flashAudio").onclick=e=>{e.stopPropagation();const c=flashCards[flashIndex];if(c)speakCard(c.english)};
+$("flashBackAudio").onclick=e=>{e.stopPropagation();const c=flashCards[flashIndex];if(c)speakCard(c.english)};
+$("flashRatings").onclick=e=>{const b=e.target.closest("[data-rate]");if(b)rateFlashcard(Number(b.dataset.rate))};
+$("flashLevel").onchange=e=>{flashLevel=e.target.value;buildFlashDeck()};
+
+// Lookup events
+$("lookupBtn").onclick=()=>lookupWord($("lookupInput").value);
+$("lookupInput").onkeydown=e=>{if(e.key==="Enter")lookupWord($("lookupInput").value)};
+
+// === INIT ===
+updateDay();activeUnit=course.find(u=>u.id===state.lastUnit)||course[0];dashboard();renderCourse();buildFlashDeck();save();
+</script>
+<script src="../../notion-connection.js?v=spider-field-unified-1"></script><script src="../../app-guard.js"></script>
+<script src="../../assets/gambit-app-polish.js"></script>
+</body>
+</html>

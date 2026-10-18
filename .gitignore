@@ -23,6 +23,7 @@ npm-debug.log*
 # Environment
 .env
 .env.local
+.field-service-release/
 
 # Extracted APK assets
 tools/apk_unpacked/

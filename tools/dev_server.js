@@ -52,15 +52,17 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  const privateApi = {'/api/routine':'routine','/api/notion-session':'notion-session','/api/notion':'notion'}[rawUrl];
+  const fieldKind={'/api/cloud':'cloud','/api/finance':'finance','/api/finance-v2':'finance-v2'}[rawUrl]||(rawUrl.startsWith('/api/google/')?'google':null);
+  const privateApi = fieldKind?'field':{'/api/routine':'routine','/api/notion-session':'notion-session','/api/notion':'notion'}[rawUrl];
   if (privateApi) {
     let body='';req.on('data', chunk=>{body+=chunk;});
     req.on('end',async()=>{
       try {
         req.query=Object.fromEntries(new URL(req.url,'http://'+req.headers.host).searchParams);
+        if(fieldKind){req.query.kind=fieldKind;if(fieldKind==='google')req.query.route=rawUrl.split('/').pop();}
         req.body=body ? JSON.parse(body) : undefined;
         const {default:handler}=await import('../api/'+privateApi+'.mjs');
-        const adapter={setHeader:(k,v)=>res.setHeader(k,v),status(code){res.statusCode=code;return this;},json(value){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(value));}};
+        const adapter={setHeader:(k,v)=>res.setHeader(k,v),status(code){res.statusCode=code;return this;},end(){res.end();},json(value){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(value));}};
         await handler(req,adapter);
       } catch {res.statusCode=500;res.end(JSON.stringify({error:'API unavailable'}));}
     });return;
