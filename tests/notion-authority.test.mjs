@@ -4,7 +4,7 @@ import { publicGameRecord, selectedGameView, skillIds, logFingerprint } from '..
 import { notionSkillAnimation } from '../js/game/NotionSkillAnimation.js';
 import { PhaseOneGameEngine } from '../js/game/PhaseOneGameEngine.js';
 import { readNotionGameState } from '../server/notion-game-reader.mjs';
-import gameStateHandler from '../api/game-state.js';
+import gameStateHandler from '../api/game-state.mjs';
 
 test('public game projection preserves formula values and zeros while excluding private and unapproved fields', () => {
   const record = publicGameRecord({ id: 'a', properties: { HP: { type: 'number', number: 0 }, Energy: { type: 'number', number: 0 }, Level: { type: 'formula', formula: { number: 1 } }, Gold: { type: 'number', number: 500 }, Diary: { type: 'rich_text', rich_text: [{ plain_text: 'private' }] }, 'Spider Suits': { type: 'relation', relation: [{ id: 'not-equipped' }] } } }, 'profile');

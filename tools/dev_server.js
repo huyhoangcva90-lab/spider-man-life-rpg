@@ -45,7 +45,7 @@ const server = http.createServer((req, res) => {
   const staticPath = /^\/pk\/?$/.test(rawUrl) ? '/index.html' : rawUrl;
 
   if (rawUrl === '/api/game-state') {
-    import('../api/game-state.js').then(({ default: handler }) => {
+    import('../api/game-state.mjs').then(({ default: handler }) => {
       const adapter = { setHeader: (key, value) => res.setHeader(key, value), status(code) { res.statusCode = code; return this; }, json(value) { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(value)); } };
       return handler(req, adapter);
     }).catch(() => { res.writeHead(500); res.end('Game display unavailable'); });
