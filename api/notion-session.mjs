@@ -31,14 +31,14 @@ export function hasOwnerSession(req, secret = process.env.NOTION_PROXY_ACCESS_TO
 export default function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   const secret = process.env.NOTION_PROXY_ACCESS_TOKEN || '';
-  if (req.method === 'GET') return res.status(200).json({ ok: true, configured: Boolean(secret && process.env.NOTION_API_KEY), connected: hasOwnerSession(req, secret) });
+  if (req.method === 'GET') return res.status(200).json({ ok: true, configured: Boolean(secret && (process.env.NOTION_API_KEY || process.env.NOTION_TOKEN)), connected: hasOwnerSession(req, secret) });
   if (!sameOrigin(req)) return res.status(403).json({ ok: false, error: 'Request must come from this site' });
   if (req.method === 'DELETE') {
     res.setHeader('Set-Cookie', `${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=0`);
     return res.status(200).json({ ok: true });
   }
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
-  if (!secret || !process.env.NOTION_API_KEY) return res.status(503).json({ ok: false, error: 'Notion owner access is not configured on this deployment' });
+  if (!secret || !(process.env.NOTION_API_KEY || process.env.NOTION_TOKEN)) return res.status(503).json({ ok: false, error: 'Notion owner access is not configured on this deployment' });
   const supplied = req.body?.accessCode;
   if (typeof supplied !== 'string' || supplied.length > 512) return res.status(400).json({ ok: false, error: 'Invalid access code' });
   const actual = Buffer.from(supplied);

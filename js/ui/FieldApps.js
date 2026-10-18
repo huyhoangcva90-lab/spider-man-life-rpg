@@ -1,6 +1,6 @@
 export const FIELD_APPS = Object.freeze({
   __proto__: null,
-  routine: { title: 'Nhịp sinh học', backend: true },
+  routine: { title: 'Nhịp sinh học', backend: false },
   dopamine: { title: 'Dopamine Menu', backend: true },
   timetable: { title: 'Lịch trong ngày', backend: true },
   gym: { title: 'Gym OS', backend: true },

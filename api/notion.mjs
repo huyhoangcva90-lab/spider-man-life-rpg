@@ -1,9 +1,9 @@
 // Vercel Serverless Function Proxy for Notion API.
 // Public deployments must not expose the owner's full Notion integration.
-import { hasOwnerSession } from './notion-session.js';
+import { hasOwnerSession } from './notion-session.mjs';
 
 export default async function handler(req, res) {
-  const token = process.env.NOTION_API_KEY || '';
+  const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN || '';
   const accessToken = process.env.NOTION_PROXY_ACCESS_TOKEN || '';
   const { path } = req.query;
 

@@ -52,51 +52,18 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // API Proxy for Notion
-  if (rawUrl === '/api/notion') {
-    const urlObj = new URL(req.url, `http://${req.headers.host}`);
-    const notionPath = urlObj.searchParams.get('path');
-    const token = process.env.NOTION_API_KEY || '';
-
-    if (!token) {
-      res.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify({ ok: false, error: 'Notion is not configured on this server' }));
-      return;
-    }
-
-    if (!notionPath) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ ok: false, error: 'Missing path query parameter' }));
-      return;
-    }
-
-    let bodyData = '';
-    req.on('data', chunk => { bodyData += chunk; });
-    req.on('end', async () => {
+  const privateApi = {'/api/routine':'routine','/api/notion-session':'notion-session','/api/notion':'notion'}[rawUrl];
+  if (privateApi) {
+    let body='';req.on('data', chunk=>{body+=chunk;});
+    req.on('end',async()=>{
       try {
-        const notionUrl = `https://api.notion.com${notionPath.startsWith('/') ? notionPath : `/${notionPath}`}`;
-        const fetchOpts = {
-          method: req.method,
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Notion-Version': '2022-06-28',
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        };
-        if (req.method !== 'GET' && req.method !== 'HEAD' && bodyData) {
-          fetchOpts.body = bodyData;
-        }
-
-        const nRes = await fetch(notionUrl, fetchOpts);
-        const json = await nRes.json().catch(() => ({}));
-        res.writeHead(nRes.status, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ ok: nRes.ok, data: json }));
-      } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ ok: false, error: err.message }));
-      }
-    });
-    return;
+        req.query=Object.fromEntries(new URL(req.url,'http://'+req.headers.host).searchParams);
+        req.body=body ? JSON.parse(body) : undefined;
+        const {default:handler}=await import('../api/'+privateApi+'.mjs');
+        const adapter={setHeader:(k,v)=>res.setHeader(k,v),status(code){res.statusCode=code;return this;},json(value){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(value));}};
+        await handler(req,adapter);
+      } catch {res.statusCode=500;res.end(JSON.stringify({error:'API unavailable'}));}
+    });return;
   }
 
   let decodedPath;

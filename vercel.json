@@ -1,7 +1,33 @@
 {
   "rewrites": [
-    { "source": "/api/game-state", "destination": "/api/game-state.mjs" },
-    { "source": "/pk", "destination": "/index.html" },
-    { "source": "/pk/", "destination": "/index.html" }
-  ]
+    {
+      "source": "/api/routine",
+      "destination": "/api/routine.mjs"
+    },
+    {
+      "source": "/api/notion-session",
+      "destination": "/api/notion-session.mjs"
+    },
+    {
+      "source": "/api/notion",
+      "destination": "/api/notion.mjs"
+    },
+    {
+      "source": "/api/game-state",
+      "destination": "/api/game-state.mjs"
+    },
+    {
+      "source": "/pk",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/pk/",
+      "destination": "/index.html"
+    }
+  ],
+  "functions": {
+    "api/routine.mjs": {
+      "maxDuration": 60
+    }
+  }
 }

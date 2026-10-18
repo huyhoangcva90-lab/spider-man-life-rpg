@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import sessionHandler, { hasOwnerSession } from '../api/notion-session.js';
-import notionHandler from '../api/notion.js';
+import sessionHandler, { hasOwnerSession } from '../api/notion-session.mjs';
+import notionHandler from '../api/notion.mjs';
 
 function response() {
   return {
