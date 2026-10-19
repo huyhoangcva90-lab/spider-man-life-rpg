@@ -108,3 +108,10 @@ html[data-notion-authority] .hud-bars label:first-child > i { visibility: hidden
   .notion-enemy-idle, .notion-skill-effect::before { animation: none !important; }
   html[data-notion-authority] .action-combat-stage .action-fighter--hero { animation: none !important; }
 }
+
+/* Passive perks are information, separated from active move controls. */
+.combat-action-bar[data-layout="grouped"]{display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
+.notion-active-skills{display:flex;gap:6px;min-width:0;overflow-x:auto;padding:2px;overscroll-behavior:contain}
+.notion-active-skills>button{flex:1 0 100px;min-width:90px}
+.notion-passive-skills{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:3px 6px;color:#c9d9e0;background:#102537;font:600 9px/1.4 'Be Vietnam Pro',sans-serif}
+.notion-passive-skills>button{display:inline-flex;align-items:center;min-height:32px;width:auto!important;padding:5px 8px!important;border:1px solid #557382;background:#203b49;color:#cce7ed;font:500 10px/1.4 'Be Vietnam Pro',sans-serif;cursor:pointer}

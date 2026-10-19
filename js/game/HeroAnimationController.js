@@ -69,7 +69,7 @@ export class HeroAnimationController {
     this.original = new OriginalCosmicSprite(this.hero, (token) => token === this.playToken);
     this.original.load().then(() => {
       if (['combat_idle', 'KO'].includes(this.hero.dataset.animation)) {
-        this.play(this.engine?.state?.progression?.hp <= 0 ? 'KO' : 'combat_idle');
+        this.play(this.restAnimation());
       }
     }).catch((error) => console.warn('Original Cosmic sprite unavailable:', error));
     this.bus.on('HERO_PREPARE_MISSION', () => {
@@ -86,9 +86,14 @@ export class HeroAnimationController {
     this.bus.on('SETTINGS_CHANGED', (settings) => { this.speed = settings.combatSpeed || 1; });
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) window.clearInterval(this.timer);
-      else this.play(this.engine?.state?.progression?.hp <= 0 ? 'KO' : 'combat_idle');
+      else this.play(this.restAnimation());
     });
-    this.play(this.engine?.state?.progression?.hp <= 0 ? 'KO' : 'combat_idle');
+    this.play(this.restAnimation());
+  }
+
+  restAnimation(){
+    if(this.engine?.notionAuthority&&this.hero?.dataset.notionVitals!=='confirmed')return 'combat_idle';
+    return this.engine?.state?.progression?.hp<=0?'KO':'combat_idle';
   }
 
   async playCombatResult(result = {}) {

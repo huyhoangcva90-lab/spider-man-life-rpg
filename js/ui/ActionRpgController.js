@@ -1,5 +1,5 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
-import { NotionGamePresenter } from './NotionGamePresenter.js?build=hero-build-preview-5';
+import { NotionGamePresenter } from './NotionGamePresenter.js?build=skill-vitals-6';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {

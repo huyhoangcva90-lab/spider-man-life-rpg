@@ -18,14 +18,13 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   const remote=fieldSession(req);
   try {
-    if(!token&&!remote){
+    if(!token&&(!remote||!(await fieldStatus(req)).connected)){
       const response=await fieldRequest('/api/spider-game');
       if(!response.ok)return res.status(503).json({ok:false,error:'Notion display is not configured'});
       const payload=await response.json();if(!payload.ok)throw Error();
       return res.status(200).json({ok:true,data:projectFieldGame(payload.data)});
     }
     if(!token){
-      if(!(await fieldStatus(req)).connected)return res.status(401).json({ok:false,error:'Kết nối riêng đã hết hạn.'});
       // No shared cache for a private upstream session; only approved game fields leave the reader.
       const data=await readNotionGameState('field-session',{fetcher:(url,options)=>fieldRequest('/api/notion?path='+encodeURIComponent(new URL(url).pathname+new URL(url).search),{method:options.method,body:options.body,session:remote})});
       return res.status(200).json({ok:true,data});
