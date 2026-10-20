@@ -2,7 +2,7 @@
 // Public deployments must not expose the owner's full Notion integration.
 
 export default async function handler(req, res) {
-  const token = process.env.NOTION_API_KEY || '';
+  const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN || '';
   const accessToken = process.env.NOTION_PROXY_ACCESS_TOKEN || '';
   const { path } = req.query;
 

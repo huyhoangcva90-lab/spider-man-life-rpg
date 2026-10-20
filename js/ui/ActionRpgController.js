@@ -87,11 +87,28 @@ export class ActionRpgController {
     this.bus.on('CAMPAIGN_UPDATED', (result) => this.handleUpdate(result));
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
       if (section === 'CITY') return this.selectSection('CITY');
-      if (section === 'ARCHIVE') { section = 'HERO'; tab = 'BADGES'; }
-      if (section === 'CHRONICLE') { section = 'FIELD'; tab = tab === 'RHYTHM' ? 'TIME' : tab; }
       this.selectSection(section, false);
       this.panelTab = tab || this.defaultTab(section);
       this.renderPanel();
+    });
+    window.addEventListener('message', (event) => {
+      const frame = document.querySelector('.habit-app-frame');
+      if (event.origin !== window.location.origin || event.source !== frame?.contentWindow || event.data?.type !== 'SPIDEY_NOTION_CHECKIN') return;
+      const { kind, id } = event.data;
+      const list = kind === 'habits' ? this.notionHabits : kind === 'activeQuests' ? this.notionActiveQuests : kind === 'masterCalendar' ? this.notionTasks : null;
+      const record = list?.find((item) => item.id === id);
+      if (!record || record.done || (kind === 'habits' && record.today)) return;
+      record.done = true;
+      if (kind === 'habits') {
+        record.today = true;
+        const result = this.engine.recordHabitCheckin(id);
+        if (!result.blocked) this.queueHeroProfileSync();
+      } else {
+        const result = this.engine.completeRealQuest({ id, title: record.title || record.name, type: 'NOTION_MISSION', status: 'DONE', source: 'NOTION', xp: record.gameXp ?? record.xp });
+        if (result) this.queueHeroProfileSync();
+      }
+      this.persistNotionCache();
+      this.render();
     });
 
     // Load rich game datasets
@@ -427,7 +444,7 @@ export class ActionRpgController {
     document.body.classList.toggle('game-no-shake', !snapshot.settings.screenShake);
     document.body.classList.toggle('game-no-comic', !snapshot.settings.comicText);
     this.syncAutoCombat(snapshot.settings);
-    if (!document.getElementById('game-panel-backdrop')?.hasAttribute('hidden')) this.renderPanel();
+    if (!document.getElementById('game-panel-backdrop')?.hasAttribute('hidden') && this.panelTab !== 'APP') this.renderPanel();
   }
 
   renderEnemySprite(enemy) {
@@ -478,9 +495,9 @@ export class ActionRpgController {
 
   defaultTab(section) {
     const map = {
-      QUESTS: 'TODAY',
+      QUESTS: 'APP',
       HERO: 'PROFILE',
-      HABITS: 'TODAY',
+      HABITS: 'APP',
       FIELD: 'SYSTEMS',
       ARCHIVE: 'BESTIARY',
       CHRONICLE: 'RHYTHM',
@@ -510,9 +527,9 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: ['TODAY', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
+      QUESTS: ['APP', 'TODAY', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
       HERO: ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'BADGES'],
-      HABITS: ['TODAY', 'PROGRESS', '66 DAYS'],
+      HABITS: ['APP', 'TODAY', 'PROGRESS', '66 DAYS'],
       FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
       CHRONICLE: ['RHYTHM', 'JOURNAL', 'GYM'],
@@ -529,6 +546,7 @@ export class ActionRpgController {
       this.renderPanel({ resetScroll: true });
     }));
 
+    content.classList.toggle('game-panel-content--habit-app', this.panelTab === 'APP');
     content.innerHTML = this.renderSection();
     if (resetScroll) content.scrollTop = 0;
     this.bindEvents(content);
@@ -548,6 +566,9 @@ export class ActionRpgController {
   }
 
   renderHabitSection() {
+    if (this.panelTab === 'APP') {
+      return '<iframe class="habit-app-frame" src="./life-reset/index.html" title="Life Reset và Hello Habit" loading="lazy"></iframe>';
+    }
     const hasGameEnabledSelection = this.notionHabits.some((habit) => habit.gameEnabled);
     const habits = this.notionHabits
       .map((habit, sourceIndex) => ({ ...habit, sourceIndex }))
@@ -671,6 +692,7 @@ export class ActionRpgController {
      1. TAB [QUESTS]: TODO (NOTION), HABITS (STREAK), PATROL TIMETABLE
   ------------------------------------------------------------- */
   renderQuestsSection() {
+    if (this.panelTab === 'APP') return '<iframe class="habit-app-frame" src="./life-reset/index.html?tab=quests" title="Quest của tôi và Habit" loading="lazy"></iframe>';
     const sourceLabel = this.notionSource === 'live' ? 'Notion live' : this.notionSource === 'mixed' ? 'Notion live một phần' : 'Bản chụp Notion';
     const sourceTime = this.notionSyncedAt ? new Date(this.notionSyncedAt).toLocaleString('vi-VN') : 'Chưa rõ thời điểm';
     const pendingCount = readPendingNotionWrites().length;
@@ -1474,7 +1496,7 @@ export class ActionRpgController {
         btn.disabled = false;
         btn.textContent = '↻ ĐỒNG BỘ NOTION';
       }
-      this.renderPanel();
+      if (this.panelTab !== 'APP') this.renderPanel();
     }
   }
 

@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 const localEnv = path.join(ROOT_DIR, '.env.local');
-if (!process.env.NOTION_API_KEY && fs.existsSync(localEnv) && typeof process.loadEnvFile === 'function') {
+if (!process.env.NOTION_API_KEY && !process.env.NOTION_TOKEN && fs.existsSync(localEnv) && typeof process.loadEnvFile === 'function') {
   process.loadEnvFile(localEnv);
 }
 const PORT = process.env.PORT || 4173;
@@ -47,7 +47,7 @@ const server = http.createServer((req, res) => {
   if (rawUrl === '/api/notion') {
     const urlObj = new URL(req.url, `http://${req.headers.host}`);
     const notionPath = urlObj.searchParams.get('path');
-    const token = process.env.NOTION_API_KEY || '';
+    const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN || '';
 
     if (!token) {
       res.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8' });

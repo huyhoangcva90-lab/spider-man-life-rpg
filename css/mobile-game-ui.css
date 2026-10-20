@@ -1,0 +1,560 @@
+/* ==========================================================================
+   SPIDEY LIFE — MOBILE GAME UI / UX REFINEMENT
+   Preserves all existing mechanics, Notion sync, and asset registries while
+   delivering top-tier mobile portrait ergonomics and visual hierarchy.
+   ========================================================================== */
+
+:root {
+  --mobile-hud-h: 56px;
+  --mobile-nav-h: 62px;
+  --game-gold: #f2c06b;
+  --game-red: #f0645c;
+  --game-cyan: #54b6d0;
+  --game-green: #83b96b;
+  --game-purple: #a855f7;
+  --game-btn-shadow: 0 4px 0 #03070d, 0 6px 12px rgba(0,0,0,0.5);
+  --game-btn-shadow-active: 0 1px 0 #03070d;
+}
+
+/* --------------------------------------------------------------------------
+   1. VIEWPORT & CONTAINER: EDGE-TO-EDGE ON MOBILE
+   -------------------------------------------------------------------------- */
+@media (max-width: 680px) {
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    touch-action: manipulation;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .tracker-viewport {
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #050d18 !important;
+    overflow: hidden !important;
+  }
+
+  .tracker-device-frame {
+    width: 100% !important;
+    height: 100% !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  /* Tone down thick decorative claw slice frame on small screens to gain screen space */
+  .claw-slice-frame {
+    display: none !important;
+  }
+
+  .frame-top-bar {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 10px !important;
+    background: #071526 !important;
+    border-bottom: 2px solid #143552 !important;
+    z-index: 120 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .brand-plaque {
+    gap: 8px !important;
+  }
+
+  .tracker-logo-image {
+    height: 22px !important;
+  }
+
+  .brand-subtitle {
+    font-size: 8px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  /* Make tracker-main flexible container filling available space between header & nav */
+  .frame-main-content {
+    flex: 1 1 auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    margin: 44px 0 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. PERSISTENT TOP HUD RESOURCE BAR
+   -------------------------------------------------------------------------- */
+.game-hud-strip {
+  background: linear-gradient(180deg, #0b1e33, #071424) !important;
+  border-bottom: 2px solid #1c4568 !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4) !important;
+  padding: 6px 10px !important;
+  z-index: 85 !important;
+}
+
+@media (max-width: 680px) {
+  .game-hud-strip {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    min-height: 48px !important;
+    padding: 4px 8px !important;
+  }
+
+  .hud-avatar {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .hud-mask {
+    width: 28px !important;
+    height: 28px !important;
+    flex-basis: 28px !important;
+    border: 2px solid #f2c06b !important;
+    border-radius: 50% !important;
+    background: #0f2c4a !important;
+    box-shadow: 0 0 6px rgba(242, 192, 107, 0.4) !important;
+    font-size: 14px !important;
+  }
+
+  .hud-avatar > div {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .hud-avatar small {
+    display: none !important;
+  }
+
+  .hud-avatar strong {
+    font-size: 8px !important;
+    max-width: 70px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    color: #e5f4f8 !important;
+  }
+
+  .hud-avatar em {
+    display: none !important;
+  }
+
+  .hud-stat--level {
+    flex: 0 0 auto !important;
+    background: #14375a !important;
+    border: 1px solid #54b6d0 !important;
+    border-radius: 6px !important;
+    padding: 2px 5px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .hud-stat--level small {
+    font-size: 6px !important;
+    color: #9ed9e7 !important;
+  }
+
+  .hud-stat--level strong {
+    font-size: 11px !important;
+    color: #f2c06b !important;
+    line-height: 1 !important;
+  }
+
+  /* HP & ENERGY BARS */
+  .hud-bars {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    padding: 0 4px !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .hud-bars label:first-child {
+    display: none !important; /* Hide EXP bar on narrow mobile header to avoid clutter */
+  }
+
+  .hud-bars label {
+    display: grid !important;
+    grid-template-columns: 24px 1fr !important;
+    gap: 4px !important;
+    align-items: center !important;
+    font-size: 6px !important;
+    color: #9ed9e7 !important;
+    margin: 0 !important;
+  }
+
+  .hud-bars label span {
+    font-size: 7px !important;
+    font-weight: 700 !important;
+    color: #eef6f8 !important;
+  }
+
+  .hud-bars label i {
+    height: 7px !important;
+    background: #03080f !important;
+    border: 1px solid #1a3f60 !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.8) !important;
+  }
+
+  #hud-hp-fill {
+    background: linear-gradient(90deg, #f0645c, #ff8780) !important;
+    box-shadow: 0 0 5px rgba(240, 100, 92, 0.6) !important;
+  }
+
+  #hud-web-fill {
+    background: linear-gradient(90deg, #54b6d0, #8ce5f8) !important;
+    box-shadow: 0 0 5px rgba(84, 182, 208, 0.6) !important;
+  }
+
+  /* RE-ENABLE ECONOMY ON MOBILE AS COMPACT PILL */
+  .hud-economy {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: 2px !important;
+    flex: 0 0 auto !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .hud-economy span {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    background: #112940 !important;
+    border: 1px solid #234f78 !important;
+    border-radius: 4px !important;
+    padding: 2px 5px !important;
+  }
+
+  .hud-economy span small {
+    display: none !important;
+  }
+
+  .hud-economy span b {
+    font-size: 9px !important;
+    color: #f2c06b !important;
+  }
+
+  .hud-economy span:first-child::before {
+    content: '🪙';
+    font-size: 8px;
+  }
+
+  .hud-economy span:last-child::before {
+    content: '🔥';
+    font-size: 8px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. BOTTOM NAVIGATION: 5-TAB TOUCH-FRIENDLY THUMB ZONE
+   -------------------------------------------------------------------------- */
+.game-primary-nav {
+  position: absolute !important;
+  transform: none !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: var(--mobile-nav-h) !important;
+  margin: 0 !important;
+  padding: 4px 6px max(6px, env(safe-area-inset-bottom)) !important;
+  background: linear-gradient(180deg, #091a2d 0%, #040c17 100%) !important;
+  border-top: 2px solid #1c4568 !important;
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.6) !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 4px !important;
+  z-index: 110 !important;
+  align-items: center !important;
+}
+
+.game-primary-nav button {
+  position: relative !important;
+  height: 50px !important;
+  min-height: 48px !important;
+  border-radius: 8px !important;
+  border: 1px solid #183a59 !important;
+  background: linear-gradient(180deg, #102942 0%, #0a1b2d 100%) !important;
+  color: #8da4be !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  cursor: pointer !important;
+  transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.4) !important;
+}
+
+.game-primary-nav button svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: currentColor !important;
+  transition: transform 0.15s ease !important;
+}
+
+.game-primary-nav button span {
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1 !important;
+}
+
+.game-primary-nav button:active {
+  transform: translateY(2px) !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6) !important;
+}
+
+/* Active tab highlight */
+.game-primary-nav button.active {
+  background: linear-gradient(180deg, #1c4974 0%, #0e2740 100%) !important;
+  border-color: #54b6d0 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(84, 182, 208, 0.3), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+}
+
+.game-primary-nav button.active svg {
+  transform: scale(1.12) !important;
+  color: #54b6d0 !important;
+}
+
+/* Central BATTLE tab elevated like top mobile games */
+.game-primary-nav button.game-primary-nav__arena {
+  background: linear-gradient(180deg, #882220 0%, #501211 100%) !important;
+  border: 1.5px solid #f0645c !important;
+  color: #ffe8e7 !important;
+  box-shadow: 0 -2px 10px rgba(240, 100, 92, 0.3), 0 3px 6px rgba(0,0,0,0.5) !important;
+}
+
+.game-primary-nav button.game-primary-nav__arena.active {
+  background: linear-gradient(180deg, #b02a28 0%, #681514 100%) !important;
+  border-color: #f2c06b !important;
+  color: #fff !important;
+  box-shadow: 0 0 14px rgba(242, 192, 107, 0.4), inset 0 1px 0 rgba(255,255,255,0.25) !important;
+}
+
+.game-primary-nav button.game-primary-nav__arena svg {
+  color: #f2c06b !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. SEAMLESS SCREEN PANEL (QUESTS, HERO, HABITS, FIELD)
+   -------------------------------------------------------------------------- */
+.game-panel-backdrop {
+  position: absolute !important;
+  inset: 0 0 var(--mobile-nav-h) 0 !important;
+  background: #071424 !important;
+  backdrop-filter: none !important;
+  z-index: 75 !important;
+  display: block !important;
+  overflow: hidden !important;
+}
+
+.game-panel-backdrop[hidden] {
+  display: none !important;
+}
+
+.game-panel {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* Clean panel header */
+.game-panel > header {
+  flex: 0 0 auto !important;
+  padding: 8px 12px !important;
+  background: linear-gradient(180deg, #0d2238 0%, #081726 100%) !important;
+  border-bottom: 1px solid #193855 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.game-panel > header div {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.game-panel > header small {
+  font-size: 8px !important;
+  color: #54b6d0 !important;
+  letter-spacing: 0.5px !important;
+}
+
+.game-panel > header h2 {
+  font-size: 11px !important;
+  color: #f2c06b !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.game-panel > header button#game-panel-close {
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 10px !important;
+  background: #15324d !important;
+  border: 1px solid #2d618c !important;
+  border-radius: 6px !important;
+  color: #9ed9e7 !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+}
+
+/* SUBTABS: HORIZONTAL PILL SEGMENTED CONTROLS */
+#game-panel-tabs {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  gap: 6px !important;
+  padding: 6px 10px !important;
+  background: #050e18 !important;
+  border-bottom: 1px solid #142f48 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+}
+
+#game-panel-tabs::-webkit-scrollbar {
+  display: none !important;
+}
+
+#game-panel-tabs button {
+  flex: 0 0 auto !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 12px !important;
+  border-radius: 16px !important;
+  border: 1px solid #1a3c5d !important;
+  background: #0d2238 !important;
+  color: #8faec8 !important;
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.4px !important;
+  white-space: nowrap !important;
+  transition: all 0.15s ease !important;
+}
+
+#game-panel-tabs button.active {
+  background: #194b75 !important;
+  border-color: #54b6d0 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 8px rgba(84, 182, 208, 0.3) !important;
+}
+
+/* SCROLLABLE PANEL CONTENT */
+.game-panel-content {
+  flex: 1 1 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 10px 10px 24px !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. COMBAT ACTION BAR (CHUNKY 3D TACTILE BUTTONS)
+   -------------------------------------------------------------------------- */
+.combat-action-bar {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 5px !important;
+  padding: 6px !important;
+  background: #06111f !important;
+  border-top: 1px solid #173857 !important;
+}
+
+.combat-action-bar button {
+  border-radius: 8px !important;
+  min-height: 52px !important;
+  border: 1.5px solid #28557e !important;
+  background: linear-gradient(180deg, #183e63 0%, #0f2740 100%) !important;
+  box-shadow: 0 3px 0 #071524, 0 4px 6px rgba(0,0,0,0.5) !important;
+  transition: transform 0.08s ease, filter 0.08s ease !important;
+}
+
+.combat-action-bar button:active:not(:disabled) {
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 #071524 !important;
+}
+
+.combat-action-bar button[data-combat-action="attack"] {
+  background: linear-gradient(180deg, #326b9c 0%, #173f63 100%) !important;
+  border-color: #54b6d0 !important;
+}
+
+.combat-action-bar button.combat-action--ultimate {
+  background: linear-gradient(180deg, #a82e2b 0%, #631615 100%) !important;
+  border-color: #f0645c !important;
+}
+
+.combat-action-bar button.combat-action--ultimate:not(:disabled) {
+  box-shadow: 0 0 12px rgba(240, 100, 92, 0.5), 0 3px 0 #071524 !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. CARDS IN QUESTS, HABITS, HERO ROSTER
+   -------------------------------------------------------------------------- */
+.pixel-game-card, .quest-board-card, .life-reset-card {
+  border-radius: 8px !important;
+  border: 1px solid #1a3c5e !important;
+  background: linear-gradient(180deg, #0e243a 0%, #071525 100%) !important;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.3) !important;
+  padding: 10px !important;
+}
+
+.pixel-action-btn {
+  border-radius: 6px !important;
+  min-height: 38px !important;
+  font-family: 'Silkscreen', monospace !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 0 3px 0 #040d17 !important;
+  transition: transform 0.08s ease !important;
+}
+
+.pixel-action-btn:active:not(:disabled) {
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 #040d17 !important;
+}

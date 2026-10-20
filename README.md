@@ -51,13 +51,17 @@ Mở `tests/domain-tests.html` qua static server. Bộ test browser-native kiể
 
 ## Chạy local
 
-Đây là ứng dụng HTML/CSS/JavaScript module không cần build step. Để đọc và ghi Notion từ máy cá nhân, tạo `.env.local` trong thư mục dự án với dòng `NOTION_API_KEY=<khóa của bạn>` rồi chạy:
+Đây là ứng dụng HTML/CSS/JavaScript module không cần build step. Để đọc và ghi Notion từ máy cá nhân, tạo `.env.local` trong thư mục dự án với dòng `NOTION_API_KEY=<khóa của bạn>` (hoặc `NOTION_TOKEN=<khóa của bạn>` như Gambit) rồi chạy:
 
 ```bash
 powershell -ExecutionPolicy Bypass -File tools/start_local_server.ps1 -Port 4173
 ```
 
 Sau đó mở <http://127.0.0.1:4173/>. Nếu cổng 4173 đang chạy máy chủ cũ, hãy dừng máy chủ đó hoặc chọn cổng khác bằng `-Port 4186`. Máy chủ static thông thường không có API Notion.
+
+## Trang riêng có đăng nhập
+
+Bản Cloudflare Pages có trang đăng nhập riêng cho cả giao diện và dữ liệu Notion. Hướng dẫn cấu hình và đóng gói nằm trong [`docs/PRIVATE_CLOUDFLARE_PAGES.md`](docs/PRIVATE_CLOUDFLARE_PAGES.md). Gói triển khai được tạo bằng `node tools/prepare_private_pages.mjs`.
 
 ## Dữ liệu và âm thanh
 

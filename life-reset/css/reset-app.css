@@ -2691,3 +2691,91 @@ body::before {
     min-height: 124px;
   }
 }
+
+/* Personal Habit + Quest flow: the same ink, bright tabs and square checks. */
+.curved-bottom-dock {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.dock-item-btn { flex-direction: column; gap: 2px; min-width: 0; }
+.dock-item-btn svg { width: 20px; height: 20px; }
+.dock-item-btn span { font: 700 8px/1.2 'Silkscreen', monospace; white-space: nowrap; }
+body.embedded {
+  width: 100%; height: 100dvh; min-height: 0; padding: 0; overflow: hidden; display: block;
+}
+body.embedded .desktop-screen-wrapper { height: 100%; min-height: 0; gap: 0; }
+body.embedded .brand-top-banner { width: 100%; min-height: 0; flex: 0 0 52px; }
+body.embedded .brand-66-logo { width: 100%; min-height: 52px; justify-content: space-between; padding: 4px 14px; }
+body.embedded .phone-frame { flex: 1 1 auto; width: 100%; max-width: none; height: auto; min-height: 0; margin: 0; border-radius: 0; }
+body.embedded .app-main-content { min-height: 0; padding-bottom: 72px; }
+body.embedded .curved-bottom-dock { position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: 58px; z-index: 80; }
+.dock-item-btn:focus-visible,
+.personal-quest-filter:focus-visible,
+.personal-quest-complete:focus-visible,
+.cal-day-cell:focus-visible {
+  outline: 2px solid #8ce5f8;
+  outline-offset: -3px;
+}
+.personal-quest-heading {
+  padding: 22px 18px 19px;
+  border: 2px solid #02060b;
+  border-left: 5px solid #f0645c;
+  background: radial-gradient(circle at 100% 0, rgba(240, 100, 92, .18), transparent 45%), #101b2b;
+  box-shadow: 4px 5px 0 #02060b;
+}
+.personal-eyebrow {
+  color: #8ce5f8;
+  font: 700 9px/1.5 'Silkscreen', monospace;
+  letter-spacing: .08em;
+}
+.personal-quest-heading h2 {
+  margin: 10px 0 8px;
+  color: #fff;
+  font: 800 clamp(27px, 7vw, 43px)/1.05 'Syne', sans-serif;
+  letter-spacing: -.045em;
+}
+.personal-quest-heading h2 span { color: #f0645c; }
+.personal-quest-heading p { color: #b7ccd9; font-size: 12px; line-height: 1.5; }
+.personal-quest-filters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 5px 0; }
+.personal-quest-filter {
+  min-height: 39px;
+  border: 2px solid #263f57;
+  border-radius: 8px;
+  color: #a9bfce;
+  background: #101b2b;
+  font: 800 11px/1 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+}
+.personal-quest-filter.active { color: #071426; border-color: #8ce5f8; background: #8ce5f8; }
+.personal-quest-list { display: grid; gap: 11px; padding-bottom: 10px; }
+.personal-quest-card {
+  padding: 14px;
+  border: 2px solid #27455e;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #12283e, #0b1523 70%);
+  box-shadow: inset 4px 0 0 #f0645c, 3px 4px 0 #02060b;
+}
+.personal-quest-card.is-done { opacity: .72; box-shadow: inset 4px 0 0 #83b96b, 3px 4px 0 #02060b; }
+.personal-quest-card-top, .personal-quest-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.personal-quest-index { color: #f2c06b; font: 700 15px/1 'Silkscreen', monospace; }
+.personal-quest-type { color: #8ce5f8; font: 700 9px/1.4 'Silkscreen', monospace; text-align: right; }
+.personal-quest-card h3 { margin: 14px 0 6px; color: #fff; font: 800 19px/1.18 'Syne', sans-serif; overflow-wrap: anywhere; }
+.personal-quest-card p { min-height: 15px; margin: 0 0 15px; color: #adc4d2; font: 600 11px/1.45 'Plus Jakarta Sans', sans-serif; }
+.personal-quest-date { color: #f2c06b; font: 700 9px/1.4 'Silkscreen', monospace; }
+.personal-quest-complete {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 2px solid #02060b;
+  border-radius: 6px;
+  color: #081726;
+  background: #a9e0e9;
+  box-shadow: 2px 3px 0 #02060b;
+  font: 800 11px/1 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+}
+.personal-quest-complete:disabled { color: #95aaae; background: #233a42; cursor: default; }
+.personal-quest-empty { padding: 22px 18px; border: 1px dashed #3c566b; color: #b7ccd9; font-size: 12px; line-height: 1.6; }
+.hello-square-tile:disabled { cursor: default; }
+@media (max-width: 380px) {
+  .personal-quest-card-foot { align-items: flex-start; flex-direction: column; }
+  .personal-quest-complete { width: 100%; }
+}
