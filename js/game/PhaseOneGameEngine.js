@@ -1,9 +1,9 @@
-import { PHASE_ONE_DATA } from './data/phaseOneData.js';
+import { PHASE_ONE_DATA } from './data/phaseOneData.js?build=four-spiders-1';
 import { GameSaveManager, GAME_SAVE_VERSION } from './GameSaveManager.js';
 import { DamageEngine } from './DamageEngine.js';
 import { RewardEngine } from './RewardEngine.js';
 import { QuestEngine } from './QuestEngine.js';
-import { CombatEngine } from './CombatEngine.js';
+import { CombatEngine } from './CombatEngine.js?build=combat-energy-1';
 import { GAME_EVENTS } from './GameEvents.js';
 
 export class PhaseOneGameEngine {
@@ -24,6 +24,7 @@ export class PhaseOneGameEngine {
     const hero = this.content.heroes.get('peter-classic');
     const main = this.content.quests.get('main-001');
     const firstEnemy = this.content.enemies.get(main.enemyIds[0]);
+    const opponents = this.opponentsForWave(main, 0, 'NORMAL');
     return {
       saveVersion: GAME_SAVE_VERSION,
       updatedAt: Date.now(),
@@ -31,7 +32,7 @@ export class PhaseOneGameEngine {
       quest: { activeQuestId: main.id, activeChapterId: main.chapterId, completedQuestIds: [], completedExternalIds: [] },
       city: { districtId: main.districtId, zoneId: main.zoneId, weather: 'LIGHT RAIN', timeOfDay: 'NIGHT', activeEvents: [] },
       battle: {
-        status: 'ACTIVE', encounterIndex: 0, enemyHp: firstEnemy.hp, enemyStagger: 0, turn: 0, phase: 1,
+        status: 'ACTIVE', encounterIndex: 0, opponents, selectedEnemyIndex: 0, enemyHp: firstEnemy.hp, enemyStagger: 0, turn: 0, phase: 1,
         cooldowns: { web: 0, gadget: 0, ally: 0 }, charges: { gadget: 3 },
         combatLog: ['PATROL STARTED // MANHATTAN ROOFTOP'], storyComplete: false
       },
@@ -73,9 +74,41 @@ export class PhaseOneGameEngine {
     if (this.state.daily.date !== this.localDay()) this.state.daily = { date: this.localDay(), completed: 0, claimed: false, metrics: { WEB_USED: 0, ELITE_DEFEATED: 0 } };
     this.state.progression.ultimate = Math.max(0, Math.min(100, this.state.progression.ultimate));
     Object.keys(this.state.battle.cooldowns).forEach((key) => { this.state.battle.cooldowns[key] = Math.max(0, this.state.battle.cooldowns[key]); });
+    const quest = this.content.quests.get(this.state.quest.activeQuestId);
+    const expected = this.opponentsForWave(quest, this.state.battle.encounterIndex, this.state.settings.difficulty);
+    if (!Array.isArray(this.state.battle.opponents) || this.state.battle.opponents.length !== expected.length || this.state.battle.opponents.some((foe, index) => foe.id !== expected[index].id)) {
+      expected[0].hp = Math.max(0, Number(this.state.battle.enemyHp) || expected[0].hp);
+      expected[0].stagger = Number(this.state.battle.enemyStagger) || 0;
+      this.state.battle.opponents = expected;
+      this.state.battle.selectedEnemyIndex = 0;
+    }
+    const battle = this.state.battle;
+    if (!battle.opponents[battle.selectedEnemyIndex] || (battle.opponents[battle.selectedEnemyIndex].hp <= 0 && !battle.storyComplete)) {
+      battle.selectedEnemyIndex = Math.max(0, battle.opponents.findIndex((foe) => foe.hp > 0));
+    }
     const enemy = this.enemyDefinition();
     const maxHp = this.combatEngine.scaledMaxHp(enemy, this.state.settings.difficulty);
-    this.state.battle.enemyHp = Math.max(0, Math.min(maxHp, this.state.battle.enemyHp));
+    const selected = battle.opponents[battle.selectedEnemyIndex];
+    selected.hp = Math.max(0, Math.min(maxHp, Number(selected.hp) || 0));
+    selected.stagger = Math.max(0, Math.min(enemy.staggerMax, Number(selected.stagger) || 0));
+    battle.enemyHp = selected.hp;
+    battle.enemyStagger = selected.stagger;
+  }
+
+  opponentsForWave(quest, index, difficultyName = 'NORMAL') {
+    const ids = quest.enemyGroups?.[index] || [quest.enemyIds[Math.min(index, quest.enemyIds.length - 1)]];
+    return ids.map((id) => ({ id, hp: this.combatEngine.scaledMaxHp(this.content.enemies.get(id), difficultyName), stagger: 0 }));
+  }
+
+  selectEnemy(index) {
+    const battle = this.state.battle;
+    if (battle.storyComplete || !battle.opponents[index] || battle.opponents[index].hp <= 0) return false;
+    battle.selectedEnemyIndex = index;
+    battle.enemyHp = battle.opponents[index].hp;
+    battle.enemyStagger = battle.opponents[index].stagger;
+    battle.phase = this.combatEngine.phaseFor(this.enemyDefinition(), battle.enemyHp, this.state.settings.difficulty);
+    this.commit({ targetSelected: index });
+    return true;
   }
 
   enemyDefinition() { return this.combatEngine.enemyFor(this.state); }
@@ -100,6 +133,11 @@ export class PhaseOneGameEngine {
       encounterIndex: this.state.battle.encounterIndex,
       enemyHp: this.state.battle.enemyHp,
       enemyStagger: this.state.battle.enemyStagger,
+      opponents: this.state.battle.opponents.map((foe) => {
+        const definition = this.content.enemies.get(foe.id);
+        return { ...foe, name: definition.name, tier: definition.displayTier || definition.tier, maxHp: this.combatEngine.scaledMaxHp(definition, this.state.settings.difficulty) };
+      }),
+      selectedEnemyIndex: this.state.battle.selectedEnemyIndex,
       turn: this.state.battle.turn,
       phase: this.state.battle.phase,
       cooldowns: this.state.battle.cooldowns,
@@ -114,6 +152,7 @@ export class PhaseOneGameEngine {
   }
 
   completeRealQuest(entry) {
+    if (this.notionAuthority) return { blocked: true, reason: 'NOTION OWNS PROGRESSION' };
     const questEvent = this.questEngine.acceptCompletion(entry, this.state, this.localDay());
     if (!questEvent) return null;
     this.bus.emit(GAME_EVENTS.QUEST_COMPLETED, questEvent);
@@ -138,6 +177,7 @@ export class PhaseOneGameEngine {
   }
 
   recordHabitCheckin(habitId) {
+    if (this.notionAuthority) return { blocked: true, reason: 'NOTION OWNS RECOVERY' };
     if (!habitId) return { blocked: true, reason: 'HABIT ID MISSING' };
     if (this.state.daily.date !== this.localDay()) this.repairState();
     this.state.daily.habitIds ||= [];
@@ -156,6 +196,7 @@ export class PhaseOneGameEngine {
   }
 
   performActionById(actionId, options = {}) {
+    if (this.notionAuthority) return { blocked: true, reason: 'USE THE NOTION ATTACK BUTTON' };
     this.bus.emit(GAME_EVENTS.ATTACK_STARTED, { actionId });
     const previousUltimate = this.state.progression.ultimate;
     const result = this.combatEngine.perform(actionId, this.state, options);
@@ -163,7 +204,19 @@ export class PhaseOneGameEngine {
 
     const action = this.content.actions.get(actionId);
     if (action.slot === 'web') this.state.daily.metrics.WEB_USED = (this.state.daily.metrics.WEB_USED || 0) + 1;
-    this.log(`${action.label}: ${result.damage} DMG${result.weaknessMatch ? ' // WEAKNESS!' : result.resisted ? ' // RESISTED' : ''}`);
+    const splashDamage = result.splashHits?.reduce((total, hit) => total + hit.damage, 0) || 0;
+    this.log(`${action.label}: ${result.damage}${splashDamage ? ` + ${splashDamage} LAN` : ''} DMG${result.weaknessMatch ? ' // WEAKNESS!' : result.resisted ? ' // RESISTED' : ''}${action.bindTurns ? action.type === 'ALLY' ? ' // CHOÁNG' : ' // TRÓI' : ''}`);
+    for (const hit of result.splashHits || []) {
+      if (!hit.defeated) continue;
+      const defeated = this.content.enemies.get(hit.id);
+      const reward = this.applyReward(defeated.rewardId);
+      this.state.defeated.push(defeated.id);
+      if (defeated.tier === 'ELITE') this.state.daily.metrics.ELITE_DEFEATED += 1;
+      this.log(`K.O. ${defeated.name} // REWARD SECURED`);
+      this.bus.emit(GAME_EVENTS.ENEMY_DEFEATED, { enemyId: defeated.id, reward });
+    }
+    if (result.enemyBlocked) this.log('ĐỊCH BỊ TRÓI / CHOÁNG // BỎ LƯỢT');
+    if (result.heroDamage && result.attackerId) this.log(`${this.content.enemies.get(result.attackerId).name}: ${result.heroDamage} DMG // ENEMY TURN`);
     this.bus.emit(GAME_EVENTS.HIT_CONFIRMED, result);
     this.bus.emit(GAME_EVENTS.DAMAGE_APPLIED, result);
     this.bus.emit(GAME_EVENTS.SFX_REQUESTED, { id: result.sfx, actionId });
@@ -178,7 +231,11 @@ export class PhaseOneGameEngine {
       this.log(`BOSS PHASE ${result.phaseChanged.to}`);
       this.bus.emit(GAME_EVENTS.BOSS_PHASE_CHANGED, result.phaseChanged);
     }
-    if (this.state.battle.enemyHp <= 0) result.victory = this.resolveEnemyDefeat();
+    if (this.state.battle.enemyHp <= 0) {
+      const outcome = this.resolveEnemyDefeat();
+      if (outcome.remaining) result.targetClear = outcome;
+      else result.victory = outcome;
+    }
     if (!options.deferCommit) this.commit(result);
     return result;
   }
@@ -190,6 +247,16 @@ export class PhaseOneGameEngine {
     if (enemy.tier === 'ELITE') this.state.daily.metrics.ELITE_DEFEATED += 1;
     this.log(`K.O. ${enemy.name} // REWARD SECURED`);
     this.bus.emit(GAME_EVENTS.ENEMY_DEFEATED, { enemyId: enemy.id, reward });
+
+    const battle = this.state.battle;
+    const nextTarget = battle.opponents.findIndex((foe) => foe.hp > 0);
+    if (nextTarget >= 0) {
+      battle.selectedEnemyIndex = nextTarget;
+      battle.enemyHp = battle.opponents[nextTarget].hp;
+      battle.enemyStagger = battle.opponents[nextTarget].stagger;
+      battle.phase = this.combatEngine.phaseFor(this.enemyDefinition(), battle.enemyHp, this.state.settings.difficulty);
+      return { remaining: battle.opponents.filter((foe) => foe.hp > 0).length, enemy: enemy.name, reward };
+    }
 
     const quest = this.content.quests.get(this.state.quest.activeQuestId);
     const bossDefeated = this.state.battle.encounterIndex === quest.enemyIds.length - 1;
@@ -206,6 +273,8 @@ export class PhaseOneGameEngine {
     }
 
     this.state.battle.encounterIndex += 1;
+    this.state.battle.opponents = this.opponentsForWave(quest, this.state.battle.encounterIndex, this.state.settings.difficulty);
+    this.state.battle.selectedEnemyIndex = 0;
     const next = this.enemyDefinition();
     this.state.battle.enemyHp = this.combatEngine.scaledMaxHp(next, this.state.settings.difficulty);
     this.state.battle.enemyStagger = 0;
@@ -214,6 +283,7 @@ export class PhaseOneGameEngine {
   }
 
   startNextPatrol() {
+    if (this.notionAuthority) return { blocked: true, reason: 'SELECT MISSION IN NOTION' };
     if (!this.state.battle.storyComplete) return false;
     const kept = {
       progression: { ...this.state.progression }, inventory: structuredClone(this.state.inventory), defeated: [...this.state.defeated],

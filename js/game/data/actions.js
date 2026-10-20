@@ -1,9 +1,9 @@
 export const ACTIONS = Object.freeze([
   { id: 'basic-combo', slot: 'attack', label: 'COMBO', type: 'ATTACK', damage: 24, energyCost: 0, cooldownTurns: 0, stagger: 8, animation: 'attack_01', tags: ['MELEE'], comicText: ['POW!', 'BAM!', 'WHACK!'], sfx: 'PUNCH_LIGHT' },
-  { id: 'web-shot', slot: 'web', label: 'WEB SHOT', type: 'SKILL', damage: 38, energyCost: 18, cooldownTurns: 1, stagger: 14, animation: 'ranged_attack', tags: ['WEB', 'RANGED'], comicText: ['THWIP!', 'FWIP!'], sfx: 'WEB_SHOOT' },
-  { id: 'impact-web', slot: 'gadget', label: 'IMPACT WEB', type: 'GADGET', damage: 52, energyCost: 0, cooldownTurns: 3, stagger: 20, animation: 'skill_01', tags: ['WEB', 'GADGET'], comicText: ['THWIP!', 'KRAK!'], sfx: 'GADGET_DEPLOY', charges: 3 },
-  { id: 'venom-assist', slot: 'ally', label: 'CALL MILES', type: 'ALLY', damage: 68, energyCost: 0, cooldownTurns: 4, stagger: 25, animation: 'ally_call', tags: ['ALLY', 'ELECTRIC'], comicText: ['ZZZAP!', 'KZZT!'], sfx: 'ALLY_CALL' },
-  { id: 'spider-barrage', slot: 'ultimate', label: 'SPIDER BARRAGE', type: 'ULTIMATE', damage: 145, energyCost: 0, cooldownTurns: 0, stagger: 45, animation: 'ultimate', tags: ['MELEE', 'WEB', 'ULTIMATE'], comicText: ['KABOOM!', 'MAXIMUM SPIDER!'], sfx: 'ULTIMATE', ultimateCost: 100 }
+  { id: 'web-shot', slot: 'web', label: 'WEB SHOT', type: 'SKILL', damage: 32, energyCost: 18, cooldownTurns: 1, stagger: 18, bindTurns: 1, animation: 'ranged_attack', tags: ['WEB', 'RANGED'], comicText: ['THWIP!', 'FWIP!'], sfx: 'WEB_SHOOT' },
+  { id: 'impact-web', slot: 'gadget', label: 'IMPACT WEB', type: 'GADGET', damage: 43, splashRatio: 0.5, energyCost: 0, cooldownTurns: 3, stagger: 20, animation: 'skill_01', tags: ['WEB', 'GADGET'], comicText: ['THWIP!', 'KRAK!'], sfx: 'GADGET_DEPLOY', charges: 3 },
+  { id: 'venom-assist', slot: 'ally', label: 'CALL MILES', type: 'ALLY', damage: 64, energyCost: 0, cooldownTurns: 4, stagger: 25, bindTurns: 1, animation: 'ally_call', tags: ['ALLY', 'ELECTRIC'], comicText: ['ZZZAP!', 'KZZT!'], sfx: 'ALLY_CALL' },
+  { id: 'spider-barrage', slot: 'ultimate', label: 'SPIDER BARRAGE', type: 'ULTIMATE', damage: 110, splashRatio: 0.65, energyCost: 0, cooldownTurns: 0, stagger: 45, animation: 'ultimate', tags: ['MELEE', 'WEB', 'ULTIMATE'], comicText: ['KABOOM!', 'MAXIMUM SPIDER!'], sfx: 'ULTIMATE', ultimateCost: 100 }
 ]);
 
 export const DIFFICULTIES = Object.freeze({

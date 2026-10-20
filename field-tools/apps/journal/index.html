@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="vi" data-gambit-app="journal">
+<head>
+<script src="../../spider-embedded.js?v=field-navigation-3"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f2f2f7">
+<title>Journal</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sf:'Lora',Georgia,serif;
+  --ss:'Inter',-apple-system,sans-serif;
+  --bg:#F2F2F7;--card:#fff;--card2:#F2F2F7;
+  --t1:#000;--t2:#3C3C43;--t3:#8E8E93;--t4:#C7C7CC;--t5:#E5E5EA;
+  --sep:rgba(60,60,67,.12);--sep2:rgba(60,60,67,.08);
+  --acc:#000;
+  --r10:10px;--r14:14px;--r20:20px;
+  --trans:.22s cubic-bezier(.4,0,.2,1);
+}
+[data-dark]{
+  --bg:#000;--card:#1C1C1E;--card2:#2C2C2E;
+  --t1:#fff;--t2:#EBEBF5;--t3:#8E8E93;--t4:#48484A;--t5:#3A3A3C;
+  --sep:rgba(255,255,255,.1);--sep2:rgba(255,255,255,.06);
+  --acc:#fff;
+}
+html,body{height:100%;overflow:hidden;background:#111;font-family:var(--ss);-webkit-font-smoothing:antialiased}
+body{display:flex;justify-content:center}
+
+/* APP SHELL */
+.phone{
+  width:100%;max-width:430px;height:100dvh;background:var(--bg);border-radius:0;
+  box-shadow:none;
+  overflow:hidden;position:relative;display:flex;flex-direction:column;flex-shrink:0;
+  transition:background var(--trans);
+}
+.phone::before,.phone::after,.island,.phone .sbar{display:none!important}
+.app-back{
+  position:absolute;top:max(12px,env(safe-area-inset-top));left:16px;z-index:420;
+  height:36px;padding:0 13px 0 10px;border:1px solid var(--sep);
+  border-radius:999px;background:var(--t1);color:var(--bg);text-decoration:none;
+  display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;
+  box-shadow:0 4px 16px rgba(0,0,0,.12);transition:transform .12s,opacity .12s,background var(--trans),color var(--trans)
+}
+.app-back:active{transform:scale(.96);opacity:.76}
+.app-back svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* STATUS */
+.sbar{height:59px;flex-shrink:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 10px;position:relative;z-index:10}
+.stime{font-size:16px;font-weight:600;letter-spacing:-.3px;color:var(--t1);transition:color var(--trans)}
+.sicons{display:flex;align-items:center;gap:5px}
+.sicons svg{transition:stroke var(--trans),fill var(--trans)}
+
+/* SCREEN */
+.screen{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative}
+
+/* VIEWS */
+.view{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;padding-top:calc(54px + env(safe-area-inset-top));
+  background:var(--bg);transition:background var(--trans);
+  opacity:0;pointer-events:none;transform:translateX(30px)}
+.view.active{opacity:1;pointer-events:all;transform:translateX(0);transition:opacity .25s ease,transform .25s ease}
+.view.slide-back{transform:translateX(-20px)}
+
+/* NAV BAR */
+.nav{padding:2px 20px 8px;flex-shrink:0;background:var(--bg);transition:background var(--trans)}
+.nav-title{font-family:var(--sf);font-size:34px;font-weight:700;letter-spacing:-.6px;color:var(--t1);padding-top:4px;transition:color var(--trans)}
+.nav-row{display:flex;align-items:center;justify-content:space-between}
+
+/* SEARCH BAR */
+.searchbar{margin:8px 0 2px;background:rgba(118,118,128,.12);border-radius:10px;
+  display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:text}
+[data-dark] .searchbar{background:rgba(118,118,128,.24)}
+.searchbar-ph{font-size:15px;color:var(--t3)}
+
+/* ENTRY LIST */
+.elist{flex:1;overflow-y:auto;padding:4px 16px 8px}
+.elist::-webkit-scrollbar{display:none}
+.month-lbl{font-size:13px;font-weight:600;color:var(--t3);letter-spacing:.05em;text-transform:uppercase;padding:14px 4px 6px;transition:color var(--trans)}
+.cgroup{background:var(--card);border-radius:var(--r14);margin-bottom:10px;overflow:hidden;transition:background var(--trans)}
+.ecard{padding:13px 16px;border-bottom:.5px solid var(--sep);cursor:pointer;transition:background .1s}
+.ecard:last-child{border-bottom:none}
+.ecard:active{background:var(--card2)}
+.ecard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.ecard-day{font-size:12px;color:var(--t3);transition:color var(--trans)}
+.ecard-mood{font-size:14px;line-height:1}
+.ecard-title{font-family:var(--sf);font-size:17px;font-weight:600;color:var(--t1);letter-spacing:-.2px;margin-bottom:4px;line-height:1.28;transition:color var(--trans)}
+.ecard-prev{font-size:13.5px;color:var(--t3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color var(--trans)}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center}
+.empty-ico{font-size:52px;margin-bottom:18px}
+.empty-title{font-family:var(--sf);font-size:22px;font-weight:600;color:var(--t2);margin-bottom:8px;letter-spacing:-.3px}
+.empty-sub{font-size:15px;color:var(--t3);line-height:1.6}
+
+/* FAB */
+.fab{position:absolute;bottom:90px;right:20px;width:54px;height:54px;background:var(--acc);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);transition:transform .14s,opacity .14s,background var(--trans)}
+.fab:active{transform:scale(.92)}
+[data-dark] .fab{box-shadow:0 4px 20px rgba(0,0,0,.5)}
+
+/* TABS */
+.tabs{height:83px;flex-shrink:0;background:var(--card);backdrop-filter:blur(20px);
+  border-top:.5px solid var(--sep);display:flex;align-items:flex-start;padding-top:11px;
+  transition:background var(--trans),border-color var(--trans)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:3px 0;transition:opacity .1s}
+.tab:active{opacity:.6}
+.tab svg{width:24px;height:24px;stroke:var(--t4);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:stroke var(--trans)}
+.tab.on svg{stroke:var(--t1)}
+.tab-lbl{font-size:10px;font-weight:500;color:var(--t4);transition:color var(--trans)}
+.tab.on .tab-lbl{color:var(--t1)}
+
+/* ── EDITOR ── */
+.ednav{display:flex;align-items:center;justify-content:space-between;padding:6px 14px 0;flex-shrink:0}
+.edbtn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:2px;
+  color:var(--t1);font-family:var(--ss);padding:7px 5px;border-radius:8px;transition:opacity .12s}
+.edbtn:active{opacity:.45}
+.edbtn svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.edbtn-txt{font-size:17px;font-weight:400;color:var(--t1);transition:color var(--trans)}
+.edbtngrp{display:flex;gap:0}
+.eddate{padding:8px 24px 0;font-size:13px;color:var(--t3);flex-shrink:0;transition:color var(--trans)}
+
+/* MOOD ROW */
+.moodrow{display:flex;gap:7px;padding:10px 24px 2px;flex-shrink:0;overflow-x:auto}
+.moodrow::-webkit-scrollbar{display:none}
+.mchip{display:flex;align-items:center;gap:5px;padding:6px 13px;border:none;cursor:pointer;
+  border-radius:20px;background:var(--card2);font-size:13px;color:var(--t2);
+  font-family:var(--ss);transition:all .15s;white-space:nowrap;flex-shrink:0}
+.mchip.on{background:var(--acc);color:var(--bg)}
+.mchip-em{font-size:15px;line-height:1}
+
+/* READING AREA — the most important part */
+.edcontent{flex:1;overflow-y:auto;padding:12px 26px 24px}
+.edcontent::-webkit-scrollbar{display:none}
+.edtitle{
+  font-family:var(--sf);font-size:26px;font-weight:700;color:var(--t1);
+  border:none;outline:none;background:transparent;width:100%;
+  letter-spacing:-.4px;line-height:1.3;resize:none;overflow:hidden;
+  display:block;margin-bottom:16px;transition:color var(--trans);
+}
+.edtitle::placeholder{color:var(--t4)}
+.edhr{height:.5px;background:var(--sep);margin-bottom:18px}
+.edbody{
+  font-family:var(--sf);
+  font-size:17px;      /* comfortable reading size */
+  line-height:1.85;    /* generous line height for long reads */
+  color:var(--t2);     /* slightly softer than pure black = easier on eyes */
+  letter-spacing:.01em;
+  border:none;outline:none;background:transparent;width:100%;
+  resize:none;overflow:hidden;min-height:300px;
+  transition:color var(--trans);
+}
+.edbody::placeholder{color:var(--t4)}
+[data-dark] .edbody{color:#EBEBF5}
+
+.wcount{font-size:12px;color:var(--t4);text-align:right;padding:4px 24px 2px;flex-shrink:0}
+
+/* KEYBOARD TOOLBAR */
+.kbtool{height:46px;flex-shrink:0;background:var(--card2);border-top:.5px solid var(--sep);
+  display:flex;align-items:center;padding:0 12px;gap:1px;transition:background var(--trans)}
+.kbbtn{width:38px;height:38px;border-radius:8px;background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;color:var(--t2);transition:background .1s}
+.kbbtn:active{background:var(--t5)}
+.kbbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.kbsep{width:.5px;height:22px;background:var(--sep);margin:0 3px;flex-shrink:0}
+.kbsp{flex:1}
+.kbdone{font-size:15px;font-weight:600;color:var(--t1);background:none;border:none;cursor:pointer;padding:6px 6px;font-family:var(--ss);transition:color var(--trans)}
+
+/* ── SEARCH SCREEN ── */
+.searchscreen{flex-shrink:0}
+.search-input-wrap{display:flex;align-items:center;gap:10px;padding:10px 16px 10px}
+.search-input{flex:1;font-size:17px;font-family:var(--ss);color:var(--t1);background:none;border:none;outline:none;transition:color var(--trans)}
+.search-input::placeholder{color:var(--t3)}
+.search-cancel{font-size:17px;color:var(--t3);background:none;border:none;cursor:pointer;font-family:var(--ss);flex-shrink:0}
+.search-sep{height:.5px;background:var(--sep);margin:0 16px}
+.search-results{flex:1;overflow-y:auto;padding:4px 16px 20px}
+.search-results::-webkit-scrollbar{display:none}
+.no-results{padding:40px 20px;text-align:center;font-size:15px;color:var(--t3)}
+
+/* ── LIBRARY ── */
+.libscroll{flex:1;overflow-y:auto;padding:0 16px 20px}
+.libscroll::-webkit-scrollbar{display:none}
+.sec-hd{font-family:var(--sf);font-size:20px;font-weight:700;color:var(--t1);padding:16px 4px 10px;transition:color var(--trans)}
+.daily-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.dcard{background:var(--card);border-radius:var(--r14);padding:16px;cursor:pointer;transition:opacity .12s,background var(--trans)}
+.dcard:active{opacity:.7}
+.dcard-ico{font-size:26px;margin-bottom:10px;line-height:1}
+.dcard-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:3px;transition:color var(--trans)}
+.dcard-sub{font-size:12px;color:var(--t3);line-height:1.4}
+.tgroup{background:var(--card);border-radius:var(--r14);margin-bottom:10px;overflow:hidden;transition:background var(--trans)}
+.tcard{padding:15px 16px;border-bottom:.5px solid var(--sep);cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;transition:background .1s}
+.tcard:last-child{border-bottom:none}
+.tcard:active{background:var(--card2)}
+.tleft{flex:1;min-width:0}
+.tico{font-size:22px;margin-bottom:7px;line-height:1}
+.ttitle{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:3px;transition:color var(--trans)}
+.tsub{font-size:13px;color:var(--t3);line-height:1.4}
+.tarrow{flex-shrink:0;margin-left:10px;color:var(--t4);display:flex;align-items:center}
+.tarrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── INSIGHTS ── */
+.inscroll{flex:1;overflow-y:auto;padding:0 16px 20px}
+.inscroll::-webkit-scrollbar{display:none}
+.streak-card{background:var(--acc);border-radius:var(--r20);padding:24px;margin-bottom:10px;transition:background var(--trans)}
+.streak-n{font-family:var(--sf);font-size:68px;font-weight:700;line-height:1;letter-spacing:-3px;color:var(--bg)}
+.streak-lbl{font-size:15px;color:var(--bg);opacity:.65;margin-top:4px}
+.streak-sub{font-size:13px;color:var(--bg);opacity:.4;margin-top:6px}
+.stats2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.sc{background:var(--card);border-radius:var(--r14);padding:18px;transition:background var(--trans)}
+.scn{font-family:var(--sf);font-size:34px;font-weight:700;letter-spacing:-.5px;color:var(--t1);transition:color var(--trans)}
+.scl{font-size:13px;color:var(--t3);margin-top:2px}
+.moodcard{background:var(--card);border-radius:var(--r14);padding:18px;margin-bottom:10px;transition:background var(--trans)}
+.moodcard-h{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:14px;transition:color var(--trans)}
+.mbar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.mbar-row:last-child{margin-bottom:0}
+.mbar-em{font-size:17px;width:24px;text-align:center;line-height:1}
+.mbar-track{flex:1;height:8px;background:var(--t5);border-radius:4px;overflow:hidden;transition:background var(--trans)}
+.mbar-fill{height:100%;background:var(--acc);border-radius:4px;transition:width .6s ease,background var(--trans)}
+.mbar-c{font-size:13px;color:var(--t3);width:18px;text-align:right}
+.weekcard{background:var(--card);border-radius:var(--r14);padding:18px;margin-bottom:10px;transition:background var(--trans)}
+.weekcard-h{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:14px}
+.weekrow{display:flex;gap:4px}
+.wdc{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.wddot{width:34px;height:34px;border-radius:50%;background:var(--t5);
+  display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t3);font-weight:500;transition:background var(--trans)}
+.wddot.did{background:var(--acc);color:var(--bg);font-size:14px}
+.wdlbl{font-size:10px;color:var(--t4);font-weight:500}
+.serendip{background:var(--card);border-radius:var(--r14);padding:20px;margin-bottom:10px;transition:background var(--trans)}
+.serendip-lbl{font-size:11px;color:var(--t3);font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
+.serendip-txt{font-family:var(--sf);font-size:16px;line-height:1.7;color:var(--t1);font-style:italic;transition:color var(--trans)}
+
+/* Notion sync card */
+.notion-card{background:var(--card);border-radius:var(--r14);padding:16px;margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .1s}
+.notion-card:active{background:var(--card2)}
+.notion-logo{width:36px;height:36px;border-radius:8px;background:var(--t1);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background var(--trans)}
+.notion-logo svg{width:20px;height:20px;fill:var(--bg);transition:fill var(--trans)}
+.notion-info{flex:1;min-width:0}
+.notion-title{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:2px;transition:color var(--trans)}
+.notion-sub{font-size:13px;color:var(--t3)}
+.notion-badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;background:var(--t5);color:var(--t3);flex-shrink:0;transition:background var(--trans)}
+
+/* ── MODAL ── */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:500;
+  display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .22s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-sheet{background:var(--card);border-radius:20px 20px 0 0;width:100%;padding:20px 0 34px;
+  transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1),background var(--trans)}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-title{font-size:13px;color:var(--t3);text-align:center;margin-bottom:16px;padding:0 20px}
+.modal-btn{width:100%;padding:16px 20px;background:none;border:none;border-top:.5px solid var(--sep);
+  font-size:17px;font-family:var(--ss);color:var(--t1);cursor:pointer;text-align:center;transition:background .1s,color var(--trans)}
+.modal-btn:active{background:var(--card2)}
+.modal-btn.danger{color:#FF3B30}
+.modal-btn.cancel{color:var(--t3)}
+
+/* ── TOPBAR ICON BUTTON ── */
+.icon-btn{background:none;border:none;cursor:pointer;padding:7px;border-radius:8px;
+  color:var(--t1);display:flex;align-items:center;transition:opacity .12s}
+.icon-btn:active{opacity:.45}
+.icon-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+</style>
+<link rel="stylesheet" href="../../assets/gambit-app-polish.css">
+</head>
+<body>
+<div class="phone" id="phone">
+  <a class="app-back" href="../../index.html" aria-label="Trở về trang chủ">
+    <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+    <span>Trở về</span>
+  </a>
+  <div class="island"></div>
+
+  <!-- STATUS BAR -->
+  <div class="sbar">
+    <span class="stime" id="clockEl">9:41</span>
+    <div class="sicons">
+      <svg width="17" height="13" viewBox="0 0 17 13" fill="none">
+        <rect x="0" y="8" width="3" height="5" rx=".6" fill="var(--t1)"/>
+        <rect x="4.5" y="5.5" width="3" height="7.5" rx=".6" fill="var(--t1)"/>
+        <rect x="9" y="2.5" width="3" height="10.5" rx=".6" fill="var(--t1)"/>
+        <rect x="13.5" y="0" width="3" height="13" rx=".6" fill="var(--t1)"/>
+      </svg>
+      <svg width="16" height="13" viewBox="0 0 16 13" fill="none">
+        <circle cx="8" cy="11.5" r="1.3" fill="var(--t1)"/>
+        <path d="M4.8 8.6A4.3 4.3 0 0 1 8 7.3c1.3 0 2.4.5 3.2 1.3" stroke="var(--t1)" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M2.2 5.7A8 8 0 0 1 8 3.4 8 8 0 0 1 13.8 5.7" stroke="var(--t1)" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M0 2.9A11.4 11.4 0 0 1 8 0a11.4 11.4 0 0 1 8 2.9" stroke="var(--t1)" stroke-width="1.4" stroke-linecap="round" opacity=".3"/>
+      </svg>
+      <svg width="26" height="13" viewBox="0 0 26 13" fill="none">
+        <rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="var(--t1)" stroke-opacity=".35"/>
+        <rect x="1.5" y="1.5" width="19" height="10" rx="2.5" fill="var(--t1)"/>
+        <path d="M24 4.5v4c.9-.6 1.4-1.3 1.4-2s-.5-1.4-1.4-2z" fill="var(--t1)" fill-opacity=".4"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="screen" id="screen">
+
+    <!-- ══ ENTRIES ══ -->
+    <div class="view active" id="v-entries">
+      <div class="nav">
+        <div class="nav-row">
+          <div class="nav-title">Journal</div>
+          <div style="display:flex;gap:2px">
+            <button class="icon-btn" onclick="openSearch()" aria-label="Tìm nhật ký">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </button>
+            <button class="icon-btn" onclick="toggleDark()" aria-label="Đổi giao diện sáng tối">
+              <svg viewBox="0 0 24 24" id="darkIcon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="elist" id="entryList"></div>
+      <div class="fab" onclick="newEntry()" aria-label="Viết nhật ký mới">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ══ SEARCH ══ -->
+    <div class="view" id="v-search">
+      <div class="searchscreen">
+        <div class="search-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <label class="sr-only" for="searchInput">Tìm nhật ký</label>
+          <input class="search-input" id="searchInput" name="journal-search" placeholder="Tìm kiếm…" oninput="doSearch(this.value)" autocomplete="off">
+          <button class="search-cancel" onclick="closeSearch()">Huỷ</button>
+        </div>
+        <div class="search-sep"></div>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="no-results" style="color:var(--t4)">Nhập để tìm entry...</div>
+      </div>
+    </div>
+
+    <!-- ══ EDITOR ══ -->
+    <div class="view" id="v-editor">
+      <div class="ednav">
+        <button class="edbtn" onclick="closeEditor()">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          <span class="edbtn-txt">Journal</span>
+        </button>
+        <div class="edbtngrp">
+          <button class="edbtn" onclick="toggleMood()" aria-label="Chọn tâm trạng">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="9" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1" fill="currentColor" stroke="none"/></svg>
+          </button>
+          <button class="edbtn" onclick="openDeleteModal()" aria-label="Xóa nhật ký">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="eddate" id="edDate"></div>
+      <div class="moodrow" id="moodRow" style="display:none">
+        <button class="mchip on" data-emoji="😊" onclick="setMood(this)"><span class="mchip-em">😊</span>Tuyệt vời</button>
+        <button class="mchip" data-emoji="🙂" onclick="setMood(this)"><span class="mchip-em">🙂</span>Khá ổn</button>
+        <button class="mchip" data-emoji="😐" onclick="setMood(this)"><span class="mchip-em">😐</span>Bình thường</button>
+        <button class="mchip" data-emoji="😔" onclick="setMood(this)"><span class="mchip-em">😔</span>Mệt mỏi</button>
+        <button class="mchip" data-emoji="😤" onclick="setMood(this)"><span class="mchip-em">😤</span>Bực bội</button>
+      </div>
+      <div class="edcontent">
+        <label class="sr-only" for="edTitle">Tiêu đề nhật ký</label>
+        <textarea class="edtitle" id="edTitle" name="journal-title" placeholder="Tiêu đề…" rows="1" oninput="autoSave();autoGrow(this)"></textarea>
+        <div class="edhr"></div>
+        <label class="sr-only" for="edBody">Nội dung nhật ký</label>
+        <textarea class="edbody" id="edBody" name="journal-body" placeholder="Viết gì đó…" oninput="autoSave();autoGrow(this);countW()"></textarea>
+      </div>
+      <div class="wcount" id="wcount">0 từ</div>
+      <div class="kbtool">
+        <button class="kbbtn" aria-label="Chữ đậm"><svg viewBox="0 0 24 24"><path d="M6 4h8a4 4 0 0 1 0 8H6z"/><path d="M6 12h9a4 4 0 0 1 0 8H6z"/></svg></button>
+        <button class="kbbtn" aria-label="Chữ nghiêng"><svg viewBox="0 0 24 24"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg></button>
+        <div class="kbsep"></div>
+        <button class="kbbtn" aria-label="Danh sách"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="3" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="3" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg></button>
+        <button class="kbbtn" onclick="insertPrompt()" aria-label="Gợi ý viết"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg></button>
+        <div class="kbsp"></div>
+        <button class="kbdone" onclick="closeEditor()">Xong</button>
+      </div>
+    </div>
+
+    <!-- ══ LIBRARY ══ -->
+    <div class="view" id="v-library">
+      <div class="nav"><div class="nav-title">Thư viện</div></div>
+      <div class="libscroll">
+        <div class="sec-hd">Hàng ngày</div>
+        <div class="daily-grid">
+          <div class="dcard" onclick="useTpl('Buổi sáng','Hôm nay tôi thức dậy cảm thấy...\n\nTôi đang nghĩ về...\n\nMục tiêu hôm nay:\n1. \n2. \n3.')">
+            <div class="dcard-ico">🌅</div><div class="dcard-title">Buổi sáng</div><div class="dcard-sub">Bắt đầu ngày mới</div>
+          </div>
+          <div class="dcard" onclick="useTpl('Buổi tối','Hôm nay tôi đã làm được:\n\nMoment đáng nhớ nhất:\n\nĐiều tôi biết ơn:\n\nNgày mai tôi sẽ...')">
+            <div class="dcard-ico">🌙</div><div class="dcard-title">Buổi tối</div><div class="dcard-sub">Tổng kết và nghỉ ngơi</div>
+          </div>
+          <div class="dcard" onclick="useTpl('Lòng biết ơn','3 điều tôi biết ơn hôm nay:\n1. \n2. \n3. \n\nVì sao chúng quan trọng với tôi:')">
+            <div class="dcard-ico">🙏</div><div class="dcard-title">Biết ơn</div><div class="dcard-sub">Trân trọng điều nhỏ bé</div>
+          </div>
+          <div class="dcard" onclick="useTpl('Check-in tâm trạng','Tôi đang cảm thấy...\n\nCảm xúc này đến từ đâu:\n\nThứ tôi cần lúc này:')">
+            <div class="dcard-ico">💭</div><div class="dcard-title">Tâm trạng</div><div class="dcard-sub">Nhận diện cảm xúc</div>
+          </div>
+        </div>
+
+        <div class="sec-hd">Mẫu có sẵn</div>
+        <div class="tgroup">
+          <div class="tcard" onclick="useTpl('Nhật ký buổi sáng','Hôm nay tôi thức dậy lúc...\n\nTôi đang nghĩ về:\n\nCảm xúc hiện tại:\n\nMục tiêu cho ngày hôm nay:\n1.\n2.\n3.\n\nMột điều tôi muốn hoàn thành:')">
+            <div class="tleft"><div class="tico">📝</div><div class="ttitle">Nhật ký buổi sáng</div><div class="tsub">Khởi đầu ngày với đầu óc sáng suốt</div></div>
+            <div class="tarrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="tcard" onclick="useTpl('Ôn tập tuần','Tuần này đã diễn ra tốt:\n\nTôi muốn làm khác đi:\n\nBài học lớn nhất:\n\nTuần tới tôi sẽ tập trung vào:')">
+            <div class="tleft"><div class="tico">📋</div><div class="ttitle">Ôn tập tuần</div><div class="tsub">Nhìn lại 7 ngày một cách có ý nghĩa</div></div>
+            <div class="tarrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="tcard" onclick="useTpl('Nhật ký quyết định','Quyết định tôi đang đối mặt:\n\nCác lựa chọn:\n• \n• \n\nTôi đang nghiêng về... vì:\n\nThứ tôi có thể bỏ sót:')">
+            <div class="tleft"><div class="tico">⚖️</div><div class="ttitle">Nhật ký quyết định</div><div class="tsub">Suy nghĩ rõ ràng về lựa chọn khó</div></div>
+            <div class="tarrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="tcard" onclick="useTpl('Mục tiêu tháng','Tháng này tôi muốn đạt được:\n1.\n2.\n3.\n\nVì sao những điều này quan trọng:\n\nBước đầu tiên tôi sẽ làm:')">
+            <div class="tleft"><div class="tico">🎯</div><div class="ttitle">Mục tiêu tháng</div><div class="tsub">Hướng đi rõ ràng cho cả tháng</div></div>
+            <div class="tarrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="tcard" onclick="useTpl('Thư gửi tương lai','Hôm nay là ngày...\n\nTôi đang ở giai đoạn:\n\nĐiều tôi muốn nhắn với bản thân tương lai:\n\nTôi hy vọng khi đọc lại thư này...')">
+            <div class="tleft"><div class="tico">💌</div><div class="ttitle">Thư gửi tương lai</div><div class="tsub">Nhắn nhủ cho chính mình sau này</div></div>
+            <div class="tarrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="tcard" onclick="useTpl('Trang trắng','')">
+            <div class="tleft"><div class="tico">🌊</div><div class="ttitle">Trang trắng</div><div class="tsub">Viết tự do, không giới hạn</div></div>
+            <div class="tarrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
+
+        <div class="sec-hd">Gợi ý</div>
+        <div class="tgroup">
+          <div class="tcard" onclick="randomPromptLib()">
+            <div class="tleft"><div class="tico">✨</div><div class="ttitle" id="randTxt">Điều gì đã khiến bạn mỉm cười hôm nay?</div><div class="tsub">Nhấn để nhận câu hỏi mới</div></div>
+            <div class="tarrow"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.08-4.43"/></svg></div>
+          </div>
+        </div>
+        <div style="height:20px"></div>
+      </div>
+    </div>
+
+    <!-- ══ INSIGHTS ══ -->
+    <div class="view" id="v-insights">
+      <div class="nav"><div class="nav-title">Thống kê</div></div>
+      <div class="inscroll">
+        <div class="streak-card">
+          <div class="streak-n" id="streakN">0</div>
+          <div class="streak-lbl" id="streakLbl">Ngày liên tiếp</div>
+          <div class="streak-sub" id="streakSub">Bắt đầu chuỗi ngày hôm nay!</div>
+        </div>
+        <div class="weekcard">
+          <div class="weekcard-h">Tuần này</div>
+          <div class="weekrow" id="weekRow"></div>
+        </div>
+        <div class="stats2">
+          <div class="sc"><div class="scn" id="totE">0</div><div class="scl">Entries</div></div>
+          <div class="sc"><div class="scn" id="totW">0</div><div class="scl">Từ đã viết</div></div>
+        </div>
+        <div class="moodcard">
+          <div class="moodcard-h">Tâm trạng</div>
+          <div class="mbar-row"><div class="mbar-em">😊</div><div class="mbar-track"><div class="mbar-fill" id="mb0" style="width:0"></div></div><div class="mbar-c" id="mc0">0</div></div>
+          <div class="mbar-row"><div class="mbar-em">🙂</div><div class="mbar-track"><div class="mbar-fill" id="mb1" style="width:0"></div></div><div class="mbar-c" id="mc1">0</div></div>
+          <div class="mbar-row"><div class="mbar-em">😐</div><div class="mbar-track"><div class="mbar-fill" id="mb2" style="width:0"></div></div><div class="mbar-c" id="mc2">0</div></div>
+          <div class="mbar-row"><div class="mbar-em">😔</div><div class="mbar-track"><div class="mbar-fill" id="mb3" style="width:0"></div></div><div class="mbar-c" id="mc3">0</div></div>
+          <div class="mbar-row"><div class="mbar-em">😤</div><div class="mbar-track"><div class="mbar-fill" id="mb4" style="width:0"></div></div><div class="mbar-c" id="mc4">0</div></div>
+        </div>
+
+        <!-- Notion Sync -->
+        <div class="notion-card" onclick="openNotionModal()">
+          <div class="notion-logo">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z"/></svg>
+          </div>
+          <div class="notion-info">
+            <div class="notion-title">Notion Sync</div>
+            <div class="notion-sub">Đồng bộ journal sang Notion database</div>
+          </div>
+          <div class="notion-badge" id="notionBadge">Sắp ra mắt</div>
+        </div>
+
+        <div class="serendip" id="serendipCard" style="display:none">
+          <div class="serendip-lbl" id="serendipDate">Ngẫu nhiên</div>
+          <div class="serendip-txt" id="serendipTxt"></div>
+        </div>
+        <div style="height:20px"></div>
+      </div>
+    </div>
+
+  </div><!-- /screen -->
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab on" id="tab-entries" onclick="switchTab('entries')">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span class="tab-lbl">Entries</span>
+    </div>
+    <div class="tab" id="tab-library" onclick="switchTab('library')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span class="tab-lbl">Thư viện</span>
+    </div>
+    <div class="tab" id="tab-insights" onclick="switchTab('insights')">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span class="tab-lbl">Thống kê</span>
+    </div>
+  </div>
+
+  <!-- DELETE MODAL -->
+  <div class="modal-overlay" id="deleteModal" onclick="closeDeleteModal(event)">
+    <div class="modal-sheet">
+      <div class="modal-title">Xóa entry này?<br><span style="font-size:12px">Hành động này không thể hoàn tác.</span></div>
+      <button class="modal-btn danger" onclick="confirmDelete()">Xóa entry</button>
+      <button class="modal-btn cancel" onclick="closeDeleteModal()">Huỷ</button>
+    </div>
+  </div>
+
+  <!-- NOTION MODAL -->
+  <div class="modal-overlay" id="notionModal" onclick="closeNotionModal(event)">
+    <div class="modal-sheet">
+      <div class="modal-title" style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:8px">Notion Sync</div>
+      <div class="modal-title">Tính năng đang được phát triển.<br>Khi ra mắt, bạn sẽ có thể kết nối Notion database và đồng bộ toàn bộ journal tự động.</div>
+      <button class="modal-btn" style="color:var(--t1);font-weight:500" onclick="closeNotionModal()">Thông báo khi có</button>
+      <button class="modal-btn cancel" onclick="closeNotionModal()">Đóng</button>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+// ── STORAGE KEY ──
+const SK='journal_v2';
+
+// ── SEED DATA ──
+const SEED=[
+  {id:1,date:new Date().toISOString(),title:"Buổi sáng yên tĩnh",body:"Thức dậy sớm hơn thường lệ. Uống cà phê và đọc sách trong khoảng thời gian yên bình trước khi cả nhà thức dậy. Có điều gì đó rất thanh thản trong việc không có lịch trình — chỉ để ngày diễn ra theo cách của nó.\n\nTôi đã suy nghĩ nhiều về sự tập trung gần đây. Không phải năng suất, mà chỉ là khả năng hiện diện với một điều tại một thời điểm.",mood:"😊"},
+  {id:2,date:new Date(Date.now()-864e5).toISOString(),title:"Xây dựng thói quen",body:"Bắt đầu routine buổi sáng mới tuần này. Phần khó nhất không phải là bản thân thói quen — mà là bảo vệ điều kiện để thói quen đó có thể xảy ra.",mood:"🙂"},
+  {id:3,date:new Date(Date.now()-864e5*2).toISOString(),title:"Có những ngày như thế",body:"Ngủ không ngon. Mọi thứ cảm thấy nặng nề hơn bình thường. Những ngày này cũng là một phần của cuộc sống — không cần phải chiến đấu hay chạy trốn.",mood:"😔"},
+  {id:4,date:new Date(Date.now()-864e5*4).toISOString(),title:"Đọc sách trở lại",body:"Đọc xong một cuốn sách hôm nay. Tôi đã quên mất cảm giác tuyệt vời khi thực sự hoàn thành điều gì đó — đặc biệt là không cầm điện thoại giữa chương.",mood:"😊"},
+  {id:5,date:new Date(Date.now()-864e5*5).toISOString(),title:"Năng suất nhưng mệt mỏi",body:"Làm được nhiều việc. Không chắc mình cảm thấy thế nào về điều đó. Đôi khi làm nhiều lại không có nghĩa là hài lòng hơn.",mood:"😐"},
+  {id:6,date:new Date(Date.now()-864e5*18).toISOString(),title:"Mục tiêu tháng 6",body:"Đặt ra một số ý định cho tháng. Tập trung ít hơn nhưng sâu hơn. Chất lượng hơn số lượng.",mood:"😊"},
+  {id:7,date:new Date(Date.now()-864e5*22).toISOString(),title:"Bắt đầu mới",body:"Entry đầu tiên. Hãy xem điều này sẽ đi đến đâu.",mood:"🙂"}
+];
+
+// ── STATE ──
+let entries=[];
+let nextId=2000;
+let curId=null;
+let moodOpen=false;
+let isDark=false;
+
+// ── PERSIST ──
+function save(){
+  try{localStorage.setItem(SK,JSON.stringify({entries,nextId,isDark}));}catch(e){}
+}
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem(SK)||'null');
+    if(d&&d.entries&&d.entries.length){
+      entries=d.entries;nextId=d.nextId||2000;isDark=!!d.isDark;
+    } else {
+      entries=SEED.map(e=>({...e}));
+    }
+  } catch(e){entries=SEED.map(e=>({...e}));}
+  if(isDark)applyDark(true);
+}
+
+// ── UTILS ──
+function today0(){const d=new Date();d.setHours(0,0,0,0);return d;}
+function sameDay(a,b){
+  const da=new Date(a);da.setHours(0,0,0,0);
+  const db=new Date(b);db.setHours(0,0,0,0);
+  return da.getTime()===db.getTime();
+}
+function fmtDay(d){
+  const dt=new Date(d);const now=new Date();
+  const diff=Math.floor((now-dt)/864e5);
+  if(diff<1)return'Hôm nay';
+  if(diff<2)return'Hôm qua';
+  if(diff<7)return dt.toLocaleDateString('vi',{weekday:'long'});
+  return dt.toLocaleDateString('vi',{day:'numeric',month:'long'});
+}
+function fmtTime(d){return new Date(d).toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'})}
+function fmtFull(d){return new Date(d).toLocaleDateString('vi',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function fmtMonth(d){return new Date(d).toLocaleDateString('vi',{month:'long',year:'numeric'})}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s}
+function autoGrow(el){el.style.height='auto';el.style.height=el.scrollHeight+'px'}
+
+// Clock
+(function tick(){
+  document.getElementById('clockEl').textContent=new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'});
+  setTimeout(tick,15000);
+})();
+
+// ── RENDER LIST ──
+function renderList(){
+  const el=document.getElementById('entryList');
+  if(!entries.length){
+    el.innerHTML='<div class="empty-state"><div class="empty-ico">📔</div><div class="empty-title">Bắt đầu nhật ký</div><div class="empty-sub">Viết ra suy nghĩ giúp bạn<br>suy nghĩ rõ ràng hơn</div></div>';
+    return;
+  }
+  let html='',lastMonth='',grpOpen=false;
+  entries.forEach((e,i)=>{
+    const mo=fmtMonth(e.date);
+    if(mo!==lastMonth){
+      if(grpOpen)html+='</div>';
+      html+=`<div class="month-lbl">${cap(mo)}</div><div class="cgroup">`;
+      grpOpen=true;lastMonth=mo;
+    }
+    const nxt=entries[i+1];
+    const isLast=!nxt||fmtMonth(nxt.date)!==mo;
+    html+=`<div class="ecard" style="${isLast?'border-bottom:none':''}" onclick="openEntry(${e.id})">
+      <div class="ecard-top">
+        <span class="ecard-day">${cap(fmtDay(e.date))} · ${fmtTime(e.date)}</span>
+        <span class="ecard-mood">${e.mood||''}</span>
+      </div>
+      <div class="ecard-title">${e.title||'Không có tiêu đề'}</div>
+      <div class="ecard-prev">${(e.body||'Chưa có nội dung.').replace(/\n/g,' ')}</div>
+    </div>`;
+  });
+  if(grpOpen)html+='</div>';
+  el.innerHTML=html;
+}
+
+// ── ENTRY CARD (reusable for search) ──
+function entryCardHTML(e){
+  return `<div class="cgroup" style="margin-bottom:8px">
+    <div class="ecard" style="border-bottom:none" onclick="openEntry(${e.id})">
+      <div class="ecard-top">
+        <span class="ecard-day">${cap(fmtDay(e.date))} · ${fmtTime(e.date)}</span>
+        <span class="ecard-mood">${e.mood||''}</span>
+      </div>
+      <div class="ecard-title">${e.title||'Không có tiêu đề'}</div>
+      <div class="ecard-prev">${(e.body||'').replace(/\n/g,' ')}</div>
+    </div>
+  </div>`;
+}
+
+// ── OPEN / EDIT ──
+function openEntry(id){
+  curId=id;
+  const e=entries.find(x=>x.id===id);if(!e)return;
+  document.getElementById('edDate').textContent=cap(fmtFull(e.date));
+  const tEl=document.getElementById('edTitle');
+  const bEl=document.getElementById('edBody');
+  tEl.value=e.title||'';bEl.value=e.body||'';
+  document.querySelectorAll('.mchip').forEach(b=>b.classList.toggle('on',b.dataset.emoji===e.mood));
+  moodOpen=false;document.getElementById('moodRow').style.display='none';
+  countW();showView('editor');
+  requestAnimationFrame(()=>{autoGrow(tEl);autoGrow(bEl);});
+}
+
+function newEntry(){
+  const e={id:++nextId,date:new Date().toISOString(),title:'',body:'',mood:'😊'};
+  entries.unshift(e);save();
+  openEntry(e.id);
+  requestAnimationFrame(()=>document.getElementById('edTitle').focus());
+}
+
+function closeEditor(){
+  autoSave();
+  entries=entries.filter(e=>e.id!==curId||(e.title||e.body));
+  curId=null;save();renderList();
+  // go back to correct tab
+  const activeTab=document.querySelector('.tab.on');
+  const tabName=activeTab?activeTab.id.replace('tab-',''):'entries';
+  showView(tabName==='entries'?'entries':tabName);
+}
+
+function autoSave(){
+  if(!curId)return;
+  const e=entries.find(x=>x.id===curId);if(!e)return;
+  e.title=document.getElementById('edTitle').value;
+  e.body=document.getElementById('edBody').value;
+  save();
+}
+
+function setMood(btn){
+  document.querySelectorAll('.mchip').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const e=entries.find(x=>x.id===curId);
+  if(e){e.mood=btn.dataset.emoji;save();}
+}
+
+function toggleMood(){
+  moodOpen=!moodOpen;
+  document.getElementById('moodRow').style.display=moodOpen?'flex':'none';
+}
+
+function countW(){
+  const txt=(document.getElementById('edBody').value||'').trim();
+  const n=txt?txt.split(/\s+/).length:0;
+  document.getElementById('wcount').textContent=n+(n===1?' từ':' từ');
+}
+
+function insertPrompt(){
+  const PROMPTS=["Điều gì đã khiến bạn mỉm cười hôm nay?","Bạn đang nghĩ về điều gì nhiều nhất?","Bạn biết ơn điều gì lúc này?","Hôm nay bạn học được gì về bản thân?","Bạn cảm thấy thế nào, và tại sao?","Điều gì khiến bạn trăn trở gần đây?","Bạn sẽ làm gì khác đi nếu có thể?","Điều bạn đang mong đợi nhất là gì?"];
+  const p=PROMPTS[Math.floor(Math.random()*PROMPTS.length)];
+  const bEl=document.getElementById('edBody');
+  const cur=bEl.value;
+  bEl.value=(cur?cur+'\n\n':'')+p+'\n';
+  autoGrow(bEl);autoSave();countW();
+  bEl.focus();bEl.setSelectionRange(bEl.value.length,bEl.value.length);
+}
+
+// ── DELETE MODAL ──
+function openDeleteModal(){document.getElementById('deleteModal').classList.add('open')}
+function closeDeleteModal(e){
+  if(e&&e.target!==document.getElementById('deleteModal'))return;
+  document.getElementById('deleteModal').classList.remove('open');
+}
+function confirmDelete(){
+  document.getElementById('deleteModal').classList.remove('open');
+  entries=entries.filter(x=>x.id!==curId);
+  curId=null;save();renderList();showView('entries');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('tab-entries').classList.add('on');
+}
+
+// ── NOTION MODAL ──
+function openNotionModal(){document.getElementById('notionModal').classList.add('open')}
+function closeNotionModal(e){
+  if(e&&e.target!==document.getElementById('notionModal'))return;
+  document.getElementById('notionModal').classList.remove('open');
+}
+
+// ── LIBRARY ──
+function useTpl(title,body){
+  const e={id:++nextId,date:new Date().toISOString(),title,body,mood:'😊'};
+  entries.unshift(e);save();openEntry(e.id);
+}
+const RANDP=["Điều gì đã khiến bạn mỉm cười hôm nay?","Bạn đang nghĩ về điều gì nhiều nhất?","Bạn biết ơn điều gì lúc này?","Hôm nay bạn học được gì về bản thân?","Bạn cảm thấy thế nào, và tại sao?","Điều gì khiến bạn trăn trở gần đây?","Bạn sẽ làm gì khác đi nếu có thể?","Điều bạn đang mong đợi nhất là gì?","Bạn đang né tránh điều gì?","Nếu ngày mai là ngày cuối cùng, bạn sẽ làm gì?"];
+let lastR='';
+function randomPromptLib(){
+  const opts=RANDP.filter(p=>p!==lastR);
+  const p=opts[Math.floor(Math.random()*opts.length)];
+  lastR=p;document.getElementById('randTxt').textContent=p;
+}
+
+// ── SEARCH ──
+function openSearch(){
+  showView('search');
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchResults').innerHTML='<div class="no-results" style="color:var(--t4)">Nhập để tìm entry...</div>';
+  setTimeout(()=>document.getElementById('searchInput').focus(),100);
+}
+function closeSearch(){
+  showView('entries');
+  document.getElementById('searchInput').value='';
+}
+function doSearch(q){
+  const res=document.getElementById('searchResults');
+  if(!q||!q.trim()){res.innerHTML='<div class="no-results" style="color:var(--t4)">Nhập để tìm entry...</div>';return;}
+  const ql=q.trim().toLowerCase();
+  const found=entries.filter(e=>(e.title+' '+e.body).toLowerCase().includes(ql));
+  if(!found.length){res.innerHTML='<div class="no-results">Không tìm thấy entry nào</div>';return;}
+  res.innerHTML=found.map(entryCardHTML).join('');
+}
+
+// ── INSIGHTS ──
+function buildInsights(){
+  const td=today0();
+  let streak=0;
+  for(let d=0;d<365;d++){
+    const day=new Date(td-864e5*d);
+    if(entries.some(e=>sameDay(e.date,day)))streak++;else break;
+  }
+  document.getElementById('streakN').textContent=streak;
+  document.getElementById('streakLbl').textContent=streak>0?'Ngày liên tiếp 🔥':'Chưa có chuỗi ngày';
+  document.getElementById('streakSub').textContent=streak>1?`${streak} ngày — xuất sắc!`:streak===1?'Ngày đầu tiên — tiếp tục nhé!':'Bắt đầu chuỗi ngày hôm nay!';
+  document.getElementById('totE').textContent=entries.length;
+  const tw=entries.reduce((s,e)=>s+(e.body&&e.body.trim()?e.body.trim().split(/\s+/).length:0),0);
+  document.getElementById('totW').textContent=tw>999?(tw/1000).toFixed(1)+'k':tw;
+  const DLBL=['CN','T2','T3','T4','T5','T6','T7'];
+  const todayDow=td.getDay();
+  let whtml='';
+  for(let i=6;i>=0;i--){
+    const day=new Date(td-864e5*i);
+    const did=entries.some(e=>sameDay(e.date,day));
+    const dow=(todayDow-i+7)%7;
+    whtml+=`<div class="wdc"><div class="wddot${did?' did':''}">${did?'✓':DLBL[dow]}</div><div class="wdlbl">${DLBL[dow]}</div></div>`;
+  }
+  document.getElementById('weekRow').innerHTML=whtml;
+  const MOODS=['😊','🙂','😐','😔','😤'];
+  const cnts=MOODS.map(m=>entries.filter(e=>e.mood===m).length);
+  const maxC=Math.max(...cnts,1);
+  cnts.forEach((c,i)=>{
+    document.getElementById('mb'+i).style.width=(c/maxC*100)+'%';
+    document.getElementById('mc'+i).textContent=c;
+  });
+  const old=entries.filter(e=>(Date.now()-new Date(e.date))>864e5*3&&e.body&&e.body.trim());
+  if(old.length){
+    const p=old[Math.floor(Math.random()*old.length)];
+    document.getElementById('serendipDate').textContent=cap(fmtFull(p.date));
+    const preview=p.body.replace(/\n/g,' ').trim();
+    document.getElementById('serendipTxt').textContent='"'+(preview.length>180?preview.slice(0,180)+'…':preview)+'"';
+    document.getElementById('serendipCard').style.display='block';
+  }else{document.getElementById('serendipCard').style.display='none';}
+}
+
+// ── DARK MODE ──
+function applyDark(silent){
+  const phone=document.getElementById('phone');
+  if(isDark)phone.setAttribute('data-dark','');
+  else phone.removeAttribute('data-dark');
+  if(!silent)save();
+}
+function toggleDark(){isDark=!isDark;applyDark();}
+
+// ── NAV ──
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const vEl=document.getElementById('v-'+name);
+  if(vEl)vEl.classList.add('active');
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  const tabEl=document.getElementById('tab-'+name);
+  if(tabEl)tabEl.classList.add('on');
+  if(name==='insights')buildInsights();
+  showView(name);
+}
+
+// ── INIT ──
+load();
+renderList();
+</script>
+<script src="../../notion-connection.js?v=spider-field-unified-1"></script><script src="../../app-guard.js"></script>
+<script src="../../assets/gambit-app-polish.js"></script>
+</body>
+</html>

@@ -70,17 +70,57 @@ test('Boss phase changes at correct HP thresholds', () => {
 test('Finisher only triggers when stagger condition is met', () => {
   const game = engine();
   game.state.battle.encounterIndex = 3;
+  game.state.battle.opponents = game.opponentsForWave(game.content.quests.get('main-001'), 3);
+  game.state.battle.selectedEnemyIndex = 0;
   game.state.battle.enemyHp = 230;
+  game.state.battle.opponents[0].hp = 230;
   game.state.progression.ultimate = 100;
   game.state.battle.enemyStagger = 99;
+  game.state.battle.opponents[0].stagger = 99;
   const early = game.performAction('ultimate');
   const ready = engine();
   ready.state.battle.encounterIndex = 3;
+  ready.state.battle.opponents = ready.opponentsForWave(ready.content.quests.get('main-001'), 3);
+  ready.state.battle.selectedEnemyIndex = 0;
   ready.state.battle.enemyHp = 230;
+  ready.state.battle.opponents[0].hp = 230;
   ready.state.progression.ultimate = 100;
   ready.state.battle.enemyStagger = 100;
+  ready.state.battle.opponents[0].stagger = 100;
   const finish = ready.performAction('ultimate');
   assert(!early.finisher && finish.finisher, 'finisher eligibility was not enforced');
+});
+
+test('Three-enemy wave keeps separate HP and lets the player choose a target', () => {
+  const game = engine();
+  assert(game.snapshot().opponents.length === 3, 'opening wave should contain three enemies');
+  assert(game.selectEnemy(1), 'AIM Rifle could not be selected');
+  game.performAction('attack');
+  assert(game.state.battle.opponents[0].hp === 85, 'unchosen enemy lost HP');
+  assert(game.state.battle.opponents[1].hp < 110, 'selected enemy did not lose HP');
+  assert(game.state.battle.opponents[2].hp === 135, 'third enemy lost HP');
+});
+
+test('Wave advances only after all three opponents are defeated', () => {
+  const game = engine();
+  for (let remaining = 2; remaining >= 0; remaining--) {
+    const target = game.state.battle.opponents[game.state.battle.selectedEnemyIndex];
+    target.hp = 1;
+    game.state.battle.enemyHp = 1;
+    game.performAction('attack');
+    assert(game.state.battle.encounterIndex === (remaining ? 0 : 1), 'wave changed before every enemy was defeated');
+    assert(game.state.battle.opponents.filter((foe) => foe.hp > 0).length === (remaining || 1), 'remaining enemies were not tracked');
+  }
+});
+
+test('Selected target and team HP survive reload', () => {
+  const storage = new MemoryStorage();
+  const game = engine(storage);
+  game.selectEnemy(2);
+  game.performAction('attack');
+  const loaded = engine(storage);
+  assert(loaded.state.battle.selectedEnemyIndex === 2, 'target selection was lost');
+  assert(loaded.state.battle.opponents[2].hp === game.state.battle.opponents[2].hp, 'team HP was lost');
 });
 
 test('Cooldown cannot go negative', () => {
@@ -94,7 +134,7 @@ test('Unique item reward cannot duplicate', () => {
   const game = engine();
   game.rewardEngine.apply('green-goblin-clear', game.state, 1);
   game.rewardEngine.apply('green-goblin-clear', game.state, 1);
-  assert(game.state.inventory['goblin-tech-core'].count === 1, 'unique loot duplicated');
+  assert(game.state.inventory['symbiote-core'].count === 1, 'unique loot duplicated');
 });
 
 test('Save and load preserve battle progress', () => {
@@ -115,14 +155,14 @@ test('Legacy save migrates without deleting progress', () => {
   assert(game.state.inventory['tech-scrap'].count === 2, 'inventory migration failed');
 });
 
-test('Difficulty multiplier affects damage and enemy HP', () => {
+test('Difficulty scales enemy HP without reducing hero damage twice', () => {
   const game = engine();
   const action = game.content.actions.get('basic-combo');
   const enemy = game.content.enemies.get('street-thug');
   const damage = new DamageEngine();
   const normal = damage.resolve({ action, enemy, difficulty: game.content.difficulties.NORMAL });
   const heroic = damage.resolve({ action, enemy, difficulty: game.content.difficulties.HEROIC });
-  assert(heroic.damage < normal.damage, 'heroic difficulty did not reduce effective damage');
+  assert(heroic.damage === normal.damage, 'heroic difficulty scaled the hero hit twice');
   assert(game.combatEngine.scaledMaxHp(enemy, 'HEROIC') > enemy.hp, 'heroic enemy HP was not scaled');
 });
 

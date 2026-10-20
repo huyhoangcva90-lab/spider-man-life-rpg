@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="vi" data-gambit-app="habits">
+<head>
+<script src="../../spider-embedded.js?v=field-navigation-3"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ededeb">
+<title>Habit Tracker</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+.hub-back{position:absolute;top:max(12px,env(safe-area-inset-top));left:16px;z-index:9999;height:36px;display:flex;align-items:center;gap:6px;padding:0 13px 0 10px;border-radius:999px;background:#000;border:1px solid #000;color:#fff;text-decoration:none;font-size:13px;font-weight:650;box-shadow:0 4px 16px rgba(0,0,0,.14);transition:transform .12s,opacity .12s}
+.hub-back:active{transform:scale(.96);opacity:.72}
+.hub-back i{font-size:17px}
+.shell{width:100%;max-width:430px;height:100dvh;padding:0;display:block}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+.phone{width:100%;height:100dvh;min-height:0;background:#07090e;border-radius:0;overflow:hidden;position:relative;box-shadow:none;border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06)}
+html,body{min-height:100%;background:#07090e;color:#fff}
+body{display:flex;justify-content:center}
+.di,.sb{display:none}
+.sb-time{font-size:15px;font-weight:600;color:#fff}
+.screen{position:absolute;inset:0;overflow:hidden}
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:82px;background:rgba(11,15,25,.94);border-top:.5px solid rgba(255,255,255,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;justify-content:space-around;align-items:center;padding:0 6px 20px;z-index:80}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:none;background:none;padding:0 14px;font-family:inherit}
+.tab i{font-size:24px;color:rgba(255,255,255,.4);transition:color .15s}
+.tab.on i{color:#00e5b4}
+.tab span{font-size:10px;font-weight:500;color:rgba(255,255,255,.4);transition:color .15s}
+.tab.on span{color:#00e5b4}
+.pg{position:absolute;top:0;left:0;right:0;bottom:82px;overflow-y:auto;overflow-x:hidden;background:#07090e;color:#fff;-webkit-overflow-scrolling:touch}
+.pg::-webkit-scrollbar{display:none}
+.pg.off{display:none}
+.loading{position:absolute;inset:0;background:#07090e;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff}
+.loading.hide{display:none}
+.spin{width:34px;height:34px;border:3px solid rgba(255,255,255,.15);border-top-color:#00e5b4;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.navbar{padding:calc(60px + env(safe-area-inset-top)) 20px 4px;display:flex;align-items:flex-start;justify-content:space-between}
+.page-title{font-size:34px;font-weight:800;letter-spacing:-.5px;color:#fff;line-height:1.1}
+.page-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:2px}
+.nb-btn{width:33px;height:33px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.nb-btn i{font-size:16px;color:#fff}
+.nb-btn.dark{background:rgba(0,229,180,.2);border-color:rgba(0,229,180,.4)}
+.nb-btn.dark i{color:#00e5b4}
+.sync-bar{display:flex;align-items:center;gap:7px;padding:2px 20px 10px;font-size:12px;color:rgba(255,255,255,.45)}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.3);transition:background .3s}
+.sdot.ok{background:#34C759}
+.sdot.sync{background:#FF9500}
+.sdot.err{background:#FF3B30}
+.prog-card{margin:0 16px 12px;background:rgba(16,22,34,.7);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px}
+.prog-ring{position:relative;flex-shrink:0}
+.prog-ring-lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.prog-pct{font-size:19px;font-weight:700;color:#000}
+.prog-sub2{font-size:9px;color:rgba(60,60,67,.5);font-weight:500;text-transform:uppercase;letter-spacing:.3px}
+.prog-info{flex:1;min-width:0}
+.prog-count{font-size:16px;font-weight:600;color:#000;margin-bottom:3px}
+.prog-msg{font-size:12px;color:rgba(60,60,67,.55);line-height:1.4;margin-bottom:10px}
+.prog-stats{display:flex;gap:14px}
+.prog-stat-val{font-size:17px;font-weight:700;color:#000;line-height:1}
+.prog-stat-lbl{font-size:10px;color:rgba(60,60,67,.5);margin-top:2px}
+.date-nav{display:flex;align-items:center;justify-content:space-between;padding:0 16px 10px}
+.dnbtn{width:32px;height:32px;border-radius:50%;background:#E5E5EA;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dnbtn i{font-size:14px;color:#000}
+.date-c{text-align:center;flex:1}
+.date-main{font-size:16px;font-weight:600;color:#000}
+.date-s2{font-size:12px;color:rgba(60,60,67,.5)}
+.meta-card{margin:0 16px 12px;background:#fff;border-radius:16px;overflow:hidden}
+.meta-row{padding:11px 16px;border-bottom:.5px solid rgba(60,60,67,.1);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.meta-row:last-child{border-bottom:none}
+.meta-lbl{font-size:14px;color:#000;min-width:70px;font-weight:500}
+.meta-chips{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+.mc{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:.5px solid rgba(60,60,67,.18);background:#F2F2F7;color:rgba(60,60,67,.7);transition:all .15s;font-family:inherit}
+.mc.on{background:#000;color:#fff;border-color:#000}
+.sect-hd{padding:12px 20px 6px;font-size:11px;font-weight:700;color:rgba(60,60,67,.5);letter-spacing:.6px;text-transform:uppercase}
+.habit-list{margin:0 16px;background:#fff;border-radius:16px;overflow:hidden;margin-bottom:10px}
+.habit-row{display:flex;align-items:center;padding:12px 14px;border-bottom:.5px solid rgba(60,60,67,.08);cursor:pointer;transition:background .1s;-webkit-user-select:none}
+.habit-row:last-child{border-bottom:none}
+.habit-row:active{background:#F5F5F5}
+.h-emoji{font-size:18px;width:34px;text-align:center;flex-shrink:0;margin-right:10px}
+.h-name{font-size:15px;font-weight:500;color:#000;flex:1}
+.h-check{width:25px;height:25px;border-radius:50%;border:2px solid rgba(60,60,67,.2);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.h-check.done{background:#000;border-color:#000}
+.h-check i{font-size:13px;color:#fff;opacity:0;transition:opacity .15s}
+.h-check.done i{opacity:1}
+.prod-card{margin:0 16px 12px;background:#fff;border-radius:16px;padding:14px 16px}
+.prod-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.prod-lbl{font-size:15px;font-weight:600;color:#000}
+.prod-val{font-size:20px;font-weight:700;color:#000}
+.prod-dots{display:flex;gap:5px}
+.pdot{flex:1;height:8px;border-radius:4px;background:#E5E5EA;cursor:pointer;transition:background .15s}
+.pdot.on{background:#000}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 16px 12px}
+.stat-tile{background:#fff;border-radius:16px;padding:14px}
+.stat-v{font-size:26px;font-weight:800;letter-spacing:-1px;color:#000;line-height:1}
+.stat-l{font-size:11px;color:rgba(60,60,67,.5);margin-top:4px}
+.streak-card{margin:0 16px 12px;background:#000;border-radius:18px;padding:16px;display:flex;align-items:center;gap:16px}
+.streak-num{font-size:48px;font-weight:800;letter-spacing:-2px;color:#fff;line-height:1}
+.streak-txt h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:4px}
+.streak-txt p{font-size:12px;color:rgba(255,255,255,.6);line-height:1.5}
+.week-card{margin:0 16px 12px;background:#fff;border-radius:16px;padding:14px 16px}
+.week-title{font-size:14px;font-weight:600;color:#000;margin-bottom:10px}
+.week-row{display:flex;gap:6px}
+.wday{flex:1;text-align:center}
+.wday-l{font-size:10px;color:rgba(60,60,67,.5);margin-bottom:5px;font-weight:500}
+.wday-dot{width:100%;aspect-ratio:1;border-radius:50%;background:#E5E5EA;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(60,60,67,.5)}
+.wday-dot.hi{background:#000;color:#fff}
+.wday-dot.med{background:rgba(0,0,0,.35);color:#fff}
+.hr-list{margin:0 16px;background:#fff;border-radius:16px;overflow:hidden;margin-bottom:10px}
+.hr-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:.5px solid rgba(60,60,67,.08)}
+.hr-row:last-child{border-bottom:none}
+.hr-emoji{font-size:16px;width:28px;text-align:center;flex-shrink:0}
+.hr-name{flex:1;font-size:14px;font-weight:500;color:#000}
+.hr-bar{flex:1;height:4px;background:#E5E5EA;border-radius:2px;overflow:hidden;margin:0 8px}
+.hr-fill{height:100%;background:#000;border-radius:2px}
+.hr-rate{font-size:13px;font-weight:600;color:#000;min-width:36px;text-align:right}
+.hist-card{background:#fff;border-radius:16px;margin:0 16px 10px;padding:13px 16px;cursor:pointer;display:flex;align-items:center;gap:12px}
+.hist-card:active{opacity:.8}
+.hist-info{flex:1;min-width:0}
+.hist-date{font-size:14px;font-weight:600;color:#000}
+.hist-meta{font-size:12px;color:rgba(60,60,67,.5);margin-top:2px}
+.hist-emojis{display:flex;flex-wrap:wrap;gap:2px;max-width:80px;justify-content:flex-end}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:300;display:flex;align-items:flex-end;opacity:0;transition:opacity .22s;pointer-events:none}
+.overlay.open{opacity:1;pointer-events:all}
+.sheet{background:#fff;border-radius:22px 22px 0 0;width:100%;max-height:88%;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,1.2,.68,1)}
+.sheet::-webkit-scrollbar{display:none}
+.overlay.open .sheet{transform:translateY(0)}
+.sh-handle{width:36px;height:5px;background:#D1D1D6;border-radius:3px;margin:10px auto 0}
+.sh-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 8px;border-bottom:.5px solid rgba(60,60,67,.1)}
+.sh-center{font-size:17px;font-weight:600;color:#000}
+.sh-btn{font-size:17px;color:#000;background:none;border:none;cursor:pointer;font-family:inherit;min-width:60px}
+.sh-btn.r{text-align:right;font-weight:500}
+.n-st{margin:12px 16px;padding:11px 14px;border-radius:12px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;background:#F2F2F7}
+.n-info{margin:0 16px 12px;padding:11px 14px;background:#F2F2F7;border-radius:12px;font-size:13px;color:rgba(60,60,67,.65);line-height:1.6}
+.n-field{margin:0 16px 12px}
+.n-field label{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(60,60,67,.55);display:block;margin-bottom:5px}
+.n-field input{width:100%;background:#F2F2F7;border:.5px solid rgba(60,60,67,.2);border-radius:10px;padding:10px 14px;font-size:15px;color:#000;font-family:inherit;outline:none}
+.n-btn{display:block;width:calc(100% - 32px);margin:0 16px 10px;padding:14px;background:#000;color:#fff;border:none;border-radius:14px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;text-align:center}
+.n-btn.ol{background:#F2F2F7;color:#000;border:.5px solid rgba(60,60,67,.2)}
+.set-card{margin:0 16px 12px;background:#fff;border-radius:16px;overflow:hidden}
+.set-row{display:flex;align-items:center;padding:13px 16px;border-bottom:.5px solid rgba(60,60,67,.1);cursor:pointer}
+.set-row:last-child{border-bottom:none}
+.set-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-right:12px;flex-shrink:0}
+.set-ico i{font-size:16px}
+.set-lbl{flex:1;font-size:15px;color:#000}
+.set-val{font-size:13px;color:rgba(60,60,67,.5);margin-right:6px}
+.sync-summary{margin:0 16px 12px;padding:14px;background:#fff;border-radius:16px}
+.sync-summary-top{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.sync-summary-dot{width:9px;height:9px;border-radius:50%;background:#C7C7CC;box-shadow:0 0 0 4px rgba(199,199,204,.18)}
+.sync-summary-dot.ok{background:#34C759;box-shadow:0 0 0 4px rgba(52,199,89,.14)}
+.sync-summary-title{font-size:15px;font-weight:650;color:#000}
+.sync-summary-sub{font-size:12px;color:rgba(60,60,67,.5);margin-top:2px}
+.sync-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sync-summary-item{padding:10px;background:#F7F7F9;border-radius:10px;min-width:0}
+.sync-summary-label{font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(60,60,67,.45);margin-bottom:4px}
+.sync-summary-value{font-size:13px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast{position:absolute;bottom:96px;left:50%;transform:translateX(-50%) translateY(12px);background:rgba(44,44,46,.97);color:#fff;padding:9px 18px;border-radius:22px;font-size:13px;font-weight:500;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Easlo-inspired full-page surface */
+:root{--canvas:#ededeb;--surface:#fff;--ink:#0d0d0d;--muted:#6d6d69;--line:#d9d9d5;--radius:8px}
+html,body{width:100%;min-height:100%;background:var(--canvas);color:var(--ink)}
+body{display:block;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.shell{width:100%;max-width:none;height:100dvh}
+.phone{width:100%;height:100dvh;background:var(--canvas);border-radius:0;box-shadow:none}
+.screen{inset:0}
+.pg{bottom:76px;background:var(--canvas);padding-bottom:max(20px,env(safe-area-inset-bottom))}
+.navbar,.sync-bar,#today-body,#stats-body,#hist-body,#pg-settings>.set-card,#pg-settings>.sync-summary,#pg-settings>#habits-cfg,#pg-settings>#habits-count,#pg-settings>div:first-of-type{width:min(100% - 32px,720px);margin-left:auto;margin-right:auto}
+.navbar{padding:calc(76px + env(safe-area-inset-top)) 0 12px;align-items:center}
+.page-title{font-size:clamp(34px,7vw,52px);font-weight:780;line-height:1;letter-spacing:0}
+.page-sub{font-size:14px;color:var(--muted);margin-top:8px}
+.hub-back{position:fixed;top:max(16px,env(safe-area-inset-top));left:max(16px,calc((100vw - 720px)/2));width:44px;height:44px;padding:0;justify-content:center;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--ink);box-shadow:none}
+.hub-back span{display:none}.hub-back i{font-size:20px}
+.nb-btn,.dnbtn{width:44px;height:44px;background:var(--surface);border:1px solid var(--line)}
+.sync-bar{padding:0 0 20px;font-size:13px;color:var(--muted)}
+.loading{background:var(--canvas)}
+.spin{width:40px;height:40px;border-color:#d2d2cf;border-top-color:var(--ink)}
+.prog-card{margin:0 0 20px;border-radius:var(--radius);padding:22px;background:var(--surface);gap:20px;border:1px solid #e3e3df}
+.prog-pct{font-size:22px}.prog-count{font-size:20px;font-weight:750}.prog-msg{font-size:13px;color:var(--muted)}
+.prog-stat-val{font-size:19px}.prog-stat-lbl{font-size:11px;color:var(--muted)}
+.date-nav{padding:0 0 18px}.date-main{font-size:17px;font-weight:700}.date-s2{color:var(--muted)}
+.meta-card,.prod-card{margin:0 0 16px;border-radius:var(--radius);border:1px solid #e3e3df;background:var(--surface)}
+.meta-row{padding:14px 16px}.mc{min-height:36px;padding:7px 12px;background:#f2f2f0;border-color:var(--line)}
+.sect-hd{padding:22px 4px 10px;font-size:12px;color:var(--muted);letter-spacing:0;text-transform:none}
+.habit-list{margin:0 0 10px;background:transparent;border-radius:0;overflow:visible;display:grid;gap:10px}
+.habit-row{width:100%;min-height:82px;padding:14px 16px;border:1px solid #e3e3df!important;border-radius:var(--radius);background:var(--surface);font-family:inherit;text-align:left;gap:14px;transition:background .18s,transform .18s;touch-action:manipulation}
+.habit-row:active{background:#e3e3df;transform:scale(.99)}
+.h-emoji{width:52px;height:52px;margin:0;border:2px solid var(--line);border-radius:50%;display:grid;place-items:center;font-size:21px;background:#f7f7f5}
+.h-emoji i{font-size:24px;color:var(--ink);stroke-width:2}
+.hr-emoji i{font-size:20px;color:var(--ink)}
+.hist-emojis i{font-size:15px;color:var(--ink)}
+.h-copy{flex:1;min-width:0}.h-name{font-size:17px;font-weight:720;letter-spacing:0}.h-meta{font-size:13px;color:var(--muted);margin-top:4px}
+.h-check{width:34px;height:34px;border:2px solid #bdbdb8}.h-check.done{background:var(--ink);border-color:var(--ink)}
+.h-check.done~*{color:var(--muted)}
+.prod-card{padding:18px}.prod-lbl{font-size:16px}.prod-val{font-size:24px}.pdot{height:10px}
+.stats-grid,.streak-card,.week-card,.hr-list,.hist-card{border-radius:var(--radius)}
+.stats-grid{margin:0 0 16px}.streak-card,.week-card,.hr-list,.hist-card{margin-left:0;margin-right:0}
+.tabbar{position:fixed;height:76px;padding:8px max(12px,calc((100vw - 560px)/2)) max(8px,env(safe-area-inset-bottom));background:rgba(247,247,244,.96);border-top:1px solid var(--line)}
+.tab{min-width:64px;min-height:52px;padding:4px 12px;border-radius:var(--radius)}.tab i{font-size:22px}.tab span{font-size:11px}.tab.on{background:#fff}.tab.on i,.tab.on span{color:var(--ink)}
+.overlay{position:fixed}.sheet{max-width:620px;margin:0 auto;border-radius:12px 12px 0 0}
+.toast{position:fixed;bottom:92px;border-radius:6px}
+@media(min-width:768px){
+  .pg{bottom:0;padding-bottom:108px}.navbar{padding-top:92px}
+  .tabbar{top:18px;bottom:auto;left:50%;right:auto;transform:translateX(-50%);width:auto;height:54px;padding:4px;background:#fff;border:1px solid var(--line);border-radius:8px}
+  .tab{min-height:44px;flex-direction:row;gap:7px}.tab i{font-size:18px}.tab span{font-size:13px}.tab.on{background:var(--ink)}.tab.on i,.tab.on span{color:#fff}
+  .hub-back{top:23px}.habit-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Experiment list: final visual layer */
+#pg-today .navbar,#pg-today .sync-bar,#today-body{width:min(calc(100% - 32px),620px)}
+#pg-today .navbar{padding-top:calc(72px + env(safe-area-inset-top));padding-bottom:8px}
+#pg-today .navbar>div:last-child{display:none}
+#pg-today .page-title{font-size:36px;font-weight:800}
+#pg-today .sync-bar{padding-bottom:22px}
+#today-body{display:flex;flex-direction:column}
+#today-body .sect-hd{padding:22px 2px 10px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#555551;text-transform:none;letter-spacing:0}
+#today-body .sect-hd:after{content:"";height:1px;background:#d4d4cf;flex:1}
+#today-body .sect-count{order:2;min-width:24px;height:24px;padding:0 7px;border:1px solid #cecec8;border-radius:999px;display:grid;place-items:center;font-size:11px;color:#555551;background:#f7f7f5}
+#today-body .habit-list{grid-template-columns:1fr;gap:12px;margin-bottom:6px}
+#today-body .habit-row{min-height:92px;padding:16px 18px;border:0!important;background:#fff;border-radius:8px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+#today-body .h-emoji{width:58px;height:58px;border:2px solid #d1d1cc;background:#f7f7f5}
+#today-body .h-emoji i{font-size:27px;line-height:1}
+#today-body .h-name{font-size:18px;font-weight:750}
+#today-body .h-meta{font-size:14px;margin-top:3px;color:#74746f}
+#today-body .h-check{width:42px;height:42px;border-color:#c7c7c1}
+#today-body .daily-details-title{padding:30px 2px 10px;font-size:13px;font-weight:650;color:#777772}
+#pg-settings>.navbar,#pg-settings>.set-card,#pg-settings>.sync-summary,#pg-settings>#habits-cfg,#pg-settings>#habits-count{width:min(calc(100% - 32px),720px);margin-left:auto!important;margin-right:auto!important}
+#pg-settings>#habits-cfg{border-radius:8px!important}
+#pg-settings>#habits-count{padding-left:0!important;padding-right:0!important}
+#pg-settings .navbar{padding-left:0;padding-right:0}
+#pg-settings .set-card,#pg-settings .sync-summary{border-radius:8px}
+.tabbar .tab{width:86px;justify-content:center}
+.tab:focus{outline:none}.tab:focus-visible{outline:2px solid #111;outline-offset:2px}
+#today-body .prog-card,#today-body .date-nav{display:none}
+#today-body .meta-card{margin-top:0}
+#today-body .meta-row{align-items:stretch;flex-direction:column;gap:10px}
+#today-body .meta-lbl{min-width:0;font-size:13px;font-weight:700}
+#today-body .meta-chips{width:100%;display:flex;justify-content:space-between;gap:4px;flex-wrap:nowrap}
+#today-body .mc{width:38px;height:38px;padding:0;display:grid;place-items:center;border-radius:50%;flex:0 0 38px}
+#today-body .mc i{font-size:20px;color:currentColor}
+#today-body .prod-card{margin-bottom:28px}
+.sdot.ok,.sync-summary-dot.ok{background:#111;box-shadow:0 0 0 4px rgba(0,0,0,.10)}
+.sdot.sync{background:#777}.sdot.err{background:#111}
+.set-ico{background:#f2f2f0!important}.set-ico i{color:#111!important}
+.scrolled .hub-back{opacity:0;pointer-events:none}
+@media(min-width:768px){#pg-today .navbar{padding-top:94px}#today-body .habit-row{min-height:96px}}
+@media(min-width:768px){
+  .pg{bottom:86px;padding-bottom:24px}
+  .tabbar{top:auto;bottom:18px;left:50%;right:auto;transform:translateX(-50%);width:auto;height:58px;padding:4px;background:#fff;border:1px solid var(--line);border-radius:8px}
+  .tab{min-height:48px;flex-direction:row;gap:7px}.tab i{font-size:18px}.tab span{font-size:13px}
+}
+.field-vector-icon{width:1em;height:1em;display:inline-block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.125em}
+.page-title{color:var(--ink)}
+.tab span,.tab .field-vector-icon{color:var(--muted)}
+.tab .field-vector-icon{width:22px;height:22px}
+.tab.on span,.tab.on .field-vector-icon{color:var(--ink)}
+@media(min-width:768px){.tab.on span,.tab.on .field-vector-icon{color:#fff}}
+.mc .field-vector-icon{width:20px;height:20px}.h-check .field-vector-icon{width:16px;height:16px;color:transparent}.h-check.done .field-vector-icon{color:#fff}
+/* The Spider toolbar owns back navigation; keep habit actions clear of headings. */
+html[data-gambit-back-mode="managed"] .navbar, html[data-gambit-back-mode="managed"] #pg-today .navbar { padding-top:28px; flex-wrap:wrap; gap:12px; }
+html[data-gambit-back-mode="managed"] .navbar > div:first-child { flex:1 1 200px; min-width:0; }
+html[data-gambit-back-mode="managed"] .navbar > div:last-child { flex-shrink:0; }
+html[data-gambit-back-mode="managed"] .page-title { overflow-wrap:anywhere; }
+</style>
+<link rel="preload" href="../../assets/vendor/tabler/fonts/tabler-icons.woff2?v3.26.0" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/vendor/tabler/tabler-icons.min.css">
+<link rel="stylesheet" href="../../assets/gambit-app-polish.css">
+</head>
+<body>
+<div class="shell">
+<div class="phone">
+<a class="hub-back" href="../../index.html" aria-label="Trở về trang chủ"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#chevron-left"></use></svg><span>Trở về</span></a>
+<div class="di"></div>
+<div class="sb">
+  <span class="sb-time" id="sbt">9:41</span>
+  <div style="display:flex;align-items:center;gap:6px">
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="#000"><rect x="0" y="5" width="3" height="7" rx="1" opacity=".3"/><rect x="4.5" y="3" width="3" height="9" rx="1" opacity=".55"/><rect x="9" y="1" width="3" height="11" rx="1" opacity=".75"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="#000" stroke-opacity=".35"/><rect x="23.5" y="4" width="3" height="5" rx="1.5" fill="#000" opacity=".4"/><rect x="2" y="2" width="18" height="9" rx="2" fill="#000"/></svg>
+  </div>
+</div>
+<div class="screen">
+
+<div class="loading" id="loading">
+  <div class="spin"></div>
+  <div style="font-size:16px;font-weight:600;color:#000">Syncing with Notion</div>
+  <div style="font-size:13px;color:rgba(60,60,67,.5)" id="loading-s">Fetching your habits...</div>
+</div>
+
+<!-- TODAY -->
+<div class="pg off" id="pg-today">
+  <div class="navbar">
+    <div>
+      <div class="page-title" id="today-h">Today</div>
+      <div class="page-sub" id="today-s"></div>
+    </div>
+    <div style="display:flex;gap:8px;padding-top:8px">
+      <button class="nb-btn dark" onclick="manualSync()" aria-label="Đồng bộ Notion"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#refresh"></use></svg></button>
+      <button class="nb-btn" onclick="tab(3)" aria-label="Mở cài đặt"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#user-circle"></use></svg></button>
+    </div>
+  </div>
+  <div class="sync-bar"><div class="sdot" id="sdot"></div><span id="stxt">Loading...</span></div>
+  <div id="today-body"></div>
+  <div style="height:24px"></div>
+</div>
+
+<!-- STATS -->
+<div class="pg off" id="pg-stats">
+  <div class="navbar"><span class="page-title">Stats</span></div>
+  <div id="stats-body"></div>
+  <div style="height:24px"></div>
+</div>
+
+<!-- HISTORY -->
+<div class="pg off" id="pg-history">
+  <div class="navbar"><span class="page-title">History</span></div>
+  <div id="hist-body"></div>
+  <div style="height:24px"></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="pg off" id="pg-settings">
+  <div class="navbar"><span class="page-title">Settings</span></div>
+  <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(60,60,67,.5);padding:10px 20px 5px">Notion Sync</div>
+  <div class="set-card">
+    <div class="set-row" onclick="openNotion()">
+      <div class="set-ico" style="background:#F2F2F7"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true" style="font-size:16px;color:#000"><use href="../../assets/field-icons.svg#brand-notion"></use></svg></div>
+      <span class="set-lbl">Notion</span>
+      <span class="set-val" id="set-nval">Not connected</span>
+      <svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true" style="color:rgba(60,60,67,.3)"><use href="../../assets/field-icons.svg#chevron-right"></use></svg>
+    </div>
+    <div class="set-row" onclick="manualSync()">
+      <div class="set-ico" style="background:#E8F3FF"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true" style="font-size:16px;color:#007AFF"><use href="../../assets/field-icons.svg#refresh"></use></svg></div>
+      <span class="set-lbl">Sync now</span>
+      <svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true" style="color:rgba(60,60,67,.3)"><use href="../../assets/field-icons.svg#chevron-right"></use></svg>
+    </div>
+  </div>
+  <div class="sync-summary">
+    <div class="sync-summary-top">
+      <div class="sync-summary-dot" id="sync-summary-dot"></div>
+      <div>
+        <div class="sync-summary-title" id="sync-summary-title">Notion not connected</div>
+        <div class="sync-summary-sub" id="sync-summary-sub">Start the Gambit server to sync</div>
+      </div>
+    </div>
+    <div class="sync-summary-grid">
+      <div class="sync-summary-item"><div class="sync-summary-label">Daily</div><div class="sync-summary-value" id="sync-daily">Waiting</div></div>
+      <div class="sync-summary-item"><div class="sync-summary-label">Habits</div><div class="sync-summary-value" id="sync-habits">Waiting</div></div>
+      <div class="sync-summary-item"><div class="sync-summary-label">Sync mode</div><div class="sync-summary-value">Automatic</div></div>
+      <div class="sync-summary-item"><div class="sync-summary-label">Completed</div><div class="sync-summary-value" id="sync-completed">0 today</div></div>
+    </div>
+  </div>
+  <div id="habits-count" style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(60,60,67,.5);padding:10px 20px 5px">Habits</div>
+  <div id="habits-cfg" style="margin:0 16px 12px;background:#fff;border-radius:16px;overflow:hidden"></div>
+  <div style="height:40px"></div>
+</div>
+
+<div class="tabbar">
+  <button class="tab on" id="tb0" onclick="tab(0)"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#calendar-event"></use></svg><span>Today</span></button>
+  <button class="tab" id="tb1" onclick="tab(1)"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#chart-bar"></use></svg><span>Stats</span></button>
+  <button class="tab" id="tb2" onclick="tab(2)"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#clock"></use></svg><span>History</span></button>
+  <button class="tab" id="tb3" onclick="tab(3)"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#settings"></use></svg><span>Settings</span></button>
+</div>
+</div>
+
+<!-- NOTION SHEET -->
+<div class="overlay" id="ov-notion" onclick="bgc(event,'ov-notion')">
+  <div class="sheet">
+    <div class="sh-handle"></div>
+    <div class="sh-nav">
+      <button class="sh-btn" onclick="closeOv('ov-notion')">Close</button>
+      <span class="sh-center">Notion Sync</span>
+      <button class="sh-btn r" onclick="saveNotion()">Save</button>
+    </div>
+    <div class="n-st" id="n-st-card"><div class="n-dot" id="n-dot" style="width:8px;height:8px;border-radius:50%;background:#C7C7CC;flex-shrink:0"></div><span id="n-st-txt">Not connected</span></div>
+    <div class="n-info">Habits are loaded from the Habits database. The local Gambit server keeps your Notion token outside the browser.</div>
+    <div class="n-field"><label for="n-db">Daily Database ID</label><input id="n-db" name="daily-database-id" type="text" placeholder="272d787636c6…" autocomplete="off" spellcheck="false"></div>
+    <div class="n-field"><label for="n-habits-db">Habits Database ID</label><input id="n-habits-db" name="habits-database-id" type="text" placeholder="272d787636c6…" autocomplete="off" spellcheck="false"></div>
+    <button class="n-btn" onclick="saveNotion()">Save &amp; Connect</button>
+    <button class="n-btn ol" onclick="manualSync()">Pull from Notion now</button>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</div>
+</div>
+
+<script>
+var DBID='272d787636c681c8b8adc9d6fdada0b7';
+var HABITS_DBID='272d787636c681a29bf8e4d5e588e173';
+var SK='dhv2';
+
+var FALLBACK_HABITS=[
+  {k:'Gym',       l:'Gym',            e:'🏋️', g:'Fitness'},
+  {k:'Yoga',      l:'Yoga',           e:'🧘', g:'Fitness'},
+  {k:'Wake up early',l:'Wake up early',e:'🌅',g:'Routine'},
+  {k:'Sleep early',l:'Sleep early',   e:'😴', g:'Routine'},
+  {k:'Skincare',  l:'Skincare',       e:'✨', g:'Routine'},
+  {k:'English',   l:'English',        e:'🇬🇧',g:'English'},
+  {k:'Vocabulary',l:'Vocabulary',     e:'📖', g:'English'},
+  {k:'Grammar',   l:'Grammar',        e:'📝', g:'English'},
+  {k:'Listening', l:'Listening',      e:'🎧', g:'English'},
+  {k:'Speaking',  l:'Speaking',       e:'🗣️', g:'English'},
+  {k:'Practive',  l:'Practice',       e:'💬', g:'English'},
+  {k:'Reading',   l:'Reading',        e:'📚', g:'English'},
+  {k:'Writing',   l:'Writing',        e:'✍️', g:'English'},
+  {k:'Learn something',l:'Learn something',e:'🧠',g:'Learning'},
+  {k:'Straight',  l:'Straight',       e:'🎯', g:'Lifestyle'},
+  {k:'Fashion',   l:'Fashion',        e:'👗', g:'Lifestyle'},
+  {k:'Economy',   l:'Economy',        e:'💰', g:'Lifestyle'},
+];
+var HABITS=[];
+var DAILY_CHECKBOXES={};
+var MOODS=['😢','😴','😰','😡','🌿','😀','🤩'];
+var MOOD_LABELS=['😢 Sad','😴 Tired','😰 Anxious','😡 Angry','🌿 Calm','😀 Happy','🤩 Excited'];
+var MOOD_ICONS=['mood-sad','moon','mood-sad-squint','mood-angry','leaf','mood-smile','mood-happy'];
+var ENERGY=['⚡︎','⚡','⚡⚡','⚡⚡⚡'];
+var ENERGY_ICONS=['battery-1','battery-2','battery-3','battery-4'];
+
+var D={notion:{dbId:DBID,habitsDbId:HABITS_DBID,ok:false},days:{},viewDate:todayStr()};
+var habitCloudReady=false,habitCloudOnline=false,habitCloudDirty=false,habitCloudTimer=null;
+
+function todayStr(){var n=new Date();return n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate());}
+function pad(n){return n<10?'0'+n:String(n);}
+function dateStr(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function uid(){return'r'+Date.now();}
+function habitCloudPayload(){return{version:1,updatedAt:new Date().toISOString(),data:D,habits:HABITS};}
+function pushHabitCloud(){
+  if(!habitCloudReady)return;
+  clearTimeout(habitCloudTimer);
+  habitCloudTimer=setTimeout(function(){
+    fetch('/api/cloud?key=habits',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(habitCloudPayload())})
+      .then(function(r){if(r.ok){habitCloudOnline=true;updateSyncUI();}}).catch(function(){});
+  },220);
+}
+function save(localOnly){
+  D.habitCatalog=HABITS;
+  try{localStorage.setItem(SK,JSON.stringify(D));}catch(e){}
+  if(!localOnly){habitCloudDirty=true;pushHabitCloud();}
+}
+function hydrateHabitCloud(cb){if(cb)cb(false);return;
+
+  var found=false;
+  fetch('/api/cloud?key=habits').then(function(r){habitCloudOnline=r.ok;return r.json();}).then(function(res){
+    var remote=res&&res.ok&&res.data;
+    if(!habitCloudDirty&&remote&&remote.data&&remote.data.days){
+      found=true;D=Object.assign(D,remote.data);
+      if(Array.isArray(remote.habits)&&remote.habits.length)HABITS=remote.habits;
+      save(true);
+    }
+  }).catch(function(){}).finally(function(){
+    habitCloudReady=true;
+    if(habitCloudDirty||!found)pushHabitCloud();
+    updateSyncUI();
+    if(cb)cb(found);
+  });
+}
+function loadS(){
+  try{
+    var s=localStorage.getItem(SK);
+    if(s){
+      var p=JSON.parse(s);
+      if(p.days)D.days=p.days;
+      if(Array.isArray(p.habitCatalog))HABITS=p.habitCatalog;
+      if(p.notion)D.notion=Object.assign(D.notion,p.notion);
+    }
+  }catch(e){}
+  if(!D.notion.dbId)D.notion.dbId=DBID;
+  if(!D.notion.habitsDbId)D.notion.habitsDbId=HABITS_DBID;
+  D.notion.ok=false;
+}
+function getDay(ds){if(!D.days[ds])D.days[ds]={pageId:null,habits:{},mood:'',energy:'',prod:0};return D.days[ds];}
+
+function init(){
+  loadS();
+  document.querySelectorAll('.pg').forEach(function(page){
+    page.addEventListener('scroll',function(){document.body.classList.toggle('scrolled',page.scrollTop>36);},{passive:true});
+  });
+  var tick=function(){var t=new Date();document.getElementById('sbt').textContent=t.getHours()+':'+(t.getMinutes()<10?'0':'')+t.getMinutes();};
+  tick();setInterval(tick,15000);
+  // Render cached data immediately; network sync continues in the background.
+  loadSampleData();
+  document.getElementById('loading').classList.add('hide');
+  showPages();renderAll();updateSyncUI();
+  hydrateHabitCloud(function(found){if(found){buildHabitsCfg();renderAll();}});
+  pullNotion(function(ok){
+    D.notion.ok=ok;save();updateSyncUI();buildHabitsCfg();
+    renderAll();
+    if(ok)toast('Synced from Notion \u2713');
+  });
+}
+function showPages(){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.add('off');});
+  document.getElementById('pg-today').classList.remove('off');
+  document.getElementById('tb0').classList.add('on');
+}
+
+function loadSampleData(){
+  // Keep an empty real day instead of inventing sample history on new devices.
+  getDay(todayStr());
+  save(true);
+}
+
+function habitVisual(name,type){
+  var n=(name||'').toLowerCase();
+  var icon='✓';
+  if(n.indexOf('facebook')>=0)icon='f';
+  else if(n.indexOf('tiktok')>=0)icon='♪';
+  else if(n.indexOf('youtube')>=0)icon='▶';
+  else if(n.indexOf('game')>=0)icon='🎮';
+  else if(n.indexOf('wake')>=0)icon='🌅';
+  else if(n.indexOf('sleep')>=0)icon='😴';
+  else if(n.indexOf('deep work')>=0)icon='🎯';
+  else if(n.indexOf('anh')>=0||n.indexOf('english')>=0)icon='📖';
+  else if(n.indexOf('gym')>=0||n.indexOf('straight')>=0)icon='🏋️';
+  else if(n.indexOf('fashion')>=0)icon='👗';
+  else if(n.indexOf('economy')>=0)icon='💰';
+  else if(n.indexOf('skincare')>=0)icon='✨';
+  else if(n.indexOf('yoga')>=0)icon='🧘';
+  return{e:icon,i:'',g:type==='Bad Habbit'?'Digital limits':'Good habits'};
+}
+
+function habitIcon(name){return '<svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#'+name+'"></use></svg>';}
+function habitGlyph(h){return h.e;}
+
+function tab(i){
+  ['tb0','tb1','tb2','tb3'].forEach(function(id,j){document.getElementById(id).classList.toggle('on',j===i);});
+  ['pg-today','pg-stats','pg-history','pg-settings'].forEach(function(id,j){document.getElementById(id).classList.toggle('off',j!==i);});
+  if(i===1)renderStats();
+  else if(i===2)renderHist();
+  else if(i===3)renderSettings();
+}
+function renderAll(){renderToday();renderStats();renderHist();}
+
+function goPrev(){var d=new Date(D.viewDate+'T00:00:00');d.setDate(d.getDate()-1);D.viewDate=dateStr(d);renderToday();}
+function goNext(){var d=new Date(D.viewDate+'T00:00:00');d.setDate(d.getDate()+1);if(d>new Date()){toast('Can\u2019t go to the future!');return;}D.viewDate=dateStr(d);renderToday();}
+
+function renderToday(){
+  var ds=D.viewDate,isToday=ds===todayStr();
+  var d2=new Date(ds+'T00:00:00');
+  document.getElementById('today-h').textContent=isToday?'Experiments':d2.toLocaleDateString('en-GB',{weekday:'long'});
+  document.getElementById('today-s').textContent=d2.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  var day=getDay(ds);
+  var done=HABITS.filter(function(h){return day.habits[h.k];}).length;
+  var pct=HABITS.length?Math.round(done/HABITS.length*100):0;
+  var b=document.getElementById('today-body');b.innerHTML='';
+
+  // Progress ring
+  var RS=78,ST=6,r=RS/2-ST/2-1,C=2*Math.PI*r,dash=pct/100*C;
+  var pc=document.createElement('div');pc.className='prog-card';
+  pc.innerHTML='<div class="prog-ring" style="width:'+RS+'px;height:'+RS+'px;flex-shrink:0">'
+    +'<svg width="'+RS+'" height="'+RS+'" viewBox="0 0 '+RS+' '+RS+'">'
+    +'<circle cx="'+RS/2+'" cy="'+RS/2+'" r="'+r+'" fill="none" stroke="#E5E5EA" stroke-width="'+ST+'"/>'
+    +'<circle cx="'+RS/2+'" cy="'+RS/2+'" r="'+r+'" fill="none" stroke="#000" stroke-width="'+ST+'" stroke-linecap="round"'
+    +' stroke-dasharray="'+dash.toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 '+RS/2+' '+RS/2+')" style="transition:stroke-dasharray .4s"/>'
+    +'</svg>'
+    +'<div class="prog-ring-lbl"><div class="prog-pct">'+pct+'%</div><div class="prog-sub2">done</div></div>'
+    +'</div>'
+    +'<div class="prog-info"><div class="prog-count">'+done+' / '+HABITS.length+' habits</div>'
+    +'<div class="prog-msg">'+motivMsg(pct)+'</div>'
+    +'<div class="prog-stats">'
+    +'<div><div class="prog-stat-val">'+calcStreak()+'</div><div class="prog-stat-lbl">Streak</div></div>'
+    +'<div><div class="prog-stat-val">'+done+'</div><div class="prog-stat-lbl">Done</div></div>'
+    +'<div><div class="prog-stat-val">'+(HABITS.length-done)+'</div><div class="prog-stat-lbl">Left</div></div>'
+    +'</div></div>';
+  b.appendChild(pc);
+
+  // Date nav
+  var dn=document.createElement('div');dn.className='date-nav';
+  dn.innerHTML='<button class="dnbtn" onclick="goPrev()"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#chevron-left"></use></svg></button>'
+    +'<div class="date-c"><div class="date-main">'+d2.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+'</div>'
+    +'<div class="date-s2">'+(isToday?'Today':'Tap to log')+'</div></div>'
+    +'<button class="dnbtn" onclick="goNext()"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#chevron-right"></use></svg></button>';
+  b.appendChild(dn);
+
+  // Mood + Energy
+  var mc=document.createElement('div');mc.className='meta-card';
+  var mr1=document.createElement('div');mr1.className='meta-row';
+  mr1.innerHTML='<div class="meta-lbl">Mood</div>';
+  var mc1=document.createElement('div');mc1.className='meta-chips';
+  MOOD_LABELS.forEach(function(m,moodIndex){
+    var ch=document.createElement('button');ch.className='mc'+(day.mood===m?' on':'');ch.textContent=m.split(' ')[0];
+    ch.innerHTML=habitIcon(MOOD_ICONS[moodIndex]);
+    ch.setAttribute('aria-label',m.split(' ').slice(1).join(' '));
+    ch.onclick=function(){setMeta(ds,'mood',day.mood===m?'':m);};
+    mc1.appendChild(ch);
+  });
+  mr1.appendChild(mc1);mc.appendChild(mr1);
+
+  var mr2=document.createElement('div');mr2.className='meta-row';
+  mr2.innerHTML='<div class="meta-lbl">Energy</div>';
+  var mc2=document.createElement('div');mc2.className='meta-chips';
+  ENERGY.forEach(function(e,energyIndex){
+    var ch=document.createElement('button');ch.className='mc'+(day.energy===e?' on':'');ch.innerHTML=habitIcon(ENERGY_ICONS[energyIndex]);
+    ch.setAttribute('aria-label','Energy '+(energyIndex+1));
+    ch.onclick=function(){setMeta(ds,'energy',day.energy===e?'':e);};
+    mc2.appendChild(ch);
+  });
+  mr2.appendChild(mc2);mc.appendChild(mr2);
+  b.appendChild(mc);
+
+  // Productivity
+  var pp=document.createElement('div');pp.className='prod-card';
+  pp.innerHTML='<div class="prod-top"><div class="prod-lbl">Productivity</div><div class="prod-val">'+(day.prod||0)+'/10</div></div>';
+  var dots=document.createElement('div');dots.className='prod-dots';
+  for(var i2=1;i2<=10;i2++){
+    var dot=document.createElement('div');dot.className='pdot'+(i2<=(day.prod||0)?' on':'');
+    (function(v){dot.onclick=function(){setMeta(ds,'prod',v);};})(i2);
+    dots.appendChild(dot);
+  }
+  pp.appendChild(dots);b.appendChild(pp);
+
+  // Habits grouped
+  var groups={};var order=[];
+  HABITS.forEach(function(h){if(!groups[h.g]){groups[h.g]=[];order.push(h.g);}groups[h.g].push(h);});
+  order.forEach(function(g){
+    var sec=document.createElement('div');sec.className='sect-hd';sec.innerHTML='<span>'+g+'</span><span class="sect-count">'+groups[g].length+'</span>';b.appendChild(sec);
+    var list=document.createElement('div');list.className='habit-list';
+    groups[g].forEach(function(h){
+      var row=document.createElement('button');row.type='button';row.className='habit-row';
+      var checked=day.habits[h.k]||false;
+      row.setAttribute('aria-label',(checked?'Bỏ hoàn thành ':'Hoàn thành ')+h.l);
+      row.innerHTML='<div class="h-emoji">'+habitGlyph(h)+'</div><div class="h-copy"><div class="h-name">'+h.l+'</div><div class="h-meta">Day '+habitDayCount(h.k,ds)+' · Daily</div></div>'
+        +'<div class="h-check'+(checked?' done':'')+'"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="../../assets/field-icons.svg#check"></use></svg></div>';
+      row.onclick=function(){toggleH(ds,h.k);};
+      list.appendChild(row);
+    });
+    b.appendChild(list);
+  });
+  var detailsTitle=document.createElement('div');detailsTitle.className='daily-details-title';detailsTitle.textContent="Today's check-in";
+  b.appendChild(detailsTitle);
+  [pc,dn,mc,pp].forEach(function(el){b.appendChild(el);});
+}
+
+function habitDayCount(key,until){
+  var count=Object.keys(D.days).filter(function(ds){return ds<=until&&D.days[ds]&&D.days[ds].habits&&D.days[ds].habits[key];}).length;
+  return Math.max(1,count);
+}
+
+function motivMsg(p){
+  if(p===0)return'Start your day strong.';
+  if(p<20)return'Start with one small win.';
+  if(p<40)return'Keep the momentum going.';
+  if(p<60)return'Halfway there.';
+  if(p<80)return'Good progress today.';
+  if(p<100)return'Almost complete.';
+  return'All experiments complete.';
+}
+
+function toggleH(ds,key){
+  if(!D.notion.ok){toast('Kết nối Notion trước khi đánh dấu.');return;}
+  var day=getDay(ds);day.habits[key]=!day.habits[key];
+  save();renderToday();
+  pushNotion(ds);
+  toast((day.habits[key]?'✓ ':'✗ ')+(HABITS.find(function(h){return h.k===key;})||{l:key}).l);
+}
+function setMeta(ds,field,val){
+  if(!D.notion.ok){toast('Kết nối Notion trước khi cập nhật.');return;}
+  var day=getDay(ds);day[field]=val;
+  save();renderToday();pushNotion(ds);
+}
+
+function calcStreak(){
+  var s=0;var d=new Date(todayStr()+'T00:00:00');
+  for(var i=0;i<365;i++){
+    var ds=dateStr(d);var day=D.days[ds];
+    if(!day)break;
+    var done=HABITS.filter(function(h){return day.habits&&day.habits[h.k];}).length;
+    if(done>0)s++;else if(i>0)break;
+    d.setDate(d.getDate()-1);
+  }
+  return s;
+}
+
+function renderStats(){
+  var b=document.getElementById('stats-body');b.innerHTML='';
+  var all=Object.keys(D.days).filter(function(ds){return D.days[ds]&&D.days[ds].pageId;}).sort().reverse();
+  if(!all.length)return;
+  var streak=calcStreak();
+  var avgPct=Math.round(all.reduce(function(a,ds){var day=D.days[ds];var done=HABITS.filter(function(h){return day.habits&&day.habits[h.k];}).length;return a+(HABITS.length?done/HABITS.length*100:0);},0)/Math.max(all.length,1));
+  var sc=document.createElement('div');sc.className='streak-card';
+  sc.innerHTML='<div class="streak-num">'+streak+'</div><div class="streak-txt"><h3>Day streak</h3><p>'+all.length+' days tracked<br>Keep it going.</p></div>';
+  b.appendChild(sc);
+  var sg=document.createElement('div');sg.className='stats-grid';
+  var todayDone=D.days[todayStr()]?HABITS.filter(function(h){return D.days[todayStr()].habits&&D.days[todayStr()].habits[h.k];}).length:0;
+  sg.innerHTML='<div class="stat-tile"><div class="stat-v">'+avgPct+'%</div><div class="stat-l">Avg completion</div></div>'
+    +'<div class="stat-tile"><div class="stat-v">'+all.length+'</div><div class="stat-l">Days tracked</div></div>'
+    +'<div class="stat-tile"><div class="stat-v">'+todayDone+'</div><div class="stat-l">Done today</div></div>'
+    +'<div class="stat-tile"><div class="stat-v">'+(HABITS.length-todayDone)+'</div><div class="stat-l">Left today</div></div>';
+  b.appendChild(sg);
+
+  // Week
+  var wc=document.createElement('div');wc.className='week-card';
+  wc.innerHTML='<div class="week-title">Last 7 days</div>';
+  var wr=document.createElement('div');wr.className='week-row';
+  for(var i=6;i>=0;i--){
+    var d2=new Date();d2.setDate(d2.getDate()-i);var ds=dateStr(d2);
+    var dayD=D.days[ds];var pct2=0;
+    if(dayD&&HABITS.length){var done2=HABITS.filter(function(h){return dayD.habits&&dayD.habits[h.k];}).length;pct2=Math.round(done2/HABITS.length*100);}
+    var cls=pct2>=80?'hi':pct2>=40?'med':'';
+    var wd=document.createElement('div');wd.className='wday';
+    wd.innerHTML='<div class="wday-l">'+d2.toLocaleDateString('en-GB',{weekday:'short'}).slice(0,2)+'</div>'
+      +'<div class="wday-dot '+cls+'">'+(pct2?pct2+'%':'—')+'</div>';
+    wr.appendChild(wd);
+  }
+  wc.appendChild(wr);b.appendChild(wc);
+
+  // Habit rates
+  var ht=document.createElement('div');ht.className='sect-hd';ht.textContent='HABIT RATES';b.appendChild(ht);
+  var hl=document.createElement('div');hl.className='hr-list';
+  var rates=HABITS.map(function(h){var r=all.length?Math.round(all.filter(function(ds){return D.days[ds].habits&&D.days[ds].habits[h.k];}).length/all.length*100):0;return{h:h,r:r};}).sort(function(a,b){return b.r-a.r;});
+  rates.forEach(function(x,i){
+    var row=document.createElement('div');row.className='hr-row';if(i===rates.length-1)row.style.borderBottom='none';
+    row.innerHTML='<div class="hr-emoji">'+habitGlyph(x.h)+'</div><div class="hr-name">'+x.h.l+'</div>'
+      +'<div class="hr-bar"><div class="hr-fill" style="width:'+x.r+'%"></div></div>'
+      +'<div class="hr-rate">'+x.r+'%</div>';
+    hl.appendChild(row);
+  });
+  b.appendChild(hl);
+}
+
+function renderHist(){
+  var b=document.getElementById('hist-body');b.innerHTML='';
+  var all=Object.keys(D.days).filter(function(ds){return D.days[ds]&&D.days[ds].pageId;}).sort().reverse().slice(0,30);
+  if(!all.length){b.innerHTML='<div style="text-align:center;padding:60px 24px;color:rgba(60,60,67,.5);font-size:15px">No history yet</div>';return;}
+  all.forEach(function(ds){
+    var day=D.days[ds];var done=HABITS.filter(function(h){return day.habits&&day.habits[h.k];}).length;
+    var pct=HABITS.length?Math.round(done/HABITS.length*100):0;
+    var RS=42,ST=4,r=RS/2-ST/2-1,C=2*Math.PI*r,dash=pct/100*C;
+    var card=document.createElement('div');card.className='hist-card';
+    card.onclick=function(){D.viewDate=ds;tab(0);renderToday();};
+    card.innerHTML='<div style="position:relative;width:'+RS+'px;height:'+RS+'px;flex-shrink:0">'
+      +'<svg width="'+RS+'" height="'+RS+'" viewBox="0 0 '+RS+' '+RS+'">'
+      +'<circle cx="'+RS/2+'" cy="'+RS/2+'" r="'+r+'" fill="none" stroke="#E5E5EA" stroke-width="'+ST+'"/>'
+      +'<circle cx="'+RS/2+'" cy="'+RS/2+'" r="'+r+'" fill="none" stroke="#000" stroke-width="'+ST+'" stroke-linecap="round"'
+      +' stroke-dasharray="'+dash.toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 '+RS/2+' '+RS/2+')"/>'
+      +'</svg>'
+      +'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#000">'+pct+'%</div></div>'
+      +'<div class="hist-info"><div class="hist-date">'+new Date(ds+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})+'</div>'
+      +'<div class="hist-meta">'+done+'/'+HABITS.length+' habits'+(day.mood?' \u00b7 '+day.mood.split(' ').slice(1).join(' '):'')+(day.prod?' \u00b7 '+day.prod+'/10':'')+'</div></div>'
+      +'<div class="hist-emojis">'+HABITS.filter(function(h){return day.habits&&day.habits[h.k];}).slice(0,6).map(function(h){return'<span>'+habitGlyph(h)+'</span>';}).join('')+'</div>';
+    b.appendChild(card);
+  });
+}
+
+function renderSettings(){
+  var ok=D.notion.ok;
+  var v=document.getElementById('set-nval');if(v)v.textContent=ok?'Connected · '+HABITS.length:'Not connected';
+  var dot=document.getElementById('sync-summary-dot');if(dot)dot.className='sync-summary-dot'+(ok?' ok':'');
+  var title=document.getElementById('sync-summary-title');if(title)title.textContent=ok?'Notion connected':'Notion not connected';
+  var sub=document.getElementById('sync-summary-sub');if(sub)sub.textContent=ok?'Daily and Habits are syncing':'Start the Gambit server to sync';
+  var daily=document.getElementById('sync-daily');if(daily)daily.textContent=ok?'Connected':'Waiting';
+  var habits=document.getElementById('sync-habits');if(habits)habits.textContent=ok?HABITS.length+' records':'Waiting';
+  var today=getDay(todayStr());
+  var done=HABITS.filter(function(h){return today.habits&&today.habits[h.k];}).length;
+  var completed=document.getElementById('sync-completed');if(completed)completed.textContent=done+' today';
+}
+function buildHabitsCfg(){
+  var list=document.getElementById('habits-cfg');if(!list)return;list.innerHTML='';
+  var count=document.getElementById('habits-count');if(count)count.textContent='Habits ('+HABITS.length+')';
+  HABITS.forEach(function(h,i){
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;padding:10px 14px;border-bottom:'+(i<HABITS.length-1?'.5px solid rgba(60,60,67,.08)':'none');
+    row.innerHTML='<span style="width:28px;font-size:17px;margin-right:10px">'+habitGlyph(h)+'</span><span style="font-size:14px;color:#000;flex:1">'+h.l+'</span><span style="font-size:11px;color:rgba(60,60,67,.5)">'+(h.checkboxes&&h.checkboxes.length?'Checkbox':'Relation')+'</span>';
+    list.appendChild(row);
+  });
+}
+
+function updateSyncUI(){
+  var ok=D.notion.ok;
+  document.getElementById('sdot').className='sdot'+((ok||habitCloudOnline)?' ok':'');
+  document.getElementById('stxt').textContent=ok?'System + Notion synced':habitCloudOnline?'Saved to system':'Offline \u2014 saved on this device';
+  var nv=document.getElementById('set-nval');if(nv)nv.textContent=ok?'Connected':'Not connected';
+}
+
+function pullNotion(cb){
+  pullDailySchema(function(){
+    pullHabits(function(){
+      pullDaily(cb);
+    });
+  });
+}
+
+function normalizedName(value){
+  return(value||'').trim().toLowerCase().replace(/\s+/g,' ');
+}
+
+function checkboxesForHabit(name){
+  var normalized=normalizedName(name);
+  var aliases={
+    'tiếng anh':['English'],
+    'straight & gym':['Straight','Gym']
+  };
+  var names=aliases[normalized]||[name];
+  return names.map(function(item){return DAILY_CHECKBOXES[normalizedName(item)]||'';}).filter(Boolean);
+}
+
+function pullDailySchema(cb){
+  nFetch('GET','https://api.notion.com/v1/databases/'+D.notion.dbId,null,
+    function(ok,data){
+      if(ok){
+        DAILY_CHECKBOXES={};
+        Object.keys(data.properties||{}).forEach(function(name){
+          if(data.properties[name]&&data.properties[name].type==='checkbox'){
+            DAILY_CHECKBOXES[normalizedName(name)]=name;
+          }
+        });
+      }
+      if(cb)cb(ok);
+    }
+  );
+}
+
+function pullHabits(cb){
+  nFetch('POST','https://api.notion.com/v1/databases/'+D.notion.habitsDbId+'/query',
+    {page_size:100},
+    function(ok,data){
+      if(ok){
+        var dynamic=(data.results||[]).map(function(page){
+          var p=page.properties||{};
+          var titleProp=Object.keys(p).map(function(k){return p[k];}).find(function(v){return v&&v.type==='title';});
+          var name=titleProp&&titleProp.title?(titleProp.title.map(function(x){return x.plain_text||'';}).join('')):'';
+          var type=p['Type']&&p['Type'].select?p['Type'].select.name:'';
+          var visual=habitVisual(name,type);
+          return{k:page.id,l:name||'Untitled habit',e:visual.e,i:visual.i,g:visual.g,checkboxes:checkboxesForHabit(name)};
+        }).filter(function(h){return h.l;});
+        HABITS=dynamic;
+      }
+      buildHabitsCfg();
+      if(cb)cb(ok);
+    }
+  );
+}
+
+function pullDaily(cb){
+  nFetch('POST','https://api.notion.com/v1/databases/'+D.notion.dbId+'/query',
+    {page_size:30,sorts:[{property:'Date',direction:'descending'}]},
+    function(ok,data){
+      if(ok){
+        (data.results||[]).forEach(function(page){
+          var p=page.properties||{};
+          var dobj=p['Date']&&p['Date'].date;var ds=dobj&&dobj.start?dobj.start.split('T')[0]:null;
+          if(!ds)return;
+          var day=getDay(ds);day.pageId=page.id;day.habits={};
+          var completed=p['Habits']&&p['Habits'].relation?p['Habits'].relation:[];
+          completed.forEach(function(rel){
+            var habit=HABITS.find(function(h){return h.k===rel.id;});
+            if(habit&&!(habit.checkboxes&&habit.checkboxes.length))day.habits[rel.id]=true;
+          });
+          HABITS.forEach(function(h){
+            if((h.checkboxes||[]).some(function(name){return p[name]&&p[name].checkbox;})){
+              day.habits[h.k]=true;
+            }
+          });
+          if(p['Mood']&&p['Mood'].select)day.mood=p['Mood'].select.name||'';
+          if(p['Energy']&&p['Energy'].select)day.energy=p['Energy'].select.name||'';
+          if(p['Productivion']&&p['Productivion'].select)day.prod=parseInt(p['Productivion'].select.name)||0;
+        });
+        save();
+      }
+      if(cb)cb(ok);
+    }
+  );
+}
+
+function pushNotion(ds){
+  if(!D.notion.ok)return;
+  var day=getDay(ds);var props={};
+  props['Habits']={relation:HABITS.filter(function(h){return !(h.checkboxes&&h.checkboxes.length)&&day.habits[h.k];}).map(function(h){return{id:h.k};})};
+  HABITS.forEach(function(h){
+    (h.checkboxes||[]).forEach(function(name){props[name]={checkbox:!!day.habits[h.k]};});
+  });
+  if(day.mood)props['Mood']={select:{name:day.mood}};
+  if(day.energy)props['Energy']={select:{name:day.energy}};
+  if(day.prod)props['Productivion']={select:{name:String(day.prod)}};
+  document.getElementById('sdot').className='sdot sync';
+  var onDone=function(ok,d){
+    if(ok){if(!day.pageId&&d.id){day.pageId=d.id;save();}document.getElementById('sdot').className='sdot ok';}
+    else document.getElementById('sdot').className='sdot err';
+  };
+  if(day.pageId)nFetch('PATCH','https://api.notion.com/v1/pages/'+day.pageId,{properties:props},onDone);
+  else{props['Date']={date:{start:ds}};props['Name']={title:[{text:{content:new Date(ds+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}}]};nFetch('POST','https://api.notion.com/v1/pages',{parent:{database_id:D.notion.dbId},properties:props},onDone);}
+}
+
+function manualSync(){
+  document.getElementById('sdot').className='sdot sync';
+  toast('Pulling from Notion...');
+  pullNotion(function(ok){D.notion.ok=ok;save();updateSyncUI();renderAll();toast(ok?'Synced \u2713':'Connection failed');});
+}
+function openNotion(){
+  document.getElementById('n-db').value=D.notion.dbId||'';
+  document.getElementById('n-habits-db').value=D.notion.habitsDbId||'';
+  var ok=D.notion.ok;
+  document.getElementById('n-dot').style.background=ok?'#111':'#C7C7CC';
+  document.getElementById('n-st-txt').textContent=ok?'Connected \u2713':'Not connected';
+  document.getElementById('n-st-card').style.background='#F2F2F0';
+  openOv('ov-notion');
+}
+function saveNotion(){
+  var db=document.getElementById('n-db').value.trim().replace(/-/g,'');
+  var habitsDb=document.getElementById('n-habits-db').value.trim().replace(/-/g,'');
+  if(!db||!habitsDb){toast('Enter both database IDs');return;}
+  D.notion.dbId=db;D.notion.habitsDbId=habitsDb;
+  save();toast('Connecting...');closeOv('ov-notion');manualSync();
+}
+function nFetch(method,url,body,cb){
+  var notionPath=url.replace('https://api.notion.com','');
+  var opts={method:method,headers:{}};
+  if(body){opts.headers['Content-Type']='application/json';opts.body=JSON.stringify(body);}
+  fetch('/api/notion?path='+encodeURIComponent(notionPath),opts)
+    .then(function(r){r.json().then(function(d){cb(r.ok,d.data || d);}).catch(function(){cb(r.ok,{});});})
+    .catch(function(){cb(false,{});});
+}
+function openOv(id){document.getElementById(id).classList.add('open');}
+function closeOv(id){document.getElementById(id).classList.remove('open');}
+function bgc(e,id){if(e.target.id===id)closeOv(id);}
+function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2400);}
+
+init();
+</script>
+<script src="../../notion-connection.js?v=gambit-native-1"></script>
+<script src="../../app-guard.js"></script>
+<script src="../../assets/gambit-app-polish.js"></script>
+</body>
+</html>

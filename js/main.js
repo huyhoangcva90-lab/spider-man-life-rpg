@@ -2,7 +2,7 @@
 
 import { EventBus } from './core/EventBus.js';
 import { StateStore } from './core/StateStore.js?build=hub-systems-1';
-import { SoundController } from './core/SoundController.js?build=hub-systems-1';
+import { SoundController } from './core/SoundController.js?build=field-tools-fullscreen-4';
 import { MapEngine } from './map/MapEngine.js?build=static-spiders-nav';
 import { MarkerLayer } from './map/MarkerLayer.js?build=static-spiders-nav';
 import { GeolocationController } from './map/GeolocationController.js';
@@ -10,18 +10,20 @@ import { GeocoderAdapter } from './map/GeocoderAdapter.js';
 import { MapEntryRepository } from './data/MapEntryRepository.js';
 import { GeoJsonTransfer } from './data/GeoJsonTransfer.js';
 import { NotionAdapter } from './integrations/notion/NotionAdapter.js';
-import { TrackerFrame } from './ui/TrackerFrame.js?build=spider-life-reset-2';
+import { TrackerFrame } from './ui/TrackerFrame.js?build=field-tools-fullscreen-4';
 import { SearchPanel } from './ui/SearchPanel.js';
 import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
 import { MarkerDossier } from './ui/MarkerDossier.js?build=spider-life-reset-2';
 import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=static-spiders-nav';
-import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-reset-2';
+import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=personal-habit-quest-1';
 import { MapGuideModal } from './ui/MapGuideModal.js';
-import { HeroAnimationController } from './game/HeroAnimationController.js?build=static-spiders-nav';
-import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=static-spiders-nav';
-import { ActionRpgController } from './ui/ActionRpgController.js?build=spider-life-reset-2';
-import { ChatCenter } from './ui/ChatCenter.js?build=hub-systems-1';
+import { HeroAnimationController } from './game/HeroAnimationController.js?build=skill-vitals-6';
+import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=notion-authority-1';
+import { ActionRpgController } from './ui/ActionRpgController.js?build=personal-habit-quest-1';
+import { ChatCenter } from './ui/ChatCenter.js?build=karen-clean-1';
+import { TrackerMapChrome } from './ui/TrackerMapChrome.js?build=field-tools-fullscreen-4';
+import { NearbyPlaces } from './ui/NearbyPlaces.js';
 
 class App {
   constructor() {
@@ -29,10 +31,11 @@ class App {
     this.state = new StateStore(this.bus);
     this.sound = new SoundController(this.state);
     this.campaign = new PhaseOneGameEngine(this.bus);
+    this.campaign.notionAuthority = true;
     this.sound.setMasterVolume(this.campaign.state.settings.volume);
     this.sound.setMusicEnabled(this.campaign.state.settings.music);
     this.campaign.state.settings.sfx = this.state.get('soundEnabled');
-    
+
     this.repo = new MapEntryRepository(this.bus);
     this.geocoder = new GeocoderAdapter();
     this.notion = new NotionAdapter(this.bus, this.repo);
@@ -48,16 +51,28 @@ class App {
     this.unlocatedQueue = new UnlocatedMissionQueue(this.notion, this.bus, this.sound);
     this.hubOverlay = new HubOverlayPanels(this.state, this.bus, this.sound);
     this.mapGuide = new MapGuideModal(this.state, this.bus, this.sound, GeoJsonTransfer, this.repo);
-    this.heroAnimation = new HeroAnimationController(this.bus, this.sound);
+    this.heroAnimation = new HeroAnimationController(this.bus, this.sound, this.campaign);
     this.actionRpg = new ActionRpgController(this.bus, this.campaign, this.sound, this.mapEngine);
+    this.actionRpg.placeRepo = this.repo;
+    this.actionRpg.heroAnimation = this.heroAnimation;
     this.chatCenter = new ChatCenter(this.sound);
+    this.mapChrome = new TrackerMapChrome(this.bus, this.mapEngine, this.repo, this.state);
+    this.nearbyPlaces = new NearbyPlaces(this.bus, this.mapEngine, this.repo);
   }
 
   async init() {
     console.log('[App] Starting WEB OPS TRACKER V6 initialization...');
 
+    if (document.documentElement.dataset.pkEmbed) {
+      this.heroAnimation.init();
+      await this.actionRpg.init();
+      return;
+    }
+
     // 1. Initialize UI components
     this.trackerFrame.init();
+    this.mapChrome.init();
+    this.nearbyPlaces.init();
     this.searchPanel.init();
     this.entryEditor.init();
     this.activityLog.init();
@@ -70,8 +85,8 @@ class App {
     this.chatCenter.init();
     this.sound.playBootSound();
 
-    // 2. Initialize Map Engine (Defaults to HCMC fallback: lng 106.7009, lat 10.7769)
-    await this.mapEngine.init('map', 'OSM_RASTER');
+    // 2. Initialize the area map; GPS is requested only by a user gesture.
+    await this.mapEngine.init('map', 'TRACKER_LIGHT');
     window.requestAnimationFrame(() => this.mapEngine.resize());
 
     // 3. Load Notion snapshot & update Notion queue & badge immediately
@@ -126,6 +141,7 @@ class App {
     this.bus.on('ENTRY_CREATED', (entry) => this.campaign.completeRealQuest(entry));
     this.bus.on('ENTRY_UPDATED', (entry) => this.campaign.completeRealQuest(entry));
     this.bus.on('SOUND_TOGGLED', (enabled) => {
+      if(!enabled)this.sound.stopSamples();
       if (this.campaign.state.settings.sfx !== enabled) this.campaign.updateSettings({ sfx: enabled });
     });
     this.bus.on('SFX_REQUESTED', ({ id }) => this.sound.playGameSfx(id));
@@ -149,6 +165,7 @@ class App {
     // Map camera controls
     this.bus.on('MAP_ZOOM_IN', () => this.mapEngine.zoomIn());
     this.bus.on('MAP_ZOOM_OUT', () => this.mapEngine.zoomOut());
+    this.bus.on('MAP_WORLD_VIEW', () => this.mapEngine.showWorld());
     this.bus.on('RESET_NORTH', () => this.mapEngine.resetNorth());
 
     // Center GPS clicked by user gesture

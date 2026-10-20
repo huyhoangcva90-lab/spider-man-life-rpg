@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" data-gambit-app="routine" data-gambit-back-mode="managed">
+<head>
+<script src="../../spider-embedded.js?v=field-navigation-3"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#070a0f"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<title>Routines</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="preload" href="../../assets/vendor/tabler/tabler-icons.min.css" as="style">
+<link rel="preload" href="../../assets/vendor/tabler/fonts/tabler-icons.woff2?v3.26.0" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/vendor/tabler/tabler-icons.min.css">
+<script src="../../assets/vendor/react/react.production.min.js"></script>
+<script src="../../assets/vendor/react/react-dom.production.min.js"></script>
+<style>
+:root{--bg:#070a0f;--surface:#0e1420;--surface-2:#151e2e;--ink:#f1f5f9;--muted:#8e9bae;--line:rgba(255,255,255,0.1);--accent:#3b82f6;--accent-soft:rgba(59,130,246,0.15);--danger:#ef4444;--shadow:0 8px 24px rgba(0,0,0,.4)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent!important;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;margin:0;padding:0}
+input,textarea{user-select:text!important;-webkit-user-select:text!important}
+html,body{height:100%;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:var(--ink)}
+::-webkit-scrollbar{display:none}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+input,button{font-family:inherit}
+button{touch-action:manipulation;cursor:pointer}
+button:active{transform:scale(.97);opacity:.9}
+
+/* Unified Glassmorphism Back Button */
+.hub-back{position:fixed;top:max(14px,calc(env(safe-area-inset-top) + 10px));left:max(14px,calc(50% - 200px));z-index:9999;height:40px;padding:0 14px 0 10px;border-radius:999px;background:rgba(15,23,42,.85);border:1px solid rgba(255,255,255,.15);color:#f8fafc;text-decoration:none;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.4);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:transform .15s ease,background .15s ease}
+.hub-back:active{transform:scale(.95);background:rgba(30,41,59,.95)}
+.hub-back svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+.subview-back{height:38px;padding:0 14px 0 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:#fff;display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.subview-back:active{transform:scale(.95);background:rgba(255,255,255,.16)}
+
+.ti{font-size:1.15em;line-height:1}
+.icon-button{width:44px!important;height:44px!important;border-radius:12px!important}
+.routine-card{border-radius:16px!important;border:1px solid var(--line)!important;background:var(--surface)!important;box-shadow:var(--shadow)!important;transition:all .2s ease!important}
+.routine-card:hover{transform:translateY(-2px);border-color:var(--accent)!important}
+.routine-mark{border-radius:12px!important}
+
+/* Interactive Bottom Task/Activity Timeline Bar */
+.bottom-step-bar{display:flex;gap:6px;overflow-x:auto;padding:10px 4px;margin-bottom:20px;scroll-behavior:smooth}
+.step-chip{flex:0 0 auto;min-width:76px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s}
+.step-chip.active{background:rgba(59,130,246,.25);border-color:var(--accent);color:#fff;box-shadow:0 0 14px rgba(59,130,246,.4);transform:scale(1.04)}
+.step-chip.done-step{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#86efac}
+.step-chip span{font-size:16px}
+.step-chip small{font-size:10px;opacity:.8}
+
+@media(max-width:480px){
+  .hub-back{left:14px}
+}
+</style>
+<link rel="stylesheet" href="../../assets/gambit-app-polish.css">
+</head>
+<body>
+<div id="root"></div>
+<script src="app.compiled.js"></script>
+<script src="../../notion-connection.js?v=spider-field-unified-1"></script><script src="../../app-guard.js"></script>
+<script src="../../assets/gambit-app-polish.js"></script>
+</body>
+</html>

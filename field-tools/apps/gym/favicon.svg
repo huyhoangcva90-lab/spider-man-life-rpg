@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#091b15"/>
+      <stop offset="100%" stop-color="#030c08"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="128" height="128" rx="32" fill="url(#bg)"/>
+  <rect width="124" height="124" x="2" y="2" rx="30" fill="none" stroke="url(#green)" stroke-width="2" stroke-opacity="0.35"/>
+
+  <!-- Barbell Dumbbell -->
+  <g transform="translate(64, 64) rotate(-35)">
+    <line x1="-42" y1="0" x2="42" y2="0" stroke="url(#green)" stroke-width="8" stroke-linecap="round"/>
+    <!-- Outer plates -->
+    <rect x="-38" y="-24" width="10" height="48" rx="4" fill="url(#green)"/>
+    <rect x="28" y="-24" width="10" height="48" rx="4" fill="url(#green)"/>
+    <!-- Inner plates -->
+    <rect x="-24" y="-18" width="8" height="36" rx="3" fill="url(#green)"/>
+    <rect x="16" y="-18" width="8" height="36" rx="3" fill="url(#green)"/>
+  </g>
+</svg>

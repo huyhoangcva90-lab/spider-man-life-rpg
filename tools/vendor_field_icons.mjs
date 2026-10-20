@@ -1,0 +1,21 @@
+import fs from 'node:fs/promises';
+const file=new URL('../field-tools/index.html',import.meta.url);
+let html=await fs.readFile(file,'utf8');
+const habitFile=new URL('../field-tools/apps/habits/index.html',import.meta.url);
+let habit=await fs.readFile(habitFile,'utf8');
+const names=[...new Set([...html.matchAll(/(?:class="ti ti-|field-icons.svg#)([\w-]+)/g)].map(m=>m[1]).concat([...habit.matchAll(/class="ti ti-([\w-]+)"/g)].map(m=>m[1]),['moon-stars','sunrise','sunset','moon','mood-sad','mood-sad-squint','mood-angry','leaf','mood-smile','mood-happy','battery-1','battery-2','battery-3','battery-4']))];
+const symbols=await Promise.all(names.map(async name=>{
+  const r=await fetch(`https://raw.githubusercontent.com/tabler/tabler-icons/v3.26.0/icons/outline/${name}.svg`);
+  if(!r.ok)throw Error('Missing official icon '+name);
+  const svg=await r.text(),paths=svg.match(/<svg[\s\S]*?>([\s\S]*?)<\/svg>/)?.[1];
+  if(!paths)throw Error('Unknown icon format');
+  return `<symbol id="${name}" viewBox="0 0 24 24">${paths}</symbol>`;
+}));
+await fs.writeFile(new URL('../field-tools/assets/field-icons.svg',import.meta.url),`<!-- Tabler Icons v3.26.0, MIT, https://github.com/tabler/tabler-icons -->\n<svg xmlns="http://www.w3.org/2000/svg">${symbols.join('\n')}</svg>`);
+html=html.replace(/<i class="ti ti-([\w-]+)"([^>]*)><\/i>/g,(_,name,attrs)=>`<svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"${attrs.replace(/ aria-hidden="true"/g,'')}><use href="assets/field-icons.svg#${name}"></use></svg>`);
+html=html.replace('`<i class="ti ${phaseIcon}" aria-hidden="true"></i> ${phaseText}`','`<svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/field-icons.svg#${phaseIcon.slice(3)}"></use></svg> ${phaseText}`');
+if(!html.includes('<style>.field-vector-icon'))html=html.replace('</head>','<style>.field-vector-icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:-.125em}.app-icon .field-vector-icon{width:24px;height:24px}</style>\n</head>');
+habit=habit.replace(/<i class="ti ti-([\w-]+)"([^>]*)><\/i>/g,(_,name,attrs)=>`<svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"${attrs.replace(/ aria-hidden="true"/g,'')}><use href="../../assets/field-icons.svg#${name}"></use></svg>`);
+await fs.writeFile(habitFile,habit);
+await fs.writeFile(file,html);
+console.log(`Vendored ${symbols.length} official vector icons for Field.`);

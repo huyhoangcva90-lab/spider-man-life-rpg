@@ -172,10 +172,10 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
   filter: drop-shadow(2px 2px 0 rgba(0,0,0,.65));
 }
 .pixel-orb--menu {
-  border-color: #03070d !important;
-  color: #f6fbff !important;
-  background: radial-gradient(circle at 35% 30%, #54b6d0 0 18%, #e9434d 19% 61%, #7e1e30 62% 100%) !important;
-  box-shadow: inset 0 0 0 3px #ffaaa0, 3px 4px 0 rgba(0,0,0,.62) !important;
+  border: 0 !important;
+  background: url('../assets/spideytracker/hub-ui/spidey_head_spritesheet.png') no-repeat 0 0 / auto 64px !important;
+  box-shadow: none !important;
+  image-rendering: pixelated;
 }
 
 .frame-bottom-bar {
@@ -184,14 +184,35 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
   padding: 5px 7px !important;
 }
 .frame-bottom-bar .spidey-head-turn-sprite {
-  position: relative !important;
-  inset: auto !important;
-  align-self: end;
-  justify-self: center;
-  width: 48px;
-  height: 64px;
-  background-size: 3020px 64px;
+  position: absolute !important;
+  inset: auto auto 0 8px !important;
+  display: block;
+  width: 71px;
+  height: 105px;
+  background-image: url('../assets/spideytracker/SpiderMan_web.png') !important;
+  background-size: 5467px 105px !important;
+  background-repeat: no-repeat;
+  transform: none;
+  filter: drop-shadow(3px 4px 0 rgba(0,0,0,.65));
+  animation: footer-spidey-web 4.2s steps(77) infinite !important;
 }
+@keyframes footer-spidey-turn { to { background-position-x: var(--footer-sprite-shift, -2363px); } }
+.frame-bottom-bar { grid-template-columns: 76px minmax(0, 1fr) 76px !important; }
+.frame-bottom-bar .ticker-wrap { grid-column: 2; margin: 0; }
+@keyframes footer-spidey-web { to { background-position-x: -5467px; } }
+.footer-spidey-counterpart {
+  position: absolute;
+  right: 11px;
+  bottom: 0;
+  width: 46px;
+  height: 74px;
+  margin: 0;
+  background: url('../assets/spideytracker/SpiderMan_HeadTurn.png') no-repeat 0 0 / 3492px 74px;
+  image-rendering: pixelated;
+  filter: drop-shadow(3px 4px 0 rgba(0,0,0,.65));
+  animation: footer-spidey-head 5.6s steps(76) infinite;
+}
+@keyframes footer-spidey-head { to { background-position-x: -3492px; } }
 .footer-enemy-counterpart {
   position: relative;
   align-self: stretch;
@@ -214,13 +235,14 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
 .footer-enemy-counterpart img { display: none; }
 .footer-enemy-counterpart.has-art img {
   display: block;
-  width: 58px;
-  height: 70px;
+  width: 42px;
+  height: 50px;
   object-fit: contain;
   object-position: center bottom;
   transform: scaleX(-1);
   filter: drop-shadow(3px 3px 0 rgba(0,0,0,.6));
 }
+.footer-enemy-counterpart.has-art::before { display: none; }
 
 .action-fighter--hero { left: 12% !important; width: 170px !important; }
 .action-fighter--enemy { right: 27% !important; width: 170px !important; }
@@ -443,9 +465,11 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
 @media (max-width: 720px) {
   .system-signal--spider-apps { top: 7px; right: 7px; width: 58px; height: 52px; }
   .top-hanging-spidey { width: 31px; height: 37px; background-size: 1926px 37px; }
-  .frame-bottom-bar { grid-template-columns: 46px minmax(0, 1fr) 46px !important; gap: 3px !important; padding: 3px !important; }
-  .frame-bottom-bar .spidey-head-turn-sprite { width: 38px; height: 53px; background-size: 2500px 53px; }
-  .footer-enemy-counterpart.has-art img { width: 44px; height: 55px; }
+  .pixel-orb--menu { background-size: auto 51px !important; }
+  .frame-bottom-bar { grid-template-columns: 60px minmax(0, 1fr) 52px !important; gap: 3px !important; padding: 3px !important; }
+  .frame-bottom-bar .spidey-head-turn-sprite { left: 4px !important; width: 55px; height: 81px; background-size: 4217px 81px !important; animation-name: footer-spidey-web-mobile !important; }
+  .footer-spidey-counterpart { right: 5px; width: 36px; height: 58px; background-size: 2736px 58px; animation-name: footer-spidey-head-mobile; }
+  .footer-enemy-counterpart.has-art img { width: 36px; height: 48px; }
   .footer-enemy-counterpart::before { display: none; }
   .action-fighter--hero { left: 0 !important; width: 132px !important; }
   .action-fighter--enemy { right: 1% !important; width: 132px !important; }
@@ -466,6 +490,9 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
   .life-66-grid { grid-template-columns: repeat(6, minmax(28px, 1fr)); gap: 5px; }
   .place-command-card { grid-template-columns: 1fr; min-height: 250px; padding: 24px 18px; }
 }
+@keyframes footer-spidey-web-mobile { to { background-position-x: -4217px; } }
+@keyframes footer-spidey-head-mobile { to { background-position-x: -2736px; } }
+@media (prefers-reduced-motion: reduce) { .frame-bottom-bar .spidey-head-turn-sprite, .footer-spidey-counterpart { animation: none !important; } }
 
 @media (max-width: 390px) {
   .habit-progress-head { padding: 15px; }
@@ -523,6 +550,7 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
 .spider-app-card--violet { --app-accent: #a68be8; }
 .spider-app-index { position: absolute; top: 9px; right: 10px; color: #507084; font: 700 8px 'Silkscreen', monospace; }
 .spider-app-icon { display: grid; grid-row: 1 / 3; place-items: center; width: 42px; height: 42px; border: 2px solid #02060b; background: var(--app-accent); color: #05070b; box-shadow: inset 0 0 0 2px rgba(255,255,255,.18); font: 700 18px 'Press Start 2P', monospace; }
+.spider-app-icon svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: square; stroke-linejoin: miter; }
 .spider-app-copy { display: grid; align-content: start; gap: 7px; min-width: 0; }
 .spider-app-copy small { color: var(--app-accent); font: 700 7px/1.3 'Silkscreen', monospace; }
 .spider-app-copy strong { color: #fff; font: 700 11px/1.5 'Press Start 2P', monospace; }
@@ -740,6 +768,42 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
   .spidey-skill-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
   .spidey-skill-summary span { padding: 7px 2px; font-size: 6px; }
   .spidey-skill-summary b { font-size: 10px; }
+}
+
+/* Owner-only Notion connection and readable mission controls. */
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; left: 16px; top: -80px; z-index: 1000; padding: 10px 14px; background: #f2c06b; color: #071426; font: 700 13px/1.4 "Silkscreen", sans-serif; }
+.skip-link:focus-visible { top: 12px; outline: 3px solid #fff; }
+.sync-online-banner, .life-reset-sync { flex-wrap: wrap; gap: 10px; }
+.notion-access-actions, .notion-auth-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.notion-auth-form label, .notion-access-note { color: #d7e6ef; font: 700 11px/1.4 "Silkscreen", sans-serif; }
+.notion-auth-form input { min-width: min(220px, 100%); min-height: 44px; padding: 8px 10px; border: 2px solid #54b6d0; background: #071426; color: #fff; font: 14px/1.3 "Be Vietnam Pro", sans-serif; }
+.notion-auth-form input:focus-visible { outline: 3px solid #f2c06b; outline-offset: 2px; }
+.notion-status-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 8px 0 12px; padding: 9px 12px; border: 1px solid #31516a; background: #071426; color: #d7e6ef; font: 11px/1.5 "Be Vietnam Pro", sans-serif; }
+.notion-status-line strong { color: #f2c06b; font: 700 10px/1.5 "Silkscreen", sans-serif; }
+.notion-status-line small { flex-basis: 100%; color: #ffb2ad; font-size: 11px; }
+.notion-status-line .pixel-action-btn { min-height: 36px; margin-left: auto; }
+.quest-board-list { gap: 8px; }
+.quest-board-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 3px 14px; padding: 11px 14px; }
+.quest-board-card .pixel-card-header, .quest-board-card h3, .quest-board-card p, .quest-board-card > small { grid-column: 1; min-width: 0; margin: 0; }
+.quest-board-card .pixel-card-header { justify-content: flex-start; flex-wrap: wrap; }
+.quest-board-card h3 { font-size: clamp(14px, 1.5vw, 18px); }
+.quest-board-card > small { font: 700 10px/1.4 "Silkscreen", sans-serif; }
+.quest-board-card .pixel-card-footer { grid-column: 2; grid-row: 1 / span 4; min-width: 132px; padding: 0; border: 0; }
+.game-primary-nav button { font: 700 clamp(11px, 1vw, 13px)/1.1 "Silkscreen", sans-serif; }
+.hud-bars label { font: 700 11px/1.2 "Silkscreen", sans-serif; }
+#game-panel-tabs button { font: 700 11px/1.2 "Silkscreen", sans-serif; }
+.arena-turn-banner #arena-open-habits { display: block; min-height: 32px; margin: 7px auto 0; padding: 5px 8px; border: 2px solid #05070b; background: #83b96b; color: #071426; font: 700 11px/1.1 "Silkscreen", sans-serif; cursor: pointer; }
+.arena-turn-banner #arena-open-habits[hidden] { display: none !important; }
+.arena-turn-banner #arena-open-habits:focus-visible { outline: 3px solid #f2c06b; outline-offset: 2px; }
+@media (max-width: 620px) {
+  .quest-board-card { grid-template-columns: 1fr; }
+  .quest-board-card .pixel-card-footer { grid-column: 1; grid-row: auto; justify-content: flex-end; width: 100%; }
+  .game-panel h2 { font-size: 13px; line-height: 1.4; }
+  .game-primary-nav button { font-size: 11px; }
+  .hud-bars label { font-size: 10px; }
+  .arena-turn-banner span { font-size: 10px; }
+  .notion-auth-form input { flex: 1 1 180px; }
 }
 
 /* Keep the system-specific game texture after the full-screen panel contract above. */

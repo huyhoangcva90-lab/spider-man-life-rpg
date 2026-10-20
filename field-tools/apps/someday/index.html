@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi" data-gambit-app="someday">
+<head>
+<script src="../../spider-embedded.js?v=field-navigation-3"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07090e">
+<title>Ambient Focus OS — Soundscapes & Pomodoro</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="../../assets/vendor/tabler/fonts/tabler-icons.woff2?v3.26.0" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/vendor/tabler/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #07090e;
+    --card: rgba(16, 22, 34, 0.7);
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #f3f5f9;
+    --muted: #8b99ad;
+    --violet: #a78bfa;
+    --cyan: #22d3ee;
+    --font-display: 'Outfit', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  html, body {
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .hub-back {
+    position: fixed;
+    top: max(16px, env(safe-area-inset-top));
+    left: max(16px, calc((100vw - 520px) / 2));
+    z-index: 99;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: rgba(15, 23, 42, 0.55);
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+    transition: transform 0.16s, opacity 0.16s;
+  }
+  .hub-back:active { transform: scale(0.94); opacity: 0.8; }
+  .hub-back i { font-size: 20px; }
+  .wrap {
+    width: min(100% - 24px, 480px);
+    margin: 0 auto;
+    padding: calc(max(24px, env(safe-area-inset-top)) + 52px) 0 max(36px, env(safe-area-inset-bottom));
+  }
+  header { text-align: center; margin-bottom: 24px; }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--violet);
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  p.lead { font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+
+  /* Timer Puck Card */
+  .timer-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 24px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  }
+  .timer-ring {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    cursor: pointer;
+  }
+  .timer-ring svg { transform: rotate(-90deg); }
+  .timer-val {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .timer-display {
+    font-family: var(--font-mono);
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .timer-mode { font-size: 12px; color: var(--violet); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  .timer-controls { display: flex; justify-content: center; gap: 14px; }
+  .btn-timer {
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 14px;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.16s, filter 0.16s;
+  }
+  .btn-primary { background: var(--violet); color: #000; box-shadow: 0 4px 16px rgba(167, 139, 250, 0.3); }
+  .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn-primary:active { transform: scale(0.95); }
+  .btn-secondary { background: rgba(255, 255, 255, 0.08); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: rgba(255, 255, 255, 0.14); }
+
+  /* Sound Generators Section */
+  .section-title { font-size: 14px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+  .sounds-grid { display: grid; gap: 10px; }
+  .sound-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    backdrop-filter: blur(16px);
+    transition: border-color 0.2s;
+  }
+  .sound-card.active { border-color: rgba(167, 139, 250, 0.4); background: rgba(167, 139, 250, 0.08); }
+  .sound-ico {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--violet);
+    flex-shrink: 0;
+  }
+  .sound-card.active .sound-ico { background: var(--violet); color: #000; }
+  .sound-info { flex: 1; min-width: 0; }
+  .sound-name { font-size: 14px; font-weight: 700; }
+  .sound-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .sound-slider {
+    width: 90px;
+    accent-color: var(--violet);
+    cursor: pointer;
+  }
+  .sound-toggle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+  }
+  .sound-card.active .sound-toggle { background: var(--violet); color: #000; border-color: var(--violet); }
+</style>
+<link rel="stylesheet" href="../../assets/gambit-app-polish.css">
+</head>
+<body>
+<a class="hub-back" href="../../index.html" aria-label="Về trang chủ"><i class="ti ti-chevron-left"></i></a>
+
+<main class="wrap">
+  <header>
+    <div class="eyebrow">Tập trung & Thư giãn</div>
+    <h1>Ambient Focus OS</h1>
+    <p class="lead">Trình tạo âm thanh tiếng ồn trắng kết hợp bộ đếm giờ Pomodoro giúp bạn làm việc sâu không xao lãng.</p>
+  </header>
+
+  <!-- Pomodoro Timer -->
+  <section class="timer-card">
+    <div class="timer-ring" id="timer-ring">
+      <svg width="200" height="200">
+        <circle cx="100" cy="100" r="84" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+        <circle id="progress-circle" cx="100" cy="100" r="84" fill="none" stroke="var(--violet)" stroke-width="6"
+                stroke-dasharray="527" stroke-dashoffset="0" stroke-linecap="round" style="transition: stroke-dashoffset 1s linear;"/>
+      </svg>
+      <div class="timer-val">
+        <span class="timer-mode" id="timer-mode">Tập trung</span>
+        <span class="timer-display" id="timer-display">25:00</span>
+      </div>
+    </div>
+    <div class="timer-controls">
+      <button class="btn-timer btn-primary" id="btn-start"><i class="ti ti-player-play-filled"></i> Bắt đầu</button>
+      <button class="btn-timer btn-secondary" id="btn-reset"><i class="ti ti-rotate-clockwise"></i> Đặt lại</button>
+    </div>
+  </section>
+
+  <!-- Soundscapes -->
+  <div class="section-title">
+    <span>Không gian âm thanh</span>
+    <span style="font-size: 11px; text-transform: none; color: var(--violet);">Web Audio Synthesizer</span>
+  </div>
+
+  <section class="sounds-grid">
+
+    <div class="sound-card" id="card-rain">
+      <div class="sound-ico"><i class="ti ti-cloud-rain"></i></div>
+      <div class="sound-info">
+        <div class="sound-name">Mưa êm dịu</div>
+        <div class="sound-sub">Tiếng mưa rơi trên mái nhà</div>
+      </div>
+      <input type="range" class="sound-slider" id="vol-rain" name="rain-volume" min="0" max="100" value="50" aria-label="Âm lượng mưa đêm">
+      <button class="sound-toggle" id="toggle-rain" aria-label="Bật hoặc tắt tiếng mưa đêm"><i class="ti ti-power" aria-hidden="true"></i></button>
+    </div>
+
+    <div class="sound-card" id="card-waves">
+      <div class="sound-ico"><i class="ti ti-wave-sine"></i></div>
+      <div class="sound-info">
+        <div class="sound-name">Sóng biển sâu</div>
+        <div class="sound-sub">Âm thanh đại dương vỗ bến</div>
+      </div>
+      <input type="range" class="sound-slider" id="vol-waves" name="waves-volume" min="0" max="100" value="50" aria-label="Âm lượng sóng biển">
+      <button class="sound-toggle" id="toggle-waves" aria-label="Bật hoặc tắt tiếng sóng biển"><i class="ti ti-power" aria-hidden="true"></i></button>
+    </div>
+
+    <div class="sound-card" id="card-noise">
+      <div class="sound-ico"><i class="ti ti-wind"></i></div>
+      <div class="sound-info">
+        <div class="sound-name">Tiếng ồn hồng (Pink Noise)</div>
+        <div class="sound-sub">Cân bằng tần số cho não bộ</div>
+      </div>
+      <input type="range" class="sound-slider" id="vol-noise" name="noise-volume" min="0" max="100" value="50" aria-label="Âm lượng tiếng ồn hồng">
+      <button class="sound-toggle" id="toggle-noise" aria-label="Bật hoặc tắt tiếng ồn hồng"><i class="ti ti-power" aria-hidden="true"></i></button>
+    </div>
+
+    <div class="sound-card" id="card-cafe">
+      <div class="sound-ico"><i class="ti ti-coffee"></i></div>
+      <div class="sound-info">
+        <div class="sound-name">Quán Cafe</div>
+        <div class="sound-sub">Không gian làm việc ấm áp</div>
+      </div>
+      <input type="range" class="sound-slider" id="vol-cafe" name="cafe-volume" min="0" max="100" value="50" aria-label="Âm lượng quán cà phê">
+      <button class="sound-toggle" id="toggle-cafe" aria-label="Bật hoặc tắt âm thanh quán cà phê"><i class="ti ti-power" aria-hidden="true"></i></button>
+    </div>
+
+  </section>
+</main>
+
+<script src="../../notion-connection.js?v=spider-field-unified-1"></script><script src="../../app-guard.js"></script>
+<script>
+  // Web Audio API Synthesizers for Ambient Sounds
+  let audioCtx = null;
+
+  function getAudioContext() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  }
+
+  // Pink/White Noise Generator
+  function createNoiseNode(type) {
+    const ctx = getAudioContext();
+    const bufferSize = ctx.sampleRate * 2;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = buffer.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+      output[i] *= 0.11;
+      b6 = white * 0.115926;
+    }
+
+    const whiteNoise = ctx.createBufferSource();
+    whiteNoise.buffer = buffer;
+    whiteNoise.loop = true;
+    return whiteNoise;
+  }
+
+  // Sound Engine Setup
+  const soundEngines = {
+    rain: { active: false, node: null, gainNode: null },
+    waves: { active: false, node: null, gainNode: null },
+    noise: { active: false, node: null, gainNode: null },
+    cafe: { active: false, node: null, gainNode: null }
+  };
+
+  function toggleSound(key) {
+    const ctx = getAudioContext();
+    const engine = soundEngines[key];
+    const card = document.getElementById(`card-${key}`);
+    const slider = document.getElementById(`vol-${key}`);
+
+    if (engine.active) {
+      if (engine.node) {
+        engine.node.stop();
+        engine.node.disconnect();
+        engine.node = null;
+      }
+      engine.active = false;
+      card.classList.remove('active');
+    } else {
+      engine.gainNode = ctx.createGain();
+      engine.gainNode.gain.value = Number(slider.value) / 100;
+      engine.node = createNoiseNode(key);
+      engine.node.connect(engine.gainNode);
+      engine.gainNode.connect(ctx.destination);
+      engine.node.start();
+      engine.active = true;
+      card.classList.add('active');
+    }
+  }
+
+  ['rain', 'waves', 'noise', 'cafe'].forEach(key => {
+    document.getElementById(`toggle-${key}`).addEventListener('click', () => toggleSound(key));
+    document.getElementById(`vol-${key}`).addEventListener('input', (e) => {
+      if (soundEngines[key].gainNode) {
+        soundEngines[key].gainNode.gain.value = Number(e.target.value) / 100;
+      }
+    });
+  });
+
+  // Pomodoro Timer Logic
+  let timerInterval = null;
+  let secondsLeft = 25 * 60;
+  let totalSeconds = 25 * 60;
+  let isRunning = false;
+
+  const display = document.getElementById('timer-display');
+  const btnStart = document.getElementById('btn-start');
+  const btnReset = document.getElementById('btn-reset');
+  const circle = document.getElementById('progress-circle');
+
+  function updateTimerDisplay() {
+    const m = Math.floor(secondsLeft / 60);
+    const s = secondsLeft % 60;
+    display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    
+    const pct = secondsLeft / totalSeconds;
+    const offset = 527 * (1 - pct);
+    circle.style.strokeDashoffset = offset;
+  }
+
+  btnStart.addEventListener('click', () => {
+    getAudioContext();
+    if (isRunning) {
+      clearInterval(timerInterval);
+      isRunning = false;
+      btnStart.innerHTML = '<i class="ti ti-player-play-filled"></i> Tiếp tục';
+    } else {
+      isRunning = true;
+      btnStart.innerHTML = '<i class="ti ti-player-pause-filled"></i> Tạm dừng';
+      timerInterval = setInterval(() => {
+        if (secondsLeft > 0) {
+          secondsLeft--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          isRunning = false;
+          btnStart.innerHTML = '<i class="ti ti-player-play-filled"></i> Bắt đầu';
+          alert('Hoàn thành phiên làm việc tập trung! 🎉');
+        }
+      }, 1000);
+    }
+  });
+
+  btnReset.addEventListener('click', () => {
+    clearInterval(timerInterval);
+    isRunning = false;
+    secondsLeft = 25 * 60;
+    btnStart.innerHTML = '<i class="ti ti-player-play-filled"></i> Bắt đầu';
+    updateTimerDisplay();
+  });
+
+  updateTimerDisplay();
+</script>
+<script src="../../assets/gambit-app-polish.js"></script>
+</body>
+</html>

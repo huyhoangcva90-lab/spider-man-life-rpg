@@ -1,0 +1,339 @@
+{
+  "source": "Notion Badges & Medals",
+  "databaseId": "a9cdb33816314ddfac39c23ba5a095df",
+  "badges": [
+    {
+      "id": "3d6d787636c681038494d3459a0ea480",
+      "Medal": "A Brand New Day - [2026] MCU Spider-Man 4 (Tom Holland)",
+      "Image": "https://iili.io/nIU7Hf2.png",
+      "Tier": "Gold",
+      "Requirement": "Thức dậy sớm trước 6h sáng liên tục 30 ngày và ghi nhật ký mục tiêu.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c68107ad8bdb8756f3c0f8",
+      "Medal": "Multiverse Anomaly - [2023] Across the Spider-Verse (Miles & Miguel)",
+      "Image": "https://iili.io/nIU7V5X.png",
+      "Tier": "Mythic",
+      "Requirement": "Phá vỡ số phận: Không chấp nhận định kiến và tự tạo ra con đường riêng.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6815180d3f327776855d4",
+      "Medal": "The Final Swing - [2021] Tom Holland (No Way Home Final Suit)",
+      "Image": "https://iili.io/nIU7MJt.png",
+      "Tier": "Mythic",
+      "Requirement": "Đạt cấp độ Hero Level 100 và đánh bại Trùm Cuối của Arc truyện.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681368c59f805e998852b",
+      "Medal": "Bio-Electric Surge - [2020] Miles Morales (PS5 Marvel's)",
+      "Image": "https://iili.io/nIU7EgI.png",
+      "Tier": "Platinum",
+      "Requirement": "Khai phá tiềm năng mới: Rèn luyện và thành thục một kỹ năng thể chất hoàn toàn mới.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681439048e198cafc2780",
+      "Medal": "Upgraded Vanguard - [2019] Tom Holland (Far From Home)",
+      "Image": "https://iili.io/nIU710N.png",
+      "Tier": "Gold",
+      "Requirement": "Tập trung tuyệt đối: Vượt qua ảo ảnh và phân tâm trong 14 ngày làm việc sâu (Deep Work).",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681429c0dc68c0be3f069",
+      "Medal": "Leap of Faith - [2018] Miles Morales (Into the Spider-Verse)",
+      "Image": "https://iili.io/nIU70fp.png",
+      "Tier": "Platinum",
+      "Requirement": "Dám bước ra khỏi vùng an toàn: Hoàn thành 10 thử thách mới mẻ trong cuộc sống.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6813c8d38e26b91f8f16a",
+      "Medal": "Be Greater - [2018] Marvel's Spider-Man PS4 (White Spider)",
+      "Image": "https://iili.io/nIU7csR.png",
+      "Tier": "Mythic",
+      "Requirement": "Mở khóa 100% tất cả các node trên cây Spider Skill Tree.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681798a73c200abe79846",
+      "Medal": "Nano Iron Spider - [2018] Tom Holland (Avengers: Infinity War)",
+      "Image": "https://iili.io/nIU7YzJ.png",
+      "Tier": "Mythic",
+      "Requirement": "Sống sót qua đợt tấn công nguy hiểm nhất của Boss vũ trụ.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6816ebec4fc19335daa7b",
+      "Medal": "Homecoming Prodigy - [2016] Tom Holland (Civil War / Homecoming)",
+      "Image": "https://iili.io/nIU75ba.png",
+      "Tier": "Gold",
+      "Requirement": "Làm việc nhóm xuất sắc cùng đồng đội hoàn thành mục tiêu lớn.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681a8b2c8c2e119428a52",
+      "Medal": "White Armor 2099 - [2015] Miguel O'Hara ANAD White Armor",
+      "Image": "https://iili.io/nIU7uJ1.png",
+      "Tier": "Platinum",
+      "Requirement": "Chinh phục 3 màn chơi thử thách công nghệ cao với đánh giá 3 sao.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681509717f4d5002bdc71",
+      "Medal": "Parker Industries CEO - [2015] Worldwide Tech Armor Mk IV",
+      "Image": "https://iili.io/nIU7ROg.png",
+      "Tier": "Gold",
+      "Requirement": "Tích lũy đạt mốc 1000 Gold trong ngân quỹ và kiểm soát chi tiêu chặt chẽ.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681b69f5df15950e667b1",
+      "Medal": "Visual Peak - [2014] Andrew Garfield (TASM 2 Visual Peak)",
+      "Image": "https://iili.io/nIU7niQ.png",
+      "Tier": "Gold",
+      "Requirement": "Thực hiện một hành động tử tế vô điều kiện giúp đỡ người lạ.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681669581f1db068ecc16",
+      "Medal": "The Superior Mind - [2013] Otto Octavius (Superior Spider-Man)",
+      "Image": "https://iili.io/nIU7CWx.png",
+      "Tier": "Mythic",
+      "Requirement": "Chiến thắng liên tiếp 15 trận Boss mà không thất bại bất kỳ trận nào.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c68152b6afedc7149cb8ac",
+      "Medal": "Ascended Other - [2012] Kaine Parker (Scarlet Spider)",
+      "Image": "https://iili.io/nIU7Bxj.png",
+      "Tier": "Platinum",
+      "Requirement": "Đánh bại Boss khát máu nhất mà không dùng bất kỳ bình máu hồi phục nào.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681caa971f45fb5960177",
+      "Medal": "Acrobatic Champion - [2012] Andrew Garfield (TASM 1)",
+      "Image": "https://iili.io/nIU7fDb.png",
+      "Tier": "Gold",
+      "Requirement": "Đạt kỷ lục cá nhân mới trong môn thể thao rèn luyện.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6817d9cfcd82ac70ee37c",
+      "Medal": "Neon Stealth Ghost - [2011] Big Time Stealth Camouflage",
+      "Image": "https://iili.io/nIU7KOu.png",
+      "Tier": "Gold",
+      "Requirement": "Hoàn thành 10 nhiệm vụ âm thầm mà không bị phát hiện hay trì hoãn.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681de9551f7c348781603",
+      "Medal": "Brooklyn Prodigy - [2011] Miles Morales Ultimate Debut",
+      "Image": "https://iili.io/nIU7FRe.png",
+      "Tier": "Platinum",
+      "Requirement": "Hoàn thành 30 thử thách vượt ngưỡng bản thân trong tập luyện.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6815bba20fb4d808b43f6",
+      "Medal": "Future Foundation Scholar - [2010] Fantastic Four White Suit",
+      "Image": "https://iili.io/nIU7dU7.png",
+      "Tier": "Gold",
+      "Requirement": "Đọc xong 5 cuốn sách phát triển bản thân / kỹ năng chuyên môn.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6818fa832f72127061a84",
+      "Medal": "Spectacular Guardian - [2008] The Spectacular Spider-Man TV",
+      "Image": "https://iili.io/nIU7JlS.png",
+      "Tier": "Silver",
+      "Requirement": "Cân bằng học tập, công việc và đời sống cá nhân trong 21 ngày.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6813da3e9df50a78d301a",
+      "Medal": "Shadows of Revenge - [2007] Tobey Maguire Black Suit (Spider-Man 3)",
+      "Image": "https://iili.io/nIU5yil.png",
+      "Tier": "Gold",
+      "Requirement": "Chiến thắng cám dỗ: Kiềm chế cơn giận và hoàn thành ngày làm việc bình tĩnh.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6819a8a59e4951a7403f8",
+      "Medal": "Iron Armor Protocol - [2006] Stark Iron Spider (Civil War)",
+      "Image": "https://iili.io/nIU5pV4.png",
+      "Tier": "Platinum",
+      "Requirement": "Chế tạo và nâng cấp tối đa 5 món trang bị công nghệ Gadgets.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6813aa0b1f67ab2b66c92",
+      "Medal": "Sacrifice on the Train - [2004] Tobey Maguire (Spider-Man 2)",
+      "Image": "https://iili.io/nIU5mxf.png",
+      "Tier": "Mythic",
+      "Requirement": "Cứu nguy đồng đội: Hoàn thành mục tiêu khó khăn nhất khi chỉ còn 1 ngày hạn chót.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6817ebecffe6e0ff3cf9b",
+      "Medal": "Cinema Pioneer - [2002] Tobey Maguire (Sam Raimi 1)",
+      "Image": "https://iili.io/nIU5DDG.png",
+      "Tier": "Mythic",
+      "Requirement": "Đạt mốc Hero Rank S và hoàn thành 100 nhiệm vụ bảo vệ công lý.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6811285c5e578338583d3",
+      "Medal": "Ultimate Web-Warrior - [2000] Earth-1610 Peter Parker (Bendis)",
+      "Image": "https://iili.io/nIU5tNs.png",
+      "Tier": "Gold",
+      "Requirement": "Đọc và áp dụng 3 bài học đắt giá về trách nhiệm trong cuộc sống.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6810d9534d46bd091b196",
+      "Medal": "Nano Unlimited - [1999] Counter-Earth Spider-Man Unlimited",
+      "Image": "https://iili.io/nIU5ZRn.png",
+      "Tier": "Platinum",
+      "Requirement": "Khám phá và hoàn thành 10 nhiệm vụ ẩn trong hệ thống.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681889040e7fef1b128dd",
+      "Medal": "Sensational Web - [1996] Dan Jurgens Sensational Era",
+      "Image": "https://iili.io/nIU5QHX.png",
+      "Tier": "Gold",
+      "Requirement": "Hoàn thành 30 bài tập cường độ cao vượt qua giới hạn cá nhân.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c68119ac47c4c4bb845dc0",
+      "Medal": "Scarlet Legacy - [1994] Ben Reilly (Clone Saga Scarlet Spider)",
+      "Image": "https://iili.io/nIU5ilI.png",
+      "Tier": "Gold",
+      "Requirement": "Duy trì chuỗi streak 45 ngày làm việc và rèn luyện không ngắt quãng.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6810c988ed929fe3f48b0",
+      "Medal": "90s Childhood Legend - [1994] Fox Kids Animated Series",
+      "Image": "https://iili.io/nIU54Pp.png",
+      "Tier": "Gold",
+      "Requirement": "Học tập và tích lũy 50 giờ nghiên cứu kiến thức mới.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6815ba4f8fcf3440f3369",
+      "Medal": "Cyberpunk 2099 - [1992] Miguel O'Hara (Nueva York 2099)",
+      "Image": "https://iili.io/nIU5gov.png",
+      "Tier": "Platinum",
+      "Requirement": "Hạ gục Boss Thử thách cấp A trở lên trong vòng dưới 60 giây.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c681bf9f54cae4c3f215c6",
+      "Medal": "Urban Brawler - [1990] Erik Larsen Dynamic Street Style",
+      "Image": "https://iili.io/nIU5SDJ.png",
+      "Tier": "Gold",
+      "Requirement": "Duy trì chuỗi hành động tích cực 30 ngày liên tục.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c68190b294f7dd8890cba8",
+      "Medal": "Spaghetti Web Master - [1988] Todd McFarlane Era (ASM #300)",
+      "Image": "https://iili.io/nIU58Na.png",
+      "Tier": "Platinum",
+      "Requirement": "Đạt 50 buổi tập thể lực cường độ cao (Gym/Cardio).",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c68131b218e026e6d385bd",
+      "Medal": "Symbiote Awakening - [1984] Alien Symbiote (Secret Wars Black Suit)",
+      "Image": "https://iili.io/nIU5kHF.png",
+      "Tier": "Mythic",
+      "Requirement": "Đánh bại 10 Boss Thử thách mà không tụt máu dưới 20%.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6814782f2e7cfdc06615d",
+      "Medal": "Spectacular Web-Warrior - [1978] Peter Parker: Spectacular",
+      "Image": "https://iili.io/nIU5OS1.png",
+      "Tier": "Silver",
+      "Requirement": "Đạt 20 buổi rèn luyện thể lực bền bỉ.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c68183a7f0e09935be6cf1",
+      "Medal": "Beyond Tragedy - [1973] The Night Gwen Stacy Died (ASM #121)",
+      "Image": "https://iili.io/nIU5wKB.png",
+      "Tier": "Platinum",
+      "Requirement": "Vượt qua nghịch cảnh: Giữ vững chuỗi streak khi gặp áp lực công việc lớn nhất.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6813f9c73ff01d9909b33",
+      "Medal": "Vintage Web-Slinger - [1967] Animated TV Series (Classic 60s)",
+      "Image": "https://iili.io/nIU5hPV.png",
+      "Tier": "Silver",
+      "Requirement": "Tương tác và hỗ trợ 15 người xung quanh trong công việc/cuộc sống.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c68184a4ddfd89165b2f76",
+      "Medal": "Golden Age Champion - [1966] John Romita Sr. Classic Era",
+      "Image": "https://iili.io/nIU5XMQ.png",
+      "Tier": "Gold",
+      "Requirement": "Thực hiện kỷ luật thép: Hoàn thành 100% thói quen buổi sáng trong 30 ngày.",
+      "Unlocked": false,
+      "Equipped": false
+    },
+    {
+      "id": "3d6d787636c6815b93e5c348f7cdd9a9",
+      "Medal": "Origin of Power - [1962] Steve Ditko Debut (Amazing Fantasy #15)",
+      "Image": "https://iili.io/nIU5Gwb.png",
+      "Tier": "Mythic",
+      "Requirement": "Hoàn thành 100 ngày liên tục rèn luyện ý chí và tinh thần trách nhiệm.",
+      "Unlocked": false,
+      "Equipped": false
+    }
+  ]
+}

@@ -231,31 +231,29 @@
   left: 18%;
   top: 55%;
   width: 58%;
-  height: 48px;
+  height: 64px;
   pointer-events: none;
   z-index: 10;
-  display: flex;
-  align-items: center;
+  transform-origin: left center;
 }
 
 .cosmic-web-shot .web-beam {
   position: absolute;
   left: 0;
   top: 50%;
-  height: 16px;
-  margin-top: -8px;
-  background-image: url('../assets/spideytracker/web-strand.png');
-  background-repeat: repeat-x;
-  background-size: 32px 16px;
+  height: 4px;
+  margin-top: -2px;
+  background: #e8fbff;
+  box-shadow: 0 -2px 0 #7bcce8, 0 2px 0 #80b9d5, 0 0 8px rgba(255,255,255,.65);
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 6px rgba(255,255,255,.7));
   animation: web-shoot-extend .25s ease-out forwards;
 }
 
 .cosmic-web-shot .web-ball {
   position: absolute;
-  width: 48px;
-  height: 48px;
+  top: 0;
+  width: 64px;
+  height: 64px;
   background-image: url('../assets/spideytracker/cosmic-web-vfx.png');
   background-size: 512px 128px;
   background-position: 0 0;
@@ -266,17 +264,17 @@
 
 .cosmic-web-shot .web-entangle {
   position: absolute;
-  right: -20px;
+  right: -32px;
   top: 50%;
   transform: translateY(-50%);
-  width: 96px;
-  height: 96px;
+  width: 64px;
+  height: 64px;
   background-image: url('../assets/spideytracker/cosmic-web-vfx.png');
   background-size: 512px 128px;
-  background-position: -256px -64px;
+  background-position: -384px 0;
   image-rendering: pixelated;
   opacity: 0;
-  animation: web-entangle-burst .45s ease-out .25s forwards;
+  animation: web-entangle-burst .42s steps(1, end) .25s forwards;
 }
 
 @keyframes web-shoot-extend {
@@ -286,16 +284,21 @@
 }
 
 @keyframes web-ball-fly {
-  0% { left: 0; transform: scale(.7) rotate(0deg); opacity: 1; }
-  75% { left: 85%; transform: scale(1.1) rotate(180deg); opacity: 1; }
-  100% { left: 95%; transform: scale(1.4) rotate(360deg); opacity: 0; }
+  0% { left: 0; background-position: 0 0; opacity: 1; }
+  20% { left: 18%; background-position: -64px 0; }
+  40% { left: 38%; background-position: -128px 0; }
+  60% { left: 58%; background-position: -192px 0; }
+  80% { left: 78%; background-position: -256px 0; }
+  100% { left: 95%; background-position: -320px 0; opacity: 0; }
 }
 
 @keyframes web-entangle-burst {
-  0% { transform: translateY(-50%) scale(.4) rotate(-15deg); opacity: 0; }
-  35% { transform: translateY(-50%) scale(1.2) rotate(10deg); opacity: 1; filter: brightness(1.6); }
-  70% { transform: translateY(-50%) scale(1) rotate(0deg); opacity: .9; }
-  100% { transform: translateY(-50%) scale(1.1); opacity: 0; }
+  0% { transform: translateY(-50%) scale(.4); background-position: -384px 0; opacity: 0; }
+  20% { transform: translateY(-50%) scale(1); background-position: -448px 0; opacity: 1; }
+  40% { background-position: 0 -64px; }
+  60% { background-position: -64px -64px; }
+  80% { background-position: -128px -64px; opacity: 1; }
+  100% { transform: translateY(-50%) scale(1.2); background-position: -192px -64px; opacity: 0; }
 }
 
 .combat-placeholder--enemy {
@@ -359,4 +362,63 @@
 @media (prefers-reduced-motion: reduce) {
   .hanging-spidey,
   .spidey-head-turn-sprite { animation: none; }
+}
+
+.cosmic-web-shot .web-beam::after {
+  content: '';
+  position: absolute;
+  inset: -5px 0;
+  background:
+    repeating-linear-gradient(60deg, transparent 0 11px, rgba(232,251,255,.85) 11px 13px, transparent 13px 23px),
+    repeating-linear-gradient(-60deg, transparent 0 11px, rgba(232,251,255,.85) 11px 13px, transparent 13px 23px);
+  image-rendering: pixelated;
+}
+
+/* Original Cosmic Invasion frame renderer. */
+.action-fighter--hero .cosmic-original-canvas,
+.action-fighter--hero .cosmic-sense-canvas {
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  width: 300px;
+  height: 300px;
+  margin-left: -150px;
+  image-rendering: pixelated;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 8px rgba(0,0,0,.75));
+}
+.action-fighter--hero .cosmic-sense-canvas { z-index: 2; }
+.action-fighter--hero .cosmic-original-canvas.cosmic-reversed { transform: scaleX(-1); }
+.cosmic-original-projectile {
+  position: absolute;
+  z-index: 12;
+  width: 200px;
+  height: 200px;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.cosmic-original-webpull {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.arena-fighter--villain.enemy-web-pulled {
+  animation: cosmic-enemy-pull .78s ease-in-out;
+}
+@keyframes cosmic-enemy-pull {
+  38%, 65% { transform: translateX(var(--web-pull-distance, -140px)); }
+}
+.cosmic-swing-rope { height: 68%; }
+
+@media (max-width: 720px) {
+  .action-fighter--hero .cosmic-original-canvas,
+  .action-fighter--hero .cosmic-sense-canvas {
+    width: 220px;
+    height: 220px;
+    margin-left: -110px;
+  }
 }

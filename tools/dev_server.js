@@ -42,9 +42,23 @@ const server = http.createServer((req, res) => {
   }
 
   const rawUrl = req.url.split('?')[0];
+  const staticPath = /^\/pk\/?$/.test(rawUrl) ? '/index.html' : rawUrl;
 
   // API Proxy for Notion
   if (rawUrl === '/api/notion') {
+    res.removeHeader('Access-Control-Allow-Origin');
+    res.removeHeader('Access-Control-Allow-Methods');
+    const requestOrigin = `http://${req.headers.host}`;
+    if (req.headers.origin && req.headers.origin !== requestOrigin) {
+      res.writeHead(403, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: false, error: 'Cross-origin Notion access is not allowed' }));
+      return;
+    }
+    if (!['GET', 'HEAD'].includes(req.method) && req.headers.origin !== requestOrigin) {
+      res.writeHead(403, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: false, error: 'Same-origin write required' }));
+      return;
+    }
     const urlObj = new URL(req.url, `http://${req.headers.host}`);
     const notionPath = urlObj.searchParams.get('path');
     const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN || '';
@@ -90,8 +104,32 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (rawUrl === '/api/game-state' || rawUrl === '/api/game-state.mjs') {
+    import('../api/game-state.mjs').then(({ default: handler }) => {
+      const adapter = { setHeader: (key, value) => res.setHeader(key, value), status(code) { res.statusCode = code; return this; }, json(value) { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(value)); } };
+      return handler(req, adapter);
+    }).catch(() => { res.writeHead(500); res.end('Game display unavailable'); });
+    return;
+  }
+
+  const fieldKind={'/api/cloud':'cloud','/api/finance':'finance','/api/finance-v2':'finance-v2'}[rawUrl]||(rawUrl.startsWith('/api/google/')?'google':null);
+  const privateApi = fieldKind?'field':{'/api/routine':'routine','/api/notion-session':'notion-session','/api/notion':'notion'}[rawUrl];
+  if (privateApi) {
+    let body='';req.on('data', chunk=>{body+=chunk;});
+    req.on('end',async()=>{
+      try {
+        req.query=Object.fromEntries(new URL(req.url,'http://'+req.headers.host).searchParams);
+        if(fieldKind){req.query.kind=fieldKind;if(fieldKind==='google')req.query.route=rawUrl.split('/').pop();}
+        req.body=body ? JSON.parse(body) : undefined;
+        const {default:handler}=await import('../api/'+privateApi+'.mjs');
+        const adapter={setHeader:(k,v)=>res.setHeader(k,v),status(code){res.statusCode=code;return this;},end(){res.end();},json(value){res.setHeader('Content-Type','application/json');res.end(JSON.stringify(value));}};
+        await handler(req,adapter);
+      } catch {res.statusCode=500;res.end(JSON.stringify({error:'API unavailable'}));}
+    });return;
+  }
+
   let decodedPath;
-  try { decodedPath = decodeURIComponent(rawUrl); } catch {
+  try { decodedPath = decodeURIComponent(staticPath); } catch {
     res.writeHead(400); res.end('Bad path'); return;
   }
   const segments = decodedPath.split(/[\/]+/).filter(Boolean);

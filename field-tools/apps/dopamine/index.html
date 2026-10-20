@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="vi" data-gambit-app="dopamine">
+<head>
+<script src="../../spider-embedded.js?v=field-navigation-3"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f2f2f7" id="theme-meta">
+<title>Menus</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+:root{
+  --bg:#07090e;--card:rgba(16,22,34,0.7);--card2:rgba(24,33,50,0.85);
+  --lbl:#f3f5f9;--lbl2:#8b99ad;--lbl3:#546377;
+  --sep:rgba(255,255,255,0.08);--sep2:rgba(255,255,255,0.15);
+  --blue:#00e5b4;--red:#ff4d6a;--green:#34c759;
+  --f:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans','Inter',sans-serif;
+  --radius:18px;
+}
+[data-dark]{
+  --bg:#07090e;--card:rgba(16,22,34,0.7);--card2:rgba(24,33,50,0.85);
+  --lbl:#f3f5f9;--lbl2:#8b99ad;--lbl3:#546377;
+  --sep:rgba(255,255,255,0.08);--sep2:rgba(255,255,255,0.15);
+  --blue:#00e5b4;
+}
+body{font-family:var(--f);background:var(--bg);color:var(--lbl);overscroll-behavior:none;}
+#app{width:440px;max-width:100vw;height:100dvh;margin:0 auto;
+     display:flex;flex-direction:column;background:var(--bg);overflow:hidden;position:relative;border-left:1px solid var(--sep);border-right:1px solid var(--sep);}
+
+/* ── PAGES ── */
+.pg{display:none;flex-direction:column;position:absolute;inset:0;
+    background:var(--bg);overflow:hidden;}
+.pg.on{display:flex;}
+.pg.enter{animation:pgEnter .3s cubic-bezier(.4,0,.2,1) both;}
+.pg.leave{animation:pgLeave .3s cubic-bezier(.4,0,.2,1) both;}
+.pg.back-enter{animation:pgBackEnter .3s cubic-bezier(.4,0,.2,1) both;}
+.pg.back-leave{animation:pgBackLeave .3s cubic-bezier(.4,0,.2,1) both;}
+@keyframes pgEnter{from{transform:translateX(100%);}to{transform:none;}}
+@keyframes pgLeave{from{transform:none;}to{transform:translateX(-28%);opacity:.5;}}
+@keyframes pgBackEnter{from{transform:translateX(-28%);opacity:.5;}to{transform:none;opacity:1;}}
+@keyframes pgBackLeave{from{transform:none;}to{transform:translateX(100%);}}
+
+/* ── NAV ── */
+.nav{flex-shrink:0;min-height:52px;padding:max(12px,env(safe-area-inset-top)) 4px 4px 8px;
+     display:flex;align-items:center;background:var(--bg);}
+.nav-back{background:none;border:none;cursor:pointer;
+          display:flex;align-items:center;gap:2px;
+          color:var(--blue);font-family:var(--f);font-size:17px;
+          padding:8px 8px 8px 4px;min-width:60px;}
+.nav-back:active{opacity:.4;}
+.hub-back{width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:var(--card);border:.5px solid var(--sep);color:var(--lbl);text-decoration:none;display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:transform .12s,opacity .12s,background .15s}
+.nav>.hub-back{margin-right:16px}
+.hub-back:active{transform:scale(.96);opacity:.72}
+.hub-back:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.hub-back svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-back-chev{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.nav-title{flex:1;text-align:center;font-size:17px;font-weight:600;
+           letter-spacing:-.3px;color:var(--lbl);}
+.nav-right{display:flex;align-items:center;gap:4px;min-width:60px;justify-content:flex-end;}
+.nav-ic{background:none;border:none;cursor:pointer;color:var(--lbl);
+        width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+        border-radius:50%;font-size:18px;letter-spacing:1px;transition:background .1s;}
+.nav-ic:active{background:var(--sep2);}
+.large-title{font-size:28px;font-weight:700;letter-spacing:-.5px;
+             padding:0 14px 10px;color:var(--lbl);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ── SCROLL ── */
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── HOME GRID ── */
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:4px 12px 14px;}
+.mc{background:var(--card);border-radius:var(--radius);
+    padding:16px 14px 14px;cursor:pointer;
+    display:flex;flex-direction:column;gap:10px;min-height:118px;
+    transition:transform .12s,opacity .12s;-webkit-user-select:none;user-select:none;
+    box-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);}
+.mc:active{transform:scale(.96);opacity:.82;}
+[data-dark] .mc{box-shadow:none;border:.5px solid var(--sep);}
+/* Light mode: icon bg tinted, icon dark */
+.mc-ico{width:44px;height:44px;border-radius:12px;
+        background:#f0f0f0;
+        display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mc-ico svg{width:22px;height:22px;stroke:#333;fill:none;
+            stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+/* Dark mode: icon bg lighter, icon bright white */
+[data-dark] .mc-ico{background:#2c2c2e;}
+[data-dark] .mc-ico svg{stroke:#e5e5e7;}
+.mc-name{font-size:15px;font-weight:600;letter-spacing:-.3px;color:var(--lbl);line-height:1.2;}
+.mc-meta{font-size:12px;color:var(--lbl3);margin-top:1px;}
+
+/* ── FOLDER CARDS (category page) ── */
+.fc{background:var(--card);border-radius:12px;min-width:0;overflow:hidden;
+    padding:10px;cursor:pointer;
+    transition:transform .12s,opacity .12s;-webkit-user-select:none;user-select:none;
+    box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.fc:active{transform:scale(.96);opacity:.82;}
+[data-dark] .fc{box-shadow:none;border:.5px solid var(--sep);}
+.fc-head{display:flex;align-items:center;gap:7px;margin-bottom:7px;min-width:0;}
+.fc-ico{width:28px;height:28px;border-radius:7px;
+        background:#f0f0f0;
+        display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fc-ico svg{width:15px;height:15px;stroke:#333;fill:none;
+            stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+[data-dark] .fc-ico{background:#2c2c2e;}
+[data-dark] .fc-ico svg{stroke:#e5e5e7;}
+.fc-head-right{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.fc-name{min-width:0;font-size:13px;font-weight:600;color:var(--lbl);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.fc-count{font-size:11px;color:var(--lbl3);white-space:nowrap;flex-shrink:0;}
+.fc-bullets{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.fc-bullet{display:flex;align-items:flex-start;gap:5px;min-width:0;font-size:11px;color:var(--lbl2);line-height:1.35;}
+.fc-dot{width:4px;height:4px;border-radius:50%;background:var(--lbl3);flex-shrink:0;margin-top:5px;}
+.fc-btxt{min-width:0;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+/* ── ITEM LIST ── */
+.icard{background:var(--card);border-radius:var(--radius);overflow:hidden;
+       margin:0 16px;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+[data-dark] .icard{box-shadow:none;border:.5px solid var(--sep);}
+.irow{display:flex;align-items:center;gap:13px;padding:13px 14px;
+      border-bottom:.5px solid var(--sep2);
+      -webkit-user-select:none;user-select:none;transition:background .08s;}
+.irow:last-child{border-bottom:none;}
+.irow:active{background:var(--sep2);}
+.iico{width:38px;height:38px;border-radius:10px;background:#f0f0f0;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.iico svg{width:18px;height:18px;stroke:#333;fill:none;
+          stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+[data-dark] .iico{background:#2c2c2e;}
+[data-dark] .iico svg{stroke:#e5e5e7;}
+.ibody{flex:1;min-width:0;}
+.iname{font-size:16px;font-weight:600;letter-spacing:-.2px;color:var(--lbl);}
+.isub{font-size:13px;color:var(--lbl2);margin-top:2px;}
+.imore{background:none;border:none;cursor:pointer;color:var(--lbl2);
+       font-size:18px;padding:12px 0 12px 16px;flex-shrink:0;
+       letter-spacing:3px;line-height:1;transition:opacity .1s;min-width:44px;text-align:right;}
+.imore:active{opacity:.4;}
+
+/* ── BOTTOM BAR ── */
+.btmbar{flex-shrink:0;padding:8px 20px max(14px,env(safe-area-inset-bottom));
+        display:flex;align-items:center;justify-content:space-between;
+        background:var(--bg);border-top:.5px solid var(--sep);}
+.btm-btn{display:flex;align-items:center;gap:8px;background:none;border:none;
+         cursor:pointer;color:var(--lbl);font-family:var(--f);font-size:15px;
+         font-weight:500;padding:8px 0;transition:opacity .1s;}
+.btm-btn:active{opacity:.4;}
+.btm-btn svg{width:19px;height:19px;stroke:var(--lbl);fill:none;
+             stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.btm-plus{background:none;border:none;cursor:pointer;font-size:30px;
+          color:var(--lbl);line-height:1;font-weight:200;padding:4px 0;
+          transition:opacity .1s;}
+.btm-plus:active{opacity:.4;}
+
+/* ── SEARCH BAR ── */
+.sbar{flex-shrink:0;display:flex;align-items:center;gap:10px;
+      padding:8px 16px max(14px,env(safe-area-inset-bottom));
+      background:var(--bg);border-top:.5px solid var(--sep);}
+.sinp{flex:1;display:flex;align-items:center;gap:8px;
+      background:var(--card);border-radius:10px;padding:9px 12px;}
+.sinp svg{flex-shrink:0;stroke:var(--lbl3);fill:none;stroke-width:2;stroke-linecap:round;}
+.sinp input{flex:1;background:none;border:none;outline:none;
+            font-family:var(--f);font-size:15px;color:var(--lbl);}
+.sinp input::placeholder{color:var(--lbl3);}
+.splus{background:none;border:none;cursor:pointer;font-size:28px;
+       color:var(--lbl);font-weight:200;padding:4px 0;transition:opacity .1s;flex-shrink:0;}
+.splus:active{opacity:.4;}
+
+/* ── DICE ── */
+.fab{width:56px;height:56px;border-radius:50%;border:none;background:#111;
+     display:flex;align-items:center;justify-content:center;cursor:pointer;
+     box-shadow:0 4px 16px rgba(0,0,0,.3);transition:transform .14s,opacity .14s;}
+.fab:active{transform:scale(.9);opacity:.78;}
+.fab svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+[data-dark] .fab{background:#f5f5f5;}
+[data-dark] .fab svg{stroke:#111;}
+
+/* ── ROLL ── */
+.roll-pg{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px 48px;}
+.roll-circle{width:96px;height:96px;border-radius:50%;background:#111;flex-shrink:0;position:relative;overflow:hidden;transform:translateZ(0);}
+[data-dark] .roll-circle{background:#f5f5f5;}
+.roll-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.roll-icon svg{stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+[data-dark] .roll-icon svg{stroke:#111;}
+@keyframes spinUp{0%{transform:translateY(54px);opacity:0;}100%{transform:none;opacity:1;}}
+@keyframes resPop{0%{transform:scale(.05) rotate(-20deg);opacity:0;}48%{transform:scale(1.2) rotate(3deg);opacity:1;}68%{transform:scale(.94) rotate(-1deg);}82%{transform:scale(1.04);}100%{transform:none;opacity:1;}}
+.roll-texts{min-height:196px;width:100%;display:flex;flex-direction:column;align-items:center;padding-top:28px;}
+.roll-name{font-size:30px;font-weight:700;text-align:center;line-height:1.2;color:var(--lbl);animation:fadeUp .32s .1s both;overflow-wrap:anywhere;}
+.roll-time{display:inline-flex;align-items:center;gap:5px;margin-top:12px;background:var(--lbl);color:var(--bg);font-size:13px;font-weight:600;padding:5px 12px;border-radius:20px;animation:fadeUp .28s .22s both;}
+.roll-sub{font-size:14px;color:var(--lbl2);text-align:center;margin-top:8px;animation:fadeUp .28s .28s both;}
+.roll-notes{font-size:13px;color:var(--lbl2);text-align:center;margin-top:6px;max-width:280px;line-height:1.5;animation:fadeUp .28s .34s both;padding:0 8px;}
+.roll-hint{font-size:15px;color:var(--lbl2);text-align:center;padding-top:8px;}
+.roll-btns{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:28px;animation:fadeUp .28s .28s both;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.btn-blk{background:#111;color:#fff;border:none;border-radius:14px;font-family:var(--f);
+         font-size:17px;font-weight:600;padding:16px;width:100%;cursor:pointer;
+         display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:-.2px;
+         transition:transform .1s,opacity .1s;}
+.btn-blk:active{opacity:.72;transform:scale(.98);}
+[data-dark] .btn-blk{background:#f5f5f5;color:#111;}
+.btn-ghost{background:none;color:var(--lbl2);border:none;border-radius:14px;
+           font-family:var(--f);font-size:17px;padding:14px;width:100%;cursor:pointer;
+           display:flex;align-items:center;justify-content:center;gap:6px;
+           transition:opacity .12s;}
+.btn-ghost:active{opacity:.35;}
+
+/* ── SHEET ── */
+.sh-ov{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);
+       display:none;align-items:flex-end;justify-content:center;}
+.sh-ov.on{display:flex;}
+.sh-ov.on .sheet{animation:shUp .34s cubic-bezier(.16,1,.3,1) both;}
+@keyframes shUp{from{transform:translateY(100%);}to{transform:none;}}
+.sheet{width:100%;max-width:390px;background:var(--bg);border-radius:20px 20px 0 0;
+       max-height:90dvh;overflow-y:auto;
+       padding-bottom:max(24px,env(safe-area-inset-bottom));}
+.sheet::-webkit-scrollbar{display:none;}
+.sh-pill{width:36px;height:4px;border-radius:2px;background:var(--sep);
+         margin:10px auto 2px;opacity:.5;}
+.sh-head{padding:14px 18px 4px;}
+.sh-title{font-size:20px;font-weight:700;letter-spacing:-.4px;color:var(--lbl);}
+.sh-lbl{font-size:12px;font-weight:600;color:var(--lbl2);text-transform:uppercase;
+        letter-spacing:.5px;padding:16px 16px 5px;display:flex;align-items:center;gap:6px;}
+.sh-lbl-hint{font-size:11px;font-weight:400;letter-spacing:0;color:var(--lbl3);text-transform:none;}
+.sh-acts{padding:8px 16px 4px;display:flex;flex-direction:column;gap:10px;}
+.fc2{margin:0 16px;background:var(--card);border-radius:12px;overflow:hidden;}
+.finp{width:100%;background:none;border:none;outline:none;font-family:var(--f);
+      font-size:16px;color:var(--lbl);padding:14px;display:block;}
+.finp::placeholder{color:var(--lbl3);}
+.fta{width:100%;background:none;border:none;outline:none;resize:none;
+     font-family:var(--f);font-size:16px;color:var(--lbl);line-height:1.55;
+     padding:14px;min-height:80px;}
+.fta::placeholder{color:var(--lbl3);}
+.frow{display:flex;align-items:center;min-height:48px;padding:0 14px;
+      border-top:.5px solid var(--sep2);}
+.frow:first-child{border-top:none;}
+.frow-lbl{font-size:16px;color:var(--lbl);min-width:100px;flex-shrink:0;}
+.fsel{flex:1;background:none;border:none;outline:none;font-family:var(--f);
+      font-size:15px;color:var(--lbl2);text-align:right;-webkit-appearance:none;
+      direction:rtl;padding:13px 0;cursor:pointer;}
+.finpr{flex:1;background:none;border:none;outline:none;font-family:var(--f);
+       font-size:15px;color:var(--lbl2);text-align:right;padding:13px 0;}
+.finpr::placeholder{color:var(--lbl3);}
+.igrid{display:flex;flex-wrap:wrap;gap:7px;padding:12px;}
+.icell{width:40px;height:40px;border-radius:10px;background:var(--card2);
+       border:1.5px solid transparent;display:flex;align-items:center;
+       justify-content:center;cursor:pointer;transition:transform .1s,border-color .1s;}
+.icell:active{transform:scale(.88);}
+.icell.on{border-color:var(--lbl);background:var(--sep2);}
+.icell svg{width:20px;height:20px;stroke:var(--lbl);fill:none;
+           stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ── ACTION SHEET ── */
+.as-ov{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.4);
+       display:none;align-items:flex-end;justify-content:center;}
+.as-ov.on{display:flex;}
+.as-ov.on .as{animation:shUp .3s cubic-bezier(.16,1,.3,1) both;}
+.as{width:100%;max-width:390px;padding:0 10px max(14px,env(safe-area-inset-bottom));
+    display:flex;flex-direction:column;gap:10px;}
+.as-grp{background:var(--card);border-radius:14px;overflow:hidden;}
+.as-lbl{padding:12px 16px 4px;text-align:center;font-size:13px;color:var(--lbl2);
+        border-bottom:.5px solid var(--sep2);}
+.as-btn{display:block;width:100%;padding:12px 16px;text-align:left;background:none;
+        border:none;border-top:.5px solid var(--sep2);font-family:var(--f);
+        font-size:17px;color:var(--lbl);cursor:pointer;transition:background .08s;}
+.as-btn:first-of-type{border-top:none;}
+.as-btn:active{background:var(--sep2);}
+.as-btn.red{color:var(--red);}
+.as-btn.red .as-btn-sub{color:var(--red);opacity:.6;}
+.as-btn-main{display:block;font-size:17px;font-weight:500;}
+.as-btn-sub{display:block;font-size:12px;color:var(--lbl2);margin-top:1px;font-weight:400;}
+.as-cancel{background:var(--card);border-radius:14px;border:none;width:100%;
+           padding:17px;font-family:var(--f);font-size:17px;font-weight:600;
+           color:var(--lbl);cursor:pointer;transition:background .08s;}
+.as-cancel:active{background:var(--sep2);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(72px + env(safe-area-inset-bottom));left:50%;
+       transform:translateX(-50%) translateY(12px);background:rgba(26,26,26,.9);color:#fff;
+       padding:11px 22px;border-radius:50px;font-size:14px;font-weight:500;
+       z-index:999;opacity:0;pointer-events:none;white-space:nowrap;
+       backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+       transition:opacity .22s,transform .22s;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── MISC ── */
+.empty{padding:60px 20px;text-align:center;color:var(--lbl2);font-size:15px;line-height:1.6;}
+.empty-ico{font-size:44px;margin-bottom:10px;display:block;}
+.spacer{height:96px;}
+
+/* ── TIME CHIPS ── */
+.time-chips{display:flex;flex-wrap:wrap;gap:7px;}
+.tchip{background:var(--card2);border:1.5px solid transparent;border-radius:20px;
+       font-family:var(--f);font-size:13px;font-weight:500;color:var(--lbl2);
+       padding:5px 13px;cursor:pointer;transition:all .12s;}
+.tchip:active{transform:scale(.93);}
+.tchip.on{background:var(--lbl);color:var(--bg);border-color:transparent;font-weight:600;}
+
+/* ── DETAIL PAGE ── */
+.detail-hero{display:flex;align-items:center;gap:14px;padding:20px 0 18px;}
+.detail-hero-ico{width:60px;height:60px;border-radius:16px;background:#f0f0f0;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.detail-hero-ico svg{width:28px;height:28px;stroke:#333;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+[data-dark] .detail-hero-ico{background:#2c2c2e;}
+[data-dark] .detail-hero-ico svg{stroke:#e5e5e7;}
+.detail-hero-name{font-size:26px;font-weight:700;letter-spacing:-.5px;color:var(--lbl);line-height:1.2;}
+.detail-section{margin-bottom:20px;}
+.detail-section-lbl{font-size:12px;font-weight:600;color:var(--lbl2);text-transform:uppercase;
+  letter-spacing:.5px;padding:0 4px 8px;}
+.detail-card{background:var(--card);border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,.08);}
+[data-dark] .detail-card{box-shadow:none;border:.5px solid var(--sep);}
+.detail-row{display:flex;align-items:center;gap:12px;padding:13px 14px;
+  border-bottom:.5px solid var(--sep2);}
+.detail-row:last-child{border-bottom:none;}
+.detail-row-lbl{font-size:15px;color:var(--lbl2);min-width:90px;flex-shrink:0;}
+.detail-row-val{font-size:15px;color:var(--lbl);font-weight:500;flex:1;text-align:right;}
+.detail-notes{background:var(--card);border-radius:var(--radius);padding:14px;
+  font-size:15px;color:var(--lbl);line-height:1.6;
+  box-shadow:0 1px 3px rgba(0,0,0,.08);}
+[data-dark] .detail-notes{box-shadow:none;border:.5px solid var(--sep);}
+.detail-del-btn{width:100%;background:none;border:none;font-family:var(--f);
+  font-size:16px;color:var(--red);padding:15px;border-radius:var(--radius);
+  background:var(--card);cursor:pointer;margin-top:8px;transition:opacity .1s;
+  box-shadow:0 1px 3px rgba(0,0,0,.08);}
+[data-dark] .detail-del-btn{box-shadow:none;border:.5px solid var(--sep);}
+.detail-del-btn:active{opacity:.5;}
+
+.fab-wrap{position:absolute;bottom:calc(max(14px,env(safe-area-inset-bottom)) + 60px);right:20px;z-index:10;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.fab-tip{background:rgba(0,0,0,.78);color:#fff;font-size:13px;padding:6px 11px;border-radius:20px;white-space:nowrap;backdrop-filter:blur(8px);animation:fadeUp .25s both;pointer-events:none;}
+
+</style>
+<link rel="stylesheet" href="../../assets/gambit-app-polish.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div id="app">
+
+<!-- HOME -->
+<div class="pg on" id="pg-home">
+  <div class="nav">
+    <a class="hub-back" href="../../index.html" aria-label="Trở về trang ứng dụng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+    <div class="nav-title">Dopamine Menu</div>
+    <div class="nav-right">
+      <button class="nav-ic" onclick="toggleDark()" style="font-size:16px;" title="Chế độ tối / sáng" aria-label="Chế độ tối">◐</button>
+      <button class="nav-ic" onclick="openHomeMenu(this)" style="letter-spacing:1.5px;font-size:14px;" title="Tuỳ chọn: xuất/nhập dữ liệu, khôi phục">···</button>
+    </div>
+  </div>
+  <div class="scroll" id="home-scroll">
+    <div style="height:4px;"></div>
+    <div class="grid2" id="home-grid"></div>
+  </div>
+  <div class="btmbar">
+    <button class="btm-btn" id="btm-new-menu" title="Tạo danh mục mới (nhóm thư mục)">
+      <svg viewBox="0 0 24 24"><path d="M2 6a2 2 0 012-2h5l2 2h9a2 2 0 012 2v11a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+      Danh mục mới
+    </button>
+    <button class="btm-plus" id="btm-plus-menu" title="Tạo danh mục mới">+</button>
+  </div>
+</div>
+
+<!-- CATEGORY -->
+<div class="pg" id="pg-cat">
+  <div class="nav">
+    <button class="nav-back" onclick="goBack()">
+      <svg class="nav-back-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Menus
+    </button>
+    <div class="nav-title" id="cat-title"></div>
+    <div class="nav-right">
+      <button class="nav-ic" onclick="openAs('as-cat')" title="Thêm thư mục, sửa hoặc xoá danh mục">···</button>
+    </div>
+  </div>
+  <div class="scroll" id="cat-scroll">
+    <div class="large-title" id="cat-large"></div>
+    <div class="grid2" id="folder-grid"></div>
+    <div class="spacer"></div>
+  </div>
+  <div class="fab-wrap">
+    <div class="fab-tip" id="fab-cat-tip" style="display:none">Chọn giúp tôi</div>
+    <button class="fab" onclick="doRoll('cat')" onmouseenter="showFabTip('fab-cat-tip')" onmouseleave="hideFabTip('fab-cat-tip')" aria-label="Chọn ngẫu nhiên một hoạt động">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1" fill="currentColor"/><circle cx="16" cy="8" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="8" cy="16" r="1" fill="currentColor"/><circle cx="16" cy="16" r="1" fill="currentColor"/></svg>
+    </button>
+  </div>
+  <div class="sbar">
+    <div class="sinp">
+      <svg width="14" height="14" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5l4 4"/></svg>
+      <input id="cat-q" placeholder="Tìm kiếm thư mục" oninput="renderCat()">
+    </div>
+    <button class="splus" id="cat-plus" title="Thêm thư mục mới">+</button>
+  </div>
+</div>
+
+<!-- FOLDER -->
+<div class="pg" id="pg-folder">
+  <div class="nav">
+    <button class="nav-back" id="folder-back" onclick="goBack()">
+      <svg class="nav-back-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span id="folder-back-lbl">Back</span>
+    </button>
+    <div class="nav-title" id="folder-title"></div>
+    <div class="nav-right">
+      <button class="nav-ic" onclick="openAs('as-folder')" title="Thêm hoạt động, sửa hoặc xoá thư mục">···</button>
+    </div>
+  </div>
+  <div class="scroll" id="folder-scroll">
+    <div class="large-title" id="folder-large"></div>
+    <div id="item-wrap"></div>
+    <div class="spacer"></div>
+  </div>
+  <div class="fab-wrap">
+    <div class="fab-tip" id="fab-folder-tip" style="display:none">Chọn giúp tôi</div>
+    <button class="fab" onclick="doRoll('folder')" onmouseenter="showFabTip('fab-folder-tip')" onmouseleave="hideFabTip('fab-folder-tip')" aria-label="Chọn ngẫu nhiên một hoạt động">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1" fill="currentColor"/><circle cx="16" cy="8" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="8" cy="16" r="1" fill="currentColor"/><circle cx="16" cy="16" r="1" fill="currentColor"/></svg>
+    </button>
+  </div>
+  <div class="sbar">
+    <div class="sinp">
+      <svg width="14" height="14" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5l4 4"/></svg>
+      <input id="folder-q" placeholder="Tìm kiếm hoạt động" oninput="renderFolder()">
+    </div>
+    <button class="splus" id="folder-plus" title="Thêm hoạt động mới">+</button>
+  </div>
+</div>
+
+<!-- DICE RESULT -->
+<div class="pg" id="pg-roll">
+  <div class="nav">
+    <button class="nav-back" onclick="goBack()">
+      <svg class="nav-back-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span id="roll-back-lbl">Quay lại</span>
+    </button>
+    <div class="nav-title">Xúc xắc</div>
+    <div style="min-width:60px"></div>
+  </div>
+  <div class="roll-pg">
+    <div class="roll-circle" id="roll-circle"></div>
+    <div class="roll-texts" id="roll-texts"><div class="roll-hint">Đang chọn…</div></div>
+  </div>
+</div>
+
+<!-- ITEM DETAIL -->
+<div class="pg" id="pg-detail">
+  <div class="nav">
+    <button class="nav-back" id="detail-back" onclick="goBack()">
+      <svg class="nav-back-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span id="detail-back-lbl">Back</span>
+    </button>
+    <div class="nav-title" id="detail-title"></div>
+    <div class="nav-right">
+      <button class="nav-ic" onclick="openEditItemById(window._detailId)" title="Edit" style="font-size:15px;">✎</button>
+    </div>
+  </div>
+  <div class="scroll" id="detail-scroll">
+    <div id="detail-content" style="padding:0 16px 40px;"></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ════ SHEETS ════ -->
+<!-- Add Menu -->
+<div class="sh-ov" id="sh-am" onclick="if(event.target===this)closeSh('sh-am')">
+<div class="sheet" onclick="event.stopPropagation()">
+  <div class="sh-pill"></div>
+  <div class="sh-head"><div class="sh-title">New Category</div></div>
+  <div class="sh-lbl">Name</div>
+  <div class="fc2"><input class="finp" id="am-n" placeholder="e.g. Dopamine, Places…" onkeydown="if(event.key==='Enter')saveMenu()"></div>
+  <div class="sh-lbl">Icon</div>
+  <div class="fc2"><div class="igrid" id="am-ico"></div></div>
+  <div class="sh-acts">
+    <button class="btn-blk" onclick="saveMenu()">Create Category</button>
+    <button class="btn-ghost" onclick="closeSh('sh-am')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Edit Menu -->
+<div class="sh-ov" id="sh-em" onclick="if(event.target===this)closeSh('sh-em')">
+<div class="sheet" onclick="event.stopPropagation()">
+  <div class="sh-pill"></div>
+  <div class="sh-head"><div class="sh-title">Edit Category</div></div>
+  <div class="sh-lbl">Name</div>
+  <div class="fc2"><input class="finp" id="em-n" placeholder="Category name" onkeydown="if(event.key==='Enter')saveEditMenu()"></div>
+  <div class="sh-lbl">Icon</div>
+  <div class="fc2"><div class="igrid" id="em-ico"></div></div>
+  <div class="sh-acts">
+    <button class="btn-blk" onclick="saveEditMenu()">Save</button>
+    <button class="btn-ghost" onclick="closeSh('sh-em')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Add Folder -->
+<div class="sh-ov" id="sh-af" onclick="if(event.target===this)closeSh('sh-af')">
+<div class="sheet" onclick="event.stopPropagation()">
+  <div class="sh-pill"></div>
+  <div class="sh-head"><div class="sh-title">New Folder</div></div>
+  <div class="sh-lbl">Name</div>
+  <div class="fc2"><input class="finp" id="af-n" placeholder="e.g. Starters, Cafes…" onkeydown="if(event.key==='Enter')saveFolder()"></div>
+  <div class="sh-lbl">Icon</div>
+  <div class="fc2"><div class="igrid" id="af-ico"></div></div>
+  <div class="sh-acts">
+    <button class="btn-blk" onclick="saveFolder()">Create Folder</button>
+    <button class="btn-ghost" onclick="closeSh('sh-af')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Edit Folder -->
+<div class="sh-ov" id="sh-ef" onclick="if(event.target===this)closeSh('sh-ef')">
+<div class="sheet" onclick="event.stopPropagation()">
+  <div class="sh-pill"></div>
+  <div class="sh-head"><div class="sh-title">Edit Folder</div></div>
+  <div class="sh-lbl">Name</div>
+  <div class="fc2"><input class="finp" id="ef-n" placeholder="Folder name" onkeydown="if(event.key==='Enter')saveEditFolder()"></div>
+  <div class="sh-lbl">Icon</div>
+  <div class="fc2"><div class="igrid" id="ef-ico"></div></div>
+  <div class="sh-acts">
+    <button class="btn-blk" onclick="saveEditFolder()">Save</button>
+    <button class="btn-ghost" onclick="closeSh('sh-ef')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Add Item -->
+<div class="sh-ov" id="sh-ai" onclick="if(event.target===this)closeSh('sh-ai')">
+<div class="sheet" onclick="event.stopPropagation()">
+  <div class="sh-pill"></div>
+  <div class="sh-head"><div class="sh-title">New Activity</div></div>
+  <div class="sh-lbl">Name</div>
+  <div class="fc2"><input class="finp" id="ai-n" placeholder="e.g. Walking, Reading…" onkeydown="if(event.key==='Enter')saveItem()"></div>
+  <div class="sh-lbl">Icon</div>
+  <div class="fc2"><div class="igrid" id="ai-ico"></div></div>
+  <div class="sh-lbl">Details</div>
+  <div class="fc2">
+    <div class="frow" style="flex-direction:column;align-items:flex-start;padding:12px 14px 10px;">
+      <span class="frow-lbl" style="margin-bottom:10px;">Duration</span>
+      <div class="time-chips" id="ai-time-chips">
+        <button type="button" class="tchip" data-v="" onclick="pickTime('ai',this)">—</button>
+        <button type="button" class="tchip" data-v="5 min" onclick="pickTime('ai',this)">5m</button>
+        <button type="button" class="tchip" data-v="10 min" onclick="pickTime('ai',this)">10m</button>
+        <button type="button" class="tchip" data-v="15 min" onclick="pickTime('ai',this)">15m</button>
+        <button type="button" class="tchip" data-v="20 min" onclick="pickTime('ai',this)">20m</button>
+        <button type="button" class="tchip on" data-v="30 min" onclick="pickTime('ai',this)">30m</button>
+        <button type="button" class="tchip" data-v="45 min" onclick="pickTime('ai',this)">45m</button>
+        <button type="button" class="tchip" data-v="1 hr" onclick="pickTime('ai',this)">1h</button>
+        <button type="button" class="tchip" data-v="1.5 hr" onclick="pickTime('ai',this)">1.5h</button>
+        <button type="button" class="tchip" data-v="2 hr" onclick="pickTime('ai',this)">2h</button>
+        <button type="button" class="tchip" data-v="2+ hr" onclick="pickTime('ai',this)">2h+</button>
+      </div>
+      <input type="hidden" id="ai-time" value="30 min">
+    </div>
+    <div class="frow"><span class="frow-lbl">Short note</span>
+      <input class="finpr" id="ai-sub" placeholder="location, author…">
+    </div>
+  </div>
+  <div class="sh-lbl">Notes
+    <span class="sh-lbl-hint">Tips, links, personal reminders…</span>
+  </div>
+  <div class="fc2"><textarea class="fta" id="ai-notes" placeholder="e.g. Do this when feeling low, link to playlist…"></textarea></div>
+  <div class="sh-acts">
+    <button class="btn-blk" onclick="saveItem()">Add Activity</button>
+    <button class="btn-ghost" onclick="closeSh('sh-ai')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- Edit Item -->
+<div class="sh-ov" id="sh-ei" onclick="if(event.target===this)closeSh('sh-ei')">
+<div class="sheet" onclick="event.stopPropagation()">
+  <div class="sh-pill"></div>
+  <div class="sh-head"><div class="sh-title">Edit Activity</div></div>
+  <div class="sh-lbl">Name</div>
+  <div class="fc2"><input class="finp" id="ei-n" placeholder="Activity name" onkeydown="if(event.key==='Enter')saveEditItem()"></div>
+  <div class="sh-lbl">Icon</div>
+  <div class="fc2"><div class="igrid" id="ei-ico"></div></div>
+  <div class="sh-lbl">Details</div>
+  <div class="fc2">
+    <div class="frow" style="flex-direction:column;align-items:flex-start;padding:12px 14px 10px;">
+      <span class="frow-lbl" style="margin-bottom:10px;">Duration</span>
+      <div class="time-chips" id="ei-time-chips">
+        <button type="button" class="tchip" data-v="" onclick="pickTime('ei',this)">—</button>
+        <button type="button" class="tchip" data-v="5 min" onclick="pickTime('ei',this)">5m</button>
+        <button type="button" class="tchip" data-v="10 min" onclick="pickTime('ei',this)">10m</button>
+        <button type="button" class="tchip" data-v="15 min" onclick="pickTime('ei',this)">15m</button>
+        <button type="button" class="tchip" data-v="20 min" onclick="pickTime('ei',this)">20m</button>
+        <button type="button" class="tchip" data-v="30 min" onclick="pickTime('ei',this)">30m</button>
+        <button type="button" class="tchip" data-v="45 min" onclick="pickTime('ei',this)">45m</button>
+        <button type="button" class="tchip" data-v="1 hr" onclick="pickTime('ei',this)">1h</button>
+        <button type="button" class="tchip" data-v="1.5 hr" onclick="pickTime('ei',this)">1.5h</button>
+        <button type="button" class="tchip" data-v="2 hr" onclick="pickTime('ei',this)">2h</button>
+        <button type="button" class="tchip" data-v="2+ hr" onclick="pickTime('ei',this)">2h+</button>
+      </div>
+      <input type="hidden" id="ei-time" value="">
+    </div>
+    <div class="frow"><span class="frow-lbl">Short note</span>
+      <input class="finpr" id="ei-sub" placeholder="location, author…">
+    </div>
+  </div>
+  <div class="sh-lbl">Notes
+    <span class="sh-lbl-hint">Tips, links, personal reminders…</span>
+  </div>
+  <div class="fc2"><textarea class="fta" id="ei-notes" placeholder="e.g. Do this when feeling low, link to playlist…"></textarea></div>
+  <div class="sh-acts">
+    <button class="btn-blk" onclick="saveEditItem()">Save</button>
+    <button class="btn-ghost" onclick="closeSh('sh-ei')">Cancel</button>
+  </div>
+</div></div>
+
+<!-- AS: Cat -->
+<div class="as-ov" id="as-cat" onclick="if(event.target===this)closeAs('as-cat')">
+<div class="as">
+  <div class="as-grp">
+    <button class="as-btn" onclick="closeAs('as-cat');openShFolder()">
+      <span class="as-btn-main">Thêm thư mục</span>
+      <span class="as-btn-sub">Tạo nhóm hoạt động mới</span>
+    </button>
+    <button class="as-btn" onclick="closeAs('as-cat');openEditMenu()">
+      <span class="as-btn-main">Sửa danh mục</span>
+      <span class="as-btn-sub">Đổi tên hoặc biểu tượng</span>
+    </button>
+    <button class="as-btn red" onclick="closeAs('as-cat');delMenu()">
+      <span class="as-btn-main">Xoá danh mục</span>
+      <span class="as-btn-sub">Xoá toàn bộ thư mục và hoạt động trong đây</span>
+    </button>
+  </div>
+  <button class="as-cancel" onclick="closeAs('as-cat')">Cancel</button>
+</div></div>
+
+<!-- AS: Folder -->
+<div class="as-ov" id="as-folder" onclick="if(event.target===this)closeAs('as-folder')">
+<div class="as">
+  <div class="as-grp">
+    <button class="as-btn" onclick="closeAs('as-folder');openShItem()">
+      <span class="as-btn-main">Add Activity</span>
+      <span class="as-btn-sub">Thêm mục mới vào thư mục này</span>
+    </button>
+    <button class="as-btn" onclick="closeAs('as-folder');openEditFolder()">
+      <span class="as-btn-main">Sửa thư mục</span>
+      <span class="as-btn-sub">Đổi tên hoặc biểu tượng</span>
+    </button>
+    <button class="as-btn red" onclick="closeAs('as-folder');delFolder()">
+      <span class="as-btn-main">Xoá thư mục</span>
+      <span class="as-btn-sub">Xoá toàn bộ hoạt động trong đây</span>
+    </button>
+  </div>
+  <button class="as-cancel" onclick="closeAs('as-folder')">Cancel</button>
+</div></div>
+
+<!-- AS: Item -->
+<div class="as-ov" id="as-item" onclick="if(event.target===this)closeAs('as-item')">
+<div class="as">
+  <div class="as-grp">
+    <div class="as-lbl" id="as-item-lbl"></div>
+    <button class="as-btn" onclick="closeAs('as-item');openEditItemById(window._iid)">
+      <span class="as-btn-main">Sửa hoạt động</span>
+      <span class="as-btn-sub">Đổi tên, thời gian, ghi chú…</span>
+    </button>
+    <button class="as-btn red" onclick="closeAs('as-item');delItemById(window._iid)">
+      <span class="as-btn-main">Xoá hoạt động</span>
+      <span class="as-btn-sub">Không thể khôi phục sau khi xoá</span>
+    </button>
+  </div>
+  <button class="as-cancel" onclick="closeAs('as-item')">Cancel</button>
+</div></div>
+
+<script>
+'use strict';
+const SK='dopamine-menus-v13';
+
+/* ══ ICONS ══ */
+const IC={
+  // Đồ ăn & Thức uống
+  food:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>',
+  coffee:'<path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+  pizza:'<path d="M12 2a10 10 0 0110 10"/><path d="M12 2a10 10 0 00-8.66 5"/><path d="M12 12l-8.66 5"/><circle cx="12" cy="12" r="2"/><circle cx="17" cy="7" r="1.5"/><circle cx="8" cy="16" r="1.5"/>',
+  burger:'<rect x="3" y="14" width="18" height="3" rx="1.5"/><path d="M3 11c0-3.31 4.03-6 9-6s9 2.69 9 6"/><path d="M5 17v2a1 1 0 001 1h12a1 1 0 001-1v-2"/>',
+  noodle:'<path d="M5 12c0 4 3 7 7 7s7-3 7-7"/><path d="M5 10c0-4 3-7 7-7s7 3 7 7"/><path d="M8 10c0-2 1.5-4 4-4s4 2 4 4"/><path d="M8 12c0 2 1.5 4 4 4s4-2 4-4"/>',
+  cake:'<path d="M20 21v-8a2 2 0 00-2-2H6a2 2 0 00-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v2M12 8v2M17 8v2"/>',
+  wine:'<path d="M8 22h8M12 22v-8"/><path d="M5 8a7 7 0 0014 0V2H5z"/>',
+  beer:'<path d="M17 11h1a3 3 0 010 6h-1"/><path d="M9 12v6M13 12v6"/><path d="M5 15h8"/><path d="M6 6l1 6h10l1-6z"/>',
+  salad:'<path d="M2 20h20"/><path d="M7 20c0-5.5 3.5-10 5-10s5 4.5 5 10"/><path d="M7 13c-1-3 .5-6 3-7"/><path d="M17 13c1-3-.5-6-3-7"/>',
+  rice:'<path d="M10 9c0 1.1.9 2 2 2s2-.9 2-2-1-4-2-4-2 2.9-2 4z"/><path d="M5 21c0-5 2.5-9 7-9s7 4 7 9"/><path d="M3 21h18"/>',
+  bread:'<path d="M17 12h.01"/><path d="M6.5 12a5.5 5.5 0 0111 0v8a1 1 0 01-1 1h-9a1 1 0 01-1-1v-8z"/><path d="M6.5 12a5.5 5.5 0 015.5-5.5"/>',
+  egg:'<path d="M12 22c5.52 0 9-3.6 9-8 0-5-3.5-12-9-12S3 9 3 14c0 4.4 3.48 8 9 8z"/>',
+  tea:'<path d="M17 8h1a4 4 0 010 8h-1"/><path d="M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8z"/>',
+  cookie:'<circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1.5" fill="currentColor"/><circle cx="15" cy="8" r="1.5" fill="currentColor"/><circle cx="10" cy="14" r="1.5" fill="currentColor"/><circle cx="16" cy="14" r="1.5" fill="currentColor"/>',
+  milk:'<path d="M8 2h8M9 2v2.789a4 4 0 01-.672 2.219l-.656.984A4 4 0 007 10.212V20a2 2 0 002 2h6a2 2 0 002-2v-9.789a4 4 0 00-.672-2.219l-.656-.984A4 4 0 0115 4.788V2"/>',
+  donut:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>',
+  // Sức khoẻ & Thể thao
+  dumbbell:'<path d="M6.5 6.5h11M6.5 17.5h11M3 9.5h18M3 14.5h18"/>',
+  run:'<circle cx="13" cy="4" r="2"/><path d="M7.5 13.5L9 9l4.5 4L17 8"/><path d="M7 22l1.5-4.5 3 1.5"/><path d="M14 15l1.5 4 2-1"/>',
+  bike:'<circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>',
+  swim:'<path d="M2 12c.5-1 1.5-2 3-2s2.5 1 4 1 2.5-1 4-1 2.5 1 4 1 2.5-1 3-2M2 7c.5-1 1.5-2 3-2s2.5 1 4 1 2.5-1 4-1 2.5 1 4 1 2.5-1 3-2M2 17c.5-1 1.5-2 3-2s2.5 1 4 1 2.5-1 4-1 2.5 1 4 1 2.5-1 3-2"/>',
+  spa:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  walk:'<circle cx="13" cy="4" r="2"/><path d="M7.5 13.5L9 9l4 3 2.5-4"/><path d="M7 22l2-5.5 3 2"/><path d="M15 14l1.5 4 2.5-1"/>',
+  heart:'<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>',
+  pulse:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+  meditation:'<circle cx="12" cy="6" r="2"/><path d="M7 22v-4l5-3 5 3v4"/><path d="M7 22H5m14 0h-2"/>',
+  // Sáng tạo & Học tập
+  pencil:'<path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>',
+  music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  headphones:'<path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/>',
+  palette:'<circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.55 0 1.08-.2 1.46-.59.37-.38.54-.9.54-1.41 0-.41-.16-.79-.4-1.08a1.96 1.96 0 01-.1-2.06 2 2 0 011.78-1.09h2.12c3.28 0 5.6-2.61 5.6-6C22 6.13 17.52 2 12 2z"/>',
+  mic:'<path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>',
+  camera:'<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>',
+  code:'<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+  // Giải trí & Cuộc sống
+  film:'<rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/>',
+  game:'<line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="7" width="20" height="14" rx="5"/>',
+  puzzle:'<path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+  dice:'<rect x="2" y="2" width="20" height="20" rx="3"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/><circle cx="16" cy="8" r="1.5" fill="currentColor"/><circle cx="8" cy="16" r="1.5" fill="currentColor"/><circle cx="16" cy="16" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>',
+  tv:'<rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/>',
+  star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/>',
+  shopping:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',
+  // Thiên nhiên & Du lịch
+  leaf:'<path d="M2 21L12 12"/><path d="M12 12C12 12 20 8 20 2C14 2 10 6 10 12"/><path d="M10 12C10 12 6 14 4 18C8 20 12 18 12 12"/>',
+  tree:'<path d="M17 22l-5-9-5 9"/><path d="M5 13L12 2l7 11H5z"/>',
+  sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>',
+  moon:'<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>',
+  mountain:'<polygon points="3 20 9 4 15 16 19 10 23 20"/><line x1="1" y1="20" x2="23" y2="20"/>',
+  plane:'<path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>',
+  map:'<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>',
+  compass:'<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+  // Công nghệ & Công việc
+  phone:'<path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.61 3.35 2 2 0 013.6 1h3a2 2 0 012 1.72 12.05 12.05 0 00.7 2.81 2 2 0 01-.45 2.11L7.91 8.9a16 16 0 006.09 6.09l.88-.88a2 2 0 012.11-.45 12.05 12.05 0 002.81.7A2 2 0 0122 16.92z"/>',
+  mail:'<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+  bookmark:'<path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  calendar:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+  list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+  target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  // Con người
+  smile:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
+  user:'<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  users:'<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>',
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+  flame:'<path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 01-7 7 7 7 0 01-7-7c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  lock:'<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>',
+  video:'<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>',
+};
+const IK=Object.keys(IC);
+const s=(k,sz=20)=>`<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${IC[k]||IC.list}</svg>`;
+const esc=v=>{if(!v)return'';const d=document.createElement('div');d.textContent=v;return d.innerHTML;};
+const FOLDER_LABELS={
+  'Chán / trống rỗng':'Chán','Mệt / cạn pin':'Cạn pin','Lười / trì hoãn':'Trì hoãn',
+  'Quá tải / loạn đầu':'Quá tải','Bực / cáu':'Bực','Bồn chồn / mất tập trung':'Mất tập trung',
+  'Vừa — nửa ngày':'Vừa','Xa — đi cả ngày':'Xa','Đồ uống & tráng miệng':'Đồ uống'
+};
+const folderLabel=name=>FOLDER_LABELS[name]||name;
+
+/* ══ DATA ══ */
+const CORE_VERSION=13;
+const CORE_MENUS=[
+  {id:1,name:'Dopamine',icon:'leaf'},
+  {id:2,name:'Places',icon:'map'},
+  {id:3,name:'Eating Out',icon:'food'},
+  {id:4,name:'Stretches',icon:'run'},
+  {id:5,name:'Mood Reset',icon:'heart'},
+  {id:6,name:'Games',icon:'game'}
+];
+const DEF={
+  menus:[
+    {id:1,name:'Dopamine',icon:'leaf'},{id:2,name:'Places',icon:'map'},
+    {id:3,name:'Eating Out',icon:'food'},{id:4,name:'Stretches',icon:'run'},
+    {id:5,name:'Mood Reset',icon:'heart'},{id:6,name:'Games',icon:'game'},
+  ],
+  folders:[
+    {id:101,mid:1,name:'Chán / trống rỗng',icon:'sun'},
+    {id:102,mid:1,name:'Buồn',icon:'heart'},
+    {id:103,mid:1,name:'Mệt / cạn pin',icon:'moon'},
+    {id:104,mid:1,name:'Lười / trì hoãn',icon:'zap'},
+    {id:105,mid:1,name:'Quá tải / loạn đầu',icon:'list'},
+    {id:106,mid:1,name:'Bực / cáu',icon:'flame'},
+    {id:107,mid:1,name:'Cô đơn',icon:'users'},
+    {id:108,mid:1,name:'Bồn chồn / mất tập trung',icon:'pulse'},
+    {id:109,mid:1,name:'Mất động lực',icon:'target'},
+    {id:110,mid:1,name:'Mất phương hướng',icon:'compass'},
+    {id:6,mid:2,name:'Starters',icon:'flame'},{id:7,mid:2,name:'Mains',icon:'map'},
+    {id:8,mid:2,name:'Specials',icon:'bookmark'},
+    {id:9,mid:3,name:'Starters',icon:'flame'},{id:10,mid:3,name:'Mains',icon:'food'},
+    {id:11,mid:3,name:'Desserts',icon:'star'},{id:12,mid:3,name:'Specials',icon:'bookmark'},
+    {id:13,mid:4,name:'Starters',icon:'flame'},{id:14,mid:4,name:'Mains',icon:'run'},
+    {id:15,mid:5,name:'Starters',icon:'flame'},{id:16,mid:5,name:'Mains',icon:'food'},
+    {id:17,mid:6,name:'Mains',icon:'game'},{id:18,mid:6,name:'Specials',icon:'star'},
+  ],
+  items:[
+    {id:101,mid:1,fid:101,name:'Đi bộ quanh khu phố',icon:'walk',time:'10 min',sub:'Ra ngoài và đổi không khí',notes:'Không cần đích đến, chỉ đi một vòng ngắn.'},
+    {id:102,mid:1,fid:101,name:'Ra ban công hoặc trước nhà',icon:'sun',time:'5 min',sub:'Nhìn trời và hít khí',notes:''},
+    {id:103,mid:1,fid:101,name:'Dọn một góc bàn',icon:'list',time:'10 min',sub:'Chỉ dọn phạm vi một cánh tay',notes:''},
+    {id:104,mid:1,fid:101,name:'Nghe một bài nhạc vào mood',icon:'music',time:'5 min',sub:'Chọn bài quen, không lướt playlist',notes:''},
+    {id:105,mid:1,fid:101,name:'Đổi chỗ sang quán cà phê gần nhà',icon:'coffee',time:'30 min',sub:'Highlands, Phúc Long hoặc quán quen',notes:'Chỉ cần mang theo một việc nhỏ.'},
+
+    {id:106,mid:1,fid:102,name:'Tắm nước ấm',icon:'spa',time:'15 min',sub:'Giảm nhịp và thư giãn cơ thể',notes:''},
+    {id:107,mid:1,fid:102,name:'Viết 5 dòng "mình đang buồn vì…"',icon:'pencil',time:'10 min',sub:'Không cần viết hay',notes:''},
+    {id:108,mid:1,fid:102,name:'Nhắn một người quen',icon:'phone',time:'5 min',sub:'Chỉ cần nói hôm nay hơi buồn',notes:''},
+    {id:109,mid:1,fid:102,name:'Ôm gối và nghe nhạc chậm',icon:'headphones',time:'15 min',sub:'Không lướt mạng xã hội',notes:''},
+    {id:110,mid:1,fid:102,name:'Xem một video nhẹ',icon:'video',time:'20 min',sub:'Sitcom, vlog nấu ăn hoặc video thú cưng',notes:'Đặt hẹn giờ trước khi xem.'},
+
+    {id:111,mid:1,fid:103,name:'Ngủ ngắn',icon:'moon',time:'20 min',sub:'Đặt báo thức 20 phút',notes:''},
+    {id:112,mid:1,fid:103,name:'Uống một cốc nước',icon:'coffee',time:'2 min',sub:'Uống chậm, không cầm điện thoại',notes:''},
+    {id:113,mid:1,fid:103,name:'Ăn nhẹ',icon:'bread',time:'10 min',sub:'Chuối, sữa chua, bánh mì hoặc hạt',notes:''},
+    {id:114,mid:1,fid:103,name:'Giãn cổ, vai và lưng',icon:'run',time:'5 min',sub:'Làm chậm, không ráng sức',notes:''},
+    {id:115,mid:1,fid:103,name:'Tắt màn hình và nằm yên',icon:'meditation',time:'10 min',sub:'Không cần cố ngủ',notes:''},
+
+    {id:116,mid:1,fid:104,name:'Viết next action siêu nhỏ',icon:'pencil',time:'2 min',sub:'Bước vật lý tiếp theo là gì?',notes:''},
+    {id:117,mid:1,fid:104,name:'Mở task và làm bước đầu',icon:'list',time:'2 min',sub:'Dừng sau bước đầu cũng được',notes:''},
+    {id:118,mid:1,fid:104,name:'Pomodoro khởi động',icon:'clock',time:'10 min',sub:'Chỉ một phiên ngắn',notes:''},
+    {id:119,mid:1,fid:104,name:'Dọn workspace trước khi làm',icon:'home',time:'5 min',sub:'Cất ba món đang gây vướng',notes:''},
+    {id:120,mid:1,fid:104,name:'Bật nhạc nền không lời',icon:'music',time:'10 min',sub:'Lofi hoặc cafe ambience',notes:''},
+
+    {id:121,mid:1,fid:105,name:'Brain dump tất cả ra giấy',icon:'pencil',time:'3 min',sub:'Viết không sắp xếp',notes:''},
+    {id:122,mid:1,fid:105,name:'Chọn đúng một việc',icon:'target',time:'2 min',sub:'Các việc còn lại để sau',notes:''},
+    {id:123,mid:1,fid:105,name:'Đóng tab và app không cần thiết',icon:'grid',time:'5 min',sub:'Giữ lại một cửa sổ làm việc',notes:''},
+    {id:124,mid:1,fid:105,name:'Đi rửa mặt',icon:'spa',time:'5 min',sub:'Rời khỏi bàn trong vài phút',notes:''},
+    {id:125,mid:1,fid:105,name:'Hẹn giờ làm một việc',icon:'clock',time:'15 min',sub:'Hết giờ thì đánh giá lại',notes:''},
+
+    {id:126,mid:1,fid:106,name:'Squat hoặc hít đất 10 cái',icon:'dumbbell',time:'3 min',sub:'Xả năng lượng an toàn',notes:''},
+    {id:127,mid:1,fid:106,name:'Đi bộ nhanh một vòng',icon:'walk',time:'10 min',sub:'Không nhắn tin khi đang cáu',notes:''},
+    {id:128,mid:1,fid:106,name:'Viết câu muốn chửi nhưng không gửi',icon:'pencil',time:'5 min',sub:'Xoá sau khi viết xong',notes:''},
+    {id:129,mid:1,fid:106,name:'Tắm nhanh',icon:'spa',time:'15 min',sub:'Cho cơ thể hạ nhiệt',notes:''},
+    {id:130,mid:1,fid:106,name:'Nghe một bài nhạc mạnh',icon:'headphones',time:'5 min',sub:'Dừng sau một bài',notes:''},
+
+    {id:131,mid:1,fid:107,name:'Nhắn "đang làm gì đấy?"',icon:'mail',time:'2 min',sub:'Gửi cho một người quen',notes:''},
+    {id:132,mid:1,fid:107,name:'Gọi cho ai đó',icon:'phone',time:'5 min',sub:'Không cần có chuyện quan trọng',notes:''},
+    {id:133,mid:1,fid:107,name:'Ra ngồi quán cà phê',icon:'coffee',time:'30 min',sub:'Chọn quán gần nhà có người',notes:''},
+    {id:134,mid:1,fid:107,name:'Vào nhóm hoặc Discord quen',icon:'users',time:'10 min',sub:'Đọc và tương tác nhẹ',notes:''},
+    {id:135,mid:1,fid:107,name:'Đi bộ ra cửa hàng tiện lợi',icon:'walk',time:'15 min',sub:'Ra nơi có ánh sáng và người',notes:''},
+
+    {id:136,mid:1,fid:108,name:'Để điện thoại ngoài tầm tay',icon:'phone',time:'10 min',sub:'Bật chế độ im lặng',notes:''},
+    {id:137,mid:1,fid:108,name:'Đi bộ hoặc leo cầu thang',icon:'walk',time:'5 min',sub:'Cho cơ thể được chuyển động',notes:''},
+    {id:138,mid:1,fid:108,name:'Thở hộp 4-4-4-4',icon:'meditation',time:'5 min',sub:'Hít 4, giữ 4, thở 4, giữ 4',notes:''},
+    {id:139,mid:1,fid:108,name:'Dọn phòng trong một bài nhạc',icon:'music',time:'5 min',sub:'Dừng khi hết bài',notes:''},
+    {id:140,mid:1,fid:108,name:'Nghe âm thanh tập trung',icon:'headphones',time:'10 min',sub:'Mưa, quán cà phê hoặc white noise',notes:''},
+
+    {id:141,mid:1,fid:109,name:'Đọc lại lý do mình bắt đầu',icon:'bookmark',time:'5 min',sub:'Chỉ đọc, chưa cần hành động',notes:''},
+    {id:142,mid:1,fid:109,name:'Tạo một chiến thắng nhỏ',icon:'star',time:'5 min',sub:'Hoàn thành việc dưới 5 phút',notes:''},
+    {id:143,mid:1,fid:109,name:'Chọn phần thưở sau 10 phút làm',icon:'gift',time:'10 min',sub:'Cà phê, trà sữa hoặc một video ngắn',notes:''},
+    {id:144,mid:1,fid:109,name:'Viết danh sách đã làm được',icon:'list',time:'5 min',sub:'Ghi ba việc gần đây',notes:''},
+    {id:145,mid:1,fid:109,name:'Đổi chỗ làm việc',icon:'coffee',time:'15 min',sub:'Sang bàn khác, thư viện hoặc quán quen',notes:''},
+
+    {id:146,mid:1,fid:110,name:'Mở Hero\'s Vision',icon:'compass',time:'10 min',sub:'Đọc lại hướng dài hạn',notes:''},
+    {id:147,mid:1,fid:110,name:'Đọc lại mục tiêu tuần',icon:'calendar',time:'5 min',sub:'Không lập lại toàn bộ kế hoạch',notes:''},
+    {id:148,mid:1,fid:110,name:'Chọn một việc Move the Needle',icon:'target',time:'5 min',sub:'Việc nhỏ nhất tạo tiến độ thật',notes:''},
+    {id:149,mid:1,fid:110,name:'Viết về một ngày lý tưởng',icon:'pencil',time:'10 min',sub:'Mình muốn sống và làm việc thế nào?',notes:''},
+    {id:150,mid:1,fid:110,name:'Làm task quan trọng trong 10 phút',icon:'clock',time:'10 min',sub:'Chỉ cần tạo chuyển động',notes:''},
+    {id:14,mid:2,fid:7,name:'Công viên Gia Định',icon:'tree',time:'30 min',sub:'',notes:''},
+    {id:15,mid:2,fid:7,name:'Bờ Hồ Tây',icon:'bike',time:'1 giờ',sub:'',notes:''},
+    {id:16,mid:3,fid:10,name:'Phở bò',icon:'food',time:'30 min',sub:'',notes:''},
+    {id:17,mid:3,fid:10,name:'Bún bò Huế',icon:'food',time:'30 min',sub:'',notes:''},
+    {id:18,mid:3,fid:10,name:'Cơm tấm',icon:'food',time:'20 min',sub:'',notes:''},
+    {id:19,mid:3,fid:11,name:'Bánh flan',icon:'cake',time:'10 min',sub:'',notes:''},
+    {id:20,mid:4,fid:13,name:'Xoay cổ',icon:'run',time:'5 min',sub:'',notes:''},
+    {id:21,mid:4,fid:14,name:'Yoga toàn thân',icon:'spa',time:'30 min',sub:'',notes:''},
+    {id:22,mid:5,fid:16,name:'Canh chua cá lóc',icon:'food',time:'45 min',sub:'',notes:''},
+    {id:23,mid:5,fid:15,name:'Bánh mì trứng',icon:'egg',time:'10 min',sub:'',notes:''},
+    {id:24,mid:6,fid:17,name:'Minecraft',icon:'game',time:'1 giờ',sub:'',notes:''},
+    {id:25,mid:6,fid:18,name:'Cờ tỷ phú',icon:'dice',time:'2 giờ',sub:'',notes:''},
+  ],
+  nMid:10,nFid:111,nIid:151,version:7
+};
+
+const V9_FOLDERS=[
+  {id:201,mid:1,name:'Tăng năng lượng',icon:'zap'},{id:202,mid:1,name:'Sáng tạo',icon:'palette'},
+  {id:203,mid:1,name:'Ra ngoài',icon:'sun'},{id:204,mid:1,name:'Kết nối',icon:'users'},
+  {id:205,mid:1,name:'Thư giãn',icon:'headphones'},
+  {id:301,mid:3,name:'Món nước',icon:'noodle'},{id:302,mid:3,name:'Món khô',icon:'rice'},
+  {id:303,mid:3,name:'Món lạnh',icon:'salad'},{id:304,mid:3,name:'Ăn vặt',icon:'bread'},
+  {id:305,mid:3,name:'Đồ uống & tráng miệng',icon:'coffee'},
+  {id:401,mid:2,name:'Gần Bát Tràng',icon:'walk'},{id:402,mid:2,name:'Vừa — nửa ngày',icon:'bike'},
+  {id:403,mid:2,name:'Xa — đi cả ngày',icon:'plane'},
+  {id:601,mid:4,name:'Khởi động',icon:'pulse'},{id:602,mid:4,name:'Toàn thân',icon:'run'},
+  {id:603,mid:4,name:'Core & chân',icon:'dumbbell'},{id:604,mid:4,name:'Yoga & giãn cơ',icon:'meditation'},
+  {id:701,mid:6,name:'Offline',icon:'users'},{id:702,mid:6,name:'Online',icon:'game'},
+  {id:703,mid:6,name:'Chill',icon:'puzzle'},{id:704,mid:6,name:'Yêu thích',icon:'star'}
+];
+const V9_ITEMS=[
+  {id:201,mid:1,fid:201,name:'Đi bộ nhanh 10 phút',icon:'walk',time:'10 min',sub:'',notes:''},
+  {id:202,mid:1,fid:201,name:'Nhảy theo 2 bài nhạc',icon:'music',time:'8 min',sub:'',notes:''},
+  {id:203,mid:1,fid:201,name:'Tắm nhanh và thay đồ',icon:'spa',time:'15 min',sub:'',notes:''},
+  {id:204,mid:1,fid:202,name:'Chụp 5 bức ảnh quanh nhà',icon:'camera',time:'15 min',sub:'',notes:''},
+  {id:205,mid:1,fid:202,name:'Vẽ hoặc doodle một trang',icon:'pencil',time:'15 min',sub:'',notes:''},
+  {id:206,mid:1,fid:202,name:'Chơi một bài nhạc',icon:'music',time:'20 min',sub:'',notes:''},
+  {id:207,mid:1,fid:203,name:'Đi mua một món nước',icon:'coffee',time:'20 min',sub:'',notes:''},
+  {id:208,mid:1,fid:203,name:'Ra bờ sông ngồi một lúc',icon:'sun',time:'30 min',sub:'',notes:''},
+  {id:209,mid:1,fid:203,name:'Khám phá một ngõ gần nhà',icon:'map',time:'20 min',sub:'',notes:''},
+  {id:210,mid:1,fid:204,name:'Gọi bạn 5 phút',icon:'phone',time:'5 min',sub:'',notes:''},
+  {id:211,mid:1,fid:204,name:'Rủ ai đó đi cà phê',icon:'coffee',time:'1 giờ',sub:'',notes:''},
+  {id:212,mid:1,fid:204,name:'Nhắn hỏi thăm một người',icon:'mail',time:'5 min',sub:'',notes:''},
+  {id:213,mid:1,fid:205,name:'Nghe trọn một album',icon:'headphones',time:'30 min',sub:'',notes:''},
+  {id:214,mid:1,fid:205,name:'Đọc 10 trang sách',icon:'book',time:'20 min',sub:'',notes:''},
+  {id:215,mid:1,fid:205,name:'Pha trà và ngồi không màn hình',icon:'tea',time:'15 min',sub:'',notes:''},
+
+  {id:301,mid:3,fid:301,name:'Phở',icon:'noodle',time:'30 min',sub:'',notes:''},{id:302,mid:3,fid:301,name:'Bún bò Huế',icon:'noodle',time:'30 min',sub:'',notes:''},{id:303,mid:3,fid:301,name:'Bún riêu',icon:'noodle',time:'30 min',sub:'',notes:''},
+  {id:304,mid:3,fid:302,name:'Cơm tấm',icon:'rice',time:'30 min',sub:'',notes:''},{id:305,mid:3,fid:302,name:'Cơm rang',icon:'rice',time:'25 min',sub:'',notes:''},{id:306,mid:3,fid:302,name:'Bánh mì',icon:'bread',time:'15 min',sub:'',notes:''},
+  {id:307,mid:3,fid:303,name:'Bún chả trộn',icon:'salad',time:'25 min',sub:'',notes:''},{id:308,mid:3,fid:303,name:'Phở cuốn',icon:'salad',time:'25 min',sub:'',notes:''},{id:309,mid:3,fid:303,name:'Gỏi cuốn',icon:'salad',time:'20 min',sub:'',notes:''},
+  {id:310,mid:3,fid:304,name:'Bánh tráng trộn',icon:'pizza',time:'15 min',sub:'',notes:''},{id:311,mid:3,fid:304,name:'Xiên nướng',icon:'food',time:'20 min',sub:'',notes:''},{id:312,mid:3,fid:304,name:'Khoai tây chiên',icon:'food',time:'15 min',sub:'',notes:''},
+  {id:313,mid:3,fid:305,name:'Cà phê sữa',icon:'coffee',time:'30 min',sub:'',notes:''},{id:314,mid:3,fid:305,name:'Trà chanh',icon:'tea',time:'30 min',sub:'',notes:''},{id:315,mid:3,fid:305,name:'Chè hoặc tào phớ',icon:'cake',time:'20 min',sub:'',notes:''},
+
+  {id:401,mid:2,fid:401,name:'Chợ gốm Bát Tràng',icon:'shopping',time:'1–2 giờ',sub:'Rất gần',notes:''},{id:402,mid:2,fid:401,name:'Bảo tàng gốm Bát Tràng',icon:'home',time:'2 giờ',sub:'Rất gần',notes:''},{id:403,mid:2,fid:401,name:'Nhà cổ Vạn Vân',icon:'home',time:'1 giờ',sub:'Trong làng',notes:''},{id:404,mid:2,fid:401,name:'Dạo bờ sông Hồng',icon:'walk',time:'45 min',sub:'Gần nhà',notes:''},
+  {id:405,mid:2,fid:402,name:'Ecopark',icon:'tree',time:'Nửa ngày',sub:'Khoảng 20–30 phút',notes:''},{id:406,mid:2,fid:402,name:'Mega Grand World',icon:'shopping',time:'Nửa ngày',sub:'Ocean City',notes:''},{id:407,mid:2,fid:402,name:'Hồ Hoàn Kiếm',icon:'walk',time:'Nửa ngày',sub:'Vào trung tâm',notes:''},{id:408,mid:2,fid:402,name:'Phố cổ Hà Nội',icon:'map',time:'Nửa ngày',sub:'Ăn và đi bộ',notes:''},
+  {id:409,mid:2,fid:403,name:'Ba Vì',icon:'mountain',time:'Cả ngày',sub:'Thiên nhiên',notes:''},{id:410,mid:2,fid:403,name:'Ninh Bình',icon:'mountain',time:'Cả ngày',sub:'Đi sớm',notes:''},{id:411,mid:2,fid:403,name:'Tam Đảo',icon:'mountain',time:'Cả ngày',sub:'Không khí mát',notes:''},{id:412,mid:2,fid:403,name:'Làng cổ Đường Lâm',icon:'home',time:'Cả ngày',sub:'Ngoại thành',notes:''},
+
+  {id:601,mid:4,fid:601,name:'Xoay khớp cổ tay, vai, hông',icon:'pulse',time:'5 min',sub:'',notes:''},{id:602,mid:4,fid:601,name:'March tại chỗ',icon:'walk',time:'3 min',sub:'',notes:''},{id:603,mid:4,fid:601,name:'Jumping jack nhẹ',icon:'run',time:'3 min',sub:'',notes:''},
+  {id:604,mid:4,fid:602,name:'Squat',icon:'dumbbell',time:'3 x 10',sub:'',notes:''},{id:605,mid:4,fid:602,name:'Hít đất tường',icon:'dumbbell',time:'3 x 8',sub:'',notes:''},{id:606,mid:4,fid:602,name:'Bird dog',icon:'run',time:'3 x 8',sub:'',notes:''},
+  {id:607,mid:4,fid:603,name:'Glute bridge',icon:'run',time:'3 x 12',sub:'',notes:''},{id:608,mid:4,fid:603,name:'Dead bug',icon:'run',time:'3 x 8',sub:'',notes:''},{id:609,mid:4,fid:603,name:'Plank gối',icon:'dumbbell',time:'3 x 20 giây',sub:'',notes:''},
+  {id:610,mid:4,fid:604,name:'Cat–cow',icon:'meditation',time:'2 min',sub:'',notes:''},{id:611,mid:4,fid:604,name:'Child\'s pose',icon:'meditation',time:'2 min',sub:'',notes:''},{id:612,mid:4,fid:604,name:'Giãn hông và gân kheo',icon:'meditation',time:'5 min',sub:'',notes:''},
+
+  {id:701,mid:6,fid:701,name:'Ma sói',icon:'users',time:'30 min',sub:'Nhóm bạn',notes:''},{id:702,mid:6,fid:701,name:'Uno',icon:'game',time:'20 min',sub:'',notes:''},{id:703,mid:6,fid:701,name:'Cờ tỷ phú',icon:'dice',time:'1–2 giờ',sub:'',notes:''},
+  {id:704,mid:6,fid:702,name:'Liên Minh / TFT',icon:'game',time:'1 trận',sub:'',notes:''},{id:705,mid:6,fid:702,name:'Valorant',icon:'game',time:'1 trận',sub:'',notes:''},{id:706,mid:6,fid:702,name:'Game co-op với bạn',icon:'users',time:'45 min',sub:'',notes:''},
+  {id:707,mid:6,fid:703,name:'Stardew Valley',icon:'leaf',time:'30 min',sub:'',notes:''},{id:708,mid:6,fid:703,name:'Minecraft xây dựng',icon:'game',time:'30 min',sub:'',notes:''},{id:709,mid:6,fid:703,name:'Game giải đố',icon:'puzzle',time:'20 min',sub:'',notes:''},
+  {id:710,mid:6,fid:704,name:'Game đang chơi dở',icon:'bookmark',time:'30 min',sub:'Ghim',notes:''},{id:711,mid:6,fid:704,name:'Game muốn chơi lại',icon:'star',time:'30 min',sub:'Ghim',notes:''},{id:712,mid:6,fid:704,name:'Game chơi cùng nhóm',icon:'users',time:'45 min',sub:'Ghim',notes:''}
+];
+
+function migrateData(d){
+  if(!d||!d.menus)d=JSON.parse(JSON.stringify(DEF));
+  if(!Array.isArray(d.menus)||!Array.isArray(d.folders)||!Array.isArray(d.items))d=JSON.parse(JSON.stringify(DEF));
+  const count=(list,mid)=>list.filter(x=>x.mid===mid).length;
+  const curatedReady=
+    d.version>=CORE_VERSION&&
+    CORE_MENUS.every(cm=>d.menus.some(m=>m.id===cm.id&&m.name===cm.name))&&
+    d.folders.some(f=>f.id===201&&f.mid===1)&&
+    d.folders.some(f=>f.id===701&&f.mid===6)&&
+    d.items.some(i=>i.id===401&&i.mid===2)&&
+    count(d.folders,1)>=5&&count(d.items,1)>=15&&
+    count(d.folders,2)>=3&&count(d.items,2)>=12&&
+    count(d.folders,3)>=5&&count(d.items,3)>=15&&
+    count(d.folders,4)>=4&&count(d.items,4)>=12&&
+    count(d.folders,5)>=10&&count(d.items,5)>=50&&
+    count(d.folders,6)>=4&&count(d.items,6)>=12&&
+    !d.folders.some(f=>f.mid===1&&f.id>=101&&f.id<=110);
+  if(curatedReady)return d;
+  const source=JSON.parse(JSON.stringify(DEF));
+  const customMenus=(d.menus||[]).filter(m=>m.id>6);
+  const customFolders=(d.folders||[]).filter(f=>f.mid>6);
+  const customItems=(d.items||[]).filter(i=>i.mid>6);
+  const moodFolders=source.folders.filter(f=>f.mid===1&&f.id>=101&&f.id<=110).map(f=>({...f,id:f.id+400,mid:5}));
+  const moodItems=source.items.filter(i=>i.mid===1&&i.fid>=101&&i.fid<=110).map(i=>({...i,id:i.id+800,mid:5,fid:i.fid+400}));
+  d.menus=[...CORE_MENUS,...customMenus];
+  d.folders=[...V9_FOLDERS,...moodFolders,...customFolders];
+  d.items=[...V9_ITEMS,...moodItems,...customItems];
+  d.nMid=Math.max(...d.menus.map(m=>m.id))+1;
+  d.nFid=Math.max(...d.folders.map(f=>f.id))+1;d.nIid=Math.max(...d.items.map(i=>i.id))+1;d.version=CORE_VERSION;
+  try{localStorage.setItem(SK,JSON.stringify(d));}catch(e){}
+  return d;
+}
+function loadData(){
+  try{return migrateData(JSON.parse(localStorage.getItem(SK)||'null'));}
+  catch(e){return migrateData(JSON.parse(JSON.stringify(DEF)));}
+}
+let dopamineCloudReady=false,dopamineCloudDirty=false,dopamineCloudTimer=null;
+function dopaminePayload(){return{menus,folders,items,nMid,nFid,nIid,version:CORE_VERSION,updatedAt:new Date().toISOString()};}
+function pushDopamineCloud(){
+  clearTimeout(dopamineCloudTimer);
+  dopamineCloudTimer=setTimeout(function(){
+    fetch('/api/cloud?key=dopamine',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(dopaminePayload())
+    }).catch(()=>{});
+  },180);
+}
+function saveData(){
+  const payload=dopaminePayload();
+  try{localStorage.setItem(SK,JSON.stringify(payload));}catch(e){}
+  dopamineCloudDirty=true;
+  if(dopamineCloudReady)pushDopamineCloud();
+}
+
+const d0=loadData();
+let menus=d0.menus,folders=d0.folders,items=d0.items,nMid=d0.nMid,nFid=d0.nFid,nIid=d0.nIid;
+let curMid=null,curFid=null,editId=null;
+const IS={am:'leaf',em:'leaf',af:'flame',ef:'flame',ai:'list',ei:'list'};
+
+fetch('/api/cloud?key=dopamine')
+  .then(r=>r.json())
+  .then(res=>{
+    if(!dopamineCloudDirty&&res&&res.ok&&res.data&&res.data.menus){
+      menus=res.data.menus;folders=res.data.folders;items=res.data.items;
+      nMid=res.data.nMid;nFid=res.data.nFid;nIid=res.data.nIid;
+      try{localStorage.setItem(SK,JSON.stringify(res.data));}catch(e){}
+      if(typeof renderHome==='function')renderHome();
+    }
+  })
+  .catch(()=>{})
+  .finally(()=>{dopamineCloudReady=true;if(dopamineCloudDirty)pushDopamineCloud();});
+
+/* ══ DARK MODE ══ */
+let dark=localStorage.getItem('dk')==='1'||(localStorage.getItem('dk')===null&&matchMedia('(prefers-color-scheme:dark)').matches);
+function applyDark(){
+  document.documentElement.toggleAttribute('data-dark',dark);
+  document.body.style.background=dark?'#000':'#f2f2f7';
+  const m=document.getElementById('theme-meta');
+  if(m)m.content=dark?'#000000':'#f2f2f7';
+  localStorage.setItem('dk',dark?'1':'0');
+}
+function toggleDark(){dark=!dark;applyDark();}
+applyDark();
+
+/* ══ NAVIGATION ══ */
+const hist=[];let cur='pg-home';
+let _navLock=false;
+function goTo(id,back=false){
+  if(_navLock)return;
+  _navLock=true;
+  const from=document.getElementById(cur);
+  const to=document.getElementById(id);
+  // prevent clicks on old page during animation
+  from.style.pointerEvents='none';
+  from.classList.add(back?'back-leave':'leave');
+  to.classList.add('on',back?'back-enter':'enter');
+  setTimeout(()=>{
+    from.classList.remove('on','leave','back-leave');
+    from.style.pointerEvents='';
+    to.classList.remove('enter','back-enter');
+    _navLock=false;
+  },300);
+  if(!back)hist.push(cur);
+  cur=id;
+}
+function goBack(){
+  if(!hist.length||_navLock)return;
+  const prev=hist.pop();
+  const needRefresh=prev;
+  goTo(prev,true);
+  setTimeout(()=>{
+    if(needRefresh==='pg-home')renderHome();
+    if(needRefresh==='pg-cat')renderCat();
+    if(needRefresh==='pg-folder')renderFolder();
+    if(needRefresh==='pg-detail'&&window._detailId)openDetail(window._detailId);
+  },50);
+}
+
+/* ══ TOAST ══ */
+let _tT;
+function toast(m,dur=2200){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('on');
+  clearTimeout(_tT);_tT=setTimeout(()=>t.classList.remove('on'),dur);
+}
+
+/* ══ SHEETS / ACTION SHEETS ══ */
+const openSh=id=>document.getElementById(id).classList.add('on');
+const closeSh=id=>document.getElementById(id).classList.remove('on');
+const openAs=id=>document.getElementById(id).classList.add('on');
+const closeAs=id=>document.getElementById(id).classList.remove('on');
+
+/* ══ ICON GRID ══ */
+function buildIco(cid,sk,sel){
+  sel=sel||IK[0];IS[sk]=sel;
+  document.getElementById(cid).innerHTML=
+    IK.map(k=>`<div class="icell${k===sel?' on':''}" onclick="pickIco('${cid}','${sk}','${k}',this)">${s(k,18)}</div>`).join('');
+}
+function pickIco(cid,sk,k,el){
+  IS[sk]=k;
+  document.querySelectorAll(`#${cid} .icell`).forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');
+}
+
+/* ══ HOME ══ */
+function renderHome(){
+  const g=document.getElementById('home-grid');
+  if(!menus.length){
+    g.innerHTML=`<div class="empty" style="grid-column:1/-1">
+      <svg viewBox="0 0 80 80" width="72" height="72" fill="none" style="margin-bottom:16px;opacity:.2;">
+        <rect x="8" y="8" width="30" height="30" rx="6" stroke="currentColor" stroke-width="3"/>
+        <rect x="42" y="8" width="30" height="30" rx="6" stroke="currentColor" stroke-width="3"/>
+        <rect x="8" y="42" width="30" height="30" rx="6" stroke="currentColor" stroke-width="3"/>
+        <rect x="42" y="42" width="30" height="30" rx="6" stroke="currentColor" stroke-width="3"/>
+        <line x1="57" y1="50" x2="57" y2="64" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <line x1="50" y1="57" x2="64" y2="57" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div style="font-weight:600;font-size:16px;color:var(--lbl);margin-bottom:4px;">Chưa có danh mục</div>
+      <div style="font-size:14px;color:var(--lbl2);">Nhấn + để tạo danh mục mới</div>
+    </div>`;
+    return;
+  }
+  g.innerHTML=menus.map(m=>{
+    const fc=folders.filter(f=>f.mid===m.id).length;
+    const ic=items.filter(i=>i.mid===m.id).length;
+    return`<div class="mc" onclick="openMenu(${m.id})">
+      <div class="mc-ico">${s(m.icon)}</div>
+      <div class="mc-name">${esc(m.name)}</div>
+      <div class="mc-meta">${fc} thư mục · ${ic} mục</div>
+    </div>`;
+  }).join('');
+}
+renderHome();
+
+/* ══ CATEGORY ══ */
+function openMenu(mid){
+  curMid=mid;
+  const m=menus.find(x=>x.id===mid);
+  document.getElementById('cat-title').textContent=m.name;
+  document.getElementById('cat-large').textContent=m.name;
+  document.getElementById('cat-q').value='';
+  renderCat();goTo('pg-cat');
+}
+function renderCat(){
+  const q=document.getElementById('cat-q').value.toLowerCase();
+  const g=document.getElementById('folder-grid');
+  let flds=folders.filter(f=>f.mid===curMid);
+  if(q)flds=flds.filter(f=>f.name.toLowerCase().includes(q));
+  if(!flds.length){
+    g.innerHTML='<div class="empty" style="grid-column:1/-1"><span class="empty-ico">📁</span>Chưa có thư mục.<br>Nhấn + để thêm.</div>';
+    return;
+  }
+  g.innerHTML=flds.map(f=>{
+    const its=items.filter(i=>i.fid===f.id);
+    const bl=its.slice(0,3).map(i=>`<div class="fc-bullet"><span class="fc-dot"></span><span class="fc-btxt" title="${esc(i.name)}">${esc(i.name)}</span></div>`).join('');
+    return`<div class="fc" onclick="openFolder(${f.id})">
+      <div class="fc-head">
+        <div class="fc-ico">${s(f.icon,16)}</div>
+        <div class="fc-head-right">
+          <span class="fc-name" title="${esc(f.name)}">${esc(folderLabel(f.name))}</span>
+          <span class="fc-count">${its.length} ›</span>
+        </div>
+      </div>
+      <div class="fc-bullets">${bl}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ FOLDER ══ */
+function openFolder(fid){
+  curFid=fid;
+  const f=folders.find(x=>x.id===fid);
+  const m=menus.find(x=>x.id===curMid);
+  document.getElementById('folder-back-lbl').textContent=m.name;
+  document.getElementById('folder-title').textContent=folderLabel(f.name);
+  document.getElementById('folder-large').textContent=folderLabel(f.name);
+  document.getElementById('folder-q').value='';
+  renderFolder();goTo('pg-folder');
+}
+function renderFolder(){
+  const q=document.getElementById('folder-q').value.toLowerCase();
+  const wrap=document.getElementById('item-wrap');
+  let its=items.filter(i=>i.fid===curFid);
+  if(q)its=its.filter(i=>i.name.toLowerCase().includes(q)||(i.sub||'').toLowerCase().includes(q));
+  if(!its.length){
+    wrap.innerHTML=`<div class="empty">
+      <svg viewBox="0 0 80 80" width="72" height="72" fill="none" style="margin-bottom:16px;opacity:.25;">
+        <rect x="12" y="20" width="56" height="44" rx="8" stroke="currentColor" stroke-width="3"/>
+        <path d="M24 20V16a4 4 0 014-4h24a4 4 0 014 4v4" stroke="currentColor" stroke-width="3"/>
+        <line x1="26" y1="38" x2="54" y2="38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="26" y1="48" x2="46" y2="48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="22" cy="38" r="2.5" fill="currentColor"/>
+        <circle cx="22" cy="48" r="2.5" fill="currentColor"/>
+      </svg>
+      <div style="font-weight:600;font-size:16px;color:var(--lbl);margin-bottom:4px;">Chưa có hoạt động</div>
+      <div style="font-size:14px;color:var(--lbl2);">Nhấn + để thêm hoạt động mới</div>
+    </div>`;
+    return;
+  }
+  wrap.innerHTML=`<div class="icard">${its.map(i=>{
+    const sub=[i.time,i.sub].filter(Boolean).join(' · ');
+    return`<div class="irow" onclick="openDetail(${i.id})">
+      <div class="iico">${s(i.icon)}</div>
+      <div class="ibody">
+        <div class="iname">${esc(i.name)}</div>
+        ${sub?`<div class="isub">${esc(sub)}</div>`:''}
+      </div>
+      <button class="imore" onclick="event.stopPropagation();showItemAs(${i.id})">···</button>
+    </div>`;
+  }).join('')}</div>`;
+}
+function showItemAs(id){
+  const it=items.find(x=>x.id===id);
+  document.getElementById('as-item-lbl').textContent=it?it.name:'';
+  // Set onclick directly — no global variable race condition
+  const btnEdit=document.querySelector('#as-item .as-btn:not(.red)');
+  const btnDel=document.querySelector('#as-item .as-btn.red');
+  if(btnEdit) btnEdit.onclick=()=>{closeAs('as-item');openEditItemById(id);};
+  if(btnDel)  btnDel.onclick=()=>{closeAs('as-item');delItemById(id);};
+  openAs('as-item');
+}
+
+/* ══ MENU CRUD ══ */
+function openShMenu(){buildIco('am-ico','am','leaf');document.getElementById('am-n').value='';openSh('sh-am');setTimeout(()=>document.getElementById('am-n').focus(),320);}
+function saveMenu(){
+  const n=document.getElementById('am-n').value.trim();
+  if(!n){toast('Please enter a name');return;}
+  const mid=nMid++;
+  menus.push({id:mid,name:n,icon:IS.am});
+  [{name:'Starters',icon:'flame'},{name:'Mains',icon:'food'},{name:'Sides',icon:'list'},{name:'Desserts',icon:'star'},{name:'Specials',icon:'bookmark'}]
+    .forEach(df=>folders.push({id:nFid++,mid,name:df.name,icon:df.icon}));
+  saveData();closeSh('sh-am');toast('✓ Category created');renderHome();
+}
+function openEditMenu(){
+  const m=menus.find(x=>x.id===curMid);if(!m)return;
+  editId=curMid;document.getElementById('em-n').value=m.name;
+  buildIco('em-ico','em',m.icon);openSh('sh-em');setTimeout(()=>document.getElementById('em-n').focus(),320);
+}
+function saveEditMenu(){
+  const n=document.getElementById('em-n').value.trim();if(!n){toast('Please enter a name');return;}
+  const m=menus.find(x=>x.id===editId);if(!m)return;
+  m.name=n;m.icon=IS.em;saveData();closeSh('sh-em');
+  document.getElementById('cat-title').textContent=n;
+  document.getElementById('cat-large').textContent=n;
+  toast('✓ Saved');renderHome();
+}
+function delMenu(){
+  const m=menus.find(x=>x.id===curMid);if(!m)return;
+  menus=menus.filter(x=>x.id!==curMid);
+  folders=folders.filter(x=>x.mid!==curMid);
+  items=items.filter(x=>x.mid!==curMid);
+  saveData();toast('Category deleted');goBack();
+}
+
+/* ══ FOLDER CRUD ══ */
+function openShFolder(){buildIco('af-ico','af','flame');document.getElementById('af-n').value='';openSh('sh-af');setTimeout(()=>document.getElementById('af-n').focus(),320);}
+function saveFolder(){
+  const n=document.getElementById('af-n').value.trim();if(!n){toast('Please enter a name');return;}
+  folders.push({id:nFid++,mid:curMid,name:n,icon:IS.af});
+  saveData();closeSh('sh-af');toast('✓ Folder created');renderCat();
+}
+function openEditFolder(){
+  const f=folders.find(x=>x.id===curFid);if(!f)return;
+  editId=curFid;document.getElementById('ef-n').value=f.name;
+  buildIco('ef-ico','ef',f.icon);openSh('sh-ef');setTimeout(()=>document.getElementById('ef-n').focus(),320);
+}
+function saveEditFolder(){
+  const n=document.getElementById('ef-n').value.trim();if(!n){toast('Please enter a name');return;}
+  const f=folders.find(x=>x.id===editId);if(!f)return;
+  f.name=n;f.icon=IS.ef;saveData();closeSh('sh-ef');
+  document.getElementById('folder-title').textContent=n;
+  document.getElementById('folder-large').textContent=n;
+  toast('✓ Saved');renderCat();
+}
+function delFolder(){
+  folders=folders.filter(x=>x.id!==curFid);
+  items=items.filter(x=>x.fid!==curFid);
+  saveData();toast('Folder deleted');goBack();
+}
+
+/* ══ ITEM CRUD ══ */
+function openShItem(){
+  buildIco('ai-ico','ai','list');
+  ['ai-n','ai-sub','ai-notes'].forEach(id=>document.getElementById(id).value='');
+  syncTimeChips('ai','30 min');
+  openSh('sh-ai');setTimeout(()=>document.getElementById('ai-n').focus(),320);
+}
+function saveItem(){
+  const n=document.getElementById('ai-n').value.trim();if(!n){toast('Please enter a name');return;}
+  items.push({id:nIid++,mid:curMid,fid:curFid,name:n,icon:IS.ai,
+    time:document.getElementById('ai-time').value,
+    sub:document.getElementById('ai-sub').value.trim(),
+    notes:document.getElementById('ai-notes').value.trim()});
+  saveData();closeSh('sh-ai');toast('✓ Added');renderFolder();
+}
+function openEditItemById(id){
+  const it=items.find(x=>x.id===id);if(!it)return;
+  editId=id;
+  document.getElementById('ei-n').value=it.name;
+  document.getElementById('ei-sub').value=it.sub||'';
+  document.getElementById('ei-notes').value=it.notes||'';
+  syncTimeChips('ei', it.time||'');
+  buildIco('ei-ico','ei',it.icon);
+  openSh('sh-ei');setTimeout(()=>document.getElementById('ei-n').focus(),320);
+}
+function saveEditItem(){
+  const n=document.getElementById('ei-n').value.trim();if(!n){toast('Please enter a name');return;}
+  const it=items.find(x=>x.id===editId);if(!it)return;
+  it.name=n;it.icon=IS.ei;
+  it.time=document.getElementById('ei-time').value;
+  it.sub=document.getElementById('ei-sub').value.trim();
+  it.notes=document.getElementById('ei-notes').value.trim();
+  saveData();closeSh('sh-ei');toast('✓ Saved');renderFolder();
+}
+function delItemById(id){
+  items=items.filter(x=>x.id!==id);
+  saveData();toast('Deleted');renderFolder();
+}
+
+/* ══ BUTTON SETUP ══ */
+document.getElementById('btm-new-menu').onclick=openShMenu;
+document.getElementById('btm-plus-menu').onclick=openShMenu;
+document.getElementById('cat-plus').onclick=openShFolder;
+document.getElementById('folder-plus').onclick=openShItem;
+
+/* ══ DICE ══ */
+function doRoll(src){
+  navigator.vibrate&&navigator.vibrate(8);
+  const pool=src==='folder'?items.filter(i=>i.fid===curFid):items.filter(i=>i.mid===curMid);
+  if(!pool.length){toast('Chưa có hoạt động');return;}
+  const label=src==='folder'?folders.find(x=>x.id===curFid)?.name:menus.find(x=>x.id===curMid)?.name;
+  document.getElementById('roll-back-lbl').textContent=folderLabel(label||'Quay lại');
+  goTo('pg-roll');
+  setTimeout(()=>startRoll(pool),80);
+}
+function startRoll(pool){
+  const circ=document.getElementById('roll-circle'),texts=document.getElementById('roll-texts');
+  if(!circ||!texts||!pool.length)return;
+  texts.innerHTML='';
+  const shuffle=arr=>{
+    const copy=[...arr];
+    for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}
+    return copy;
+  };
+  const final=pool[Math.floor(Math.random()*pool.length)];
+  let seq=shuffle(pool);
+  while(seq.length<18)seq=[...seq,...shuffle(pool)];
+  seq=seq.slice(0,20);seq.push(final);
+  const last=seq.length-1,getDelay=i=>Math.round(55+285*Math.pow(i/last,2.2));
+  circ.innerHTML='<div class="roll-icon"></div>';
+  const slot=circ.querySelector('.roll-icon');
+  const setIcon=(key,animation,duration)=>{
+    slot.innerHTML=s(key,42);
+    if(animation){slot.style.animation='none';void slot.offsetWidth;slot.style.animation=`${animation} ${duration}ms cubic-bezier(0,.15,.4,1) both`;}
+  };
+  setIcon(seq[0].icon,null,0);
+  let frame=0;
+  function tick(){
+    frame++;
+    if(frame>=seq.length){
+      setIcon(final.icon,'resPop',520);
+      const ids=pool.map(x=>x.id).join(',');
+      texts.innerHTML=`<div class="roll-name">${esc(final.name)}</div>`
+        +(final.time?`<div class="roll-time">${esc(final.time)}</div>`:'')
+        +(final.sub?`<div class="roll-sub">${esc(final.sub)}</div>`:'')
+        +(final.notes?`<div class="roll-notes">${esc(final.notes)}</div>`:'')
+        +`<div class="roll-btns"><button class="btn-blk" onclick="goBack()">Làm việc này</button>`
+        +`<button class="btn-ghost" onclick="startRoll([${ids}].map(id=>items.find(x=>x.id===id)).filter(Boolean))">Lắc lại</button></div>`;
+      return;
+    }
+    const delay=getDelay(frame);setIcon(seq[frame].icon,'spinUp',delay);setTimeout(tick,delay);
+  }
+  setTimeout(tick,getDelay(0));
+}
+
+function openHomeMenu(btn){
+  // simple action sheet for home options
+  const as=document.createElement('div');
+  as.className='as-ov on';
+  as.style.zIndex='400';
+  as.innerHTML=`<div class="as">
+    <div class="as-grp">
+      <button class="as-btn" onclick="this.closest('.as-ov').remove();exportData()">
+        <span class="as-btn-main">📤 Xuất dữ liệu (JSON)</span>
+        <span class="as-btn-sub">Tải về file backup toàn bộ danh mục</span>
+      </button>
+      <button class="as-btn" onclick="this.closest('.as-ov').remove();importData()">
+        <span class="as-btn-main">📥 Nhập dữ liệu (JSON)</span>
+        <span class="as-btn-sub">Khôi phục từ file backup đã xuất trước đó</span>
+      </button>
+      <button class="as-btn red" onclick="this.closest('.as-ov').remove();resetData()">
+        <span class="as-btn-main">Khôi phục dữ liệu gốc</span>
+        <span class="as-btn-sub">Xoá tất cả và đặt lại về mặc định</span>
+      </button>
+    </div>
+    <button class="as-cancel" onclick="this.closest('.as-ov').remove()">Cancel</button>
+  </div>`;
+  as.addEventListener('click',e=>{if(e.target===as)as.remove();});
+  document.body.appendChild(as);
+}
+function resetData(){
+  localStorage.removeItem(SK);
+  location.reload();
+}
+/* ══ TIME CHIP PICKER ══ */
+function pickTime(pfx,btn){
+  document.querySelectorAll(`#${pfx}-time-chips .tchip`).forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById(`${pfx}-time`).value=btn.dataset.v;
+}
+function syncTimeChips(pfx,val){
+  document.querySelectorAll(`#${pfx}-time-chips .tchip`).forEach(b=>{
+    b.classList.toggle('on', b.dataset.v===val);
+  });
+  document.getElementById(`${pfx}-time`).value=val;
+}
+
+/* ══ ITEM DETAIL ══ */
+function openDetail(id){
+  const it=items.find(x=>x.id===id);if(!it)return;
+  window._detailId=id;
+  const f=folders.find(x=>x.id===it.fid);
+  document.getElementById('detail-back-lbl').textContent=f?f.name:'Back';
+  document.getElementById('detail-title').textContent=it.name;
+  const rows=[];
+  if(it.time)rows.push(`<div class="detail-row"><span class="detail-row-lbl">⏱ Duration</span><span class="detail-row-val">${esc(it.time)}</span></div>`);
+  if(it.sub)rows.push(`<div class="detail-row"><span class="detail-row-lbl">📍 Note</span><span class="detail-row-val">${esc(it.sub)}</span></div>`);
+  const fName=f?esc(f.name):'';
+  const mName=menus.find(x=>x.id===it.mid)?esc(menus.find(x=>x.id===it.mid).name):'';
+  rows.push(`<div class="detail-row"><span class="detail-row-lbl">📁 Folder</span><span class="detail-row-val">${fName}</span></div>`);
+  rows.push(`<div class="detail-row"><span class="detail-row-lbl">🗂 Category</span><span class="detail-row-val">${mName}</span></div>`);
+  document.getElementById('detail-content').innerHTML=
+    `<div class="detail-hero">
+      <div class="detail-hero-ico">${s(it.icon,28)}</div>
+      <div class="detail-hero-name">${esc(it.name)}</div>
+    </div>`
+    +(rows.length?`<div class="detail-section"><div class="detail-section-lbl">Details</div><div class="detail-card">${rows.join('')}</div></div>`:'')
+    +(it.notes?`<div class="detail-section"><div class="detail-section-lbl">Notes</div><div class="detail-notes">${esc(it.notes).replace(/\n/g,'<br>')}</div></div>`:'')
+    +`<button class="detail-del-btn" onclick="if(confirm('Xoá hoạt động này?')){delItemById(${id});goBack();}">🗑 Delete activity</button>`;
+  goTo('pg-detail');
+}
+
+/* ══ FAB TOOLTIP ══ */
+function showFabTip(id){document.getElementById(id).style.display='block';}
+function hideFabTip(id){document.getElementById(id).style.display='none';}
+
+/* ══ EXPORT / IMPORT ══ */
+function exportData(){
+  const json=JSON.stringify({menus,folders,items,nMid,nFid,nIid},null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='dopamine-menus-backup.json';a.click();
+  toast('✓ Backup exported');
+}
+function importData(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
+  inp.onchange=e=>{
+    const file=e.target.files[0];if(!file)return;
+    const r=new FileReader();
+    r.onload=ev=>{
+      try{
+        const d=JSON.parse(ev.target.result);
+        if(!d.menus||!d.folders||!d.items)throw new Error();
+        menus=d.menus;folders=d.folders;items=d.items;
+        nMid=d.nMid||menus.length+10;nFid=d.nFid||folders.length+10;nIid=d.nIid||items.length+30;
+        saveData();renderHome();toast('✓ Data imported');
+      }catch(err){toast('❌ Invalid file');}
+    };
+    r.readAsText(file);
+  };
+  inp.click();
+}
+
+/* ══ SWIPE BACK GESTURE ══ */
+(function(){
+  let startX=0,startY=0,swiping=false;
+  document.getElementById('app').addEventListener('touchstart',e=>{
+    if(e.touches[0].clientX<28){startX=e.touches[0].clientX;startY=e.touches[0].clientY;swiping=true;}
+    else swiping=false;
+  },{passive:true});
+  document.getElementById('app').addEventListener('touchend',e=>{
+    if(!swiping)return;
+    const dx=e.changedTouches[0].clientX-startX;
+    const dy=Math.abs(e.changedTouches[0].clientY-startY);
+    if(dx>60&&dy<60&&hist.length){goBack();navigator.vibrate&&navigator.vibrate(8);}
+    swiping=false;
+  },{passive:true});
+})();
+</script>
+<script src="../../notion-connection.js?v=spider-field-unified-1"></script><script src="../../app-guard.js"></script>
+<script src="../../assets/gambit-app-polish.js"></script>
+</body>
+</html>

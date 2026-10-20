@@ -1,0 +1,151 @@
+/* SpideyTracker-inspired navigation, limited to the real-world map screen. */
+body[data-game-mode="MAP"] { --map-ink:#101c24; --map-ice:#96e0f7; --map-paper:#e7e9df; }
+body[data-game-mode="MAP"] #map { background:#dce1e0; }
+body[data-game-mode="MAP"] #map .maplibregl-canvas { filter:saturate(.8) contrast(1.04); }
+body[data-game-mode="MAP"] .map-dark-filter { background:radial-gradient(ellipse at center,transparent 50%,#18344333); }
+body[data-game-mode="MAP"] .map-scanlines { opacity:.035; mix-blend-mode:multiply; }
+body[data-game-mode="MAP"] .hanging-spidey { display:none; }
+body[data-game-mode="MAP"] .map-status-card {
+  top:18px; left:18px; transform:none; width:240px; max-width:calc(100% - 96px);
+  padding:12px 14px; gap:6px; text-align:left; color:var(--map-paper);
+  background:#101c24f5; border:2px solid var(--map-ink); border-radius:0;
+  box-shadow:inset 0 0 0 1px #568697,3px 3px 0 #101c2444; clip-path:none;
+}
+body[data-game-mode="MAP"] .map-status-card::before { display:none; }
+body[data-game-mode="MAP"] .map-status-kicker { color:var(--map-ice); font:700 10px/1.4 'Silkscreen',monospace; }
+body[data-game-mode="MAP"] .map-status-card strong { font:700 15px/1.4 'Be Vietnam Pro',sans-serif; }
+body[data-game-mode="MAP"] .map-status-card > span:last-child { display:block; color:#c2cec9; font:500 11px/1.4 'Be Vietnam Pro',sans-serif; }
+body[data-game-mode="MAP"] .rail-left { top:130px; left:18px; gap:10px; width:60px; max-height:none; overflow:visible; }
+body[data-game-mode="MAP"] .filter-btn { width:52px; height:52px; border:0; background:transparent url('../assets/spideytracker/filter_white.png') center/contain no-repeat; box-shadow:none; outline:0; }
+body[data-game-mode="MAP"] .filter-btn[data-filter="WORK"] { background-image:url('../assets/spideytracker/filter_red.png'); }
+body[data-game-mode="MAP"] .filter-btn[data-filter="NOTION_MISSION"] { background-image:url('../assets/spideytracker/filter_green.png'); }
+body[data-game-mode="MAP"] .filter-btn svg { display:none; }
+body[data-game-mode="MAP"] .filter-btn .filter-label { opacity:1; transform:none; }
+body[data-game-mode="MAP"] .filter-btn .filter-label { display:block; position:absolute; left:60px; top:12px; width:max-content; padding:5px 8px; background:var(--map-ink); color:var(--map-paper); font:700 10px/1.4 'Silkscreen',monospace; }
+body[data-game-mode="MAP"] .filter-btn.active .filter-label { color:var(--map-ice); box-shadow:inset 3px 0 var(--map-ice); }
+body[data-game-mode="MAP"] .filter-count { top:-3px; right:-4px; min-width:18px; min-height:18px; font-size:10px; }
+body[data-game-mode="MAP"] .rail-right { top:auto; bottom:142px; right:18px; display:grid; grid-template-columns:44px 44px; gap:6px; }
+body[data-game-mode="MAP"] .map-control-btn { width:44px; height:44px; min-height:44px; color:var(--map-ink); background:var(--map-paper); border:2px solid var(--map-ink); box-shadow:inset 0 0 0 2px #fff,2px 2px 0 #101c2433; font:700 13px 'Silkscreen',monospace; }
+body[data-game-mode="MAP"] #btn-center-gps { background:var(--map-ice); }
+body[data-game-mode="MAP"] .map-control-btn--world { padding:0; background:transparent; border:0; box-shadow:none; }
+body[data-game-mode="MAP"] .map-control-btn--world img { width:44px; height:44px; image-rendering:pixelated; }
+body[data-game-mode="MAP"] #btn-reset-north { grid-column:1/-1; width:94px; }
+body[data-game-mode="MAP"] .frame-search-row { top:auto; bottom:82px; left:18px; transform:none; width:min(480px,calc(100% - 36px)); }
+body[data-game-mode="MAP"] .search-input-wrap { height:48px; border:2px solid var(--map-ink); box-shadow:inset 0 0 0 1px #568697,3px 3px 0 #101c2444; }
+body[data-game-mode="MAP"] .search-input-field { font:500 12px 'Be Vietnam Pro',sans-serif; }
+.map-camera-readout { position:absolute; z-index:10; bottom:138px; left:18px; padding:5px 8px; background:#101c24e8; color:#c5e4eb; font:500 10px/1.4 monospace; pointer-events:none; }
+body[data-game-mode="MAP"] .maplibregl-ctrl-bottom-right { bottom:71px; right:3px; }
+body[data-game-mode="MAP"] .maplibregl-ctrl-attrib { color:#202f35; background:#fffffff0; font:10px/1.5 sans-serif; }
+body[data-game-mode="MAP"] .maplibregl-ctrl-attrib a { color:#202f35; }
+body[data-game-mode="MAP"] .offline-grid-banner { top:auto; bottom:200px; max-width:70%; font:500 12px/1.5 'Be Vietnam Pro',sans-serif; }
+/* MapLibre owns the outer marker transform; only its child should scale. */
+body[data-game-mode="MAP"] .custom-pixel-marker { width:44px; height:48px; transition:none; }
+body[data-game-mode="MAP"] .custom-pixel-marker:hover .marker-pin-body { transform:translateY(-3px) scale(1.08); }
+body[data-game-mode="MAP"] .custom-pixel-marker.active-selected .marker-pin-body { filter:drop-shadow(0 0 5px #fff); }
+body[data-game-mode="MAP"] .marker-pin-body { transition:transform .15s; }
+body[data-game-mode="MAP"] button:focus-visible,body[data-game-mode="MAP"] .custom-pixel-marker:focus-visible { outline:3px solid #e49d44; outline-offset:3px; }
+.game-primary-nav { grid-template-columns:repeat(6,minmax(0,1fr)); }
+@media(max-width:600px) {
+  body[data-game-mode="MAP"] .map-status-card { top:10px; left:10px; padding:9px 10px; width:215px; }
+  body[data-game-mode="MAP"] .map-status-kicker { font-size:8px; }
+  body[data-game-mode="MAP"] .map-status-card strong { font-size:12px; }
+  body[data-game-mode="MAP"] .rail-left { top:112px; left:8px; gap:8px; flex-direction:column; }
+  body[data-game-mode="MAP"] .filter-btn .filter-label { left:56px; font-size:9px; }
+  body[data-game-mode="MAP"] .rail-right { bottom:158px; right:10px; }
+  body[data-game-mode="MAP"] .frame-search-row { left:10px; bottom:77px; width:calc(100% - 20px); }
+  body[data-game-mode="MAP"] .search-input-field { font-size:10px; }
+  .map-camera-readout { left:10px; bottom:133px; font-size:9px; }
+  .game-primary-nav button { min-width:0; padding-inline:2px; font-size:9px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  body[data-game-mode="MAP"] .marker-pin-body { transition:none; }
+  body[data-game-mode="MAP"] .marker-selected-ring { animation:none; }
+}
+
+/* Match the reference shell instead of stacking the battle navigation on the map. */
+.brand-plaque { pointer-events:auto; cursor:pointer; text-decoration:none; }
+.brand-plaque:focus-visible { outline:3px solid #f2c06b; outline-offset:5px; }
+body[data-game-mode="MAP"] .tracker-device-frame,
+body[data-game-mode="MAP"] .claw-slice-frame { grid-template-rows:36px minmax(0,1fr) 19px 50px 7px; }
+body[data-game-mode="MAP"] .game-primary-nav { display:none; }
+body[data-game-mode="MAP"] .frame-bottom-bar { height:50px; min-height:0; padding-block:5px !important; }
+body[data-game-mode="MAP"] .frame-search-row { left:50%; bottom:18px; width:min(560px,calc(100% - 240px)); transform:translateX(-50%); }
+body[data-game-mode="MAP"] .map-camera-readout { left:18px; bottom:12px; font-size:9px; }
+body[data-game-mode="MAP"] .map-status-card { top:20px; left:90px; padding:7px 10px; width:auto; background:#101c24e8; }
+body[data-game-mode="MAP"] .map-status-kicker { display:none; }
+body[data-game-mode="MAP"] .map-status-card strong { font-size:11px; }
+body[data-game-mode="MAP"] .map-status-card > span:last-child { font-size:10px; }
+body[data-game-mode="MAP"] .rail-left { left:2px; top:104px; gap:4px; }
+body[data-game-mode="MAP"] .filter-btn { width:44px; height:44px; min-height:44px; }
+body[data-game-mode="MAP"] .filter-btn .filter-label { opacity:0; left:50px; }
+body[data-game-mode="MAP"] .filter-btn:hover .filter-label,
+body[data-game-mode="MAP"] .filter-btn:focus-visible .filter-label { opacity:1; }
+body[data-game-mode="MAP"] .rail-right { bottom:156px; right:15px; grid-template-columns:36px 36px; gap:3px; }
+body[data-game-mode="MAP"] .rail-right .map-control-btn { width:36px; height:36px; min-width:36px; min-height:36px; }
+body[data-game-mode="MAP"] .rail-right #btn-center-gps,
+body[data-game-mode="MAP"] .rail-right #btn-map-world,
+body[data-game-mode="MAP"] .rail-right #btn-reset-north { display:none; }
+body[data-game-mode="MAP"] .maplibregl-ctrl-bottom-right { bottom:0; right:0; }
+body[data-game-mode="MAP"] .pixel-orb--menu {
+  --menu-cell:62px; width:var(--menu-cell); height:calc(var(--menu-cell)*83/81);
+  background-size:calc(var(--menu-cell)*46) 100% !important;
+  background-position:calc(var(--menu-frame,0)*var(--menu-cell)*-1) 0 !important;
+}
+body[data-game-mode="MAP"] .system-signal--spider-apps {
+  top:13px; right:23px; width:64px; height:64px; padding:0; border:0;
+  background:url('../assets/spideytracker/hub-ui/alert_btn_white.png') center/contain no-repeat;
+  box-shadow:none; transition:filter .15s,transform .2s;
+}
+body[data-game-mode="MAP"] .system-signal--spider-apps::before,
+body[data-game-mode="MAP"] .system-signal--spider-apps::after,
+body[data-game-mode="MAP"] .system-signal--spider-apps span { display:none !important; }
+body[data-game-mode="MAP"] .system-signal--spider-apps:hover,
+body[data-game-mode="MAP"] .system-signal--spider-apps[aria-expanded="true"] { background-image:url('../assets/spideytracker/map-ui/alert_btn_black.png'); }
+body[data-game-mode="MAP"] .system-signal--spider-apps[aria-expanded="true"] { transform:translateY(2px); }
+body[data-game-mode="MAP"] .frame-bottom-bar .spidey-head-turn-sprite {
+  left:-29px !important; bottom:-5px !important; width:59.2px; height:95.2px;
+  background-image:url('../assets/spideytracker/SpiderMan_HeadTurn.png') !important;
+  background-size:4499.2px 95.2px !important;
+  animation:map-spidey-look 6.3333s steps(76) infinite !important;
+}
+@keyframes map-spidey-look { to { background-position-x:-4499.2px; } }
+body[data-game-mode="MAP"] .footer-spidey-counterpart { width:46px; height:69.56px; background-image:url('../assets/spideytracker/SpiderMan_web.png'); background-size:3542px 69.56px; animation:map-spidey-dangle 6.4167s steps(77) infinite; }
+@keyframes map-spidey-dangle { to { background-position-x:-3542px; } }
+.tracker-corner-menu { position:absolute; z-index:60; top:36px; width:min(285px,calc(100% - 24px)); padding:17px 12px; border:2px solid #101c24; background:#0c1c25f5; box-shadow:inset 0 0 0 1px #5896ab,4px 5px 0 #0005; }
+.tracker-corner-menu[hidden] { display:none; }
+.tracker-corner-menu--left { left:8px; transform-origin:top left; animation:tracker-menu-in .28s ease-out; }
+.tracker-corner-menu--right { right:8px; transform-origin:top right; animation:tracker-alert-in .28s ease-out; }
+.tracker-corner-menu strong { display:block; padding:10px; color:#96e0f7; font:700 14px 'Silkscreen',monospace; }
+.tracker-corner-menu button { display:flex; justify-content:space-between; align-items:center; width:100%; min-height:44px; padding:10px; border:0; border-bottom:1px solid #96e0f72b; background:transparent; color:#e7e9df; font:700 12px 'Silkscreen',monospace; cursor:pointer; text-align:left; }
+.tracker-corner-menu button:hover { background:#96e0f715; color:#96e0f7; }
+@keyframes tracker-menu-in { from { opacity:0; transform:translateX(-35px) scaleX(.85); } to { opacity:1; transform:none; } }
+@keyframes tracker-alert-in { from { opacity:0; transform:translateX(35px) scaleX(.85); } to { opacity:1; transform:none; } }
+.tracker-radar { position:absolute; z-index:12; right:30px; bottom:35px; width:100px; height:100px; background:url('../assets/spideytracker/map-ui/radar.png') center/contain no-repeat; pointer-events:none; }
+.tracker-radar canvas { width:100px; height:100px; display:block; }
+.tracker-radar button { position:absolute; width:32px; height:32px; padding:4px; border:0; background:transparent; pointer-events:auto; cursor:pointer; }
+.tracker-radar button img { width:100%; height:100%; display:block; image-rendering:pixelated; }
+#btn-radar-world { bottom:34px; right:-18px; }
+#btn-radar-center { bottom:-10px; right:9px; }
+@media(max-width:768px) {
+  body[data-game-mode="MAP"] .tracker-device-frame,
+  body[data-game-mode="MAP"] .claw-slice-frame { grid-template-rows:27px minmax(0,1fr) 14px 40px 5px; }
+  body[data-game-mode="MAP"] .pixel-orb--menu { --menu-cell:50px; }
+  body[data-game-mode="MAP"] .frame-bottom-bar { height:40px; padding-block:3px !important; }
+  body[data-game-mode="MAP"] .system-signal--spider-apps { top:14px; right:12px; width:48px; height:48px; }
+  body[data-game-mode="MAP"] .frame-search-row { bottom:20px; left:10px; width:calc(100% - 20px); transform:none; }
+  body[data-game-mode="MAP"] .map-camera-readout { bottom:77px; left:10px; }
+  body[data-game-mode="MAP"] .map-status-card { left:60px; top:42px; max-width:calc(100% - 78px); }
+  body[data-game-mode="MAP"] .map-status-card strong { font-size:9px; }
+  body[data-game-mode="MAP"] .rail-left { top:110px; left:0; }
+  body[data-game-mode="MAP"] .rail-right { bottom:206px; right:12px; }
+  .tracker-radar { bottom:96px; right:24px; width:85px; height:85px; background-size:85px; }
+  .tracker-radar canvas { width:85px; height:85px; }
+  #btn-radar-world { bottom:26px; right:-20px; }
+  .tracker-corner-menu { top:42px; }
+  body[data-game-mode="MAP"] .frame-bottom-bar .spidey-head-turn-sprite { left:-22px !important; bottom:0 !important; width:37.31px; height:60px; background-size:2835.29px 60px !important; animation-name:map-spidey-look-mobile !important; }
+  @keyframes map-spidey-look-mobile { to { background-position-x:-2835.29px; } }
+}
+@media(prefers-reduced-motion:reduce) {
+  .tracker-corner-menu,body[data-game-mode="MAP"] .frame-bottom-bar .spidey-head-turn-sprite,
+  body[data-game-mode="MAP"] .footer-spidey-counterpart { animation:none !important; }
+}

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-notion-authority>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
   <meta name="theme-color" content="#071426" />
   <title>SPIDEY LIFE TRACKER — Mission Hub</title>
+  <script>if (/^\/pk\/?$/.test(location.pathname)) { document.documentElement.dataset.pkEmbed = 'true'; document.title = 'SPIDEY LIFE — PK ARENA'; }</script>
   <link rel="icon" type="image/png" href="./assets/spideytracker/favicon.png" />
-  
+
   <!-- MapLibre GL JS Engine -->
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" />
   <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
@@ -24,15 +26,26 @@
   <link rel="stylesheet" href="./css/mobile.css" />
   <link rel="stylesheet" href="./css/action-rpg.css" />
   <link rel="stylesheet" href="./css/spidey-hub.css" />
-  <link rel="stylesheet" href="./css/current-content-overrides.css?build=static-spiders-nav" />
+  <link rel="stylesheet" href="./css/current-content-overrides.css?build=spider-icons-7" />
   <link rel="stylesheet" href="./css/clawed-hub.css?build=hub-slices-1" />
   <link rel="stylesheet" href="./css/hub-systems.css?build=hub-systems-1" />
   <link rel="stylesheet" href="./css/single-version-polish.css?build=single-root-1" />
-  <link rel="stylesheet" href="./css/game-layout.css?build=game-layout-6" />
+  <link rel="stylesheet" href="./css/game-layout.css?build=four-spiders-1" />
   <link rel="stylesheet" href="./css/combat-characters.css?build=animated-enemies-2" />
-  <link rel="stylesheet" href="./css/mobile-game-ui.css?v=mobile-game-1" />
+  <link rel="stylesheet" href="./css/arena-maps.css?build=arena-maps-1" />
+  <link rel="stylesheet" href="./css/cosmic-enemy-team.css?build=four-spiders-1" />
+  <link rel="stylesheet" href="./css/pk-embed.css?build=pk-embed-1" />
+  <link rel="stylesheet" href="./css/notion-game-view.css?build=skill-vitals-6" />
+  <link rel="stylesheet" href="./css/tracker-map.css?build=tracker-map-1" />
+  <link rel="stylesheet" href="./css/shared-tracker-shell.css?build=shared-shell-1" />
+  <link rel="stylesheet" href="./css/mobile-game-ui.css?build=personal-habit-quest-1" />
+  <link rel="stylesheet" href="./css/field-apps.css?build=field-tools-fullscreen-4" />
+  <link rel="stylesheet" href="./css/stable-shell.css?build=hero-build-preview-5" />
+  <link rel="stylesheet" href="./css/hero-loadout.css?build=skill-vitals-6" />
 </head>
 <body data-game-mode="ARENA">
+  <a class="skip-link" href="#tracker-main">Bỏ qua điều hướng</a>
+  <h1 class="visually-hidden">Spidey Life Tracker</h1>
   <svg class="svg-sprite" aria-hidden="true">
     <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
     <symbol id="icon-spider" viewBox="0 0 24 24"><path d="M9 5 6 2M15 5l3-3M8 9 3 6m13-6 5 6M8 13l-5 4m13-4 5 4M9 17l-3 5m9-5 3 5"/><ellipse cx="12" cy="9" rx="3" ry="4"/><ellipse cx="12" cy="16" rx="4" ry="5"/></symbol>
@@ -69,41 +82,41 @@
           <svg><use href="#icon-menu"></use></svg>
         </button>
 
-        <div class="brand-plaque" aria-label="Spidey Life Tracker">
+        <a class="brand-plaque" href="/" aria-label="Về Home Spider Life" title="Về Home">
           <img class="tracker-logo-image" src="./assets/spideytracker/tracker_logo3.png" alt="Spidey Tracker" />
           <span class="brand-subtitle">LIFE RPG // MISSION HUB <span id="live-clock">00:00:00</span></span>
-        </div>
+        </a>
 
-        <button class="system-signal system-signal--spider-apps" id="btn-field-mode" aria-label="Mở trung tâm Spider Apps" title="SPIDER APPS">
+        <button class="system-signal system-signal--spider-apps" id="btn-field-mode" aria-label="Mở lối tắt" title="LỐI TẮT">
           <span class="top-hanging-spidey" aria-hidden="true"></span>
           <span class="system-signal-label">APPS</span>
         </button>
       </header>
 
-      <main class="frame-main-content" id="tracker-main">
+      <main class="frame-main-content" id="tracker-main" tabindex="-1">
         <div id="map" aria-label="Bản đồ nhiệm vụ đời thực"></div>
         <div class="map-dark-filter map-mode-only"></div>
         <div class="map-scanlines map-mode-only" aria-hidden="true"></div>
         <div class="hanging-spidey map-mode-only" aria-hidden="true"></div>
 
-        <section class="action-rpg-screen" id="action-rpg-screen" aria-label="Spider-Man Action Arena">
           <div class="game-hud-strip">
-            <div class="hud-avatar"><span class="hud-mask">◉</span><div><small>HERO</small><strong>PETER // CLASSIC</strong><em id="hud-rank">FRIENDLY NEIGHBORHOOD</em></div></div>
-            <div class="hud-stat hud-stat--level"><small>LV</small><strong id="hud-level">1</strong></div>
+            <button class="hud-avatar" type="button" aria-label="Mở hồ sơ Hero"><span class="hud-mask" id="hud-mask">◉</span><span class="hud-avatar-label"><small>HERO</small><strong>PETER // CLASSIC</strong><em id="hud-rank">FRIENDLY NEIGHBORHOOD</em></span></button>
+            <button type="button" class="hud-stat hud-stat--level" id="hud-stat--level" aria-label="Xem cấp độ trong hồ sơ Hero"><small>LV</small><strong id="hud-level">1</strong></button>
             <div class="hud-bars">
               <label>EXP <span id="hud-xp-text">0 / 100</span><i><b id="hud-xp-fill"></b></i></label>
               <label>HP <span id="hud-hp-text">120 / 120</span><i><b id="hud-hp-fill"></b></i></label>
-              <label>ENERGY <span id="hud-web-text">0 / 10</span><i><b id="hud-web-fill"></b></i></label>
+              <label title="Web Energy">WEB <span id="hud-web-text">0 / 10</span><i><b id="hud-web-fill"></b></i></label>
             </div>
             <div class="hud-economy"><span><small>WEB COINS</small><b id="hud-coins">0</b></span><span><small>STREAK</small><b><i id="hud-streak">0</i>D</b></span></div>
           </div>
-          <div class="quest-directive"><span>MAIN QUEST</span><strong id="hud-main-quest">THE GOBLIN SIGNAL</strong><em id="hud-quest-progress">WAVE 1 / 5</em></div>
+
+        <section class="action-rpg-screen" id="action-rpg-screen" aria-label="Spider-Man Action Arena">
+          <div class="quest-directive"><span>MAIN QUEST</span><strong id="hud-main-quest">THE SYMBIOTE SIGNAL</strong><em id="hud-quest-progress">WAVE 1 / 5</em><div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span><button type="button" id="arena-open-habits" hidden>MỞ LIFE 66</button></div></div>
           <div class="action-combat-stage" id="action-combat-stage">
             <div class="combat-vfx-layer" id="combat-vfx-layer" aria-hidden="true"></div>
             <div class="combat-location"><strong id="combat-district">MANHATTAN ROOFTOP</strong><span id="combat-weather">NIGHT // LIGHT RAIN</span></div>
-            <div class="arena-turn-banner" aria-live="polite"><small>YOUR TURN</small><strong id="arena-turn-value">01</strong><span id="arena-turn-tip">Hoàn thành Habit để nạp Energy</span></div>
-            <div class="arena-fighter arena-fighter--hero action-fighter--hero"><button class="arena-hero-sprite" id="arena-hero-sprite" type="button" aria-label="Xem động tác Người Nhện tiếp theo"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></button><span>SPIDER-MAN</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
-            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div class="combat-placeholder combat-placeholder--enemy" id="combat-enemy-image" role="img" aria-label="Street Thug" data-motion="idle"><b>FOE</b></div><span id="combat-enemy-short">THUG</span></div>
+            <div class="arena-fighter arena-fighter--hero action-fighter--hero"><div class="arena-hero-sprite" id="arena-hero-sprite" role="img" aria-label="Người Nhện đang chiến đấu"><i class="hero-sprite-actor" aria-hidden="true"><b>HERO</b></i></div><span>SPIDER-MAN</span><output class="hero-animation-state" id="hero-animation-state">COMBAT_IDLE</output></div>
+            <div class="arena-fighter arena-fighter--villain action-fighter--enemy"><div id="combat-enemy-team" class="arena-enemy-team" aria-label="Đội địch"></div></div>
             <aside class="combat-info-panel" aria-label="Combat information">
               <small id="enemy-tier">TIER 1</small><strong id="enemy-name">STREET THUG</strong>
               <label>HP <span id="enemy-hp-text">85 / 85</span><i><b id="enemy-hp-fill"></b></i></label>
@@ -113,19 +126,54 @@
             </aside>
           </div>
           <div class="combat-action-bar" aria-label="Combat actions">
-            <button data-combat-action="attack"><svg><use href="#icon-arena"></use></svg><strong>COMBO</strong><small>READY</small></button>
-            <button data-combat-action="web"><svg><use href="#icon-web-map"></use></svg><strong>WEB SHOT</strong><small id="cooldown-web">18 WEB</small></button>
-            <button data-combat-action="gadget"><svg><use href="#icon-gear"></use></svg><strong>GADGET</strong><small id="cooldown-gadget">3 CHARGES</small></button>
-            <button data-combat-action="ally"><svg><use href="#icon-mask"></use></svg><strong>CALL MILES</strong><small id="cooldown-ally">READY</small></button>
-            <button class="combat-action--ultimate" data-combat-action="ultimate"><svg><use href="#icon-bolt"></use></svg><strong>ULTIMATE</strong><small id="ultimate-charge">0%</small></button>
+            <button data-combat-action="attack" title="Đánh một mục tiêu, không tốn tơ và hồi 7 năng lượng"><svg><use href="#icon-arena"></use></svg><strong>COMBO</strong><small>HỒI TƠ</small></button>
+            <button data-combat-action="web" title="Bắn tơ trói mục tiêu; quái bị trói bỏ lượt tấn công kế tiếp"><svg><use href="#icon-web-map"></use></svg><strong>WEB SHOT</strong><small id="cooldown-web">2 ENERGY · TRÓI</small></button>
+            <button data-combat-action="gadget" title="Sát thương mục tiêu và lan sang quái đứng cạnh"><svg><use href="#icon-gear"></use></svg><strong>GADGET</strong><small id="cooldown-gadget">3 CHARGES</small></button>
+            <button data-combat-action="ally" title="Miles tấn công điện và làm choáng mục tiêu"><svg><use href="#icon-mask"></use></svg><strong>CALL MILES</strong><small id="cooldown-ally">CHOÁNG</small></button>
+            <button class="combat-action--ultimate" data-combat-action="ultimate" title="Đánh mạnh mục tiêu và toàn bộ quái đứng cạnh"><svg><use href="#icon-bolt"></use></svg><strong>ULTIMATE</strong><small id="ultimate-charge">0%</small></button>
           </div>
           <div class="ultimate-meter"><span>ULTIMATE</span><i><b id="ultimate-fill"></b></i><button id="btn-next-patrol" hidden>NEXT PATROL →</button></div>
         </section>
 
         <div class="map-status-card map-mode-only" aria-live="polite">
-          <span class="map-status-kicker">MISSION MAP</span>
-          <strong><span id="visible-mission-count">0</span> NHIỆM VỤ</strong>
+          <span class="map-status-kicker">SPIDER NETWORK / ĐỊA ĐIỂM</span>
+          <strong><span id="visible-mission-count">0</span> ĐỊA ĐIỂM TRÊN MAP</strong>
           <span id="gps-status-text">GPS CHƯA BẬT</span>
+          <div class="map-link-actions"><button type="button" id="btn-map-kim-lan">KIM LAN · BÁT TRÀNG</button><a id="map-open-google" href="https://www.google.com/maps/search/?api=1&amp;query=Kim+Lan+Bat+Trang+Ha+Noi" target="_blank" rel="noopener noreferrer">GOOGLE MAPS ↗</a></div>
+          <button class="map-find-places" type="button" id="btn-find-places">TÌM QUÁN / ĐỊA ĐIỂM</button>
+        </div>
+        <aside class="nearby-places map-mode-only" id="nearby-places" aria-label="Tìm và chọn quán quanh bản đồ" hidden inert>
+          <header><strong data-nearby-heading>CHỌN QUÁN QUANH MAP</strong><button type="button" data-nearby-close aria-label="Đóng danh sách quán">✕</button></header>
+          <p>Quán trong bán kính quanh tâm map. Xem đánh giá thật trên Google Maps trước khi chọn.</p>
+          <form><label>Loại quán<select data-nearby-category><option value="cafe">Cà phê / gặp gỡ</option><option value="food">Quán ăn / nhà hàng</option></select></label><label>Bán kính<select data-nearby-radius><option value="1000">1 km</option><option value="3000" selected>3 km</option><option value="5000">5 km</option></select></label><button type="submit">TÌM QUANH ĐÂY</button></form>
+          <input data-nearby-name aria-label="Lọc tên quán hoặc món ăn" placeholder="Lọc tên quán hoặc món ăn…" />
+          <div data-nearby-results><p>Chọn loại quán và bấm Tìm quanh đây.</p></div>
+          <footer><a data-nearby-google href="https://www.google.com/maps/search/?api=1&amp;query=quán+cà+phê+Kim+Lan+Bát+Tràng" target="_blank" rel="noopener noreferrer">TÌM THÊM TRÊN GOOGLE MAPS ↗</a><small>Data © OpenStreetMap contributors · Lựa chọn lưu trên thiết bị, không tự sửa nhiệm vụ Notion.</small></footer>
+        </aside>
+        <output class="map-camera-readout map-mode-only" id="map-camera-readout" aria-label="Tâm bản đồ"></output>
+        <aside class="tracker-corner-menu tracker-corner-menu--left" id="tracker-map-menu" aria-label="Điều hướng Spider Life" hidden inert>
+          <button data-tracker-section="ARENA">HOME / BATTLE <span>↗</span></button>
+          <button data-tracker-section="QUESTS">NHIỆM VỤ <span>↗</span></button>
+          <button data-tracker-section="HERO">HERO <span>↗</span></button>
+          <button data-tracker-section="HABITS">THÓI QUEN <span>↗</span></button>
+          <button data-tracker-section="FIELD">SPIDER APPS <span>↗</span></button>
+          <button data-tracker-section="CITY">BẢN ĐỒ <span>↗</span></button>
+          <button data-tracker-section="SETTINGS">CÀI ĐẶT <span>↗</span></button>
+        </aside>
+        <aside class="tracker-corner-menu tracker-corner-menu--right" id="tracker-map-alerts" aria-label="Lối tắt Spider" hidden inert>
+          <strong>LỐI TẮT</strong>
+          <button data-tracker-app="todo">THÊM / XEM VIỆC <span>↗</span></button>
+          <button data-tracker-app="habits">ĐÁNH DẤU THÓI QUEN <span>↗</span></button>
+          <button data-tracker-app="timetable">LỊCH TRONG NGÀY <span>↗</span></button>
+          <button data-tracker-app="finance">TÀI CHÍNH <span>↗</span></button>
+          <button data-tracker-section="SETTINGS">ÂM THANH & HIỂN THỊ <span>↗</span></button>
+          <button data-tracker-event="ACTIVITY_LOG">NHẬT KÝ ĐỊA ĐIỂM <span>↗</span></button>
+          <button data-tracker-event="UNLOCATED_QUEUE">NOTION CHƯA ĐỊNH VỊ <span>↗</span></button>
+        </aside>
+        <div class="tracker-radar map-mode-only" aria-label="Radar địa điểm quanh tâm bản đồ">
+          <canvas id="tracker-radar-canvas" width="200" height="200" role="img" aria-label="Radar hiển thị địa điểm thực đang được lọc"></canvas>
+          <button id="btn-radar-world" aria-label="Radar: xem toàn thế giới" title="Xem toàn thế giới"><img src="./assets/spideytracker/map-ui/globe_btn.png" alt="" /></button>
+          <button id="btn-radar-center" aria-label="Radar: về vị trí của tôi" title="Vị trí của tôi"><img src="./assets/spideytracker/map-ui/map_center.png" alt="" /></button>
         </div>
 
         <aside class="rail-left map-mode-only" aria-label="Bộ lọc bản đồ">
@@ -138,6 +186,8 @@
           <button class="map-control-btn" id="btn-zoom-in" title="Phóng to" aria-label="Phóng to"><svg><use href="#icon-plus"></use></svg></button>
           <button class="map-control-btn" id="btn-zoom-out" title="Thu nhỏ" aria-label="Thu nhỏ"><span class="minus-glyph"></span></button>
           <button class="map-control-btn map-control-btn--accent" id="btn-center-gps" title="Vị trí của tôi" aria-label="Căn giữa vị trí của tôi"><svg><use href="#icon-compass"></use></svg></button>
+          <button class="map-control-btn map-control-btn--world" id="btn-map-world" title="Xem toàn thế giới" aria-label="Xem toàn thế giới"><img src="./assets/spideytracker/map-ui/globe_btn.png" alt="" /></button>
+          <button class="map-control-btn" id="btn-reset-north" title="Đặt hướng Bắc" aria-label="Đặt hướng Bắc"><span aria-hidden="true">N ↑</span></button>
         </aside>
 
         <div class="frame-search-row map-mode-only">
@@ -155,10 +205,10 @@
           <button data-game-section="QUESTS"><svg><use href="#icon-missions"></use></svg><span>QUESTS</span></button>
           <button data-game-section="HERO"><svg><use href="#icon-mask"></use></svg><span>HERO</span></button>
           <button class="game-primary-nav__arena active" data-game-section="ARENA" aria-current="page"><svg><use href="#icon-arena"></use></svg><span>BATTLE</span></button>
-          <button data-game-section="HABITS" aria-label="Mở Life Reset: 66 Day Habit" title="Life Reset: 66 Day Habit"><svg><use href="#icon-bolt"></use></svg><span>LIFE 66</span></button>
+          <button data-game-section="HABITS" aria-label="Mở Habits" title="Habits"><svg><use href="#icon-bolt"></use></svg><span>HABITS</span></button>
           <button data-game-section="FIELD"><svg><use href="#icon-clock"></use></svg><span>FIELD</span></button>
         </nav>
-        <div class="game-panel-backdrop" id="game-panel-backdrop" hidden inert><section class="game-panel" aria-labelledby="game-panel-title"><header><div><small id="game-panel-kicker">SPIDEY LIFE</small><h2 id="game-panel-title">MISSIONS</h2></div><button id="game-panel-close" aria-label="Về màn Battle">← BATTLE</button></header><nav id="game-panel-tabs" role="tablist" aria-label="Các mục của màn hình"></nav><div class="game-panel-content" id="game-panel-content"></div></section></div>
+        <div class="game-panel-backdrop" id="game-panel-backdrop" hidden inert><section class="game-panel" aria-labelledby="game-panel-title"><header><div><small id="game-panel-kicker">SPIDEY LIFE</small><h2 id="game-panel-title">MISSIONS</h2></div><button id="game-panel-close" aria-label="Về Home">← HOME</button></header><nav id="game-panel-tabs" role="tablist" aria-label="Các mục của màn hình"></nav><div class="game-panel-content" id="game-panel-content"></div></section></div>
 
         <!-- SIDE DRAWER: ACTIVITY LOG -->
         <div class="side-drawer-panel" id="activity-log-drawer" hidden inert>
@@ -199,23 +249,17 @@
 
       <footer class="frame-bottom-bar">
         <div class="spidey-head-turn-sprite" aria-hidden="true"></div>
-        <button class="ticker-wrap" id="btn-chat-list" type="button" aria-label="Mở Message Center">
+        <a class="ticker-wrap" id="btn-chat-list" href="https://t.me/Huykl_KarenBot" target="_blank" rel="noopener noreferrer" aria-label="Mở Karen trên Telegram" title="Karen · Telegram / Hermes" style="text-decoration:none">
           <div class="ticker-content">
-            <span class="ticker-status-tag">MESSAGE CENTER</span>
-            TAP TO OPEN CHAT LIST <span id="ticker-gps-readout">• GPS: STANDBY</span> • YOUR FRIENDLY NEIGHBORHOOD IS ONLINE
+            <span class="ticker-status-tag">KAREN / TELEGRAM</span>
+            MỞ CHAT VỚI KAREN ↗ <span id="ticker-gps-readout">• GPS: STANDBY</span>
           </div>
-        </button>
-        <div class="footer-enemy-counterpart" aria-hidden="true"><img id="footer-enemy-rival-image" alt="" /></div>
+        </a>
+        <div class="footer-spidey-counterpart" aria-hidden="true"></div>
       </footer>
 
     </div>
   </div>
-
-  <aside class="chat-center" id="chat-center" hidden inert aria-label="Message Center">
-    <header><div><small>SPIDEY NETWORK // ONLINE</small><strong>MESSAGE CENTER</strong></div><button id="chat-center-close" aria-label="Đóng">✕</button></header>
-    <div class="chat-thread-list" id="chat-thread-list"></div>
-    <form class="chat-composer" id="chat-composer"><input id="chat-message-input" maxlength="180" placeholder="Nhắn cho Spider-Team…" autocomplete="off" required /><button aria-label="Gửi"><svg><use href="#icon-send"></use></svg></button></form>
-  </aside>
 
   <!-- MODAL 1: ENTRY EDITOR (CREATE / EDIT) -->
   <div class="panel-backdrop" id="editor-modal-backdrop" hidden inert>
@@ -415,6 +459,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=spider-life-reset-2"></script>
+  <script type="module" src="./js/main.js?build=personal-habit-quest-1"></script>
 </body>
 </html>

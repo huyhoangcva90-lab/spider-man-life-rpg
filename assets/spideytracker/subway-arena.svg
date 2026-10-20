@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#101c2e"/><stop offset=".68" stop-color="#173346"/><stop offset="1" stop-color="#0b1825"/></linearGradient>
+    <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#263d48"/><stop offset="1" stop-color="#07131b"/></linearGradient>
+    <pattern id="tile" width="64" height="56" patternUnits="userSpaceOnUse"><path d="M0 0h64M0 0v56" stroke="#477182" stroke-width="2" opacity=".2"/><path d="M32 28h32M32 28v28" stroke="#477182" opacity=".13"/></pattern>
+  </defs>
+  <path fill="url(#wall)" d="M0 0h1200v700H0z"/><path fill="url(#tile)" d="M0 0h1200v510H0z"/>
+  <path d="M0 0h1200v70H0z" fill="#050d18"/><path d="M0 65h1200" stroke="#74b8c2" stroke-width="8" opacity=".45"/>
+  <path d="M45 72h18v422H45zm270 0h18v422h-18zm290 0h18v422h-18zm282 0h18v422h-18zm270 0h18v422h-18z" fill="#07131e" stroke="#396779" stroke-width="3"/>
+  <path d="M92 152h240v256H92zM648 152h238v256H648z" fill="#081320" stroke="#3c7786" stroke-width="8"/>
+  <path d="M110 176h204v198H110zM666 176h202v198H666z" fill="#0d2637"/><path d="M128 195h168v18H128zM684 195h166v18H684z" fill="#3d92aa" opacity=".55"/>
+  <path d="M960 190h164v120H960z" fill="#0a1722" stroke="#79a9b5" stroke-width="5"/><path d="M980 211h124v22H980z" fill="#d5a852"/><text x="987" y="260" fill="#d4e9e5" font-family="monospace" font-size="21" font-weight="bold">SUBWAY</text>
+  <path d="M0 485h1200v215H0z" fill="url(#floor)"/><path d="M0 487h1200v12H0z" fill="#e1b456"/><path d="M0 506h1200" stroke="#9d713c" stroke-width="4" opacity=".7"/>
+  <path d="M0 580h1200M0 654h1200M150 500l-35 200m250-200-20 200m255-200v200m255-200 20 200m250-200 35 200" stroke="#6e99a1" stroke-width="3" opacity=".22"/>
+  <path d="M0 0h1200v700H0z" fill="#020912" opacity=".16"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#101528"/><stop offset=".7" stop-color="#1c2e40"/><stop offset="1" stop-color="#0a1220"/></linearGradient>
+    <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#4bafaa" stop-opacity=".55"/><stop offset="1" stop-color="#1a4554" stop-opacity=".15"/></linearGradient>
+    <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#2c3c52"/><stop offset="1" stop-color="#08111d"/></linearGradient>
+    <pattern id="grid" width="68" height="54" patternUnits="userSpaceOnUse"><path d="M0 0h68v54" fill="none" stroke="#7694aa" stroke-width="2" opacity=".16"/></pattern>
+  </defs>
+  <path fill="url(#wall)" d="M0 0h1200v700H0z"/><path fill="url(#grid)" d="M0 0h1200v520H0z"/>
+  <path d="M0 55h1200M0 110h1200" stroke="#576f8a" stroke-width="12" opacity=".35"/>
+  <path d="M94 164h170v296H94zM412 164h170v296H412zM733 164h170v296H733z" fill="#071622" stroke="#64b6b6" stroke-width="8"/>
+  <path d="M108 178h142v267H108zM426 178h142v267H426zM747 178h142v267H747z" fill="url(#glass)"/>
+  <path d="M179 212v193m318-193v193m321-193v193" stroke="#b1f4df" stroke-width="6" opacity=".33"/>
+  <circle cx="179" cy="332" r="52" fill="none" stroke="#88d5cc" stroke-width="8" opacity=".45"/><circle cx="497" cy="326" r="38" fill="none" stroke="#88d5cc" stroke-width="8" opacity=".35"/>
+  <path d="M972 172h165v118H972z" fill="#0b1929" stroke="#b95c68" stroke-width="6"/><path d="M990 192h127v17H990z" fill="#d36b6e"/><text x="989" y="249" fill="#eef3e8" font-family="monospace" font-size="19" font-weight="bold">OSCORP</text>
+  <path d="M0 477h1200v223H0z" fill="url(#floor)"/><path d="M0 479h1200v10H0z" fill="#69acae"/><path d="M0 516h1200" stroke="#a34754" stroke-width="5" opacity=".7"/>
+  <path d="M0 591h1200M0 664h1200M142 491l-33 209m280-209-15 209m250-209v209m265-209 18 209m240-209 40 209" stroke="#7d99a8" stroke-width="3" opacity=".24"/>
+  <path d="M0 0h1200v700H0z" fill="#030815" opacity=".18"/>
+</svg>

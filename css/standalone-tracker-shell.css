@@ -1,0 +1,41 @@
+html:has(.has-standalone-tracker) { margin:0; padding:0; height:100dvh; overflow:hidden; }
+body.has-standalone-tracker { position:fixed; inset:0; display:block; margin:0; padding:0; height:100dvh; min-height:0; overflow:hidden; background:#02060b; }
+.standalone-tracker { position:relative; box-sizing:border-box; display:grid; grid-template-columns:36px minmax(0,1fr) 36px; grid-template-rows:76px minmax(0,1fr) 19px 50px 7px; width:100%; height:100dvh; }
+.standalone-tracker-frame { position:absolute; inset:0; display:grid; grid-template-columns:36px minmax(0,1fr) 36px; grid-template-rows:36px minmax(0,1fr) 19px 50px 7px; pointer-events:none; }
+.standalone-tracker-frame i { background-size:100% 100%; image-rendering:pixelated; }
+.standalone-tracker-content { position:relative; grid-area:2/2; min-width:0; min-height:0; overflow:auto; background:#071426; }
+.standalone-tracker-content .os-header { position:sticky; top:0; }
+.standalone-tracker-content .desktop-screen-wrapper { min-height:100%; height:auto; padding-top:12px; }
+.standalone-tracker-content .phone-frame { max-height:none; }
+.standalone-tracker-header { position:absolute; inset:0 0 auto; height:76px; z-index:500; pointer-events:none; }
+.standalone-tracker-header a,.standalone-tracker-header details { pointer-events:auto; }
+.standalone-tracker-header details { position:absolute; top:12px; left:20px; }
+.standalone-tracker-header summary { cursor:pointer; list-style:none; }
+.standalone-tracker-header summary::-webkit-details-marker { display:none; }
+.standalone-menu-head { display:block; width:62px; height:63.53px; background:url('../assets/spideytracker/hub-ui/spidey_head_spritesheet.png') 0 0/2852px 63.53px; image-rendering:pixelated; animation:standalone-head 4.8s steps(29) infinite alternate; }
+@keyframes standalone-head { from { background-position-x:0; } to { background-position-x:-1798px; } }
+.standalone-tracker-header details[open] .standalone-menu-head { animation:none; background-position-x:-2790px; }
+.standalone-tracker-header nav { display:grid; width:240px; padding:12px; background:#0c1c25f5; border:2px solid #96e0f7; box-shadow:4px 5px #0005; }
+.standalone-tracker-header nav a { display:flex; align-items:center; min-height:44px; padding:0 10px; color:#e7e9df; text-decoration:none; font:700 12px monospace; border-bottom:1px solid #96e0f733; }
+.standalone-logo { position:absolute; top:16px; left:50%; transform:translateX(-50%); }
+.standalone-logo img { width:280px; image-rendering:pixelated; }
+.standalone-apps { position:absolute; top:13px; right:23px; width:64px; height:64px; background:url('../assets/spideytracker/hub-ui/alert_btn_white.png') center/contain no-repeat; }
+.standalone-tracker-footer { position:relative; grid-area:4/2; display:flex; justify-content:center; align-items:center; }
+.standalone-tracker-footer a { color:#96e0f7; text-decoration:none; font:700 11px monospace; }
+.standalone-spidey { position:absolute; left:-29px; bottom:-5px; width:59.2px; height:95.2px; background:url('../assets/spideytracker/SpiderMan_HeadTurn.png') 0 0/4499.2px 95.2px; image-rendering:pixelated; animation:standalone-spidey 6.3333s steps(76) infinite; }
+@keyframes standalone-spidey { to { background-position-x:-4499.2px; } }
+.standalone-web-spidey { position:absolute; right:0; bottom:0; width:46px; height:69.56px; background:url('../assets/spideytracker/SpiderMan_web.png') 0 0/3542px 69.56px; image-rendering:pixelated; animation:standalone-web 6.4167s steps(77) infinite; }
+@keyframes standalone-web { to { background-position-x:-3542px; } }
+@media(max-width:768px) {
+  .standalone-tracker { grid-template-columns:27px minmax(0,1fr) 27px; grid-template-rows:62px minmax(0,1fr) 14px 40px 5px; }
+  .standalone-tracker-frame { grid-template-columns:27px minmax(0,1fr) 27px; grid-template-rows:27px minmax(0,1fr) 14px 40px 5px; }
+  .standalone-tracker-header details { top:11px; left:10px; }
+  .standalone-menu-head { width:50px; height:51.23px; background-size:2300px 51.23px; animation-name:standalone-head-mobile; }
+  @keyframes standalone-head-mobile { to { background-position-x:-1450px; } }
+  .standalone-tracker-header details[open] .standalone-menu-head { background-position-x:-2250px; }
+  .standalone-logo img { width:180px; }
+  .standalone-apps { top:14px; right:12px; width:48px; height:48px; }
+  .standalone-spidey { left:-22px; bottom:0; transform:scale(.63); transform-origin:bottom left; }
+  .standalone-web-spidey { transform:scale(.8); transform-origin:bottom right; }
+}
+@media(prefers-reduced-motion:reduce) { .standalone-menu-head,.standalone-spidey,.standalone-web-spidey { animation:none; } }

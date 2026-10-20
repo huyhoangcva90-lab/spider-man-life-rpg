@@ -1,0 +1,204 @@
+@font-face {
+  font-family: "Gambit Sans";
+  src: url("fonts/be-vietnam-pro-400.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@font-face {
+  font-family: "Gambit Sans";
+  src: url("fonts/be-vietnam-pro-600.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+
+:where(button, a[href], input, select, textarea, [role="button"]) {
+  touch-action: manipulation;
+}
+
+:where(button, a[href], input, select, textarea, [role="button"]):focus-visible {
+  outline: 2px solid #f4f3ed !important;
+  outline-offset: 3px !important;
+}
+
+:where(input, select, textarea):focus-visible {
+  box-shadow: 0 0 0 3px rgba(244, 243, 237, 0.18) !important;
+}
+
+html[data-gambit-app="todo"] .check-btn,
+html[data-gambit-app="todo"] .sub-check {
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  margin: -9px !important;
+  position: relative;
+  transform: none !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+html[data-gambit-app="todo"] .check-btn::before,
+html[data-gambit-app="todo"] .sub-check::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  opacity: .5;
+  transition: transform .16s ease, background .16s ease, opacity .16s ease;
+}
+
+html[data-gambit-app="todo"] .check-btn svg,
+html[data-gambit-app="todo"] .sub-check svg {
+  position: relative;
+  z-index: 1;
+}
+
+html[data-gambit-app="todo"] .done-card .check-btn::before,
+html[data-gambit-app="todo"] .sub-check.on::before {
+  background: currentColor;
+  opacity: 1;
+}
+
+html[data-gambit-app="todo"] .check-btn:active,
+html[data-gambit-app="todo"] .sub-check:active {
+  transform: none !important;
+}
+
+html[data-gambit-app="todo"] .check-btn:active::before,
+html[data-gambit-app="todo"] .sub-check:active::before {
+  transform: scale(.88);
+}
+
+html[data-gambit-app="todo"] :where(.icon-btn, .gear-btn) {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+html[data-gambit-app="todo"] :where(.tab, .undo-toast button),
+html[data-gambit-app="journal"] .kbdone,
+html[data-gambit-app="finance"] .month-arr {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+html[data-gambit-app="todo"] :where(.sheet-input, #new-subtask-input, #edit-subtask-input) {
+  min-height: 44px;
+}
+
+html[data-gambit-app="journal"] :where(.icon-btn, .edbtn, .kbbtn, .search-cancel) {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+html[data-gambit-app="journal"] :where(.search-input, .edtitle) {
+  min-height: 44px !important;
+}
+
+html[data-gambit-app="journal"] :where(.dcard, .tcard, .notion-card, .ecard, .tab, .fab)[role="button"] {
+  cursor: pointer;
+}
+
+html[data-gambit-app="journal"] :where(.dcard, .tcard, .notion-card, .ecard, .tab, .fab)[role="button"]:focus-visible {
+  outline-color: #111 !important;
+}
+
+@media (max-width: 520px) {
+  html[data-gambit-app="gym"] :where(.app, #homeView, .routine-grid) {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html[data-gambit-app="gym"] .routine-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html[data-gambit-app="gym"] .routine {
+    min-width: 0 !important;
+    overflow: hidden;
+  }
+}
+
+html[data-gambit-app="gym"] button.icon {
+  min-width: 44px !important;
+}
+
+html[data-gambit-app="timetable"] :where(.nav-btn, .theme-btn, .calendar-btn, .add-btn, .toast-close, .calendar-input) {
+  min-height: 44px !important;
+}
+
+html[data-gambit-app="timetable"] :where(.calendar-refresh, .toast-close) {
+  min-width: 44px !important;
+}
+
+html[data-gambit-app="dopamine"] :where(.nav-ic, .btm-btn, .btm-plus) {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+html[data-gambit-app="dopamine"] .btm-plus {
+  margin-left: auto;
+}
+
+html[data-gambit-app="habits"] :where(.sh-btn, .set-row) {
+  min-height: 44px !important;
+}
+
+html[data-gambit-app="habits"] .set-row[role="button"]:focus-visible {
+  outline-color: #111 !important;
+  outline-offset: -3px !important;
+}
+
+html[data-gambit-app="english"] .nav-tab,
+html[data-gambit-app="style30"] .tab {
+  min-height: 44px !important;
+  scroll-snap-align: start;
+}
+
+html[data-gambit-app="english"] .nav-tabs,
+html[data-gambit-app="style30"] .tabs {
+  scroll-snap-type: x proximity;
+}
+
+html[data-gambit-app="someday"] :where(.sound-toggle, .sound-slider) {
+  min-height: 44px !important;
+}
+
+html[data-gambit-app="someday"] .sound-toggle {
+  min-width: 44px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+@font-face {
+  font-family: "tabler-icons";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("./vendor/tabler/fonts/tabler-icons.woff2?v3.26.0") format("woff2");
+}

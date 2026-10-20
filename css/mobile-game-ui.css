@@ -1,560 +1,122 @@
-/* ==========================================================================
-   SPIDEY LIFE — MOBILE GAME UI / UX REFINEMENT
-   Preserves all existing mechanics, Notion sync, and asset registries while
-   delivering top-tier mobile portrait ergonomics and visual hierarchy.
-   ========================================================================== */
-
-:root {
-  --mobile-hud-h: 56px;
-  --mobile-nav-h: 62px;
-  --game-gold: #f2c06b;
-  --game-red: #f0645c;
-  --game-cyan: #54b6d0;
-  --game-green: #83b96b;
-  --game-purple: #a855f7;
-  --game-btn-shadow: 0 4px 0 #03070d, 0 6px 12px rgba(0,0,0,0.5);
-  --game-btn-shadow-active: 0 1px 0 #03070d;
+/* Refines the Antigravity mobile-game-ui direction without changing the tracker
+   artwork, frame, palette or Notion authority. This file owns spatial layout. */
+:root { --mission-hud-height:76px; --mission-dock-height:68px; }
+.game-hud-strip { position:absolute; z-index:65; inset:6px 8px auto; height:var(--mission-hud-height); min-height:0; margin:0; box-sizing:border-box; }
+html[data-notion-authority] body:not(:has(.notion-ready)) .game-hud-strip { visibility:hidden; }
+body[data-game-section] .action-rpg-screen { display:none; }
+body[data-game-mode="MAP"] .game-hud-strip,
+body[data-field-immersive="true"] .game-hud-strip { display:none !important; }
+.hud-avatar { cursor:pointer; text-align:left; color:inherit; font:inherit; }
+.hud-avatar-label { display:grid; min-width:0; gap:2px; }
+.hud-avatar:focus-visible { outline:2px solid #f2c06b; outline-offset:2px; }
+html[data-notion-authority] .game-hud-strip { grid-template-columns:minmax(125px,1fr) 48px minmax(180px,1.6fr); }
+.game-hud-strip .hud-bars { min-width:0; }
+.game-hud-strip .hud-bars label { grid-template-columns:50px minmax(10px,1fr) auto; font-size:11px; }
+.game-hud-strip .hud-bars label > span { white-space:nowrap; font:600 11px/1.2 'Be Vietnam Pro',sans-serif; }
+.game-hud-strip .hud-bars label > i { min-width:0; }
+body[data-game-mode="ARENA"]:not([data-field-immersive="true"]) .action-rpg-screen {
+  top:calc(var(--mission-hud-height) + 12px); bottom:var(--mission-dock-height);
+  grid-template-rows:auto minmax(0,1fr) auto auto; min-height:0; padding:0 8px 6px;
 }
-
-/* --------------------------------------------------------------------------
-   1. VIEWPORT & CONTAINER: EDGE-TO-EDGE ON MOBILE
-   -------------------------------------------------------------------------- */
-@media (max-width: 680px) {
-  html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: fixed;
-    touch-action: manipulation;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .tracker-viewport {
-    width: 100vw !important;
-    height: 100vh !important;
-    height: 100dvh !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    background: #050d18 !important;
-    overflow: hidden !important;
-  }
-
-  .tracker-device-frame {
-    width: 100% !important;
-    height: 100% !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    overflow: hidden !important;
-  }
-
-  /* Tone down thick decorative claw slice frame on small screens to gain screen space */
-  .claw-slice-frame {
-    display: none !important;
-  }
-
-  .frame-top-bar {
-    height: 44px !important;
-    min-height: 44px !important;
-    padding: 0 10px !important;
-    background: #071526 !important;
-    border-bottom: 2px solid #143552 !important;
-    z-index: 120 !important;
-    flex-shrink: 0 !important;
-  }
-
-  .brand-plaque {
-    gap: 8px !important;
-  }
-
-  .tracker-logo-image {
-    height: 22px !important;
-  }
-
-  .brand-subtitle {
-    font-size: 8px !important;
-    letter-spacing: 0.5px !important;
-  }
-
-  /* Make tracker-main flexible container filling available space between header & nav */
-  .frame-main-content {
-    flex: 1 1 auto !important;
-    height: auto !important;
-    min-height: 0 !important;
-    width: 100% !important;
-    margin: 44px 0 0 !important;
-    position: relative !important;
-    overflow: hidden !important;
-  }
+body[data-game-section]:not([data-field-immersive="true"]) #game-panel-backdrop {
+  inset:calc(var(--mission-hud-height) + 12px) 0 var(--mission-dock-height);
+  width:100%; padding:0; background:#071426; backdrop-filter:none; z-index:50;
 }
-
-/* --------------------------------------------------------------------------
-   2. PERSISTENT TOP HUD RESOURCE BAR
-   -------------------------------------------------------------------------- */
-.game-hud-strip {
-  background: linear-gradient(180deg, #0b1e33, #071424) !important;
-  border-bottom: 2px solid #1c4568 !important;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4) !important;
-  padding: 6px 10px !important;
-  z-index: 85 !important;
+#game-panel-backdrop[hidden] { display:none !important; }
+body[data-game-section]:not([data-field-immersive="true"]) .game-panel {
+  width:100%; height:100%; min-height:0; max-height:none;
+  display:grid; grid-template-rows:auto auto minmax(0,1fr); border:0; border-radius:0;
 }
-
-@media (max-width: 680px) {
-  .game-hud-strip {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 6px !important;
-    min-height: 48px !important;
-    padding: 4px 8px !important;
-  }
-
-  .hud-avatar {
-    flex: 0 0 auto !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-  }
-
-  .hud-mask {
-    width: 28px !important;
-    height: 28px !important;
-    flex-basis: 28px !important;
-    border: 2px solid #f2c06b !important;
-    border-radius: 50% !important;
-    background: #0f2c4a !important;
-    box-shadow: 0 0 6px rgba(242, 192, 107, 0.4) !important;
-    font-size: 14px !important;
-  }
-
-  .hud-avatar > div {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .hud-avatar small {
-    display: none !important;
-  }
-
-  .hud-avatar strong {
-    font-size: 8px !important;
-    max-width: 70px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    color: #e5f4f8 !important;
-  }
-
-  .hud-avatar em {
-    display: none !important;
-  }
-
-  .hud-stat--level {
-    flex: 0 0 auto !important;
-    background: #14375a !important;
-    border: 1px solid #54b6d0 !important;
-    border-radius: 6px !important;
-    padding: 2px 5px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-  }
-
-  .hud-stat--level small {
-    font-size: 6px !important;
-    color: #9ed9e7 !important;
-  }
-
-  .hud-stat--level strong {
-    font-size: 11px !important;
-    color: #f2c06b !important;
-    line-height: 1 !important;
-  }
-
-  /* HP & ENERGY BARS */
-  .hud-bars {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 3px !important;
-    padding: 0 4px !important;
-    background: transparent !important;
-    border: none !important;
-  }
-
-  .hud-bars label:first-child {
-    display: none !important; /* Hide EXP bar on narrow mobile header to avoid clutter */
-  }
-
-  .hud-bars label {
-    display: grid !important;
-    grid-template-columns: 24px 1fr !important;
-    gap: 4px !important;
-    align-items: center !important;
-    font-size: 6px !important;
-    color: #9ed9e7 !important;
-    margin: 0 !important;
-  }
-
-  .hud-bars label span {
-    font-size: 7px !important;
-    font-weight: 700 !important;
-    color: #eef6f8 !important;
-  }
-
-  .hud-bars label i {
-    height: 7px !important;
-    background: #03080f !important;
-    border: 1px solid #1a3f60 !important;
-    border-radius: 4px !important;
-    overflow: hidden !important;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.8) !important;
-  }
-
-  #hud-hp-fill {
-    background: linear-gradient(90deg, #f0645c, #ff8780) !important;
-    box-shadow: 0 0 5px rgba(240, 100, 92, 0.6) !important;
-  }
-
-  #hud-web-fill {
-    background: linear-gradient(90deg, #54b6d0, #8ce5f8) !important;
-    box-shadow: 0 0 5px rgba(84, 182, 208, 0.6) !important;
-  }
-
-  /* RE-ENABLE ECONOMY ON MOBILE AS COMPACT PILL */
-  .hud-economy {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    gap: 2px !important;
-    flex: 0 0 auto !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-  }
-
-  .hud-economy span {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 3px !important;
-    background: #112940 !important;
-    border: 1px solid #234f78 !important;
-    border-radius: 4px !important;
-    padding: 2px 5px !important;
-  }
-
-  .hud-economy span small {
-    display: none !important;
-  }
-
-  .hud-economy span b {
-    font-size: 9px !important;
-    color: #f2c06b !important;
-  }
-
-  .hud-economy span:first-child::before {
-    content: '🪙';
-    font-size: 8px;
-  }
-
-  .hud-economy span:last-child::before {
-    content: '🔥';
-    font-size: 8px;
-  }
+body[data-game-section]:not([data-field-immersive="true"]) .game-panel > header { padding:12px 18px; min-height:54px; }
+body[data-game-section]:not([data-game-section="SETTINGS"]) #game-panel-close { display:none; }
+.game-panel > header h2 { font-size:clamp(12px,1.4vw,16px); overflow-wrap:anywhere; }
+#game-panel-tabs { display:flex; flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; padding:8px 16px; gap:6px; scroll-padding-inline:16px; overscroll-behavior-inline:contain; }
+#game-panel-tabs button { flex:0 0 auto; min-height:44px; white-space:nowrap; }
+.game-panel-content { min-width:0; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+body[data-game-mode="ARENA"] .game-primary-nav,
+body[data-game-section]:not([data-field-immersive="true"]) .game-primary-nav {
+  grid-template-columns:repeat(5,minmax(0,1fr)); height:calc(var(--mission-dock-height) - 6px);
+  min-height:0; width:min(780px,calc(100% - 16px)); bottom:2px; padding:4px 0 0; gap:5px;
 }
-
-/* --------------------------------------------------------------------------
-   3. BOTTOM NAVIGATION: 5-TAB TOUCH-FRIENDLY THUMB ZONE
-   -------------------------------------------------------------------------- */
-.game-primary-nav {
-  position: absolute !important;
-  transform: none !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  height: var(--mobile-nav-h) !important;
-  margin: 0 !important;
-  padding: 4px 6px max(6px, env(safe-area-inset-bottom)) !important;
-  background: linear-gradient(180deg, #091a2d 0%, #040c17 100%) !important;
-  border-top: 2px solid #1c4568 !important;
-  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.6) !important;
-  display: grid !important;
-  grid-template-columns: repeat(5, 1fr) !important;
-  gap: 4px !important;
-  z-index: 110 !important;
-  align-items: center !important;
+.game-primary-nav button { min-width:0; min-height:48px; }
+.game-primary-nav button:active:not(:disabled), .pixel-action-btn:active:not(:disabled) { translate:0 2px; }
+.game-primary-nav__arena { translate:0 -4px; }
+.game-primary-nav button:focus-visible, #game-panel-tabs button:focus-visible { outline:2px solid #f2c06b; outline-offset:-3px; }
+.game-panel-content :is(p,.pixel-card-desc,.notion-record-card p) { font-size: max(12px,1em); }
+.notion-view-banner { padding:12px 16px; margin-bottom:14px; }
+.notion-view-banner p { font-size:12px; }
+.notion-record-card { min-width:0; overflow-wrap:anywhere; }
+.notion-hero-profile { grid-template-columns:minmax(100px,180px) minmax(0,1fr); }
+.notion-mission-card ol { padding-left:20px; }
+.notion-mission-card li { margin-block:12px; }
+.quest-create-drawer { margin-top:18px; border:1px solid #397c9b; background:#0c2134; }
+.quest-create-drawer summary { min-height:44px; padding:12px; color:#9ed9e7; cursor:pointer; font:700 12px/1.6 'Be Vietnam Pro',sans-serif; }
+.quest-create-drawer summary:focus-visible { outline:2px solid #f2c06b; outline-offset:-3px; }
+.quest-create-drawer .quest-create-form { margin:0; }
+.combat-action-bar { overflow-x:auto; overscroll-behavior-inline:contain; }
+html[data-notion-authority] .combat-action-bar { display:flex; gap:6px; padding:6px; }
+html[data-notion-authority] .combat-action-bar button { flex:1 0 108px; min-width:0; min-height:60px; }
+html[data-notion-authority] .combat-action-bar[data-layout="row"] { display:grid; grid-template-columns:repeat(var(--selected-skill-count),minmax(0,1fr)); }
+html[data-notion-authority] .combat-action-bar[data-layout="row"] button { padding-inline:4px; }
+html[data-notion-authority] .combat-action-bar[data-layout="row"][data-count] button { grid-column:auto !important; }
+html[data-notion-authority] .combat-action-bar strong { white-space:normal; overflow-wrap:anywhere; }
+html[data-notion-authority] .ultimate-meter { flex-wrap:wrap; gap:4px 8px; }
+.mission-panel-context { color:#9ed9e7; font:500 12px/1.5 'Be Vietnam Pro',sans-serif; }
+.quest-directive { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:4px 8px; }
+.quest-directive > strong { min-width:0; }
+.quest-directive > em { white-space:nowrap; }
+.quest-directive > .arena-turn-banner { position:static; grid-column:1/-1; display:flex; align-items:center; justify-content:flex-start; gap:8px; transform:none; width:auto; max-width:none; padding:4px 0 0; border:0; border-top:1px solid #ffffff24; background:transparent; box-shadow:none; text-align:left; }
+html[data-notion-authority] .quest-directive > .arena-turn-banner { max-width:none; }
+.quest-directive .arena-turn-banner small { color:#9ed9e7; font-size:9px; white-space:nowrap; }
+.quest-directive .arena-turn-banner strong { flex:0 0 auto; font-size:12px; }
+html[data-notion-authority] .quest-directive .arena-turn-banner span { display:block; min-width:0; color:#d9e0df; font:500 11px/1.4 'Be Vietnam Pro',sans-serif; white-space:normal; }
+@media(max-width:680px) {
+  :root { --mission-hud-height:80px; --mission-dock-height:64px; }
+  /* Retain all four animated corner characters and the original slice frame. */
+  .game-hud-strip { inset:4px 4px auto; gap:4px; }
+  html[data-notion-authority] .game-hud-strip { grid-template-columns:minmax(72px,.8fr) 34px minmax(142px,1.6fr); }
+  .game-hud-strip .hud-avatar { gap:5px; padding:5px; }
+  .game-hud-strip .hud-mask { width:26px; height:32px; flex-basis:26px; }
+  .game-hud-strip .hud-mask svg { width:23px; height:23px; }
+  .game-hud-strip .hud-avatar strong { white-space:normal; font:700 11px/1.3 'Be Vietnam Pro',sans-serif; }
+  .game-hud-strip .hud-avatar small,.game-hud-strip .hud-avatar em { display:none; }
+  .game-hud-strip .hud-stat--level { padding:3px; }
+  .game-hud-strip .hud-stat--level strong { font-size:14px; }
+  .game-hud-strip .hud-stat--level small { font-size:9px; }
+  .game-hud-strip .hud-bars { padding:5px; gap:4px; }
+  .game-hud-strip .hud-bars label { grid-template-columns:38px minmax(10px,1fr) auto; gap:3px; font-size:9px; letter-spacing:0; }
+  .game-hud-strip .hud-bars label > span { font-size:10px; }
+  body[data-game-section]:not([data-field-immersive="true"]) .game-panel > header { padding:10px 12px; min-height:48px; }
+  .game-panel > header small { display:none; }
+  .quest-directive { grid-template-columns:minmax(0,1fr) auto; }
+  .quest-directive > span { display:none; }
+  .quest-directive > strong { grid-column:1; }
+  .quest-directive > em { grid-column:2; }
+  .quest-directive .arena-turn-banner small { display:none; }
+  #game-panel-tabs { padding:6px 10px; }
+  #game-panel-tabs button { padding:8px 10px; font-size:10px; }
+  .game-panel-content { padding:12px 10px 24px; scrollbar-gutter:auto; }
+  .game-primary-nav button { min-height:50px; padding:4px 1px; font-size:10px; }
+  .game-primary-nav button svg { width:20px; height:20px; }
+  .notion-view-banner { flex-direction:column; align-items:stretch; gap:8px; font-size:12px; padding:10px; }
+  .notion-view-banner .notion-source-link { align-self:flex-start; }
+  .notion-hero-profile { grid-template-columns:1fr; gap:10px; padding:14px; }
+  .notion-hero-portrait { min-height:110px; }
+  .notion-hero-portrait img { max-height:160px; }
+  .notion-hero-profile h3 { font-size:22px; }
+  .notion-stat-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin-top:12px; }
+  .notion-stat-grid > span { padding:9px; }
+  .notion-record-grid { grid-template-columns:minmax(0,1fr); gap:10px; }
+  .notion-record-card { padding:14px; }
+  .notion-record-card h3 { font-size:17px; }
+  .notion-skill-detail { padding:14px; max-height:90%; overflow:auto; }
+  html[data-notion-authority] .combat-action-bar button { flex-basis:96px; min-height:58px; }
+  html[data-notion-authority] .combat-action-bar[data-layout="row"] button { min-height:78px; }
+  html[data-notion-authority] .combat-action-bar[data-layout="row"] strong { font-size:9px; overflow-wrap:normal; }
+  html[data-notion-authority] .combat-action-bar[data-layout="row"] small { font-size:8px; }
+  html[data-notion-authority] .ultimate-meter > .notion-source-link { min-height:32px; font-size:10px; }
 }
-
-.game-primary-nav button {
-  position: relative !important;
-  height: 50px !important;
-  min-height: 48px !important;
-  border-radius: 8px !important;
-  border: 1px solid #183a59 !important;
-  background: linear-gradient(180deg, #102942 0%, #0a1b2d 100%) !important;
-  color: #8da4be !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 3px !important;
-  cursor: pointer !important;
-  transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.4) !important;
-}
-
-.game-primary-nav button svg {
-  width: 18px !important;
-  height: 18px !important;
-  fill: currentColor !important;
-  transition: transform 0.15s ease !important;
-}
-
-.game-primary-nav button span {
-  font-family: 'Silkscreen', monospace !important;
-  font-size: 8px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.5px !important;
-  line-height: 1 !important;
-}
-
-.game-primary-nav button:active {
-  transform: translateY(2px) !important;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6) !important;
-}
-
-/* Active tab highlight */
-.game-primary-nav button.active {
-  background: linear-gradient(180deg, #1c4974 0%, #0e2740 100%) !important;
-  border-color: #54b6d0 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 10px rgba(84, 182, 208, 0.3), inset 0 1px 0 rgba(255,255,255,0.2) !important;
-}
-
-.game-primary-nav button.active svg {
-  transform: scale(1.12) !important;
-  color: #54b6d0 !important;
-}
-
-/* Central BATTLE tab elevated like top mobile games */
-.game-primary-nav button.game-primary-nav__arena {
-  background: linear-gradient(180deg, #882220 0%, #501211 100%) !important;
-  border: 1.5px solid #f0645c !important;
-  color: #ffe8e7 !important;
-  box-shadow: 0 -2px 10px rgba(240, 100, 92, 0.3), 0 3px 6px rgba(0,0,0,0.5) !important;
-}
-
-.game-primary-nav button.game-primary-nav__arena.active {
-  background: linear-gradient(180deg, #b02a28 0%, #681514 100%) !important;
-  border-color: #f2c06b !important;
-  color: #fff !important;
-  box-shadow: 0 0 14px rgba(242, 192, 107, 0.4), inset 0 1px 0 rgba(255,255,255,0.25) !important;
-}
-
-.game-primary-nav button.game-primary-nav__arena svg {
-  color: #f2c06b !important;
-}
-
-/* --------------------------------------------------------------------------
-   4. SEAMLESS SCREEN PANEL (QUESTS, HERO, HABITS, FIELD)
-   -------------------------------------------------------------------------- */
-.game-panel-backdrop {
-  position: absolute !important;
-  inset: 0 0 var(--mobile-nav-h) 0 !important;
-  background: #071424 !important;
-  backdrop-filter: none !important;
-  z-index: 75 !important;
-  display: block !important;
-  overflow: hidden !important;
-}
-
-.game-panel-backdrop[hidden] {
-  display: none !important;
-}
-
-.game-panel {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-  max-height: none !important;
-  margin: 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  display: flex !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-}
-
-/* Clean panel header */
-.game-panel > header {
-  flex: 0 0 auto !important;
-  padding: 8px 12px !important;
-  background: linear-gradient(180deg, #0d2238 0%, #081726 100%) !important;
-  border-bottom: 1px solid #193855 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-}
-
-.game-panel > header div {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.game-panel > header small {
-  font-size: 8px !important;
-  color: #54b6d0 !important;
-  letter-spacing: 0.5px !important;
-}
-
-.game-panel > header h2 {
-  font-size: 11px !important;
-  color: #f2c06b !important;
-  margin: 0 !important;
-  line-height: 1.2 !important;
-}
-
-.game-panel > header button#game-panel-close {
-  height: 32px !important;
-  min-height: 32px !important;
-  padding: 0 10px !important;
-  background: #15324d !important;
-  border: 1px solid #2d618c !important;
-  border-radius: 6px !important;
-  color: #9ed9e7 !important;
-  font-size: 8px !important;
-  font-weight: 700 !important;
-}
-
-/* SUBTABS: HORIZONTAL PILL SEGMENTED CONTROLS */
-#game-panel-tabs {
-  flex: 0 0 auto !important;
-  display: flex !important;
-  gap: 6px !important;
-  padding: 6px 10px !important;
-  background: #050e18 !important;
-  border-bottom: 1px solid #142f48 !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  scroll-behavior: smooth !important;
-  -webkit-overflow-scrolling: touch !important;
-  scrollbar-width: none !important;
-}
-
-#game-panel-tabs::-webkit-scrollbar {
-  display: none !important;
-}
-
-#game-panel-tabs button {
-  flex: 0 0 auto !important;
-  height: 32px !important;
-  min-height: 32px !important;
-  padding: 0 12px !important;
-  border-radius: 16px !important;
-  border: 1px solid #1a3c5d !important;
-  background: #0d2238 !important;
-  color: #8faec8 !important;
-  font-family: 'Silkscreen', monospace !important;
-  font-size: 8px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.4px !important;
-  white-space: nowrap !important;
-  transition: all 0.15s ease !important;
-}
-
-#game-panel-tabs button.active {
-  background: #194b75 !important;
-  border-color: #54b6d0 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 8px rgba(84, 182, 208, 0.3) !important;
-}
-
-/* SCROLLABLE PANEL CONTENT */
-.game-panel-content {
-  flex: 1 1 auto !important;
-  height: auto !important;
-  min-height: 0 !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  padding: 10px 10px 24px !important;
-  -webkit-overflow-scrolling: touch !important;
-}
-
-/* --------------------------------------------------------------------------
-   5. COMBAT ACTION BAR (CHUNKY 3D TACTILE BUTTONS)
-   -------------------------------------------------------------------------- */
-.combat-action-bar {
-  display: grid !important;
-  grid-template-columns: repeat(5, 1fr) !important;
-  gap: 5px !important;
-  padding: 6px !important;
-  background: #06111f !important;
-  border-top: 1px solid #173857 !important;
-}
-
-.combat-action-bar button {
-  border-radius: 8px !important;
-  min-height: 52px !important;
-  border: 1.5px solid #28557e !important;
-  background: linear-gradient(180deg, #183e63 0%, #0f2740 100%) !important;
-  box-shadow: 0 3px 0 #071524, 0 4px 6px rgba(0,0,0,0.5) !important;
-  transition: transform 0.08s ease, filter 0.08s ease !important;
-}
-
-.combat-action-bar button:active:not(:disabled) {
-  transform: translateY(2px) !important;
-  box-shadow: 0 1px 0 #071524 !important;
-}
-
-.combat-action-bar button[data-combat-action="attack"] {
-  background: linear-gradient(180deg, #326b9c 0%, #173f63 100%) !important;
-  border-color: #54b6d0 !important;
-}
-
-.combat-action-bar button.combat-action--ultimate {
-  background: linear-gradient(180deg, #a82e2b 0%, #631615 100%) !important;
-  border-color: #f0645c !important;
-}
-
-.combat-action-bar button.combat-action--ultimate:not(:disabled) {
-  box-shadow: 0 0 12px rgba(240, 100, 92, 0.5), 0 3px 0 #071524 !important;
-}
-
-/* --------------------------------------------------------------------------
-   6. CARDS IN QUESTS, HABITS, HERO ROSTER
-   -------------------------------------------------------------------------- */
-.pixel-game-card, .quest-board-card, .life-reset-card {
-  border-radius: 8px !important;
-  border: 1px solid #1a3c5e !important;
-  background: linear-gradient(180deg, #0e243a 0%, #071525 100%) !important;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.3) !important;
-  padding: 10px !important;
-}
-
-.pixel-action-btn {
-  border-radius: 6px !important;
-  min-height: 38px !important;
-  font-family: 'Silkscreen', monospace !important;
-  font-size: 8px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.5px !important;
-  box-shadow: 0 3px 0 #040d17 !important;
-  transition: transform 0.08s ease !important;
-}
-
-.pixel-action-btn:active:not(:disabled) {
-  transform: translateY(2px) !important;
-  box-shadow: 0 1px 0 #040d17 !important;
-}
+/* PK remains a dedicated battle embed; tools retain their separate full screen. */
+html[data-pk-embed] .game-hud-strip { top:4px; height:var(--mission-hud-height); }
+html[data-pk-embed] body .action-rpg-screen { inset:calc(var(--mission-hud-height) + 10px) 0 0; height:auto; grid-template-rows:auto minmax(0,1fr) auto auto; }
+@media(prefers-reduced-motion:reduce) { .game-primary-nav button { transition:none; } }

@@ -1,0 +1,48 @@
+{
+  "redirects": [
+    {"source":"/gambit","destination":"/?game=FIELD","permanent":false},
+    {"source":"/gambit/","destination":"/?game=FIELD","permanent":false},
+    {"source":"/gambit/index.html","destination":"/?game=FIELD","permanent":false},
+    {"source":"/gambit/apps/:path*","destination":"/field-tools/apps/:path*","permanent":false},
+    {"source":"/gambit/assets/:path*","destination":"/field-tools/assets/:path*","permanent":false}
+  ],
+  "rewrites": [
+    {"source":"/api/cloud","destination":"/api/field.mjs?kind=cloud"},
+    {"source":"/api/finance","destination":"/api/field.mjs?kind=finance"},
+    {"source":"/api/finance-v2","destination":"/api/field.mjs?kind=finance-v2"},
+    {"source":"/api/google/:route*","destination":"/api/field.mjs?kind=google&route=:route*"},
+    {
+      "source": "/api/routine",
+      "destination": "/api/routine.mjs"
+    },
+    {
+      "source": "/api/notion-session",
+      "destination": "/api/notion-session.mjs"
+    },
+    {
+      "source": "/api/notion",
+      "destination": "/api/notion.mjs"
+    },
+    {
+      "source": "/api/game-state",
+      "destination": "/api/game-state.mjs"
+    },
+    {
+      "source": "/pk",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/pk/",
+      "destination": "/index.html"
+    }
+  ],
+  "functions": {
+    "api/game-state.mjs":{"maxDuration":60},
+    "api/field.mjs":{"maxDuration":60},
+    "api/notion.mjs":{"maxDuration":60},
+    "api/notion-session.mjs":{"maxDuration":60},
+    "api/routine.mjs": {
+      "maxDuration": 60
+    }
+  }
+}
