@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 const localEnv = path.join(ROOT_DIR, '.env.local');
-if (!process.env.NOTION_API_KEY && fs.existsSync(localEnv) && typeof process.loadEnvFile === 'function') {
+if (!process.env.NOTION_API_KEY && !process.env.NOTION_TOKEN && fs.existsSync(localEnv) && typeof process.loadEnvFile === 'function') {
   process.loadEnvFile(localEnv);
 }
 const PORT = process.env.PORT || 4173;
@@ -43,6 +43,66 @@ const server = http.createServer((req, res) => {
 
   const rawUrl = req.url.split('?')[0];
   const staticPath = /^\/pk\/?$/.test(rawUrl) ? '/index.html' : rawUrl;
+
+  // API Proxy for Notion
+  if (rawUrl === '/api/notion') {
+    res.removeHeader('Access-Control-Allow-Origin');
+    res.removeHeader('Access-Control-Allow-Methods');
+    const requestOrigin = `http://${req.headers.host}`;
+    if (req.headers.origin && req.headers.origin !== requestOrigin) {
+      res.writeHead(403, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: false, error: 'Cross-origin Notion access is not allowed' }));
+      return;
+    }
+    if (!['GET', 'HEAD'].includes(req.method) && req.headers.origin !== requestOrigin) {
+      res.writeHead(403, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: false, error: 'Same-origin write required' }));
+      return;
+    }
+    const urlObj = new URL(req.url, `http://${req.headers.host}`);
+    const notionPath = urlObj.searchParams.get('path');
+    const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN || '';
+
+    if (!token) {
+      res.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ ok: false, error: 'Notion is not configured on this server' }));
+      return;
+    }
+
+    if (!notionPath) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: 'Missing path query parameter' }));
+      return;
+    }
+
+    let bodyData = '';
+    req.on('data', chunk => { bodyData += chunk; });
+    req.on('end', async () => {
+      try {
+        const notionUrl = `https://api.notion.com${notionPath.startsWith('/') ? notionPath : `/${notionPath}`}`;
+        const fetchOpts = {
+          method: req.method,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Notion-Version': '2022-06-28',
+            'Content-Type': 'application/json; charset=utf-8'
+          }
+        };
+        if (req.method !== 'GET' && req.method !== 'HEAD' && bodyData) {
+          fetchOpts.body = bodyData;
+        }
+
+        const nRes = await fetch(notionUrl, fetchOpts);
+        const json = await nRes.json().catch(() => ({}));
+        res.writeHead(nRes.status, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ ok: nRes.ok, data: json }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ ok: false, error: err.message }));
+      }
+    });
+    return;
+  }
 
   if (rawUrl === '/api/game-state' || rawUrl === '/api/game-state.mjs') {
     import('../api/game-state.mjs').then(({ default: handler }) => {

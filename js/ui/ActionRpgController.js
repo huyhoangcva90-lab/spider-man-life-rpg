@@ -75,6 +75,25 @@ export class ActionRpgController {
     this.fieldAppId = null;
     this.bus.on('OPEN_FIELD_APP',({id})=>this.openEmbeddedFieldApp(id));
     window.addEventListener('message', event => {
+      const personalFrame = document.querySelector('.habit-app-frame[data-personal-app]');
+      if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'SPIDEY_NOTION_CHECKIN') {
+        const { kind, id } = event.data;
+        const list = kind === 'habits' ? this.notionHabits : kind === 'activeQuests' ? this.notionActiveQuests : kind === 'masterCalendar' ? this.notionTasks : null;
+        const record = list?.find(item => item.id === id);
+        if (!record || record.done || (kind === 'habits' && record.today)) return;
+        record.done = true;
+        if (kind === 'habits') {
+          record.today = true;
+          const result = this.engine.recordHabitCheckin(id);
+          if (!result.blocked) this.queueHeroProfileSync();
+        } else {
+          const result = this.engine.completeRealQuest({ id, title: record.title || record.name, type: 'NOTION_MISSION', status: 'DONE', source: 'NOTION', xp: record.gameXp ?? record.xp });
+          if (result) this.queueHeroProfileSync();
+        }
+        this.persistNotionCache();
+        this.render();
+        return;
+      }
       const frame = document.querySelector('[data-field-app-frame]');
       if (event.origin !== location.origin || event.source !== frame?.contentWindow) return;
       if (event.data?.type === 'spider:gambit-open' && FIELD_APPS[event.data.id] && event.data.id !== 'launcher') this.openEmbeddedFieldApp(event.data.id);
@@ -126,8 +145,6 @@ export class ActionRpgController {
     this.bus.on('ENEMY_COUNTERATTACK', () => this.animateEnemy('attack', 520));
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
       if (section === 'CITY') return this.selectSection('CITY');
-      if (section === 'ARCHIVE') { section = 'HERO'; tab = 'BADGES'; }
-      if (section === 'CHRONICLE') { section = 'FIELD'; tab = tab === 'RHYTHM' ? 'TIME' : tab; }
       this.selectSection(section, false);
       this.panelTab = tab || this.defaultTab(section);
       this.renderPanel();
@@ -459,7 +476,7 @@ export class ActionRpgController {
     if (FIELD_APPS[appId]) { this.openEmbeddedFieldApp(appId); return; }
     const section = url.searchParams.get('game');
     const tab = url.searchParams.get('tab');
-    if (!['ARENA', 'QUESTS', 'HERO', 'HABITS', 'FIELD', 'SETTINGS', 'CITY'].includes(section)) return;
+    if (!['ARENA', 'QUESTS', 'HERO', 'HABITS', 'FIELD', 'ARCHIVE', 'CHRONICLE', 'SETTINGS', 'CITY'].includes(section)) return;
     this.selectSection(section, false);
     if (section !== 'CITY' && tab) {
       this.panelTab = tab;
@@ -678,9 +695,9 @@ export class ActionRpgController {
 
   defaultTab(section) {
     const map = {
-      QUESTS: 'TODAY',
+      QUESTS: 'APP',
       HERO: 'PROFILE',
-      HABITS: 'TODAY',
+      HABITS: 'APP',
       FIELD: 'SYSTEMS',
       ARCHIVE: 'BESTIARY',
       CHRONICLE: 'RHYTHM',
@@ -710,9 +727,9 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: this.notionPresenter ? ['TODAY', 'MISSIONS', 'OVERDUE', 'GOALS'] : ['TODAY', 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS'],
+      QUESTS: ['APP', 'GAMBIT', 'TODAY', ...(this.notionPresenter ? ['MISSIONS'] : []), 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS', 'ACTIVE'],
       HERO: this.notionPresenter ? ['PROFILE', 'SUITS', 'SKILLS', 'MAPS', 'BADGES'] : ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'MAPS', 'BADGES'],
-      HABITS: ['TODAY', 'PROGRESS', '66 DAYS'],
+      HABITS: ['APP', 'GAMBIT', 'TODAY', 'PROGRESS', '66 DAYS'],
       FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
       CHRONICLE: ['RHYTHM', 'JOURNAL', 'GYM'],
@@ -747,13 +764,15 @@ export class ActionRpgController {
     };
 
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
-    const requestedApp = this.panelSection === 'QUESTS' ? 'todo' : this.panelSection === 'HABITS' ? 'habits' : this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
+    const requestedApp = this.panelSection === 'QUESTS' && this.panelTab === 'GAMBIT' ? 'todo' : this.panelSection === 'HABITS' && this.panelTab === 'GAMBIT' ? 'habits' : this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
     if (FIELD_APPS[requestedApp]) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
-    if (FIELD_APPS[requestedApp] && requestedApp !== 'launcher') document.body.dataset.fieldStandalone='true';
-    else delete document.body.dataset.fieldStandalone;
+    // Every destination uses the same Spider frame, including imported Field apps.
+    delete document.body.dataset.fieldStandalone;
     const keepCurrentApp = requestedApp && content.querySelector('[data-field-app]')?.dataset.fieldApp === requestedApp;
-    if (!keepCurrentApp) {
+    const keepPersonalApp = this.panelTab === 'APP' && content.querySelector('[data-personal-app]')?.dataset.personalApp === this.panelSection;
+    content.classList.toggle('game-panel-content--habit-app', this.panelTab === 'APP' && ['QUESTS', 'HABITS'].includes(this.panelSection));
+    if (!keepCurrentApp && !keepPersonalApp) {
       content.innerHTML = this.renderSection();
       this.bindEvents(content);
     }
@@ -761,8 +780,12 @@ export class ActionRpgController {
   }
 
   renderSection() {
-    if (this.panelSection === 'QUESTS') return renderFieldApp('todo');
-    if (this.panelSection === 'HABITS') return renderFieldApp('habits');
+    if (['QUESTS', 'HABITS'].includes(this.panelSection) && this.panelTab === 'APP') {
+      const tab = this.panelSection === 'QUESTS' ? 'quests' : 'today';
+      return `<iframe class="habit-app-frame" data-personal-app="${this.panelSection}" src="./life-reset/index.html?tab=${tab}" title="${this.panelSection === 'QUESTS' ? 'Quest' : 'Habit'} của tôi" loading="lazy"></iframe>`;
+    }
+    if (this.panelSection === 'QUESTS' && this.panelTab === 'GAMBIT') return renderFieldApp('todo');
+    if (this.panelSection === 'HABITS' && this.panelTab === 'GAMBIT') return renderFieldApp('habits');
     switch (this.panelSection) {
       case 'QUESTS': return this.renderQuestsSection();
       case 'HERO': return this.renderHeroSection();

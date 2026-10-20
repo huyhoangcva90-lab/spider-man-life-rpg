@@ -1,6 +1,13 @@
 # Node / Dependencies
 node_modules/
 .npm
+.npm-cache/
+.pages-private/
+.pages-private.zip
+.pages-bootstrap/
+.pages-bootstrap.zip
+.private-pages-credentials.json
+.wrangler-config/
 
 # OS generated files
 .DS_Store
@@ -28,3 +35,4 @@ npm-debug.log*
 # Extracted APK assets
 tools/apk_unpacked/
 tools/xapk_extracted/
+tools/reference-apks/

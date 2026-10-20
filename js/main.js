@@ -16,7 +16,7 @@ import { EntryEditor } from './ui/EntryEditor.js';
 import { ActivityLog } from './ui/ActivityLog.js';
 import { MarkerDossier } from './ui/MarkerDossier.js?build=spider-life-reset-2';
 import { UnlocatedMissionQueue } from './ui/UnlocatedMissionQueue.js?build=static-spiders-nav';
-import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=spider-life-reset-2';
+import { HubOverlayPanels } from './ui/HubOverlayPanels.js?build=personal-habit-quest-1';
 import { MapGuideModal } from './ui/MapGuideModal.js';
 import { HeroAnimationController } from './game/HeroAnimationController.js?build=game-loadout-7';
 import { PhaseOneGameEngine } from './game/PhaseOneGameEngine.js?build=notion-authority-1';
