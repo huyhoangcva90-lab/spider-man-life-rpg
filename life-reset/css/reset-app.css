@@ -2793,6 +2793,9 @@ body.embedded .curved-bottom-dock { position: fixed; bottom: 0; left: 0; right: 
 .phone-frame .ios-status-bar { display: none; }
 .phone-frame .app-main-content { min-height: 0; padding-bottom: 22px; overscroll-behavior: contain; }
 .phone-frame .curved-bottom-dock { position: relative; flex: 0 0 64px; width: 100%; margin: 0 auto; }
+body.embedded .brand-top-banner { display: none; }
+body.embedded .app-main-content { padding-bottom: 22px; }
+body.embedded .curved-bottom-dock { position: relative; flex: 0 0 58px; height: 58px; }
 .hello-square-tile[aria-busy="true"] { opacity: .55; cursor: progress; }
 .hello-square-tile { aspect-ratio: auto; min-height: 148px; grid-template-rows: 34px auto 1fr auto; gap: 6px; }
 .hello-square-name { line-height: 1.35; }
