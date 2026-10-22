@@ -1,11 +1,9 @@
 import { dateKey, rollDailyState, questBucket, selectQuests, campaignDays } from './personal-progress.mjs';
+import { HelloHabitView } from './hello-habit-view.mjs';
 
 /**
- * 66 日間 (LIFE RESET) & HELLO HABIT REPORTS ENGINE - 100% REPLICA
- * Accurately matching all 4 user screenshots:
- * - Image 1 & 2: Anime habit cards with square check [✓], flame pills, day navigator
- * - Image 3: The 8 core habits 2x4 grid with "➜ Continue"
- * - Image 4: Hello Habit Reports heatmap matrix & split-color goal cards
+ * Life Reset reference UI and Notion-backed personal views.
+ * HelloHabit parity and outstanding gaps: docs/HELLOHABIT_AUDIT.md.
  */
 
 const STORAGE_KEY = 'life_reset_screenshot_v5';
@@ -162,22 +160,8 @@ class LifeResetApp {
     this.focusSeconds = 25 * 60;
     this.activeSheetHabit = null;
 
-    // Local goals are separate from Notion habits and start with no fabricated progress.
-    this.helloTracker = this.state.helloTracker || {
-      selectedDay: new Date().toDateString(),
-      days: [],
-      daily: {
-        water: { name: 'Drink Water', cur: 0, tgt: 8, unit: 'times', streak: 0, color: 'blue', step: 1 },
-        steps: { name: 'Steps', cur: 0, tgt: 10000, unit: 'steps', streak: 0, color: 'teal', step: 1000 },
-        read: { name: 'Read', cur: 0, tgt: 30, unit: 'min', streak: 0, color: 'coral', step: 5 }
-      },
-      weekly: {
-        exercise: { name: 'Exercise', cur: 0, tgt: 3, unit: 'times', streak: 0, color: 'purple', step: 1 },
-        journal: { name: 'Journal', cur: 0, tgt: 500, unit: 'words', streak: 0, color: 'slate', step: 100 }
-      },
-      collapsedDaily: false,
-      collapsedWeekly: false
-    };
+    // Preserve legacy saved settings; new views use the canonical Notion habits.
+    this.helloTracker = this.state.helloTracker || { selectedDay: this.todayKey() };
   }
 
   loadState() {
@@ -633,7 +617,6 @@ class LifeResetApp {
       this.renderHelloSquareHabits();
       this.renderQuestBoard();
       this.renderPathwayGrid();
-      this.renderTrackerSplitCards();
       if (this.activeSubview === 'reports') this.renderHeatmapMatrices();
       if (!quiet) {
         this.playSfx('reward');
@@ -929,7 +912,6 @@ class LifeResetApp {
     this.cacheNotionData();
     this.saveState();
     this.renderPathwayGrid();
-    this.renderTrackerSplitCards();
     this.renderHabitCards();
     this.renderHelloSquareHabits();
   }
@@ -1034,6 +1016,7 @@ class LifeResetApp {
   // =========================================================================
   setupHelloHabitTab() {
     this.helloTracker.selectedDay = this.todayKey();
+    this.helloView = new HelloHabitView(this);
     document.getElementById('btn-hello-menu')?.addEventListener('click', () => this.syncNotionLive());
     document.getElementById('btn-reports-menu')?.addEventListener('click', () => document.getElementById('btn-export-save')?.click());
     this.renderWeekStrip();
@@ -1071,31 +1054,9 @@ class LifeResetApp {
       this.playSfx('bell');
     });
 
-    document.getElementById('btn-tracker-filter')?.addEventListener('click', (event) => {
-      const filters = ['all', 'open', 'done'];
-      this.helloFilter = filters[(filters.indexOf(this.helloFilter || 'all') + 1) % filters.length];
-      event.currentTarget.setAttribute('aria-label', `Lọc Habit: ${{ all: 'Tất cả', open: 'Chưa check', done: 'Đã check' }[this.helloFilter]}`);
-      event.currentTarget.title = event.currentTarget.getAttribute('aria-label');
-      document.querySelector('.tracker-header-title').textContent = { all: 'Tất cả Habit', open: 'Chưa check', done: 'Đã check' }[this.helloFilter];
-      this.renderHelloSquareHabits();
-    });
     document.getElementById('btn-tracker-dots')?.addEventListener('click', () => document.querySelector('[data-subview="reports"]')?.click());
 
     // Collapsible Groups
-    const groupDaily = document.getElementById('group-daily-goals');
-    const headerDaily = document.getElementById('header-daily-goals');
-    headerDaily?.addEventListener('click', () => {
-      this.helloTracker.collapsedDaily = !this.helloTracker.collapsedDaily;
-      groupDaily?.classList.toggle('collapsed', this.helloTracker.collapsedDaily);
-    });
-
-    const groupWeekly = document.getElementById('group-weekly-goals');
-    const headerWeekly = document.getElementById('header-weekly-goals');
-    headerWeekly?.addEventListener('click', () => {
-      this.helloTracker.collapsedWeekly = !this.helloTracker.collapsedWeekly;
-      groupWeekly?.classList.toggle('collapsed', this.helloTracker.collapsedWeekly);
-    });
-
     // Granularity switcher: Week | Month | Year
     const timeBtns = document.querySelectorAll('.time-btn');
     timeBtns.forEach(btn => {
@@ -1161,7 +1122,6 @@ class LifeResetApp {
       this.renderHeatmapMatrices();
     } else {
       this.renderHelloSquareHabits();
-      this.renderTrackerSplitCards();
     }
   }
 
@@ -1174,91 +1134,11 @@ class LifeResetApp {
   }
 
   renderWeekStrip() {
-    const strip = document.getElementById('hello-week-strip');
-    if (!strip) return;
-    strip.replaceChildren();
-    const today = new Date();
-    for (let offset = 6; offset >= 0; offset--) {
-      const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - offset);
-      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-      const cell = document.createElement('button');
-      cell.type = 'button';
-      cell.className = `cal-day-cell${this.helloTracker.selectedDay === key ? ' active' : ''}`;
-      cell.dataset.day = key;
-      cell.setAttribute('aria-pressed', String(this.helloTracker.selectedDay === key));
-      cell.innerHTML = '<span class="cal-day-name"></span><span class="cal-day-num"></span>';
-      cell.querySelector('.cal-day-name').textContent = new Intl.DateTimeFormat('vi-VN', { weekday: 'short' }).format(date);
-      cell.querySelector('.cal-day-num').textContent = String(date.getDate());
-      strip.appendChild(cell);
-    }
+    this.helloView?.renderCalendar();
   }
 
   renderHelloSquareHabits() {
-    const grid = document.getElementById('hello-square-grid');
-    const progress = document.getElementById('hello-square-progress');
-    if (!grid || !progress) return;
-
-    const habits = this.notionHabits;
-    const selectedDay = this.helloTracker.selectedDay || this.todayKey();
-    const isToday = selectedDay === this.todayKey();
-    const completed = habits.filter((habit) => isToday ? !!this.state.notionDoneToday[habit.id] : (this.state.notionHistory?.[habit.rawId || habit.id] || []).includes(selectedDay)).length;
-    progress.textContent = `${completed} / ${habits.length} CHECKED${isToday ? '' : ' · LỊCH SỬ'}`;
-    grid.innerHTML = '';
-
-    if (!habits.length) {
-      grid.innerHTML = '<div class="hello-square-empty">Đang tải Habit từ Notion Zeus…</div>';
-      return;
-    }
-
-    const tones = ['sky', 'mint', 'coral', 'violet', 'amber'];
-    habits.forEach((habit, index) => {
-      const done = isToday ? !!this.state.notionDoneToday[habit.id] : (this.state.notionHistory?.[habit.rawId || habit.id] || []).includes(selectedDay);
-      if (this.helloFilter === 'open' && done || this.helloFilter === 'done' && !done) return;
-      const tile = document.createElement('button');
-      tile.type = 'button';
-      tile.className = `hello-square-tile hello-square-tile--${tones[index % tones.length]}${done ? ' is-checked' : ''}`;
-      tile.setAttribute('aria-pressed', String(done));
-      tile.setAttribute('aria-label', `${done ? 'Bỏ check' : 'Check'} ${habit.name}`);
-      tile.disabled = !isToday || this.syncing || this.pendingHabitIds.has(habit.id);
-      tile.setAttribute('aria-busy', String(this.pendingHabitIds.has(habit.id)));
-      tile.innerHTML = `
-        <span class="hello-square-box" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
-        <span class="hello-square-type"></span>
-        <strong class="hello-square-name"></strong>
-        <small class="hello-square-time"></small>
-      `;
-      tile.querySelector('.hello-square-type').textContent = habit.category || 'HABIT';
-      tile.querySelector('.hello-square-name').textContent = habit.name;
-      tile.querySelector('.hello-square-time').textContent = habit.timeBlock || 'Cả ngày';
-      tile.addEventListener('click', () => this.toggleNotionHabitDone(habit));
-      grid.appendChild(tile);
-    });
-  }
-
-  renderTrackerSplitCards() {
-    const container = document.getElementById('daily-split-cards');
-    if (!container) return;
-    container.replaceChildren();
-    const days = Array.from({ length: 7 }, (_, index) => {
-      const date = new Date(); date.setDate(date.getDate() - 6 + index); return dateKey(date);
-    });
-    for (const habit of this.notionHabits) {
-      const history = new Set(this.state.notionHistory?.[habit.rawId || habit.id] || []);
-      const count = days.filter(day => history.has(day)).length;
-      const tile = document.createElement('article');
-      tile.className = 'split-goal-tile';
-      tile.innerHTML = '<div class="split-pastel-left teal"></div><div class="split-data-right"><div class="split-data-top">7 ngày gần đây</div><div class="split-val-center"><span class="split-val-bold"></span><span class="split-target-sub">ngày có check-in được ghi nhận</span></div><div class="split-dots-track"></div></div>';
-      tile.querySelector('.split-pastel-left').textContent = habit.name;
-      tile.querySelector('.split-val-bold').textContent = `${count} / 7`;
-      const track = tile.querySelector('.split-dots-track');
-      for (const day of days) {
-        const dot = document.createElement('span');
-        dot.className = `split-dash-segment${history.has(day) ? ' filled teal' : ''}`;
-        dot.title = `${day}: ${history.has(day) ? 'Đã check' : 'Chưa ghi nhận'}`;
-        track.appendChild(dot);
-      }
-      container.appendChild(tile);
-    }
+    this.helloView?.render();
   }
 
   renderHeatmapMatrices() {

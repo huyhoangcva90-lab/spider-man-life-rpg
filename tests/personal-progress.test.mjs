@@ -52,7 +52,7 @@ test('Field summary uses the canonical cache and never treats yesterday as check
 function makeApp() {
   const store = new Map();
   const context = vm.createContext({ ...progress, localStorage: { getItem: key => store.get(key), setItem: (key, value) => store.set(key, value) }, window: { addEventListener() {}, parent: { postMessage() {} }, location: { origin: 'http://localhost' } }, Date, Set, console });
-  const source = fs.readFileSync(new URL('../life-reset/js/app.js', import.meta.url), 'utf8').replace(/^import .*;\r?\n/, '');
+  const source = fs.readFileSync(new URL('../life-reset/js/app.js', import.meta.url), 'utf8').replace(/^import .*;\r?\n/gm, '');
   vm.runInContext(`${source}\nglobalThis.TestApp = LifeResetApp;`, context);
   const app = new context.TestApp();
   for (const method of ['renderHelloSquareHabits', 'renderHabitCards', 'renderPathwayGrid', 'renderTrackerSplitCards', 'showSpideyToast', 'playSfx', 'renderHeaderStats']) app[method] = () => {};

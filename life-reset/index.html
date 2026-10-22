@@ -6,7 +6,8 @@
   <title>66 日間 - Life Reset: 66 Day Habit</title>
   <link rel="stylesheet" href="../css/standalone-tracker-shell.css?build=frame-layers-1" />
   <script type="module" src="../js/ui/StandaloneTrackerShell.js"></script>
-  <link rel="stylesheet" href="css/reset-app.css?build=unified-personal-1" />
+  <link rel="stylesheet" href="css/reset-app.css?build=hello-audit-1" />
+  <link rel="stylesheet" href="css/hello-habit.css?build=hello-audit-1" />
   <link rel="icon" type="image/png" href="assets/images/house_ember.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -175,7 +176,7 @@
           <!-- Sub-View Navigation Switcher (Habit Tracker vs Habit Reports) -->
           <div class="hello-habit-nav-bar">
             <div class="sub-nav-segmented">
-              <button class="sub-nav-btn active" data-subview="tracker">Check Habit</button>
+              <button class="sub-nav-btn active" data-subview="tracker">Theo dõi</button>
               <button class="sub-nav-btn" data-subview="reports">Báo cáo</button>
             </div>
             <button id="btn-hello-menu" class="hello-menu-btn" title="Đồng bộ Habit" aria-label="Đồng bộ Habit">↻</button>
@@ -184,58 +185,33 @@
           <!-- SUB-VIEW 1: HABIT TRACKER (Left Side of User Image 4) -->
           <div id="subview-tracker-content" class="subview-section active">
 
-            <!-- Subview 1 Native Header from Image 4: [Sliders] [...] [Habits] [+] -->
             <div class="hello-tracker-header">
-              <div class="tracker-header-left">
-                <button class="t-icon-btn" id="btn-tracker-filter" title="Filter">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
-                </button>
-                <button class="t-icon-btn" id="btn-tracker-dots" title="More Options">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="1.8" fill="currentColor"></circle><circle cx="6" cy="12" r="1.8" fill="currentColor"></circle><circle cx="18" cy="12" r="1.8" fill="currentColor"></circle></svg>
-                </button>
-              </div>
-              <h2 class="tracker-header-title">Habits</h2>
-              <a class="t-plus-round-btn" href="https://www.notion.so/272d787636c681a29bf8e4d5e588e173" target="_blank" rel="noopener" aria-label="Quản lý Habit trong Notion">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              </a>
+              <button class="t-icon-btn" id="btn-tracker-filter" type="button" aria-label="Bộ lọc và sắp xếp Habit" aria-expanded="false" aria-controls="hello-view-options">☷</button>
+              <div class="hh-heading"><h2 class="tracker-header-title">Habits</h2><small id="hello-sync-status" role="status"></small></div>
+              <button class="t-icon-btn" id="btn-tracker-dots" type="button" aria-label="Mở báo cáo Habit">▥</button>
+              <a class="t-plus-round-btn" href="https://www.notion.so/272d787636c681a29bf8e4d5e588e173" target="_blank" rel="noopener" aria-label="Thêm hoặc quản lý Habit trong Notion">+</a>
             </div>
-
-            <!-- Calendar Horizontal Week Slider (Thu 10 ... Wed 16 from Image 4) -->
-            <div class="week-calendar-strip" id="hello-week-strip">
-              <div class="cal-day-cell" data-day="Thu 10"><span class="cal-day-name">Thu</span><span class="cal-day-num">10</span></div>
-              <div class="cal-day-cell" data-day="Fri 11"><span class="cal-day-name">Fri</span><span class="cal-day-num">11</span></div>
-              <div class="cal-day-cell" data-day="Sat 12"><span class="cal-day-name">Sat</span><span class="cal-day-num">12</span></div>
-              <div class="cal-day-cell" data-day="Sun 13"><span class="cal-day-name">Sun</span><span class="cal-day-num">13</span></div>
-              <div class="cal-day-cell" data-day="Mon 14"><span class="cal-day-name">Mon</span><span class="cal-day-num">14</span></div>
-              <div class="cal-day-cell" data-day="Tue 15"><span class="cal-day-name">Tue</span><span class="cal-day-num">15</span></div>
-              <div class="cal-day-cell active" data-day="Wed 16"><span class="cal-day-name">Wed</span><span class="cal-day-num">16</span></div>
+            <div class="hh-date-controls">
+              <button id="hello-week-prev" type="button" aria-label="Tuần trước">‹</button>
+              <label><span class="hh-sr-only">Chọn ngày theo dõi Habit</span><input id="hello-date" type="date" /></label>
+              <button id="hello-today" type="button">Hôm nay</button>
+              <button id="hello-week-next" type="button" aria-label="Tuần sau">›</button>
             </div>
-
-            <!-- Hello Habit quick check: square Notion habits -->
-            <section class="hello-square-check-section" aria-labelledby="hello-square-title">
-              <header class="hello-square-check-header">
-                <div><span>NOTION ZEUS // TODAY</span><h3 id="hello-square-title">Hello Habit</h3></div>
-                <strong id="hello-square-progress">0 / 0 CHECKED</strong>
-              </header>
-              <p class="personal-history-note">Check hôm nay để lưu vào Notion. Chọn ngày phía trên để xem lịch sử ghi nhận trên thiết bị này.</p>
-              <div class="hello-square-grid" id="hello-square-grid" aria-live="polite"></div>
-            </section>
-
-            <!-- Daily Goals (Split Color Tiles from Image 4) -->
-            <div class="goals-group-container" id="group-daily-goals">
-              <div class="goals-group-header" id="header-daily-goals">
-                <div class="group-header-label">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                  <span>7 ngày gần đây · Notion</span>
-                </div>
-                <button class="collapse-circle-btn" aria-label="Toggle section">
-                  <span class="collapse-arrow">▾</span>
-                </button>
+            <div class="week-calendar-strip" id="hello-week-strip" aria-label="Chọn ngày"></div>
+            <div id="hello-overview">
+              <label class="hh-search"><span class="hh-sr-only">Tìm Habit</span><input type="search" id="hello-search" placeholder="Tìm Habit…" autocomplete="off" /></label>
+              <div id="hello-view-options" class="hh-options" hidden>
+                <label>Trạng thái<select id="hello-filter"><option value="all">Tất cả</option><option value="open">Chưa check</option><option value="done">Đã check</option></select></label>
+                <label>Nhóm theo<select id="hello-group"><option value="none">Không nhóm</option><option value="category">Phân loại</option><option value="time">Khung giờ</option></select></label>
+                <label>Sắp xếp<select id="hello-sort"><option value="original">Thứ tự Notion</option><option value="name">Tên A–Z</option><option value="streak">Streak giảm dần</option></select></label>
               </div>
-              <div class="split-cards-container" id="daily-split-cards">
-                <!-- Populated dynamically with exact Image 4 pastel split cards -->
-              </div>
+              <section class="hh-overview-section" aria-labelledby="hello-square-title">
+                <header class="hello-square-check-header"><h3 id="hello-square-title"><span id="hello-selected-date">Hôm nay</span></h3><strong id="hello-square-progress">0 / 0 đã check</strong></header>
+                <div id="hello-square-grid" class="hh-habit-list"></div>
+              </section>
             </div>
+            <section id="hello-habit-detail" class="hh-detail" aria-label="Chi tiết Habit" hidden></section>
+            <p class="personal-history-note hh-scope" id="hello-history-scope"></p>
 
           </div>
 
@@ -569,6 +545,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?build=frame-layers-1"></script>
+  <script type="module" src="js/app.js?build=hello-audit-1"></script>
 </body>
 </html>

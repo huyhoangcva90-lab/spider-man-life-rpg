@@ -30,7 +30,7 @@ Mục đích: tránh phát triển lại cùng tính năng trong Life Reset, RPG
 Giữ mã giao diện gốc của các app được nhập vào mà chủ dự án thích; cải thiện thao tác và kết nối dữ liệu trên nền đó. Việc thống nhất nguồn dữ liệu và lối vào phải giữ phong cách của app. Khung Spider là lớp ngoài; nội dung và hộp thoại app phải nằm trong vùng màn hình, dưới viền và các nhân vật ở góc.
 
 1. Sửa màn chính trước. Một đường dẫn khác vào cùng chức năng chỉ là lối tắt, không thêm tracker hoặc kho lưu mới.
-2. Không phát triển thêm Habit/To-do trong các bản Gambit nhập vào hoặc màn RPG cũ. Giữ chúng để tương thích dữ liệu cũ.
+2. Nhập từng app theo kiểm kê chức năng đầy đủ; bắt đầu với [HelloHabit](HELLOHABIT_AUDIT.md). Báo phần trùng trước khi cắt hoặc gộp. Mã và dữ liệu Gambit cũ được giữ đến khi xác nhận chức năng thay thế tương đương; một màn đơn giản hơn chưa được coi là đã di chuyển xong.
 3. Phân biệt nhiệm vụ đời thực với encounter của Battle. Không tự tạo thưởng hoặc trạng thái chiến đấu từ dữ liệu mẫu.
 4. Giữ chức năng khác vai trò: Time là lịch giờ; Pomodoro là bộ đếm tập trung; âm thanh Ambient là công cụ âm thanh.
 
