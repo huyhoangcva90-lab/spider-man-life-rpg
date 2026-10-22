@@ -1079,7 +1079,7 @@ function setCalendarStatus(message,type=''){
 }
 
 function useActiveZones(){
-  zones=document.getElementById('calendarSync').checked&&calendarLoaded?calendarZones:manualZones;
+  zones=document.getElementById('calendarSync').checked?(calendarLoaded?calendarZones:[]):manualZones;
   buildPanel();
   renderPlannerEvents();
 }
@@ -1209,13 +1209,16 @@ async function loadGoogleCalendarList(){
   renderCalendarList();
 }
 
+let calendarRequestVersion=0;
 async function loadGoogleCalendar(){
+  const requestVersion=++calendarRequestVersion;
   const dateValue=document.getElementById('calendarDate').value;
   if(!googleConnected){setCalendarStatus('Hãy kết nối Google Calendar trước.','err');return;}
   setCalendarStatus('Đang tải lịch...');
   document.getElementById('calendarRefresh').disabled=true;
   try{
     if(!googleCalendars.length)await loadGoogleCalendarList();
+    if(requestVersion!==calendarRequestVersion)return;
     const ids=selectedCalendarIds();
     if(!ids.length)throw new Error('Hãy chọn ít nhất một lịch.');
     const query=new URLSearchParams({date:dateValue,calendarIds:ids.join(',')});
@@ -1223,6 +1226,7 @@ async function loadGoogleCalendar(){
     if(response.status===401){googleConnected=false;throw new Error('Kết nối Google đã hết hạn. Bấm Kết nối lại.');}
     if(!response.ok)throw new Error(`Không tải được lịch (${response.status}).`);
     const results=(await response.json()).calendars||[];
+    if(requestVersion!==calendarRequestVersion)return;
     const items=results.flatMap(result=>result.items);
     const eventZones=results.flatMap(result=>googleEventsToZones(result.items,dateValue,result.calendar));
     calendarZones=eventZones.sort((a,b)=>a.from-b.from||a.to-b.to);
@@ -1233,12 +1237,13 @@ async function loadGoogleCalendar(){
     setCalendarStatus(`Đã tải ${eventZones.length} sự kiện theo đúng giờ bắt đầu và kết thúc${extra}.`,'ok');
     document.getElementById('calendarConnect').querySelector('span').textContent='Đã kết nối';
   }catch(error){
+    if(requestVersion!==calendarRequestVersion)return;
     calendarZones=[];
     calendarLoaded=false;
     useActiveZones();
     setCalendarStatus(error.message||'Không thể tải Google Calendar.','err');
   }finally{
-    document.getElementById('calendarRefresh').disabled=!googleConnected;
+    if(requestVersion===calendarRequestVersion)document.getElementById('calendarRefresh').disabled=!googleConnected;
   }
 }
 
@@ -1251,12 +1256,14 @@ async function initGoogleCalendarControls(){
   const config=readCalendarConfig();
   document.getElementById('calendarDate').value=config.date||localDateValue();
   document.getElementById('calendarSync').checked=config.sync!==false;
+  useActiveZones();
   updateDisplayedDate();
   document.getElementById('calendarConnect').addEventListener('click',connectGoogleCalendar);
   document.getElementById('calendarRefresh').addEventListener('click',loadGoogleCalendar);
   document.getElementById('calendarDate').addEventListener('change',()=>{
     saveCalendarConfig();
     updateDisplayedDate();
+    calendarZones=[];calendarLoaded=false;useActiveZones();
     if(googleConnected)loadGoogleCalendar();
   });
   document.getElementById('calendarSync').addEventListener('change',()=>{
@@ -1274,7 +1281,7 @@ async function initGoogleCalendarControls(){
 
 function buildPanel(){
   const list=document.getElementById('zlist');list.innerHTML='';
-  const opts=Array.from({length:25},(_,i)=>`<option value="${i}">${String(i).padStart(2,'0')}:00</option>`).join('');
+  const opts=Array.from({length:97},(_,i)=>`<option value="${i/4}">${formatHour(i/4)}</option>`).join('');
   zones.filter(z=>!z.hideInPanel).forEach(z=>{
     const d=document.createElement('div');d.className='zi';
     const locked=Boolean(z.source);
@@ -1293,13 +1300,13 @@ function buildPanel(){
           <select class="sf" data-id="${z.id}" data-f="to">${opts}</select>
         </div>
       </div>`;
-    d.querySelectorAll('.sf').forEach(s=>{s.value=z[s.dataset.f];s.addEventListener('change',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz){zz[e.target.dataset.f]=+e.target.value;saveManualZones();}buildPanel();});});
+    d.querySelectorAll('.sf').forEach(s=>{s.value=z[s.dataset.f];s.addEventListener('change',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz){const field=e.target.dataset.f,next=+e.target.value;if(field==='from'?next>=zz.to:next<=zz.from){setCalendarStatus('Giờ kết thúc phải sau giờ bắt đầu.','err');e.target.value=zz[field];return;}zz[field]=next;saveManualZones();}buildPanel();});});
     d.querySelector('input')?.addEventListener('input',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz){zz.name=e.target.value;d.querySelector('.zn').textContent=e.target.value||'—';saveManualZones();renderPlannerEvents();}});
     d.querySelector('.zdel')?.addEventListener('click',e=>{
       e.stopPropagation();
       const id=+e.currentTarget.dataset.id;
       d.style.transform='translateX(8px)';d.style.opacity='0';d.style.transition='all .25s';
-      setTimeout(()=>{manualZones=manualZones.filter(x=>x.id!==id);zones=manualZones;saveManualZones();buildPanel();},220);
+      setTimeout(()=>{manualZones=manualZones.filter(x=>x.id!==id);saveManualZones();useActiveZones();},220);
     });
     list.appendChild(d);
   });

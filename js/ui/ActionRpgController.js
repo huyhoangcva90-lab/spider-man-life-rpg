@@ -80,6 +80,13 @@ export class ActionRpgController {
         const { kind, id } = event.data;
         const list = kind === 'habits' ? this.notionHabits : kind === 'activeQuests' ? this.notionActiveQuests : kind === 'masterCalendar' ? this.notionTasks : null;
         const record = list?.find(item => item.id === id);
+        if (record && kind === 'habits' && event.data.checked === false) {
+          record.done = false;
+          record.today = false;
+          this.persistNotionCache();
+          this.render();
+          return;
+        }
         if (!record || record.done || (kind === 'habits' && record.today)) return;
         record.done = true;
         if (kind === 'habits') {

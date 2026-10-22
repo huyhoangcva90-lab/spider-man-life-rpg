@@ -1,3 +1,5 @@
+import { dateKey, rollDailyState, questBucket, selectQuests, campaignDays } from './personal-progress.mjs';
+
 /**
  * 66 日間 (LIFE RESET) & HELLO HABIT REPORTS ENGINE - 100% REPLICA
  * Accurately matching all 4 user screenshots:
@@ -143,6 +145,9 @@ class LifeResetApp {
     this.activeFilter = 'todos';
     this.activeSource = 'notion-habits'; // 'anime' | 'notion-habits' | 'notion-tasks'
     this.activeQuestFilter = 'today';
+    this.questSearch = '';
+    this.pendingHabitIds = new Set();
+    this.pendingQuestIds = new Set();
     this.activeSubview = 'tracker'; // 'tracker' or 'reports'
     this.activePeriod = 'year'; // 'week', 'month', 'year'
     this.currentYear = new Date().getFullYear();
@@ -215,8 +220,7 @@ class LifeResetApp {
   }
 
   todayKey() {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    return dateKey();
   }
 
   recordNotionHabitDay(habit, checked) {
@@ -244,7 +248,23 @@ class LifeResetApp {
     this.setupActionSheet();
     this.setupTools();
     this.loadNotionSnapshot().then(() => this.syncNotionLive({ quiet: true }));
-    if (new URLSearchParams(window.location.search).get('tab') === 'quests') this.switchTab('quests');
+    const initialTab = new URLSearchParams(window.location.search).get('tab');
+    if (['today', 'reports', 'quests', 'core-habits', 'tools'].includes(initialTab)) this.switchTab(initialTab);
+    const refresh = () => {
+      if (document.hidden) return;
+      if (rollDailyState(this.state, this.notionHabits, this.todayKey())) {
+        this.helloTracker.selectedDay = this.todayKey();
+        this.saveState();
+        this.renderHabitCards();
+        this.renderHelloSquareHabits();
+        this.renderWeekStrip();
+        this.renderPathwayGrid();
+      }
+      this.syncNotionLive({ quiet: true });
+    };
+    document.addEventListener('visibilitychange', refresh);
+    window.addEventListener('online', refresh);
+    setInterval(refresh, 60000);
   }
 
   preloadAudio() {
@@ -335,7 +355,14 @@ class LifeResetApp {
 
   switchTab(targetTab) {
     const dockBtns = document.querySelectorAll('.dock-item-btn');
-    dockBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === targetTab));
+    dockBtns.forEach(b => {
+      const active = b.dataset.tab === targetTab;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', targetTab);
+    history.replaceState(null, '', url);
 
     document.querySelectorAll('.view-tab-pane').forEach(p => p.classList.remove('active'));
     const activePane = document.getElementById(`tab-${targetTab}`);
@@ -380,6 +407,11 @@ class LifeResetApp {
   }
 
   setupQuestBoard() {
+    document.getElementById('quest-search')?.addEventListener('input', (event) => {
+      this.questSearch = event.target.value;
+      this.renderQuestBoard();
+    });
+    document.getElementById('quest-sync')?.addEventListener('click', () => this.syncNotionLive());
     document.querySelectorAll('[data-quest-filter]').forEach((button) => button.addEventListener('click', () => {
       this.activeQuestFilter = button.dataset.questFilter;
       document.querySelectorAll('[data-quest-filter]').forEach((item) => {
@@ -401,44 +433,46 @@ class LifeResetApp {
     ];
     const open = quests.filter((quest) => !quest.done && !this.state.notionDoneToday[quest.id]);
     const today = this.todayKey();
-    const filtered = quests.filter((quest) => {
-      const done = !!(quest.done || this.state.notionDoneToday[quest.id]);
-      if (this.activeQuestFilter === 'done') return done;
-      if (done) return false;
-      if (this.activeQuestFilter === 'open') return true;
-      const due = String(quest.date || '').slice(0, 10);
-      return (due && due <= today) || /daily|hàng ngày/i.test(quest.frequency || '');
-    }).sort((a, b) => String(a.date || '9999').localeCompare(String(b.date || '9999')));
-    summary.textContent = `${filtered.length}/${quests.length} Quest đang hiển thị · ${open.length} cần làm · ${this.notionLive ? 'Đồng bộ trực tiếp' : 'Dữ liệu đã lưu'}`;
+    const filtered = selectQuests(quests, this.activeQuestFilter, this.state.notionDoneToday, today, this.questSearch);
+    const overdue = open.filter(quest => questBucket(quest, today) === 'overdue').length;
+    const doneCount = quests.length - open.length;
+    summary.textContent = `${open.length} cần làm · ${overdue} quá hạn · ${doneCount} đã xong`;
+    const meter = document.getElementById('quest-completion-meter');
+    if (meter) { meter.max = Math.max(1, quests.length); meter.value = doneCount; }
+    const connection = document.getElementById('quest-connection');
+    if (connection) connection.textContent = this.syncing ? 'Đang đồng bộ…' : this.notionLive ? 'Đã kết nối Notion' : 'Bản lưu trên máy · chưa xác nhận đồng bộ';
     list.replaceChildren();
     if (!filtered.length) {
       const empty = document.createElement('div');
       empty.className = 'personal-quest-empty';
-      empty.textContent = this.activeQuestFilter === 'today' ? 'Hôm nay chưa có quest đến hạn. Mở “Cần làm” để xem toàn bộ.' : this.activeQuestFilter === 'done' ? 'Chưa có quest nào hoàn thành.' : 'Chưa có quest trong Notion.';
+      empty.textContent = this.questSearch.trim() ? 'Không tìm thấy Quest phù hợp.' : this.activeQuestFilter === 'overdue' ? 'Không có Quest quá hạn.' : this.activeQuestFilter === 'today' ? 'Hôm nay chưa có quest đến hạn. Mở “Cần làm” để xem toàn bộ.' : this.activeQuestFilter === 'done' ? 'Chưa có quest nào hoàn thành.' : 'Chưa có quest trong Notion.';
       list.appendChild(empty);
       return;
     }
     filtered.forEach((quest, index) => {
       const done = !!(quest.done || this.state.notionDoneToday[quest.id]);
       const card = document.createElement('article');
-      card.className = `personal-quest-card${done ? ' is-done' : ''}`;
+      const bucket = questBucket(quest, today);
+      card.className = `personal-quest-card${done ? ' is-done' : ''}${!done && bucket === 'overdue' ? ' is-overdue' : ''}`;
       card.innerHTML = `<div class="personal-quest-card-top"><span class="personal-quest-index"></span><span class="personal-quest-type"></span></div><h3></h3><p></p><div class="personal-quest-card-foot"><span class="personal-quest-date"></span><button type="button" class="personal-quest-complete"></button></div>`;
       card.querySelector('.personal-quest-index').textContent = String(index + 1).padStart(2, '0');
       card.querySelector('.personal-quest-type').textContent = quest.kind === 'activeQuests' ? 'ACTIVE QUEST' : (quest.type || 'QUEST').toUpperCase();
       card.querySelector('h3').textContent = quest.title || quest.name || 'Quest';
       const detail = quest.description || (quest.kind === 'activeQuests' ? quest.frequency : quest.priority) || '';
       card.querySelector('p').textContent = detail;
-      card.querySelector('.personal-quest-date').textContent = quest.date ? `HẠN ${String(quest.date).slice(0, 10)}` : 'KHÔNG CÓ HẠN';
+      card.querySelector('.personal-quest-date').textContent = `${bucket === 'overdue' && !done ? 'QUÁ HẠN · ' : bucket === 'today' ? 'HÔM NAY · ' : ''}${quest.date ? String(quest.date).slice(0, 10) : 'Không đặt hạn'}`;
       const button = card.querySelector('button');
       button.textContent = done ? '✓ Đã xong' : '✓ Hoàn thành';
-      button.disabled = done;
+      button.disabled = done || this.pendingQuestIds.has(quest.id);
+      button.setAttribute('aria-label', `${done ? 'Đã xong' : 'Hoàn thành'} ${quest.title || quest.name || 'Quest'}`);
       button.addEventListener('click', () => this.completeNotionQuest(quest, button));
       list.appendChild(card);
     });
   }
 
   async completeNotionQuest(quest, button) {
-    if (quest.done || this.state.notionDoneToday[quest.id]) return;
+    if (quest.done || this.state.notionDoneToday[quest.id] || this.pendingQuestIds.has(quest.id) || this.syncing) return;
+    this.pendingQuestIds.add(quest.id);
     button.disabled = true;
     button.textContent = 'Đang lưu…';
     try {
@@ -454,6 +488,7 @@ class LifeResetApp {
       const original = (quest.kind === 'activeQuests' ? this.notionActiveQuests : this.notionTasks).find((item) => item.id === quest.id);
       if (original) original.done = true;
       this.state.notionDoneToday[quest.id] = true;
+      this.cacheNotionData();
       this.saveState();
       this.renderQuestBoard();
       this.renderHabitCards();
@@ -463,7 +498,7 @@ class LifeResetApp {
       button.disabled = false;
       button.textContent = '✓ Hoàn thành';
       this.showSpideyToast('CHƯA LƯU ĐƯỢC', 'THỬ LẠI', error.message || 'Kiểm tra kết nối Notion.');
-    }
+    } finally { this.pendingQuestIds.delete(quest.id); }
   }
 
   async loadNotionSnapshot() {
@@ -471,8 +506,10 @@ class LifeResetApp {
       const cached = localStorage.getItem('life_reset_notion_cache_v1');
       if (cached) {
         const data = JSON.parse(cached);
+        this.lastSyncedAt = data.syncedAt;
         this.notionHabits = Array.isArray(data.habits) ? data.habits : [];
-        const cacheIsToday = data.syncedAt && new Date(data.syncedAt).toDateString() === new Date().toDateString();
+        this.habitSyncedAt = data.habitSyncedAt || data.syncedAt;
+        const cacheIsToday = this.habitSyncedAt && dateKey(new Date(this.habitSyncedAt)) === this.todayKey();
         this.notionHabits.forEach((habit) => {
           if (!cacheIsToday) { habit.today = false; habit.done = false; }
           if (habit.today) this.state.notionDoneToday[habit.id] = true;
@@ -501,7 +538,7 @@ class LifeResetApp {
           timeBlock: h.timeBlock || 'Allday',
           outcome: h.outcome || '',
           description: h.description || '',
-          today: !!h.today,
+          today: !!h.today && dateKey(new Date(data.metadata?.syncedAt || 0)) === this.todayKey(),
           xp: h.xp ? h.xp * 35 : 35,
           gold: h.gold ? h.gold * 15 : 20,
           sourceUrl: h.sourceUrl
@@ -545,11 +582,24 @@ class LifeResetApp {
     }
   }
 
+  cacheNotionData(syncedAt = this.lastSyncedAt) {
+    localStorage.setItem('life_reset_notion_cache_v1', JSON.stringify({
+      habits: this.notionHabits, tasks: this.notionTasks, activeQuests: this.notionActiveQuests,
+      heroXp: this.notionHeroXp, syncedAt, habitSyncedAt: this.habitSyncedAt
+    }));
+  }
+
   async syncNotionLive({ quiet = false } = {}) {
+    if (this.syncing || this.pendingHabitIds.size || this.pendingQuestIds.size) return;
+    this.syncing = true;
     const syncBtn = document.getElementById('btn-sync-notion-now');
     const statusEl = document.getElementById('notion-status-text');
     syncBtn?.classList.add('spinning');
-    if (statusEl) statusEl.textContent = 'Syncing Notion Zeus...';
+    if (syncBtn) syncBtn.disabled = true;
+    if (statusEl) statusEl.textContent = 'Đang đồng bộ Notion…';
+    this.renderHabitCards();
+    this.renderHelloSquareHabits();
+    this.renderQuestBoard();
 
     try {
       const { queryAllNotionPages, normalizeNotionPage, normalizeNotionCatalogPage, NOTION_GAME_DATABASES } = await import('../../js/integrations/notion/NotionGameData.js');
@@ -561,6 +611,7 @@ class LifeResetApp {
       ]);
       if (results.every((result) => result.status === 'rejected')) throw results[0].reason;
       if (results[0].status === 'fulfilled') {
+        this.habitSyncedAt = new Date().toISOString();
         this.notionHabits = results[0].value.map((page) => {
           const habit = normalizeNotionPage(page, 'habits');
           return { ...habit, id: `notion_${habit.id}`, rawId: habit.id, xp: (Number(habit.xp) || 1) * 35, gold: 20 };
@@ -580,33 +631,45 @@ class LifeResetApp {
       }
       if (results[2].status === 'fulfilled') {
         this.notionActiveQuests = results[2].value.map((page) => normalizeNotionPage(page, 'activeQuests'));
+        for (const quest of this.notionActiveQuests) {
+          if (quest.done) this.state.notionDoneToday[quest.id] = true;
+          else delete this.state.notionDoneToday[quest.id];
+        }
       }
       if (results[3].status === 'fulfilled') {
         const profile = results[3].value.map(normalizeNotionCatalogPage)[0];
         this.notionHeroXp = profile ? Number(profile.Exp) || 0 : null;
       }
       this.notionLive = results.every((result) => result.status === 'fulfilled');
-      localStorage.setItem('life_reset_notion_cache_v1', JSON.stringify({
-        habits: this.notionHabits, tasks: this.notionTasks, activeQuests: this.notionActiveQuests,
-        heroXp: this.notionHeroXp, syncedAt: new Date().toISOString()
-      }));
+      this.lastSyncedAt = new Date().toISOString();
+      this.cacheNotionData();
       this.saveState();
       document.getElementById('badge-notion-habits-count')?.replaceChildren(document.createTextNode(String(this.notionHabits.length)));
       document.getElementById('badge-notion-tasks-count')?.replaceChildren(document.createTextNode(String(this.notionTasks.length + this.notionActiveQuests.length)));
-      if (statusEl) statusEl.textContent = `Notion Zeus: ${this.notionLive ? 'Live' : 'Một phần'} · ${this.notionHabits.length} Habit · ${this.notionTasks.length + this.notionActiveQuests.length} Quest`;
+      const missing = ['Habit', 'Todo', 'Quest', 'Hero'].filter((_, index) => results[index].status === 'rejected');
+      if (statusEl) statusEl.textContent = `Notion · ${new Date(this.lastSyncedAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}${missing.length ? ` · Chưa tải: ${missing.join(', ')}` : ' · Đã cập nhật'}`;
       document.querySelector('.notion-status-dot')?.classList.toggle('online', this.notionLive);
       this.renderHabitCards();
       this.renderHelloSquareHabits();
       this.renderQuestBoard();
+      this.renderPathwayGrid();
+      this.renderTrackerSplitCards();
+      if (this.activeSubview === 'reports') this.renderHeatmapMatrices();
       if (!quiet) {
         this.playSfx('reward');
         this.showSpideyToast('NOTION SYNCED', 'LIVE ⚡', `${this.notionHabits.length} habits updated.`);
       }
     } catch (error) {
+      this.notionLive = false;
       if (statusEl) statusEl.textContent = `Notion Zeus: Offline (${this.notionHabits.length} cached)`;
       document.querySelector('.notion-status-dot')?.classList.remove('online');
       if (!quiet) this.showSpideyToast('NOTION OFFLINE', 'RETRY ↻', error.message || 'Live sync failed.');
     } finally {
+      this.syncing = false;
+      if (syncBtn) syncBtn.disabled = false;
+      this.renderHabitCards();
+      this.renderHelloSquareHabits();
+      this.renderQuestBoard();
       setTimeout(() => {
         syncBtn?.classList.remove('spinning');
       }, 600);
@@ -701,7 +764,7 @@ class LifeResetApp {
               </div>
             </div>
 
-            <button class="card-square-check" aria-label="${isDone ? 'Đã hoàn thành' : 'Hoàn thành'} ${this.escapeHtml(habit.name)}" data-id="${this.escapeHtml(habit.id)}" ${isDone ? 'disabled' : ''}>
+            <button class="card-square-check" aria-label="${isDone ? 'Đã hoàn thành' : 'Hoàn thành'} ${this.escapeHtml(habit.name)}" data-id="${this.escapeHtml(habit.id)}" ${isDone || this.syncing || this.pendingHabitIds.has(habit.id) ? 'disabled' : ''}>
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </button>
           </div>
@@ -864,21 +927,29 @@ class LifeResetApp {
 
   async toggleNotionHabitDone(habit) {
     const isDone = !this.state.notionDoneToday[habit.id];
-    if (this.pendingHabitId === habit.id) return;
-    this.pendingHabitId = habit.id;
+    if (this.syncing || this.pendingHabitIds.has(habit.id)) return;
+    this.pendingHabitIds.add(habit.id);
+    this.renderHelloSquareHabits();
+    this.renderHabitCards();
     const saved = await this.persistNotionHabitCheck(habit, isDone);
-    this.pendingHabitId = null;
-    if (!saved) return;
+    this.pendingHabitIds.delete(habit.id);
+    if (!saved) { this.renderHelloSquareHabits(); this.renderHabitCards(); return; }
+    this.habitSyncedAt = new Date().toISOString();
+    habit.today = isDone;
+    habit.done = isDone;
     if (isDone) {
       this.state.notionDoneToday[habit.id] = true;
       this.showSpideyToast('HABIT HOÀN THÀNH', '✓ NOTION', `${habit.name} đã được lưu vào Notion.`);
-      window.parent?.postMessage({ type: 'SPIDEY_NOTION_CHECKIN', kind: 'habits', id: habit.rawId }, window.location.origin);
     } else {
       delete this.state.notionDoneToday[habit.id];
       this.playSfx('bell');
     }
     this.recordNotionHabitDay(habit, isDone);
+    window.parent?.postMessage({ type: 'SPIDEY_NOTION_CHECKIN', kind: 'habits', id: habit.rawId, checked: isDone }, window.location.origin);
+    this.cacheNotionData();
     this.saveState();
+    this.renderPathwayGrid();
+    this.renderTrackerSplitCards();
     this.renderHabitCards();
     this.renderHelloSquareHabits();
   }
@@ -984,7 +1055,9 @@ class LifeResetApp {
   // TAB 2: HELLO HABIT (TRACKER & REPORTS - EXACT USER IMAGE 4)
   // =========================================================================
   setupHelloHabitTab() {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(this.helloTracker.selectedDay || '')) this.helloTracker.selectedDay = this.todayKey();
+    this.helloTracker.selectedDay = this.todayKey();
+    document.getElementById('btn-hello-menu')?.addEventListener('click', () => this.syncNotionLive());
+    document.getElementById('btn-reports-menu')?.addEventListener('click', () => document.getElementById('btn-export-save')?.click());
     this.renderWeekStrip();
     // Subview switcher: Habit Tracker vs Habit Reports
     const subBtns = document.querySelectorAll('.sub-nav-btn');
@@ -1020,26 +1093,15 @@ class LifeResetApp {
       this.playSfx('bell');
     });
 
-    // Add Goal Button (+)
-    document.getElementById('btn-hello-add-goal')?.addEventListener('click', () => {
-      const name = prompt('Add new habit goal:', 'Meditate 10m');
-      if (name && name.trim()) {
-        const id = `custom_${Date.now()}`;
-        this.helloTracker.daily[id] = {
-          name: name.trim(),
-          cur: 0,
-          tgt: 1,
-          unit: 'time',
-          streak: 0,
-          color: 'teal',
-          step: 1
-        };
-        this.saveState();
-        this.renderTrackerSplitCards();
-        this.playSfx('reward');
-        this.showSpideyToast('NEW GOAL CREATED', 'READY 🎯', `Habit "${name.trim()}" added to Hello Habit tracker!`);
-      }
+    document.getElementById('btn-tracker-filter')?.addEventListener('click', (event) => {
+      const filters = ['all', 'open', 'done'];
+      this.helloFilter = filters[(filters.indexOf(this.helloFilter || 'all') + 1) % filters.length];
+      event.currentTarget.setAttribute('aria-label', `Lọc Habit: ${{ all: 'Tất cả', open: 'Chưa check', done: 'Đã check' }[this.helloFilter]}`);
+      event.currentTarget.title = event.currentTarget.getAttribute('aria-label');
+      document.querySelector('.tracker-header-title').textContent = { all: 'Tất cả Habit', open: 'Chưa check', done: 'Đã check' }[this.helloFilter];
+      this.renderHelloSquareHabits();
     });
+    document.getElementById('btn-tracker-dots')?.addEventListener('click', () => document.querySelector('[data-subview="reports"]')?.click());
 
     // Collapsible Groups
     const groupDaily = document.getElementById('group-daily-goals');
@@ -1173,12 +1235,14 @@ class LifeResetApp {
     const tones = ['sky', 'mint', 'coral', 'violet', 'amber'];
     habits.forEach((habit, index) => {
       const done = isToday ? !!this.state.notionDoneToday[habit.id] : (this.state.notionHistory?.[habit.rawId || habit.id] || []).includes(selectedDay);
+      if (this.helloFilter === 'open' && done || this.helloFilter === 'done' && !done) return;
       const tile = document.createElement('button');
       tile.type = 'button';
       tile.className = `hello-square-tile hello-square-tile--${tones[index % tones.length]}${done ? ' is-checked' : ''}`;
       tile.setAttribute('aria-pressed', String(done));
       tile.setAttribute('aria-label', `${done ? 'Bỏ check' : 'Check'} ${habit.name}`);
-      tile.disabled = !isToday;
+      tile.disabled = !isToday || this.syncing || this.pendingHabitIds.has(habit.id);
+      tile.setAttribute('aria-busy', String(this.pendingHabitIds.has(habit.id)));
       tile.innerHTML = `
         <span class="hello-square-box" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
         <span class="hello-square-type"></span>
@@ -1194,131 +1258,29 @@ class LifeResetApp {
   }
 
   renderTrackerSplitCards() {
-    const dailyContainer = document.getElementById('daily-split-cards');
-    const weeklyContainer = document.getElementById('weekly-split-cards');
-    if (!dailyContainer || !weeklyContainer) return;
-
-    dailyContainer.innerHTML = '';
-    weeklyContainer.innerHTML = '';
-
-    // Render Daily Goals
-    Object.entries(this.helloTracker.daily).forEach(([k, g]) => {
-      const tile = document.createElement('div');
-      tile.className = 'split-goal-tile';
-      const pct = Math.min(100, Math.round((g.cur / g.tgt) * 100));
-
-      let trackHtml = '';
-      if (k === 'water') {
-        // 8 rounded dash segments (Image 4 exact)
-        trackHtml = `
-          <div class="split-dots-track">
-            ${Array.from({ length: 8 }).map((_, i) => `<div class="split-dash-segment ${i < g.cur ? 'filled blue' : ''}"></div>`).join('')}
-          </div>
-        `;
-      } else if (k === 'steps') {
-        // 20 mini-dot pills (Image 4 exact)
-        const filledDots = Math.min(20, Math.round((g.cur / g.tgt) * 20));
-        trackHtml = `
-          <div class="split-mini-dots-row">
-            ${Array.from({ length: 20 }).map((_, i) => `<div class="mini-dot-pill ${i < filledDots ? 'filled teal' : ''}"></div>`).join('')}
-          </div>
-        `;
-      } else {
-        // 16 coral dots
-        const filledDots = Math.min(16, Math.round((g.cur / g.tgt) * 16));
-        trackHtml = `
-          <div class="split-mini-dots-row">
-            ${Array.from({ length: 16 }).map((_, i) => `<div class="mini-dot-pill ${i < filledDots ? 'filled coral' : ''}"></div>`).join('')}
-          </div>
-        `;
-      }
-
-      tile.innerHTML = `
-        <div class="split-pastel-left ${g.color}">${g.name}</div>
-        <div class="split-data-right">
-          <div class="split-data-top">
-            <span class="split-timeframe-sub">Today</span>
-            <span class="split-streak-pill">${g.streak} 🔥</span>
-          </div>
-          <div class="split-val-center">
-            <span class="split-val-bold">${g.cur.toLocaleString()} ${g.unit}</span>
-            <span class="split-target-sub">Goal: ${g.tgt.toLocaleString()} ${g.unit}</span>
-          </div>
-          ${trackHtml}
-        </div>
-      `;
-
-      // Tap card increments progress!
-      tile.addEventListener('click', () => {
-        g.cur += g.step;
-        if (g.cur >= g.tgt && g.cur - g.step < g.tgt) {
-          g.streak++;
-          this.applySpideyRpgReward(g.name, 35, 20, 35, 'WILLPOWER');
-        } else {
-          this.playSfx('bell');
-        }
-        if (k === 'water' && g.cur > 8) g.cur = 1; // loop or reset
-        this.saveState();
-        this.renderTrackerSplitCards();
-      });
-
-      dailyContainer.appendChild(tile);
+    const container = document.getElementById('daily-split-cards');
+    if (!container) return;
+    container.replaceChildren();
+    const days = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(); date.setDate(date.getDate() - 6 + index); return dateKey(date);
     });
-
-    // Render Weekly Goals
-    Object.entries(this.helloTracker.weekly).forEach(([k, g]) => {
-      const tile = document.createElement('div');
+    for (const habit of this.notionHabits) {
+      const history = new Set(this.state.notionHistory?.[habit.rawId || habit.id] || []);
+      const count = days.filter(day => history.has(day)).length;
+      const tile = document.createElement('article');
       tile.className = 'split-goal-tile';
-
-      let trackHtml = '';
-      if (k === 'exercise') {
-        // 3 large segments (Image 4 exact)
-        trackHtml = `
-          <div class="split-dots-track">
-            ${Array.from({ length: 3 }).map((_, i) => `<div class="split-dash-segment ${i < g.cur ? 'filled purple' : ''}"></div>`).join('')}
-          </div>
-        `;
-      } else {
-        // 16 slate mini-dots
-        const filledDots = Math.min(16, Math.round((g.cur / g.tgt) * 16));
-        trackHtml = `
-          <div class="split-mini-dots-row">
-            ${Array.from({ length: 16 }).map((_, i) => `<div class="mini-dot-pill ${i < filledDots ? 'filled slate' : ''}"></div>`).join('')}
-          </div>
-        `;
+      tile.innerHTML = '<div class="split-pastel-left teal"></div><div class="split-data-right"><div class="split-data-top">7 ngày gần đây</div><div class="split-val-center"><span class="split-val-bold"></span><span class="split-target-sub">ngày có check-in được ghi nhận</span></div><div class="split-dots-track"></div></div>';
+      tile.querySelector('.split-pastel-left').textContent = habit.name;
+      tile.querySelector('.split-val-bold').textContent = `${count} / 7`;
+      const track = tile.querySelector('.split-dots-track');
+      for (const day of days) {
+        const dot = document.createElement('span');
+        dot.className = `split-dash-segment${history.has(day) ? ' filled teal' : ''}`;
+        dot.title = `${day}: ${history.has(day) ? 'Đã check' : 'Chưa ghi nhận'}`;
+        track.appendChild(dot);
       }
-
-      tile.innerHTML = `
-        <div class="split-pastel-left ${g.color}">${g.name}</div>
-        <div class="split-data-right">
-          <div class="split-data-top">
-            <span class="split-timeframe-sub">This Week</span>
-            <span class="split-streak-pill">${g.streak} 🔥</span>
-          </div>
-          <div class="split-val-center">
-            <span class="split-val-bold">${g.cur.toLocaleString()} ${g.unit}</span>
-            <span class="split-target-sub">Goal: ${g.tgt.toLocaleString()} ${g.unit}</span>
-          </div>
-          ${trackHtml}
-        </div>
-      `;
-
-      // Tap card increments progress!
-      tile.addEventListener('click', () => {
-        g.cur += g.step;
-        if (g.cur >= g.tgt && g.cur - g.step < g.tgt) {
-          g.streak++;
-          this.applySpideyRpgReward(g.name, 45, 25, 40, 'DISCIPLINE');
-        } else {
-          this.playSfx('bell');
-        }
-        if (k === 'exercise' && g.cur > 3) g.cur = 1;
-        this.saveState();
-        this.renderTrackerSplitCards();
-      });
-
-      weeklyContainer.appendChild(tile);
-    });
+      container.appendChild(tile);
+    }
   }
 
   renderHeatmapMatrices() {
@@ -1415,21 +1377,17 @@ class LifeResetApp {
     if (!grid) return;
     grid.innerHTML = '';
 
-    for (let d = 1; d <= 66; d++) {
-      const cell = document.createElement('div');
-      const isDone = d < this.state.day;
-      const isToday = d === this.state.day;
-
+    const recorded = new Set(Object.values(this.state.notionHistory || {}).flat());
+    for (const entry of campaignDays(this.state.campaignStartedAt, this.todayKey())) {
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      const isDone = recorded.has(entry.date);
+      const isToday = entry.date === this.todayKey();
       cell.className = `pathway-cell ${isDone ? 'done' : ''} ${isToday ? 'active' : ''}`;
-      cell.textContent = d;
-
-      cell.addEventListener('click', () => {
-        let phase = 'Stage 1: Destruction';
-        if (d > 22 && d <= 44) phase = 'Stage 2: Installation';
-        else if (d > 44) phase = 'Stage 3: Integration';
-        this.openAlert(`Day ${d} • ${phase}`, 'Keep your daily momentum intact without zero-days.');
-      });
-
+      cell.textContent = entry.day;
+      cell.setAttribute('aria-label', `Ngày ${entry.day}, ${entry.date}: ${isDone ? 'Có check-in' : entry.future ? 'Sắp tới' : 'Chưa ghi nhận'}`);
+      if (isToday) cell.setAttribute('aria-current', 'date');
+      cell.addEventListener('click', () => this.openAlert(`Ngày ${entry.day} / 66`, `${entry.date} · ${isDone ? 'Đã ghi nhận check-in trên thiết bị này.' : entry.future ? 'Ngày sắp tới trong hành trình.' : 'Chưa có check-in được ghi nhận trên thiết bị này.'}`));
       grid.appendChild(cell);
     }
   }
@@ -1561,8 +1519,10 @@ class LifeResetApp {
         pomoBtn.textContent = 'PAUSE FOCUS';
         pomoBtn.style.background = 'var(--accent-coral)';
         pomoBtn.style.color = '#FFFFFF';
+        if (this.focusSeconds <= 0) this.focusSeconds = 25 * 60;
+        const focusDeadline = Date.now() + this.focusSeconds * 1000;
         this.focusTimerInterval = setInterval(() => {
-          this.focusSeconds--;
+          this.focusSeconds = Math.max(0, Math.ceil((focusDeadline - Date.now()) / 1000));
           const m = Math.floor(this.focusSeconds / 60).toString().padStart(2, '0');
           const s = Math.floor(this.focusSeconds % 60).toString().padStart(2, '0');
           if (clock) clock.textContent = `${m}:${s}`;

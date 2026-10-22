@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>66 日間 - Life Reset: 66 Day Habit</title>
   <link rel="stylesheet" href="../css/standalone-tracker-shell.css" />
   <script type="module" src="../js/ui/StandaloneTrackerShell.js"></script>
-  <link rel="stylesheet" href="css/reset-app.css?build=personal-quest-2" />
+  <link rel="stylesheet" href="css/reset-app.css?build=personal-quest-3" />
   <link rel="icon" type="image/png" href="assets/images/house_ember.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -158,7 +158,7 @@
                 Skipped <span id="count-badge-skipped">0</span>
               </button>
             </div>
-            <button id="btn-add-habit" class="plus-habit-btn" title="Add Habit">＋</button>
+            <a class="plus-habit-btn" href="https://www.notion.so/272d787636c681a29bf8e4d5e588e173" target="_blank" rel="noopener" aria-label="Thêm Habit trong Notion">＋</a>
           </div>
 
           <!-- Habits Feed (Renders either Anime 66 habits or Notion habits or Notion tasks) -->
@@ -175,10 +175,10 @@
           <!-- Sub-View Navigation Switcher (Habit Tracker vs Habit Reports) -->
           <div class="hello-habit-nav-bar">
             <div class="sub-nav-segmented">
-              <button class="sub-nav-btn active" data-subview="tracker">Habit Tracker</button>
-              <button class="sub-nav-btn" data-subview="reports">Habit Reports</button>
+              <button class="sub-nav-btn active" data-subview="tracker">Check Habit</button>
+              <button class="sub-nav-btn" data-subview="reports">Báo cáo</button>
             </div>
-            <button id="btn-hello-menu" class="hello-menu-btn" title="Options">•••</button>
+            <button id="btn-hello-menu" class="hello-menu-btn" title="Đồng bộ Habit" aria-label="Đồng bộ Habit">↻</button>
           </div>
 
           <!-- SUB-VIEW 1: HABIT TRACKER (Left Side of User Image 4) -->
@@ -195,9 +195,9 @@
                 </button>
               </div>
               <h2 class="tracker-header-title">Habits</h2>
-              <button class="t-plus-round-btn" id="btn-hello-add-goal" title="Add Goal">
+              <a class="t-plus-round-btn" href="https://www.notion.so/272d787636c681a29bf8e4d5e588e173" target="_blank" rel="noopener" aria-label="Quản lý Habit trong Notion">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              </button>
+              </a>
             </div>
 
             <!-- Calendar Horizontal Week Slider (Thu 10 ... Wed 16 from Image 4) -->
@@ -217,6 +217,7 @@
                 <div><span>NOTION ZEUS // TODAY</span><h3 id="hello-square-title">Hello Habit</h3></div>
                 <strong id="hello-square-progress">0 / 0 CHECKED</strong>
               </header>
+              <p class="personal-history-note">Check hôm nay để lưu vào Notion. Chọn ngày phía trên để xem lịch sử ghi nhận trên thiết bị này.</p>
               <div class="hello-square-grid" id="hello-square-grid" aria-live="polite"></div>
             </section>
 
@@ -225,7 +226,7 @@
               <div class="goals-group-header" id="header-daily-goals">
                 <div class="group-header-label">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                  <span>Daily Goals</span>
+                  <span>7 ngày gần đây · Notion</span>
                 </div>
                 <button class="collapse-circle-btn" aria-label="Toggle section">
                   <span class="collapse-arrow">▾</span>
@@ -236,21 +237,6 @@
               </div>
             </div>
 
-            <!-- Weekly Goals (Split Color Tiles from Image 4) -->
-            <div class="goals-group-container" id="group-weekly-goals">
-              <div class="goals-group-header" id="header-weekly-goals">
-                <div class="group-header-label">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  <span>Weekly Goals</span>
-                </div>
-                <button class="collapse-circle-btn" aria-label="Toggle section">
-                  <span class="collapse-arrow">▾</span>
-                </button>
-              </div>
-              <div class="split-cards-container" id="weekly-split-cards">
-                <!-- Populated dynamically -->
-              </div>
-            </div>
           </div>
 
           <!-- SUB-VIEW 2: HABIT REPORTS (Right Side of User Image 4) -->
@@ -260,7 +246,7 @@
             <div class="hello-reports-header">
               <button class="r-icon-btn" id="btn-close-reports" title="Close Reports">✕</button>
               <h2 class="reports-header-title">Habit Reports</h2>
-              <button class="r-icon-btn" id="btn-reports-menu" title="Menu">☰</button>
+              <button class="r-icon-btn" id="btn-reports-menu" title="Tải báo cáo dạng văn bản" aria-label="Tải báo cáo dạng văn bản">☰</button>
             </div>
 
             <!-- Granularity: [Week] [Month] [Year] (Image 4) -->
@@ -290,6 +276,7 @@
             </div>
 
             <!-- Heatmap Contribution Matrices (52 cols x 4 rows) -->
+            <p class="personal-history-note">Chỉ hiển thị check-in được ghi nhận trên thiết bị này. Ô trống là chưa có dữ liệu, không tự tính là bỏ lỡ.</p>
             <div id="heatmaps-list-container" class="heatmaps-list">
               <!-- Rendered dynamically with GitHub square matrices -->
             </div>
@@ -298,11 +285,11 @@
             <div class="hello-export-bar">
               <button id="btn-export-save" class="hello-action-btn btn-save-img">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                <span>Save Report</span>
+                <span>Tải báo cáo</span>
               </button>
               <button id="btn-export-share" class="hello-action-btn btn-share-rep">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-                <span>Share Report</span>
+                <span>Sao chép báo cáo</span>
               </button>
             </div>
           </div>
@@ -312,10 +299,14 @@
           <div class="personal-quest-heading">
             <span class="personal-eyebrow">PETER PARKER / YOUR MISSIONS</span>
             <h2>Quest của bạn<span>.</span></h2>
+            <progress id="quest-completion-meter" max="1" value="0" aria-label="Tiến độ Quest"></progress>
             <p id="personal-quest-summary">Đang tải nhiệm vụ từ Notion…</p>
           </div>
+          <div class="personal-sync-row"><span id="quest-connection" role="status">Đang tải Notion…</span><button id="quest-sync" type="button">↻ Đồng bộ</button></div>
+          <label class="quest-search-label" for="quest-search">Tìm nhiệm vụ<input id="quest-search" type="search" placeholder="Tên hoặc nội dung Quest…" autocomplete="off"></label>
           <div class="personal-quest-filters" role="group" aria-label="Lọc quest">
             <button class="personal-quest-filter active" data-quest-filter="today" aria-pressed="true">Hôm nay</button>
+            <button class="personal-quest-filter" data-quest-filter="overdue" aria-pressed="false">Quá hạn</button>
             <button class="personal-quest-filter" data-quest-filter="open" aria-pressed="false">Cần làm</button>
             <button class="personal-quest-filter" data-quest-filter="done" aria-pressed="false">Đã xong</button>
           </div>
@@ -569,6 +560,6 @@
     </div>
   </div>
 
-  <script src="js/app.js?build=personal-quest-2"></script>
+  <script type="module" src="js/app.js?build=personal-quest-3"></script>
 </body>
 </html>
