@@ -2794,6 +2794,7 @@ body.embedded .curved-bottom-dock { position: fixed; bottom: 0; left: 0; right: 
 .phone-frame .app-main-content { min-height: 0; padding-bottom: 22px; overscroll-behavior: contain; }
 .phone-frame .curved-bottom-dock { position: relative; flex: 0 0 64px; width: 100%; margin: 0 auto; }
 body.embedded .brand-top-banner { display: none; }
+html:has(body.embedded) { height: 100%; overflow: hidden; }
 body.embedded .app-main-content { padding-bottom: 22px; }
 body.embedded .curved-bottom-dock { position: relative; flex: 0 0 58px; height: 58px; }
 .hello-square-tile[aria-busy="true"] { opacity: .55; cursor: progress; }

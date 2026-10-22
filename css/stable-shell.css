@@ -42,3 +42,16 @@ html:not([data-pk-embed]) body:not([data-field-standalone="true"]) .tracker-devi
 html:not([data-pk-embed]) body:not([data-field-standalone="true"]) .claw-slice-frame{z-index:85}
 html:not([data-pk-embed]) body:not([data-field-standalone="true"]) :is(.frame-top-bar,.frame-bottom-bar){z-index:90}
 html:not([data-pk-embed]) body:not([data-field-standalone="true"]) .tracker-corner-menu{z-index:100}
+/* Personal apps use their own navigation inside the unchanged tracker frame. */
+body[data-game-section]:not([data-field-immersive="true"]):has(.habit-app-frame) .game-hud-strip,
+body[data-game-section]:not([data-field-immersive="true"]):has(.habit-app-frame) .game-panel > header,
+body[data-game-section]:not([data-field-immersive="true"]):has(.habit-app-frame) #game-panel-tabs {
+  display: none !important;
+}
+body[data-game-section]:not([data-field-immersive="true"]):has(.habit-app-frame) #game-panel-backdrop {
+  inset: 0 !important;
+  height: 100% !important;
+}
+body[data-game-section]:not([data-field-immersive="true"]):has(.habit-app-frame) .game-panel {
+  grid-template-rows: minmax(0, 1fr) !important;
+}
