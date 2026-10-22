@@ -1,6 +1,6 @@
 # Spider Life — kiểm tra Habit / Quest / Time
 
-Ngày cập nhật: 2026-10-22.
+Ngày cập nhật: 2026-10-23. Chi tiết triển khai: `UPGRADE_PHASE_ONE_2026-10-23.md`.
 
 ## Hướng giao diện
 
@@ -31,8 +31,9 @@ Giữ khung Spider và màu hiện tại. Habit mở bảng check giống cách 
 
 - [ ] Kiểm chứng đọc và ghi trên tên miền triển khai sau đăng nhập riêng, bằng bản ghi thử dành riêng cho QA. Đợt này chỉ đọc dữ liệu thật; thao tác ghi và lỗi mạng được kiểm tra bằng dữ liệu giả lập.
 - [x] Đọc lịch sử theo ngày từ quan hệ `Habits.Days ↔ Daily` đã có trong Notion; giữ riêng lịch sử thiết bị và hiển thị nguồn/thời điểm tải.
-- [ ] Nối luồng ghi Today với lịch sử Daily/activity; mục tiêu theo số lượng và thời điểm vẫn chưa hoàn tất.
-- [ ] Notion cần tự đặt lại `Today` theo ngày bằng automation hoặc nhật ký check-in. App không tự sửa hàng loạt Habit khi đổi ngày.
+- [x] Check hôm nay ghi quan hệ Daily.Habits theo ngày Việt Nam; Today là bản tương thích. Có hàng chờ và gửi lại cùng giá trị khi lỗi.
+- [x] Màn Habit lấy dấu hôm nay từ lịch sử Daily, không suy ngày từ checkbox Today. App không sửa hàng loạt Habit khi đổi ngày.
+- [ ] Mục tiêu theo số lượng/thời điểm, đồng thời nhiều máy chủ, khôi phục bản sao và thử hai thiết bị thực tế chưa hoàn tất.
 - [ ] Xác nhận Calendar bằng tài khoản Google đang kết nối trên tên miền thật; môi trường phát triển không có phiên Google đó.
 - [ ] Chạy thử thực tế trên Safari iPhone và Chrome Android, gồm đổi ngày khi app ngủ và quay lại.
 - [ ] Moveset độc lập cần quy tắc ánh xạ đã chốt trước khi đưa vào Battle chính. Chưa ghép các chiêu thử nghiệm với kỹ năng Notion.

@@ -24,6 +24,7 @@ export function renderFieldApp(id) {
     <h2 class="spider-field-app-title">${app.title}</h2>
     ${!app.launcher ? '<button type="button" class="spider-field-app-connection" data-notion-connect>Mở kết nối riêng</button>' : ''}
     </div>
+    ${id === 'finance' ? '' : `<p class="spider-field-source-note" role="status">${({ routine: 'Dữ liệu Routine: thiết bị / Cloud. Phiên kết nối riêng không có nghĩa nội dung đã đồng bộ Notion.', journal: 'Nhật ký đang lưu trên trình duyệt này.', english: 'Tiến độ English đang lưu trên trình duyệt này.', gym: 'Gym đọc Notion khi có phiên riêng; nguồn lỗi giữ bản lưu và được báo khi đồng bộ.' })[id] || 'Xem trạng thái lưu trong ứng dụng; kết nối riêng chỉ xác nhận quyền truy cập.'}</p>`}
     <p class="spider-field-app-loading" role="status">Đang mở ${app.title}…</p>
     <iframe class="spider-field-app-frame" title="${app.title} — Spider Field" src="./field-tools/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original" data-field-app-frame></iframe>
   </section>`;

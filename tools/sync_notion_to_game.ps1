@@ -187,7 +187,8 @@ $snapshot = [PSCustomObject]@{
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..')).Path
-$targetFile = Join-Path $repoRoot "data\notion-snapshot.json"
+New-Item -ItemType Directory -Force -Path (Join-Path $repoRoot '.private-backups') | Out-Null
+$targetFile = Join-Path $repoRoot ".private-backups\notion-snapshot.json"
 if (-not $goalsAvailable -and (Test-Path $targetFile)) {
     $previousSnapshot = Get-Content -Raw -Encoding UTF8 $targetFile | ConvertFrom-Json
     $goalsList = @($previousSnapshot.collections.goals)
@@ -202,5 +203,5 @@ Write-Host "Sync completed successfully!" -ForegroundColor Green
 Write-Host "   - Habits count: $($habitsList.Count)" -ForegroundColor White
 Write-Host "   - Tasks count:  $($calList.Count)" -ForegroundColor White
 Write-Host "   - Goals count:  $($goalsList.Count)" -ForegroundColor White
-Write-Host "   - Saved to:     data/notion-snapshot.json" -ForegroundColor Gray
+Write-Host "   - Saved to:     .private-backups/notion-snapshot.json" -ForegroundColor Gray
 Write-Host "==========================================" -ForegroundColor Cyan

@@ -2,6 +2,10 @@
 #tab-reports [hidden] { display: none !important; }
 #tab-reports .hello-tracker-header { display: flex; gap: 8px; align-items: center; margin: 18px 0 14px; }
 .hh-heading { min-width: 0; flex: 1; }
+.hh-connection { margin: 0 0 14px; padding: 12px; border: 1px solid #365164; border-radius: 6px; color: #adc4d2; font: 500 12px/1.6 'Plus Jakarta Sans', sans-serif; }
+.hh-connection summary { min-height: 32px; cursor: pointer; color: #c3e5f6; }
+.hh-connection input { display: block; width: 100%; min-height: 44px; margin: 8px 0; padding: 10px; background: #11263a; color: #fff; border: 1px solid #5a788c; }
+.hh-connection button { min-height: 44px; margin: 4px; padding: 8px 12px; border: 1px solid #5a788c; border-radius: 5px; color: #e5f1f8; background: #19374c; cursor: pointer; }
 #tab-reports .tracker-header-title { margin: 0; text-align: left; font-size: 23px; }
 .hh-heading small { display: block; margin-top: 5px; color: #adc4d2; font-size: 10px; line-height: 1.6; }
 #tab-reports .t-icon-btn, #tab-reports .t-plus-round-btn { flex: 0 0 44px; min-height: 44px; font-size: 24px; }

@@ -45,6 +45,39 @@ const server = http.createServer((req, res) => {
   const staticPath = /^\/pk\/?$/.test(rawUrl) ? '/index.html' : rawUrl;
 
   // API Proxy for Notion
+  if (rawUrl === '/api/habit-check') {
+    res.removeHeader('Access-Control-Allow-Origin');
+    const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN;
+    if (req.method !== 'POST' || req.headers.origin !== `http://${req.headers.host}` || !token) { res.writeHead(403); res.end('{}'); return; }
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', async () => {
+      try {
+        if (body.length > 8192) throw Object.assign(new Error('Request too large'), { status: 413 });
+        const { writeHabitCheck } = await import('../server/habit-check.mjs');
+        const data = await writeHabitCheck(JSON.parse(body), (notionPath, options) => fetch('https://api.notion.com' + notionPath, {
+          ...options, headers: { Authorization: `Bearer ${token}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' }
+        }));
+        res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); res.end(JSON.stringify({ ok: true, data }));
+      } catch (error) { res.writeHead(error.status || 502, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: false, partial: !!error.partial, error: error.message })); }
+    }); return;
+  }
+  if (rawUrl === '/api/personal-state') {
+    if (req.method !== 'GET') { res.writeHead(405); res.end(); return; }
+    const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN;
+    if (!token) { res.writeHead(401); res.end('{}'); return; }
+    import('../server/personal-state.mjs').then(async ({ readPersonalState }) => {
+      const data = await readPersonalState((notionPath, options) => fetch('https://api.notion.com' + notionPath, {
+        ...options, headers: { Authorization: `Bearer ${token}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' }
+      }));
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(data));
+    }).catch(() => { res.writeHead(502); res.end('{}'); });
+    return;
+  }
+  if (rawUrl === '/api/notion-session' && req.method === 'GET' && (process.env.NOTION_API_KEY || process.env.NOTION_TOKEN)) {
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ ok: true, configured: true, connected: true, backend: 'local' })); return;
+  }
   if (rawUrl === '/api/notion') {
     res.removeHeader('Access-Control-Allow-Origin');
     res.removeHeader('Access-Control-Allow-Methods');

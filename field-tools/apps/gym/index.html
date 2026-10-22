@@ -314,7 +314,7 @@ function render(){
   progressList.innerHTML=(state.body.length?state.body:[]).slice(0,8).map(function(b){return'<div class="feed"><div><b>Body Stats</b><span>'+b.date+' / '+(b.fat?b.fat+'% fat / ':'')+(b.notes||'No notes')+'</span></div><div class="right"><strong>'+b.weight+'kg</strong><span>weight</span></div></div>'}).join('')+(state.records.length?state.records.map(function(r){return'<div class="feed"><div><b>'+r.name+'</b><span>'+r.detail+'</span></div><span class="pill">PR</span></div>'}).join(''):'<div class="panel">No body stats or PRs yet.</div>');
   healthList.innerHTML=[].concat(tagRecords(state.nutrition,'Meals'),tagRecords(state.recipes,'Recipe'),tagRecords(state.supplements,'Supplement'),tagRecords(state.yoga,'Mobility'),tagRecords(state.cardio,'Cardio'),tagRecords(state.classes,'Sport'),tagRecords(state.sb,'Progress')).slice(0,12).map(function(x){return'<div class="feed"><div><b>'+x.name+'</b><span>'+x.tag+' / '+x.detail+'</span></div></div>'}).join('')||'<div class="feed"><div><b>Nutrition / Cardio / Yoga</b><span>Sync Notion to show all support databases.</span></div></div>';
   dbList.innerHTML=Object.keys(DB).map(function(k){var ok=state.db[k];return'<div class="dbrow"><div><b>'+label(k)+'</b><code>'+DB[k]+'</code></div><span class="status '+(ok?'ok':'bad')+'">'+(ok?'OK':'WAIT')+'</span></div>'}).join('');
-  syncLine.textContent=state.lastSync?'Last sync '+state.lastSync:'Not synced yet';
+  syncLine.setAttribute('role','status');syncLine.textContent=state.syncStatus==='loading'?'Đang đồng bộ Notion…':state.syncStatus==='partial'?'Đồng bộ một phần · nguồn lỗi giữ bản lưu':state.syncStatus==='error'?'Chưa đồng bộ được · đang giữ bản lưu':state.lastSync?'Đã đồng bộ '+state.lastSync:'Chưa đồng bộ Notion';
 }
 
 function feedRow(l){
@@ -358,11 +358,25 @@ function finishWorkout(){var rows=[].slice.call(document.querySelectorAll('.setr
 function openBodyStats(){bodyModal.classList.add('open')}function closeBodyStats(){bodyModal.classList.remove('open')}
 function saveBodyStats(){var b={date:today(),weight:+bodyWeight.value||0,fat:+bodyFat.value||0,notes:bodyNotes.value.trim()};if(!b.weight){toast('Enter weight');return}state.body.unshift(b);save();render();closeBodyStats();pushBodyStats(b);toast('Body stat saved')}
 
-function nFetch(method,path,body){return fetch('/api/notion?path='+encodeURIComponent(path),{method:method,headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined}).then(function(r){return r.json().then(function(d){return{ok:r.ok,data:d}})})}
+function nFetch(method,path,body){if(window.SpiderNotion?.request)return window.SpiderNotion.request(method,path,body);return fetch('/api/notion?path='+encodeURIComponent(path),{method:method,headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined}).then(async function(r){var raw=await r.json();return{ok:r.ok&&raw.ok!==false,data:raw.data||raw}})}
 function dbSchema(key){return nFetch('GET','/v1/databases/'+DB[key]).then(function(r){state.db[key]=r.ok;if(r.ok)state.schemas[key]=r.data.properties||{};return r})}
-function queryDb(key){return nFetch('POST','/v1/databases/'+DB[key]+'/query',{page_size:50}).then(function(r){state.db[key]=r.ok;return r.ok?(r.data.results||[]):[]})}
+async function queryDb(key){var rows=[],cursor,seen=new Set();do{var r=await nFetch('POST','/v1/databases/'+DB[key]+'/query',{page_size:100,...(cursor?{start_cursor:cursor}:{})});state.db[key]=r.ok;if(!r.ok||!Array.isArray(r.data?.results))throw Error('Notion source unavailable');rows.push(...r.data.results);cursor=r.data.has_more?r.data.next_cursor:null;if(r.data.has_more&&(!cursor||seen.has(cursor)))throw Error('Incomplete Notion page');if(cursor)seen.add(cursor);}while(cursor);return rows}
 
-function syncAll(){toast('Syncing Notion...');var keys=['exerciseLogs','weightsLog','cardioLog','classesSportsLog','gymExercises','aerobicExercises','workoutPlans','personalRecords','bodyStats','nutritionMeals','recipes','supplementTracker','yogaStretching','sbProgress'];Promise.all(Object.keys(DB).filter(function(k){return k!=='workoutHub'}).map(dbSchema)).then(function(){return Promise.all(keys.map(queryDb))}).then(function(res){state.logs=res[0].map(mapLog).concat(state.logs).filter(uniqueLog).slice(0,120);state.setLogs=res[1].map(mapRecord);state.cardio=res[2].map(mapRecord);state.classes=res[3].map(mapRecord);state.library=res[4].map(mapLibrary);state.aerobic=res[5].map(function(x){var y=mapLibrary(x);y.source='Aerobic';return y});state.plans=res[6].map(mapPlan);state.records=res[7].map(mapRecord);state.body=res[8].map(mapBody).concat(state.body||[]).filter(uniqueBody).slice(0,50);state.nutrition=res[9].map(mapRecord);state.recipes=res[10].map(mapRecord);state.supplements=res[11].map(mapRecord);state.yoga=res[12].map(mapRecord);state.sb=res[13].map(mapRecord);state.lastSync=new Date().toLocaleString('vi-VN');save();render();toast('Notion synced')}).catch(function(){save();render();toast('Notion sync failed')})}
+var gymSyncing=false;
+async function syncAll(){
+ if(gymSyncing)return;gymSyncing=true;state.syncStatus='loading';render();toast('Đang đồng bộ Notion…');
+ var keys=['exerciseLogs','weightsLog','cardioLog','classesSportsLog','gymExercises','aerobicExercises','workoutPlans','personalRecords','bodyStats','nutritionMeals','recipes','supplementTracker','yogaStretching','sbProgress'];
+ var fields=['logs','setLogs','cardio','classes','library','aerobic','plans','records','body','nutrition','recipes','supplements','yoga','sb'];
+ var maps=[mapLog,mapRecord,mapRecord,mapRecord,mapLibrary,function(x){var y=mapLibrary(x);y.source='Aerobic';return y},mapPlan,mapRecord,mapBody,mapRecord,mapRecord,mapRecord,mapRecord,mapRecord];
+ try{
+  var results=await Promise.allSettled(keys.map(async function(key){await dbSchema(key);return queryDb(key)}));
+  results.forEach(function(result,i){if(result.status!=='fulfilled')return;var values=result.value.map(maps[i]);if(i===0)values=values.concat(state.logs||[]).filter(uniqueLog).slice(0,120);if(i===8)values=values.concat(state.body||[]).filter(uniqueBody).slice(0,50);state[fields[i]]=values;});
+  var count=results.filter(function(r){return r.status==='fulfilled'}).length;
+  if(count===keys.length)state.lastSync=new Date().toLocaleString('vi-VN');
+  state.syncStatus=count===keys.length?'synced':count?'partial':'error';save();render();
+  toast(count===keys.length?'Đã đồng bộ Notion':count?'Đã tải '+count+'/'+keys.length+' nguồn; phần lỗi giữ bản lưu.':'Chưa đồng bộ được; dữ liệu hiện tại là bản lưu.');
+ }catch(e){state.syncStatus='error';render();toast('Chưa đồng bộ được Notion.');}finally{gymSyncing=false;}
+}
 
 function tagRecords(list,tag){return(list||[]).map(function(x){return Object.assign({tag:tag},x)})}
 function uniqueLog(l,i,a){return a.findIndex(function(x){return(x.id&&x.id===l.id)||(!x.id&&x.date===l.date&&x.type===l.type&&x.volume===l.volume)})===i}

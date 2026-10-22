@@ -1,0 +1,14 @@
+.private-backups/
+.env*
+.npm-cache/
+.wrangler-config/
+.field-service-release/
+.pages-private/
+.pages-private.zip
+.pages-bootstrap/
+.pages-bootstrap.zip
+.private-pages-credentials.json
+.playwright-cli/
+tools/reference-apks/
+tools/apk_unpacked/
+tools/xapk_extracted/

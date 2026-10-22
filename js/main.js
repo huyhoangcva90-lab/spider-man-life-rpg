@@ -100,6 +100,16 @@ class App {
     this.updateMarkers();
     this.trackerFrame.updateFilterCounts(this.repo.getAll());
 
+    const refreshPrivate = async () => {
+      if (document.hidden) return;
+      await this.notion.loadSnapshot();
+      this.unlocatedQueue.render();
+      this.updateMarkers();
+      this.trackerFrame.updateFilterCounts(this.repo.getAll());
+    };
+    setInterval(refreshPrivate, 60000);
+    document.addEventListener('visibilitychange', refreshPrivate);
+
     // NOTE: GPS is NOT requested automatically on boot per requirements.
     // Geolocation must be initiated from a user gesture (e.g. clicking Center GPS / Track button).
 

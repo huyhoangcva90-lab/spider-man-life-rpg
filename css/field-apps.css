@@ -13,6 +13,8 @@ body[data-field-immersive="true"] #game-panel-content { position:relative; width
 .spider-field-app-loading { position:absolute; inset:0; display:grid; place-items:center; margin:0; background:#071426; color:#d9e0df; font:500 14px/1.6 'Be Vietnam Pro',sans-serif; pointer-events:none; }
 .spider-field-app-loading[hidden] { display:none; }
 .spider-field-app { background:#071426; }
+.spider-field-app:has(.spider-field-source-note) { grid-template-rows:60px auto minmax(0,1fr); }
+.spider-field-source-note { margin:0; padding:7px 14px; border-bottom:1px solid #244256; color:#adc4d2; background:#0b1b2b; font:500 11px/1.5 system-ui,sans-serif; }
 
 /* Navigation has its own row, clear of the animated frame corners. */
 .spider-field-toolbar { display:flex; align-items:center; gap:12px; min-width:0; padding:6px 12px 6px 52px; border-bottom:1px solid #244256; background:#071426; }

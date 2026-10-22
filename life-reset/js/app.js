@@ -1,6 +1,8 @@
 import { dateKey, rollDailyState, questBucket, selectQuests, campaignDays } from './personal-progress.mjs';
 import { HelloHabitView } from './hello-habit-view.mjs';
 import { readDailyHabitHistory, recordedHabitDays, HABIT_PLANNER_DATABASE_ID, normalizeHabitPlan } from '../../js/integrations/notion/NotionHabitHistory.mjs';
+import { pendingHabitActions, saveHabitAction, settleHabitAction } from './habit-actions.mjs';
+import { setupOwnerConnection } from './owner-connection.mjs';
 
 /**
  * Life Reset reference UI and Notion-backed personal views.
@@ -161,6 +163,7 @@ class LifeResetApp {
     this.habitPlans = [];
     this.habitPlansSyncedAt = null;
     this.habitPlansError = '';
+    this.habitWritable = false;
     this.activeMeditation = null;
     this.breathingInterval = null;
     this.focusTimerInterval = null;
@@ -251,6 +254,19 @@ class LifeResetApp {
     this.renderHeaderStats();
     this.renderHabitCards();
     this.setupHelloHabitTab();
+    setupOwnerConnection(() => this.syncNotionLive());
+    document.getElementById('habit-retry-actions')?.addEventListener('click', async () => {
+      for (const action of pendingHabitActions().filter(item => item.status === 'pending')) {
+        const habit = this.notionHabits.find(item => item.rawId === action.habitId);
+        if (habit) await this.toggleNotionHabitDone(habit, action.checked);
+      }
+      this.renderHabitPending();
+    });
+    document.getElementById('habit-dismiss-reviewed')?.addEventListener('click', () => {
+      for (const action of pendingHabitActions().filter(item => item.status === 'review')) settleHabitAction(action.id);
+      this.renderHabitPending();
+    });
+    this.renderHabitPending();
     this.renderCore8HabitsGrid();
     this.renderPathwayGrid();
     this.setupActionSheet();
@@ -517,7 +533,7 @@ class LifeResetApp {
         this.renderQuestBoard();
         return;
       }
-      const res = await fetch('../data/notion-snapshot.json');
+      const res = await fetch('/api/personal-state', { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data && data.collections) {
@@ -530,7 +546,7 @@ class LifeResetApp {
           timeBlock: h.timeBlock || 'Allday',
           outcome: h.outcome || '',
           description: h.description || '',
-          today: !!h.today && dateKey(new Date(data.metadata?.syncedAt || 0)) === this.todayKey(),
+          today: false, // A fresh read timestamp does not date a timeless Today checkbox.
           xp: h.xp ? h.xp * 35 : 35,
           gold: h.gold ? h.gold * 15 : 20,
           sourceUrl: h.sourceUrl
@@ -605,15 +621,15 @@ class LifeResetApp {
       ]);
       if (results.every((result) => result.status === 'rejected')) throw results[0].reason;
       if (results[0].status === 'fulfilled') {
+        this.habitWritable = true;
         this.habitSyncedAt = new Date().toISOString();
         this.notionHabits = results[0].value.map((page) => {
           const habit = normalizeNotionPage(page, 'habits');
-          return { ...habit, id: `notion_${habit.id}`, rawId: habit.id, xp: (Number(habit.xp) || 1) * 35, gold: 20 };
+          return { ...habit, id: `notion_${habit.id}`, rawId: habit.id };
         });
         for (const habit of this.notionHabits) {
-          if (habit.today) this.state.notionDoneToday[habit.id] = true;
-          else delete this.state.notionDoneToday[habit.id];
-          this.recordNotionHabitDay(habit, habit.today);
+          // Today alone has no date. Dated Daily history determines this mark.
+          delete this.state.notionDoneToday[habit.id];
         }
       }
       if (results[1].status === 'fulfilled') {
@@ -623,7 +639,15 @@ class LifeResetApp {
           else delete this.state.notionDoneToday[task.id];
         }
       }
-      if (results[0].status === 'fulfilled') await this.syncHabitHistory({ force: !quiet });
+      if (results[0].status === 'fulfilled') {
+        await this.syncHabitHistory({ force: !quiet });
+        this.habitWritable = !this.habitHistoryError;
+        for (const habit of this.notionHabits) {
+          const checked = this.habitRecordedDays(habit).includes(this.todayKey());
+          habit.today = checked; habit.done = checked;
+          if (checked) this.state.notionDoneToday[habit.id] = true;
+        }
+      } else this.habitWritable = false;
       if (results[2].status === 'fulfilled') {
         this.notionActiveQuests = results[2].value.map((page) => normalizeNotionPage(page, 'activeQuests'));
         for (const quest of this.notionActiveQuests) {
@@ -640,13 +664,14 @@ class LifeResetApp {
         this.habitPlansSyncedAt = new Date().toISOString();
         this.habitPlansError = '';
       } else this.habitPlansError = 'Chưa làm mới được kế hoạch; có thể đang xem bản lưu.';
-      this.notionLive = results.every((result) => result.status === 'fulfilled');
+      this.notionLive = results.every((result) => result.status === 'fulfilled') && !this.habitHistoryError;
       this.lastSyncedAt = new Date().toISOString();
       this.cacheNotionData();
       this.saveState();
       document.getElementById('badge-notion-habits-count')?.replaceChildren(document.createTextNode(String(this.notionHabits.length)));
       document.getElementById('badge-notion-tasks-count')?.replaceChildren(document.createTextNode(String(this.notionTasks.length + this.notionActiveQuests.length)));
       const missing = ['Habit', 'Todo', 'Quest', 'Hero', 'Habit Planner'].filter((_, index) => results[index].status === 'rejected');
+      if (this.habitHistoryError) missing.push('Lịch sử Habit');
       if (statusEl) statusEl.textContent = `Notion · ${new Date(this.lastSyncedAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' })}${missing.length ? ` · Chưa tải: ${missing.join(', ')}` : ' · Đã cập nhật'}`;
       document.querySelector('.notion-status-dot')?.classList.toggle('online', this.notionLive);
       this.renderHabitCards();
@@ -656,9 +681,10 @@ class LifeResetApp {
       if (this.activeSubview === 'reports') this.renderHeatmapMatrices();
       if (!quiet) {
         this.playSfx('reward');
-        this.showSpideyToast('NOTION SYNCED', 'LIVE ⚡', `${this.notionHabits.length} habits updated.`);
+        this.showSpideyToast(missing.length ? 'ĐỒNG BỘ MỘT PHẦN' : 'ĐÃ ĐỒNG BỘ NOTION', missing.length ? 'CẦN KIỂM TRA' : '✓ NOTION', missing.length ? `Chưa tải: ${missing.join(', ')}` : `${this.notionHabits.length} Habit đã cập nhật.`);
       }
     } catch (error) {
+      this.habitWritable = false;
       this.notionLive = false;
       if (statusEl) statusEl.textContent = `Notion Zeus: Offline (${this.notionHabits.length} cached)`;
       document.querySelector('.notion-status-dot')?.classList.remove('online');
@@ -759,11 +785,11 @@ class LifeResetApp {
               <div class="card-meta-indicators">
                 <span>📊 ${this.escapeHtml(habit.priority)}</span>
                 ${habit.streak ? `<span>🔥 ${Number(habit.streak)} ngày</span>` : ''}
-                <span>❤️ Hồi HP & Energy</span>
+                <span>Ảnh hưởng Hero theo cấu hình Notion</span>
               </div>
             </div>
 
-            <button class="card-square-check" aria-label="${isDone ? 'Đã hoàn thành' : 'Hoàn thành'} ${this.escapeHtml(habit.name)}" data-id="${this.escapeHtml(habit.id)}" ${isDone || this.syncing || this.pendingHabitIds.has(habit.id) ? 'disabled' : ''}>
+            <button class="card-square-check" aria-label="${isDone ? 'Đã hoàn thành' : 'Hoàn thành'} ${this.escapeHtml(habit.name)}" data-id="${this.escapeHtml(habit.id)}" ${isDone || this.syncing || !this.habitWritable || this.pendingHabitIds.has(habit.id) ? 'disabled' : ''}>
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </button>
           </div>
@@ -924,8 +950,8 @@ class LifeResetApp {
     });
   }
 
-  async toggleNotionHabitDone(habit) {
-    const isDone = !this.state.notionDoneToday[habit.id];
+  async toggleNotionHabitDone(habit, desired) {
+    const isDone = typeof desired === 'boolean' ? desired : !this.state.notionDoneToday[habit.id];
     if (this.syncing || this.pendingHabitIds.has(habit.id)) return;
     this.pendingHabitIds.add(habit.id);
     this.renderHelloSquareHabits();
@@ -944,6 +970,12 @@ class LifeResetApp {
       this.playSfx('bell');
     }
     this.recordNotionHabitDay(habit, isDone);
+    const historyKey = String(habit.rawId || habit.id).replaceAll('-', '').toLowerCase();
+    if (this.remoteHabitHistory && Array.isArray(this.remoteHabitHistory[historyKey])) {
+      const days = new Set(this.remoteHabitHistory[historyKey]);
+      if (isDone) days.add(this.todayKey()); else days.delete(this.todayKey());
+      this.remoteHabitHistory[historyKey] = [...days].sort();
+    }
     window.parent?.postMessage({ type: 'SPIDEY_NOTION_CHECKIN', kind: 'habits', id: habit.rawId, checked: isDone }, window.location.origin);
     this.cacheNotionData();
     this.saveState();
@@ -954,20 +986,38 @@ class LifeResetApp {
 
   async persistNotionHabitCheck(habit, checked) {
     if (!habit.rawId) return;
+    let action;
     try {
-      const pageId = String(habit.rawId).replace(/-/g, '');
-      const response = await fetch(`/api/notion?path=${encodeURIComponent(`/v1/pages/${pageId}`)}`, {
-        method: 'PATCH',
+      action = saveHabitAction({ id: crypto.randomUUID(), habitId: habit.rawId, day: this.todayKey(), checked, expectedEditedAt: habit.editedAt });
+      if (action.status === 'review') throw Error('Thao tác trước cần xem lại. Bỏ thao tác chờ, làm mới rồi xác nhận lại.');
+      if (action.checked !== checked) throw Error('Habit này có thao tác đang chờ gửi. Thử gửi lại trước khi đổi dấu.');
+      const response = await fetch('/api/habit-check', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ properties: { Today: { checkbox: checked } } })
+        body: JSON.stringify(action)
       });
       const payload = await response.json();
-      if (!response.ok || !payload.ok) throw new Error(payload.error || `HTTP ${response.status}`);
+      if (!response.ok || !payload.ok) {
+        if (response.status === 409) settleHabitAction(action.id, true);
+        throw new Error(payload.partial ? 'Daily đã ghi; dấu Today còn chờ xác nhận. Thử gửi lại để hoàn tất.' : payload.error || `HTTP ${response.status}`);
+      }
+      habit.editedAt = payload.data?.editedAt || habit.editedAt;
+      settleHabitAction(action.id);
       return true;
     } catch (error) {
       this.showSpideyToast('CHƯA LƯU ĐƯỢC', 'THỬ LẠI', error.message || `${habit.name}: kiểm tra kết nối Notion.`);
       return false;
-    }
+    } finally { this.renderHabitPending(); }
+  }
+
+  renderHabitPending() {
+    const host = document.getElementById('habit-pending-actions');
+    if (!host) return;
+    const items = pendingHabitActions(), review = items.filter(item => item.status === 'review').length;
+    host.hidden = !items.length;
+    host.querySelector('[role=status]').textContent = `${items.length - review} thao tác chờ gửi · ${review} thao tác cần xem lại. Dữ liệu chưa xác nhận không được coi là đã lưu.`;
+    document.getElementById('habit-retry-actions').hidden = items.length === review;
+    document.getElementById('habit-dismiss-reviewed').hidden = !review;
   }
 
   bindCardSwipe(wrapEl, cardEl, habitId) {

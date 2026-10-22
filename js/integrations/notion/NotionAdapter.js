@@ -9,16 +9,21 @@ export class NotionAdapter {
   }
 
   async loadSnapshot() {
+    if (this.loading) return false;
+    this.loading = true;
     try {
-      const response = await fetch('./data/notion-snapshot.json');
-      if (!response.ok) throw new Error(`Notion snapshot HTTP ${response.status}`);
+      const response = await fetch('/api/personal-state', { cache: 'no-store' });
+      if (!response.ok) {
+        if ([401, 403].includes(response.status)) { this.rawSnapshot = null; this.unlocatedMissions = []; return false; }
+        throw new Error(`Private Notion data HTTP ${response.status}`);
+      }
       this.rawSnapshot = await response.json();
       this.parseSnapshot();
       return true;
     } catch (err) {
-      console.warn('[NotionAdapter] Could not load notion-snapshot.json:', err);
+      console.warn('[NotionAdapter] Could not refresh private data:', err);
       return false;
-    }
+    } finally { this.loading = false; }
   }
 
   parseSnapshot() {
@@ -31,74 +36,27 @@ export class NotionAdapter {
     const unlocated = [];
     const existingEntries = this.repo.getAll();
 
-    // 1. Process Master Calendar items (primary source for geographic missions)
-    calendarItems.forEach(item => {
-      if (item.done) return;
-
-      const title = item.title || item.name || 'Nhiệm vụ Notion';
-      const sourceUrl = item.sourceUrl || '';
-      const id = item.id;
-
-      const hasCoordsInRepo = existingEntries.some(e => 
-        (sourceUrl && e.notionPageUrl === sourceUrl) || e.id === `notion-${id}`
-      );
-
-      if (item.lat && item.lng) {
-        if (!hasCoordsInRepo) {
-          this.repo.create({
-            id: `notion-${id}`,
-            type: 'NOTION_MISSION',
-            title,
-            lat: parseFloat(item.lat),
-            lng: parseFloat(item.lng),
-            address: item.address || 'Địa điểm Notion',
-            startsAt: item.date || new Date().toISOString(),
-            status: item.done ? 'DONE' : 'PLANNED',
-            notionPageUrl: sourceUrl,
-            source: 'NOTION'
-          });
+    for (const [kind, items] of [['task', calendarItems], ['habit', habits], ['goal', goals]]) {
+      for (const item of items) {
+        const id = String(item.id || '').replaceAll('-', '');
+        if (!id) continue;
+        const sourceUrl = item.sourceUrl || '';
+        const existing = existingEntries.find(entry => entry.source === 'NOTION' && (entry.id === 'notion-' + id || sourceUrl && entry.notionPageUrl === sourceUrl));
+        const done = !!(item.done || item.achieved);
+        const lat = Number(item.lat), lng = Number(item.lng);
+        const located = item.lat != null && item.lng != null && Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
+        const changes = { title: item.title || item.name || 'Nhiệm vụ Notion', status: done ? 'DONE' : 'PLANNED', notionPageUrl: sourceUrl };
+        if (item.date || item.startDate) changes.startsAt = item.date || item.startDate;
+        if (located) Object.assign(changes, { lat, lng, address: item.address || existing?.address || 'Địa điểm Notion' });
+        if (existing) {
+          if (Object.entries(changes).some(([key, value]) => existing[key] !== value)) this.repo.update(existing.id, changes);
+          continue;
         }
-      } else if (!hasCoordsInRepo) {
-        // Unlocated master calendar record
-        unlocated.push({
-          id: `notion-unlocated-${id}`,
-          title,
-          date: item.date || item.startDate || null,
-          priority: item.priority || 'Trung bình',
-          type: item.type || 'Nhiệm vụ',
-          sourceUrl,
-          rawItem: item
-        });
+        if (done) continue;
+        if (located) this.repo.create({ id: 'notion-' + id, type: 'NOTION_MISSION', ...changes, source: 'NOTION' });
+        else if (kind === 'task') unlocated.push({ id: 'notion-unlocated-' + id, title: changes.title, date: item.date || item.startDate || null, priority: item.priority || '', type: item.type || '', sourceUrl, rawItem: item });
       }
-    });
-
-    // 2. Process Habits & Goals ONLY if they explicitly carry usable address/coordinates
-    [...habits, ...goals].forEach(item => {
-      if (!item.lat || !item.lng) return;
-
-      const title = item.title || item.name || 'Thói quen / Mục tiêu Notion';
-      const sourceUrl = item.sourceUrl || '';
-      const id = item.id;
-
-      const hasCoordsInRepo = existingEntries.some(e => 
-        (sourceUrl && e.notionPageUrl === sourceUrl) || e.id === `notion-${id}`
-      );
-
-      if (!hasCoordsInRepo) {
-        this.repo.create({
-          id: `notion-${id}`,
-          type: 'NOTION_MISSION',
-          title,
-          lat: parseFloat(item.lat),
-          lng: parseFloat(item.lng),
-          address: item.address || 'Địa điểm Notion',
-          startsAt: item.startDate || new Date().toISOString(),
-          status: item.achieved || item.done ? 'DONE' : 'PLANNED',
-          notionPageUrl: sourceUrl,
-          source: 'NOTION'
-        });
-      }
-    });
+    }
 
     this.unlocatedMissions = unlocated;
   }

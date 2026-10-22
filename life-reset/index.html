@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/standalone-tracker-shell.css?build=frame-layers-1" />
   <script type="module" src="../js/ui/StandaloneTrackerShell.js"></script>
   <link rel="stylesheet" href="css/reset-app.css?build=hello-audit-1" />
-  <link rel="stylesheet" href="css/hello-habit.css?build=hello-history-2" />
+  <link rel="stylesheet" href="css/hello-habit.css?build=phase-one-3" />
   <link rel="icon" type="image/png" href="assets/images/house_ember.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -172,6 +172,8 @@
              TAB 2: HELLO HABIT (TRACKER & REPORTS - EXACT USER IMAGE 4)
              ═══════════════════════════════════════ -->
         <section id="tab-reports" class="view-tab-pane">
+          <details id="habit-owner-connection" class="hh-connection"><summary>Mở kết nối Notion</summary><p role="status"></p><form hidden><label>Mã truy cập Spider / mật khẩu Field<input name="accessCode" type="password" autocomplete="current-password" required /></label><button type="submit">Kết nối</button></form></details>
+          <div id="habit-pending-actions" class="hh-connection" hidden><p role="status"></p><button id="habit-retry-actions" type="button">Thử gửi lại</button><button id="habit-dismiss-reviewed" type="button">Bỏ thao tác cần xem lại</button></div>
 
           <!-- Sub-View Navigation Switcher (Habit Tracker vs Habit Reports) -->
           <div class="hello-habit-nav-bar">
@@ -531,7 +533,7 @@
         <div class="toast-body">
           <div class="toast-header-row">
             <strong class="toast-title" id="toast-rpg-title">SPIDEY COMBO!</strong>
-            <span class="toast-xp-pill" id="toast-rpg-xp">+35 XP</span>
+            <span class="toast-xp-pill" id="toast-rpg-xp">NOTION</span>
           </div>
           <p class="toast-desc" id="toast-rpg-desc">Tiến độ đã được cập nhật.</p>
         </div>
@@ -545,6 +547,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?build=hello-history-2"></script>
+  <script type="module" src="js/app.js?build=phase-one-3"></script>
 </body>
 </html>

@@ -61,7 +61,7 @@ export class MapEntryRepository {
 
   create(entryData) {
     const newEntry = {
-      id: `entry-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+      id: entryData.id || `entry-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
       type: entryData.type || 'MEETING',
       title: entryData.title || 'Địa điểm mới',
       lat: parseFloat(entryData.lat),

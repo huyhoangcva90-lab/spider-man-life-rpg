@@ -95,7 +95,8 @@ export class HelloHabitView {
     const pending = this.app.pendingHabitIds.has(habit.id);
     const button = element('button', `hh-check${done ? ' is-done' : ''}`, pending ? '…' : done ? '✓' : '+');
     button.type = 'button';
-    button.disabled = !today || this.app.syncing || pending;
+    button.disabled = !today || this.app.syncing || pending || !this.app.habitWritable;
+    if (!this.app.habitWritable) button.title = 'Mở kết nối riêng và làm mới dữ liệu trước khi check.';
     button.setAttribute('aria-label', `${done ? 'Bỏ check' : 'Check'} ${habit.name}`);
     button.setAttribute('aria-pressed', String(done));
     button.setAttribute('aria-busy', String(pending));
@@ -121,7 +122,7 @@ export class HelloHabitView {
     document.getElementById('hello-square-progress').textContent = `${count} / ${habits.length} đã check`;
     const scope = document.getElementById('hello-history-scope');
     scope.textContent = selected === app.todayKey()
-      ? 'Check hôm nay lưu vào Notion. Chạm tên Habit để xem chi tiết.'
+      ? 'Check hôm nay ghi vào Daily Notion. Chạm tên Habit để xem chi tiết.'
       : selected > app.todayKey() ? 'Ngày sắp tới · chỉ xem. Chưa có dữ liệu hoạt động cho ngày này.'
       : app.habitHistorySyncedAt ? 'Lịch sử Daily từ Notion · chỉ xem. Ô trống là chưa ghi nhận, không tự tính là bỏ lỡ.' : 'Lịch sử trên thiết bị này · ô chưa ghi nhận không có nghĩa là bỏ lỡ. Chưa hỗ trợ sửa ngày cũ.';
     if (app.habitHistoryError) scope.textContent += ` Lịch sử chưa làm mới: ${app.habitHistoryError}.`;
@@ -141,7 +142,7 @@ export class HelloHabitView {
     if (this.sort === 'name') visible.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
     if (this.sort === 'streak') visible.sort((a, b) => (Number(b.streak) || 0) - (Number(a.streak) || 0));
     if (!visible.length) {
-      list.append(element('p', 'hh-empty', habits.length ? 'Không có Habit phù hợp. Thử đổi bộ lọc hoặc từ tìm kiếm.' : app.syncing ? 'Đang tải Habit từ Notion…' : 'Chưa có Habit để hiển thị. Đồng bộ lại hoặc mở Notion bằng nút +.'));
+      list.append(element('p', 'hh-empty', habits.length ? 'Không có Habit phù hợp. Thử đổi bộ lọc hoặc từ tìm kiếm.' : app.syncing ? 'Đang tải Habit từ Notion…' : !app.habitWritable ? 'Mở kết nối riêng và làm mới để tải Habit từ Notion.' : 'Chưa có Habit để hiển thị. Mở Notion bằng nút + để quản lý.'));
       return;
     }
     const groups = new Map();
@@ -264,7 +265,7 @@ export class HelloHabitView {
       panel.append(stats, element('p', 'personal-history-note', remote ? `Nguồn: quan hệ Habits ↔ Daily trong Notion. Đọc lúc ${new Date(this.app.habitHistorySyncedAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}. Streak dùng kết quả công thức Notion; ô trống không tự tính là thất bại.` : 'Chưa tải được lịch sử Daily từ Notion. Số ngày hiện tại chỉ lấy từ thiết bị; streak lấy từ công thức Notion.'));
     }
     if (this.detailTab === 'activity') {
-      panel.append(element('p', 'personal-history-note', this.app.habitHistorySyncedAt ? 'Các ngày có liên kết Habit trong Daily Notion. Checkbox Today và lịch sử Daily là hai trường riêng; check Today chưa tự tạo một hoạt động định lượng.' : 'Các ngày check-in được lưu trên thiết bị này; đây chưa phải nhật ký số lượng và thời điểm đầy đủ.'));
+      panel.append(element('p', 'personal-history-note', this.app.habitHistorySyncedAt ? 'Nguồn: quan hệ Habit ↔ Daily trong Notion. Check trong app ghi ngày thực hiện và cập nhật dấu Today; đây chưa phải nhật ký định lượng theo cốc/phút/km.' : 'Các ngày check-in được lưu trên thiết bị này; đây chưa phải nhật ký số lượng và thời điểm đầy đủ.'));
       const log = element('ol', 'hh-activity-list');
       for (const day of history.toReversed()) log.append(element('li', '', `${day} · Đã check-in`));
       panel.append(history.length ? log : element('p', 'hh-empty', this.app.habitHistorySyncedAt ? 'Chưa có ngày Daily nào liên kết Habit này trong dữ liệu đã tải.' : 'Chưa có check-in được ghi nhận trên thiết bị này.'));

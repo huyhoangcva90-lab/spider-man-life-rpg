@@ -255,7 +255,7 @@ export class ActionRpgController {
         fetch('./data/backpacks.json').then(r => r.json()),
         fetch('./data/badges.json').then(r => r.json()),
         fetch('./data/gadgets.json').then(r => r.json()),
-        fetch('./data/notion-snapshot.json').then(r => r.json()),
+        fetch('/api/personal-state', { cache: 'no-store' }).then(r => r.json()),
         fetch('./data/skill_icons.json').then(r => r.json()),
         fetch('./data/effect_icons.json').then(r => r.json()),
         fetch('./data/skills.json').then(r => r.json()),
@@ -1999,7 +1999,7 @@ export class ActionRpgController {
       this.notionActiveQuests = [];
       for (const key of ['spidey_notion_tasks', 'spidey_notion_habits', 'spidey_notion_goals', 'spidey_notion_active_quests', 'spidey_notion_cached_at', 'spidey_notion_cache_source', 'spidey_notion_source_at']) localStorage.removeItem(key);
       try {
-        const response = await fetch('./data/notion-snapshot.json', { cache: 'no-store' });
+        const response = await fetch('/api/personal-state', { cache: 'no-store' });
         const snapshot = await response.json();
         this.notionTasks = snapshot.collections?.masterCalendar || [];
         this.notionHabits = snapshot.collections?.habits || [];
