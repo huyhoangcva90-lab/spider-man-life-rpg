@@ -1,20 +1,17 @@
-/* Route existing Life OS bookmarks to the original Gambit apps. */
+/* Life OS bookmarks are aliases; the Field launcher owns the app directory. */
 (() => {
-  const routes = { today: 'todo', routine: 'routine', dopamine: 'dopamine', timetable: 'timetable', habits: 'habits', journal: 'journal', gym: 'gym' };
-  const open = (view) => {
-    const app = routes[view];
-    if (!app) return false;
-    location.replace(new URL(`../?spiderApp=${app}`, location.href).href);
-    return true;
-  };
-  if (open(location.hash.slice(1))) return;
-  document.addEventListener('click', (event) => {
-    const button = event.target.closest?.('.system-nav[data-view]');
-    if (button && routes[button.dataset.view]) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      open(button.dataset.view);
-    }
-  }, true);
-  window.addEventListener('hashchange', () => open(location.hash.slice(1)));
+  const view = location.hash.slice(1);
+  const target = new URL('../', location.href);
+  if (['reset66', 'habits'].includes(view)) {
+    target.searchParams.set('game', 'HABITS');
+    target.searchParams.set('tab', view === 'reset66' ? '66 DAYS' : 'APP');
+  } else if (view === 'today') {
+    target.searchParams.set('game', 'QUESTS');
+    target.searchParams.set('tab', 'APP');
+  } else {
+    target.searchParams.set('game', 'FIELD');
+    target.searchParams.set('tab', 'SYSTEMS');
+    if (['routine', 'dopamine', 'timetable', 'journal', 'gym'].includes(view)) target.searchParams.set('spiderApp', view);
+  }
+  location.replace(target.href);
 })();

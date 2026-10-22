@@ -44,26 +44,14 @@ export class HubOverlayPanels {
 
   renderApps() {
     const apps = [
-      ['QUESTS:TODAY', 'TODAY QUESTS', 'Việc cần làm hôm nay từ Notion', '✓', 'cyan'],
-      ['QUESTS:MAIN', 'MAIN QUESTS', 'Tuyến nhiệm vụ chính theo Type', '◆', 'red'],
-      ['QUESTS:DAILY', 'DAILY QUESTS', 'Nhiệm vụ lặp lại mỗi ngày', '↻', 'green'],
-      ['QUESTS:GAMBIT', 'GAMBIT TO-DO', 'Ứng dụng To-do gốc của Gambit', '▤', 'cyan'],
-      ['HABITS:TODAY', 'LIFE RESET', 'Habit hôm nay và hồi phục Energy', '66', 'green'],
-      ['HABITS:PROGRESS', 'HELLO HABIT', 'Xem tiến độ bằng các ô vuông', '▦', 'cyan'],
-      ['HABITS:66 DAYS', '66 DAY PATH', 'Lộ trình xây kỷ luật 66 ngày', '66', 'amber'],
-      ['HABITS:APP', 'HABIT APP', 'Life Reset và Hello Habit trong cùng một màn', '▦', 'green'],
-      ['HABITS:GAMBIT', 'GAMBIT HABITS', 'Ứng dụng Habit gốc của Gambit', '◈', 'green'],
+      ['QUESTS:APP', 'QUEST', 'Việc từ Notion · hôm nay, quá hạn và đã xong', '✓', 'cyan'],
+      ['HABITS:APP', 'HABIT', 'Check Habit, báo cáo và hành trình 66 ngày', '▦', 'green'],
       ['FIELD:SYSTEMS', 'SPIDER APPS', 'Trung tâm Gym, Time, Journal và công cụ', '⌘', 'cyan'],
       ['FIELD:PLACES', 'PLACE MAP', 'Sổ địa chỉ, danh mục và chỉ đường', '⌖', 'green'],
       ['CITY', 'CITY MAP', 'Bản đồ nhiệm vụ và địa điểm', '⌖', 'cyan'],
-      ['HERO:SUITS', 'SUITS WARDROBE', 'Tủ đồ thời trang & đổi Skin', '👕', 'amber'],
-      ['HERO:ROSTER', 'SPIDER-VERSE', '77 Biến thể Nhện đa vũ trụ', '🕷️', 'red'],
-      ['HERO:SKILLS', 'SKILL TREE', 'Combat · Web · Spider-Sense', '⚡', 'cyan'],
-      ['HERO:GADGETS', 'GADGETS', 'Impact Web · Drone · EMP', '⌁', 'green'],
+      ['HERO:PROFILE', 'HERO', 'Hồ sơ, trang phục, kỹ năng, map và huy hiệu', '🕷️', 'red'],
       ['FIELD:ENEMIES', 'BESTIARY', 'Hồ sơ kẻ địch Bosses & Minions', '◉', 'red'],
-      ['HERO:BADGES', 'SPIDER BADGES', 'Huy hiệu từ Notion', '✦', 'amber'],
       ['ARCHIVE:BESTIARY', 'GAME ARCHIVE', 'Bestiary, backpacks và badges bản game cũ', '▣', 'red'],
-      ['CHRONICLE:RHYTHM', 'CHRONICLE', 'Nhịp sinh học, journal và Gym bản game cũ', '◷', 'amber'],
       ['SETTINGS', 'GAME SETTINGS', 'Âm thanh, hiệu ứng, sao lưu save', '⚙', 'paper']
     ];
 

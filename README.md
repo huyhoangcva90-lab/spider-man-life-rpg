@@ -1,10 +1,11 @@
 # SPIDEY LIFE — Arena Mission Hub
 
-Ứng dụng Life RPG local-first kết hợp Life Reset 66 ngày, Quest Notion, Spider Apps và trận đấu theo lượt Spider hero vs villain.
+Ứng dụng Life RPG kết hợp Habit, hành trình 66 ngày, Quest, Spider Apps và Battle. Notion là nguồn dữ liệu thật; dữ liệu mẫu và moveset tham khảo được giữ riêng.
 
-- Live: <https://huyhoangcva90-lab.github.io/spider-man-life-rpg/>
+- Live: <https://spider.huykl.id.vn/>
 - Repository: <https://github.com/huyhoangcva90-lab/spider-man-life-rpg>
 - Brand guide: [`docs/SPIDEY_LIFE_BRAND_GUIDE.md`](docs/SPIDEY_LIFE_BRAND_GUIDE.md)
+- Phạm vi từng chức năng, tránh xây trùng: [`docs/FEATURE_OWNERSHIP.md`](docs/FEATURE_OWNERSHIP.md)
 - LXXXV architecture audit: [`docs/APP_V6_AUDIT_LXXXV.md`](docs/APP_V6_AUDIT_LXXXV.md)
 
 ## Luồng chính

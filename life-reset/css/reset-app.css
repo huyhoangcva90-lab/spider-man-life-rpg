@@ -2804,6 +2804,7 @@ body.embedded .curved-bottom-dock { position: relative; flex: 0 0 58px; height: 
 .hello-square-check-header { flex-wrap: wrap; gap: 10px; }
 .personal-quest-card h3 { line-height: 1.5; }
 .pathway-cell { font: inherit; cursor: pointer; }
+@media (min-width: 700px) { .pathway-grid { grid-template-columns: repeat(11, minmax(0, 1fr)); } }
 button:focus-visible, input:focus-visible { outline: 3px solid #8ce5f8; outline-offset: 3px; }
 @media (min-width: 821px) { .personal-quest-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } .personal-quest-empty { grid-column: 1 / -1; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }

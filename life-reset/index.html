@@ -6,7 +6,7 @@
   <title>66 日間 - Life Reset: 66 Day Habit</title>
   <link rel="stylesheet" href="../css/standalone-tracker-shell.css" />
   <script type="module" src="../js/ui/StandaloneTrackerShell.js"></script>
-  <link rel="stylesheet" href="css/reset-app.css?build=personal-quest-3" />
+  <link rel="stylesheet" href="css/reset-app.css?build=unified-personal-1" />
   <link rel="icon" type="image/png" href="assets/images/house_ember.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -318,6 +318,15 @@
              ═══════════════════════════════════════ -->
         <section id="tab-core-habits" class="view-tab-pane">
 
+          <!-- 66-Day Matrix Pathway -->
+          <div class="pathway-card">
+            <div class="pathway-head">
+              <h3>HÀNH TRÌNH 66 NGÀY</h3>
+              <span class="pathway-badge">Check-in thực tế</span>
+            </div>
+            <div id="pathway-grid" class="pathway-grid"></div>
+          </div>
+
           <!-- Sunburst Icon & Title -->
           <div class="core-habits-header-block">
             <div class="sunburst-icon-wrap">
@@ -333,9 +342,9 @@
                 <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
               </svg>
             </div>
-            <h2 class="core-title-text">The 8 core habits</h2>
+            <h2 class="core-title-text">8 gợi ý tham khảo</h2>
             <p class="core-subtitle-text">
-              Studies shows that to reset your life, you need the below <span style="color: #FB6900; font-weight: 800;">8 core habits</span>.
+              Danh sách mẫu để tham khảo. Habit thực tế của bạn được quản lý trong Notion.
             </p>
           </div>
 
@@ -346,20 +355,12 @@
 
           <!-- Footer Explainer & Continue CTA -->
           <div class="core-cta-footer">
-            <p class="core-footer-note">Here's how your life will change as you build these habits for 66 days:</p>
+            <p class="core-footer-note">Chọn Habit phù hợp với lịch và mục tiêu của bạn.</p>
             <button id="btn-core-continue" class="core-continue-btn">
               <span>➜ Continue</span>
             </button>
           </div>
 
-          <!-- 66-Day Matrix Pathway -->
-          <div class="pathway-card">
-            <div class="pathway-head">
-              <h3>66-DAY AUTOMATICITY PATHWAY</h3>
-              <span class="pathway-badge">Active</span>
-            </div>
-            <div id="pathway-grid" class="pathway-grid"></div>
-          </div>
         </section>
 
         <!-- ═══════════════════════════════════════
@@ -485,12 +486,12 @@
         </button>
 
         <!-- 4. The 8 Core Habits / Book -->
-        <button class="dock-item-btn" data-tab="core-habits" aria-label="Core Habits">
+        <button class="dock-item-btn" data-tab="core-habits" aria-label="Hành trình 66 ngày">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
           </svg>
-          <span>66 MẪU</span>
+          <span>66 NGÀY</span>
         </button>
 
         <!-- 5. Tools & Settings (...) -->
@@ -560,6 +561,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?build=personal-quest-3"></script>
+  <script type="module" src="js/app.js?build=unified-personal-1"></script>
 </body>
 </html>

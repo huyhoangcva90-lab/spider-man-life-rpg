@@ -39,6 +39,16 @@ test('66 day campaign crosses year boundaries with exact local dates', () => {
   assert.equal(days[2].future, true);
 });
 
+test('Field summary uses the canonical cache and never treats yesterday as checked today', () => {
+  const cache = { habits: [{ id: 'h', today: true }], tasks: [{ id: 'q', done: true }], activeQuests: [], habitSyncedAt: '2026-10-21T12:00:00' };
+  assert.equal(progress.personalDashboardSummary(cache, { notionDay: '2026-10-21', notionDoneToday: { h: true } }, '2026-10-22').habits, 'Mở để cập nhật');
+  cache.habitSyncedAt = '2026-10-22T12:00:00';
+  const result = progress.personalDashboardSummary(cache, {}, '2026-10-22');
+  assert.equal(result.habits, '1/1 · bản lưu');
+  assert.equal(result.quests, '1/1 · bản lưu');
+  assert.equal(progress.personalDashboardSummary(null).habits, 'Mở Habit');
+});
+
 function makeApp() {
   const store = new Map();
   const context = vm.createContext({ ...progress, localStorage: { getItem: key => store.get(key), setItem: (key, value) => store.set(key, value) }, window: { addEventListener() {}, parent: { postMessage() {} }, location: { origin: 'http://localhost' } }, Date, Set, console });
@@ -77,4 +87,14 @@ test('failed write leaves progress unchanged and repeated click does not send an
   assert.equal(habit.today, false);
   assert.equal(app.pendingHabitIds.size, 0);
   assert.equal(app.state.notionDoneToday[habit.id], undefined);
+});
+
+test('trying reference habits never changes the real Hero save or awards XP', () => {
+  const { app, store } = makeApp();
+  const realSave = JSON.stringify({ character: { xp: 100, gold: 7 }, boss: { currentHp: 200 } });
+  store.set('spidey-life-rpg-v1', realSave);
+  const xp = app.state.xp;
+  app.toggleHabitDone('habit_run');
+  assert.equal(store.get('spidey-life-rpg-v1'), realSave);
+  assert.equal(app.state.xp, xp);
 });

@@ -1,5 +1,6 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
 import { NotionGamePresenter } from './NotionGamePresenter.js?build=game-loadout-7';
+import { personalAppRoute, personalFieldDestination } from './PersonalAppRoutes.mjs';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -734,9 +735,9 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: ['APP', 'GAMBIT', 'TODAY', ...(this.notionPresenter ? ['MISSIONS'] : []), 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS', 'ACTIVE'],
+      QUESTS: ['APP', 'TODAY', ...(this.notionPresenter ? ['MISSIONS'] : []), 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS', 'ACTIVE'],
       HERO: this.notionPresenter ? ['PROFILE', 'SUITS', 'SKILLS', 'MAPS', 'BADGES'] : ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'MAPS', 'BADGES'],
-      HABITS: ['APP', 'GAMBIT', 'TODAY', 'PROGRESS', '66 DAYS'],
+      HABITS: ['APP', 'TODAY', 'PROGRESS', '66 DAYS'],
       FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
       CHRONICLE: ['RHYTHM', 'JOURNAL', 'GYM'],
@@ -771,14 +772,16 @@ export class ActionRpgController {
     };
 
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
-    const requestedApp = this.panelSection === 'QUESTS' && this.panelTab === 'GAMBIT' ? 'todo' : this.panelSection === 'HABITS' && this.panelTab === 'GAMBIT' ? 'habits' : this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
+    const personalRoute = personalAppRoute(this.panelSection, this.panelTab);
+    const requestedApp = this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
     if (FIELD_APPS[requestedApp]) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
     // Every destination uses the same Spider frame, including imported Field apps.
     delete document.body.dataset.fieldStandalone;
     const keepCurrentApp = requestedApp && content.querySelector('[data-field-app]')?.dataset.fieldApp === requestedApp;
-    const keepPersonalApp = this.panelTab === 'APP' && content.querySelector('[data-personal-app]')?.dataset.personalApp === this.panelSection;
-    content.classList.toggle('game-panel-content--habit-app', this.panelTab === 'APP' && ['QUESTS', 'HABITS'].includes(this.panelSection));
+    const personalKey = personalRoute ? `${personalRoute.section}:${personalRoute.view}:${personalRoute.filter || ''}` : '';
+    const keepPersonalApp = personalRoute && content.querySelector('[data-personal-route]')?.dataset.personalRoute === personalKey;
+    content.classList.toggle('game-panel-content--habit-app', Boolean(personalRoute));
     if (!keepCurrentApp && !keepPersonalApp) {
       content.innerHTML = this.renderSection();
       this.bindEvents(content);
@@ -787,12 +790,13 @@ export class ActionRpgController {
   }
 
   renderSection() {
-    if (['QUESTS', 'HABITS'].includes(this.panelSection) && this.panelTab === 'APP') {
-      const tab = this.panelSection === 'QUESTS' ? 'quests' : 'reports';
-      return `<iframe class="habit-app-frame" data-personal-app="${this.panelSection}" src="./life-reset/index.html?tab=${tab}" title="${this.panelSection === 'QUESTS' ? 'Quest' : 'Habit'} của tôi" loading="lazy"></iframe>`;
+    const personal = personalAppRoute(this.panelSection, this.panelTab);
+    if (personal) {
+      const query = new URLSearchParams({ tab: personal.view });
+      if (personal.filter) query.set('filter', personal.filter);
+      const key = `${personal.section}:${personal.view}:${personal.filter || ''}`;
+      return `<iframe class="habit-app-frame" data-personal-app="${personal.section}" data-personal-route="${key}" src="./life-reset/index.html?${query}" title="${personal.section === 'QUESTS' ? 'Quest' : 'Habit'} của tôi" loading="lazy"></iframe>`;
     }
-    if (this.panelSection === 'QUESTS' && this.panelTab === 'GAMBIT') return renderFieldApp('todo');
-    if (this.panelSection === 'HABITS' && this.panelTab === 'GAMBIT') return renderFieldApp('habits');
     switch (this.panelSection) {
       case 'QUESTS': return this.renderQuestsSection();
       case 'HERO': return this.renderHeroSection();
@@ -844,6 +848,12 @@ export class ActionRpgController {
 
   openEmbeddedFieldApp(id) {
     if (!FIELD_APPS[id]) return;
+    const personalSection = personalFieldDestination(id);
+    if (personalSection) {
+      this.fieldAppId = null;
+      this.selectSection(personalSection);
+      return;
+    }
     document.body.dataset.gameMode = 'ARENA';
     this.openPanel('FIELD');
     this.setActiveNav('FIELD');

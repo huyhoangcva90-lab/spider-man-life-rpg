@@ -39,3 +39,16 @@ export function campaignDays(start, today = dateKey(), length = 66) {
   }
   return days;
 }
+
+export function personalDashboardSummary(cache, state, today = dateKey()) {
+  if (!cache || !Array.isArray(cache.habits)) return { habits: 'Mở Habit', quests: 'Mở Quest' };
+  const marks = state?.notionDay === today ? state.notionDoneToday || {} : {};
+  const stamp = cache.habitSyncedAt || cache.syncedAt;
+  const freshDay = stamp && dateKey(new Date(stamp)) === today;
+  const done = cache.habits.filter(habit => marks[habit.id] || freshDay && habit.today).length;
+  const quests = [...(cache.tasks || []), ...(cache.activeQuests || [])];
+  return {
+    habits: freshDay ? `${done}/${cache.habits.length} · bản lưu` : 'Mở để cập nhật',
+    quests: `${quests.filter(quest => quest.done || marks[quest.id]).length}/${quests.length} · bản lưu`
+  };
+}

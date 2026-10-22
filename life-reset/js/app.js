@@ -249,6 +249,15 @@ class LifeResetApp {
     this.setupTools();
     this.loadNotionSnapshot().then(() => this.syncNotionLive({ quiet: true }));
     const initialTab = new URLSearchParams(window.location.search).get('tab');
+    const initialFilter = new URLSearchParams(window.location.search).get('filter');
+    if (['today', 'overdue', 'open', 'done'].includes(initialFilter)) {
+      this.activeQuestFilter = initialFilter;
+      document.querySelectorAll('[data-quest-filter]').forEach(button => {
+        const active = button.dataset.questFilter === initialFilter;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+    }
     if (['today', 'reports', 'quests', 'core-habits', 'tools'].includes(initialTab)) this.switchTab(initialTab);
     const refresh = () => {
       if (document.hidden) return;
@@ -290,39 +299,10 @@ class LifeResetApp {
     } catch (_) {}
   }
 
-  // Spider-Man RPG Integration loop
-  applySpideyRpgReward(habitName, xp = 35, gold = 20, damage = 38, statName = 'DISCIPLINE') {
-    try {
-      const key = 'spidey-life-rpg-v1';
-      const raw = localStorage.getItem(key);
-      let rState = null;
-      if (raw) {
-        try { rState = JSON.parse(raw); } catch (_) {}
-      }
-
-      if (rState && rState.character) {
-        rState.character.xp = (rState.character.xp || 0) + xp;
-        rState.character.gold = (rState.character.gold || 0) + gold;
-        if (rState.character.stats && rState.character.stats[statName] !== undefined) {
-          rState.character.attrXp = rState.character.attrXp || {};
-          rState.character.attrXp[statName] = (rState.character.attrXp[statName] || 0) + xp;
-        }
-        if (rState.boss && rState.boss.currentHp > 0) {
-          rState.boss.currentHp = Math.max(0, rState.boss.currentHp - damage);
-          rState.boss.combatLog = rState.boss.combatLog || [];
-          rState.boss.combatLog.unshift(`[${new Date().toLocaleTimeString()}] ${habitName} dealt ${damage} DMG to ${rState.boss.name}!`);
-        }
-        rState.streak = rState.streak || { current: 0, best: 0 };
-        rState.streak.current = (rState.streak.current || 0) + 1;
-        rState.streak.best = Math.max(rState.streak.best || 0, rState.streak.current);
-        localStorage.setItem(key, JSON.stringify(rState));
-      }
-
-      this.showSpideyToast(habitName, `+${xp} XP  +${gold} Gold`, `Tiến độ trong ứng dụng đã được cập nhật.`);
-      this.playSfx('reward');
-    } catch (err) {
-      console.warn('[Spider-Man RPG] Reward application failed:', err);
-    }
+  // Reference protocols are local practice; Notion owns the actual Hero state.
+  notifyPracticeComplete(habitName) {
+    this.showSpideyToast(habitName, 'MẪU THAM KHẢO', 'Đã lưu thao tác thử trên thiết bị.');
+    this.playSfx('done');
   }
 
   showSpideyToast(title, xpPill, desc) {
@@ -1036,16 +1016,14 @@ class LifeResetApp {
     if (isDone) {
       this.state.completedToday[habitId] = true;
       delete this.state.skippedToday[habitId];
-      this.state.xp += 50;
       const habit = this.state.habits.find(h => h.id === habitId);
       if (habit) habit.streak++;
       if (habitId === 'habit_water') this.state.waterDrankLiters += 2;
-      this.applySpideyRpgReward(habit ? habit.title : 'Habit Complete', 50, 25, 45, 'DISCIPLINE');
+      this.notifyPracticeComplete(habit ? habit.title : 'Habit mẫu');
     } else {
       delete this.state.completedToday[habitId];
-      this.state.xp = Math.max(0, this.state.xp - 50);
       const habit = this.state.habits.find(h => h.id === habitId);
-      if (habit) habit.streak = Math.max(1, habit.streak - 1);
+      if (habit) habit.streak = Math.max(0, habit.streak - 1);
     }
     this.saveState();
     this.renderHabitCards();

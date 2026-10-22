@@ -630,8 +630,8 @@
       <a class="app-card theme-purple" data-cat="life" data-keywords="timetable time table random now 24h đồng hồ" href="apps/timetable/index.html">
         <div class="app-badge"></div>
         <div class="app-icon"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/field-icons.svg#clock"></use></svg></div>
-        <span class="app-title">Time Table</span>
-        <span class="app-desc">Random · 24h Clock</span>
+        <span class="app-title">Lịch trong ngày</span>
+        <span class="app-desc">Lịch tròn · kế hoạch theo giờ</span>
       </a>
 
       <a class="app-card theme-teal" data-cat="life" data-keywords="dopamine menu shuffle hoạt động giải trí" href="apps/dopamine/index.html">
@@ -652,14 +652,14 @@
         <div class="app-badge"></div>
         <div class="app-icon"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/field-icons.svg#checkbox"></use></svg></div>
         <span class="app-title">Việc cần làm</span>
-        <span class="app-desc">Today · Quick Tasks</span>
+        <span class="app-desc">Quest · cùng dữ liệu Notion</span>
       </a>
 
       <a class="app-card theme-coral" data-cat="life" data-keywords="thói quen habits tracker streak notion" href="apps/habits/index.html">
         <div class="app-badge"></div>
         <div class="app-icon"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/field-icons.svg#flask"></use></svg></div>
         <span class="app-title">Thói quen</span>
-        <span class="app-desc">Habit Tracker Hub</span>
+        <span class="app-desc">Habit · cùng dữ liệu Notion</span>
       </a>
 
       <a class="app-card theme-pink" data-cat="learn" data-keywords="học tiếng anh english flashcard listen speak tra từ" href="apps/english/index.html">
@@ -762,40 +762,26 @@
     updateClock();
     setInterval(updateClock, 15000);
 
-    // Live Stats Reading from LocalStorage
-    function updateDashboardStats() {
+    // Reuse the personal app's cache, rather than reading retired Gambit trackers.
+    async function updateDashboardStats() {
+      const habits = document.getElementById('stat-habits');
+      const quests = document.getElementById('stat-streak');
       try {
-        const habitsData = localStorage.getItem('dhv2');
-        if (habitsData) {
-          const parsed = JSON.parse(habitsData);
-          const now=new Date(),todayKey=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-          const day = parsed.days && parsed.days[todayKey];
-          if (day && day.habits) {
-            const keys = (parsed.habitCatalog||[]).map(h=>h.k);
-            const done = keys.filter(k => day.habits[k]).length;
-            document.getElementById('stat-habits').textContent = keys.length?done + '/' + keys.length:'Mở Habits';
-          } else {
-            document.getElementById('stat-habits').textContent = 'Sẵn sàng';
-          }
-        } else {
-          document.getElementById('stat-habits').textContent = 'Ready';
-        }
-      } catch (e) {
-        document.getElementById('stat-habits').textContent = 'Ready';
+        const { personalDashboardSummary } = await import('../life-reset/js/personal-progress.mjs');
+        const cache = JSON.parse(localStorage.getItem('life_reset_notion_cache_v1') || 'null');
+        const state = JSON.parse(localStorage.getItem('life_reset_screenshot_v5') || 'null');
+        const summary = personalDashboardSummary(cache, state);
+        habits.textContent = summary.habits;
+        quests.textContent = summary.quests;
+      } catch (_) {
+        habits.textContent = 'Mở Habit';
+        quests.textContent = 'Mở Quest';
       }
-
-      try {
-        const todoData = localStorage.getItem('todo_mono_data');
-        if (todoData) {
-          const parsed = JSON.parse(todoData);
-          if (parsed.todos && Array.isArray(parsed.todos)) {
-            const done = parsed.todos.filter(t => t.done).length;
-            document.getElementById('stat-streak').textContent = done + '/' + parsed.todos.length + ' task';
-          }
-        }
-      } catch (e) {}
     }
     updateDashboardStats();
+    window.addEventListener('storage', event => {
+      if (['life_reset_notion_cache_v1', 'life_reset_screenshot_v5'].includes(event.key)) updateDashboardStats();
+    });
 
     // Live App Search & Filtering
     const searchInput = document.getElementById('app-search');
