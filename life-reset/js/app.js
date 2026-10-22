@@ -463,7 +463,7 @@ class LifeResetApp {
       card.querySelector('.personal-quest-date').textContent = `${bucket === 'overdue' && !done ? 'QUÁ HẠN · ' : bucket === 'today' ? 'HÔM NAY · ' : ''}${quest.date ? String(quest.date).slice(0, 10) : 'Không đặt hạn'}`;
       const button = card.querySelector('button');
       button.textContent = done ? '✓ Đã xong' : '✓ Hoàn thành';
-      button.disabled = done || this.pendingQuestIds.has(quest.id);
+      button.disabled = done || this.syncing || this.pendingQuestIds.has(quest.id);
       button.setAttribute('aria-label', `${done ? 'Đã xong' : 'Hoàn thành'} ${quest.title || quest.name || 'Quest'}`);
       button.addEventListener('click', () => this.completeNotionQuest(quest, button));
       list.appendChild(card);

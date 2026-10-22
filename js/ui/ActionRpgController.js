@@ -788,7 +788,7 @@ export class ActionRpgController {
 
   renderSection() {
     if (['QUESTS', 'HABITS'].includes(this.panelSection) && this.panelTab === 'APP') {
-      const tab = this.panelSection === 'QUESTS' ? 'quests' : 'today';
+      const tab = this.panelSection === 'QUESTS' ? 'quests' : 'reports';
       return `<iframe class="habit-app-frame" data-personal-app="${this.panelSection}" src="./life-reset/index.html?tab=${tab}" title="${this.panelSection === 'QUESTS' ? 'Quest' : 'Habit'} của tôi" loading="lazy"></iframe>`;
     }
     if (this.panelSection === 'QUESTS' && this.panelTab === 'GAMBIT') return renderFieldApp('todo');
