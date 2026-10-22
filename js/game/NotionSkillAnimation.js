@@ -1,6 +1,7 @@
+import {skillGroup} from './SkillPresentation.mjs';
 // Explicit visual interpretations. They never calculate damage or apply statuses.
 export function notionSkillAnimation(skill) {
-  if (!skill || /passive|modifier|formula/i.test(skill['Skill Type'] || '')) return null;
+  if (!skill || skillGroup(skill)==='passive') return null;
   const key = String(skill.Skill || '').trim().toLowerCase();
   const clips = {
     'web trap': { clip: 'ranged_attack', effect: 'trap', label: 'Vùng tơ giữ chân' },

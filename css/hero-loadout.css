@@ -37,3 +37,27 @@
 @media(max-width:600px){.is-skill-preview .hero-preview-art,.is-skill-preview .hero-preview-symbol{height:90px}}
 .game-panel .hero-skill-hint{font:400 11px/1.6 'Be Vietnam Pro',sans-serif;margin:8px 0 12px}
 @media(max-width:600px){.hero-loadout-filters{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.hero-loadout-filters>input{grid-column:1/-1;width:100%;min-width:0}.hero-loadout-filters label{width:auto;gap:6px;font-size:10px}.hero-loadout-filters select{max-width:125px;padding:6px}.hero-loadout-filters>span{font-size:10px;white-space:nowrap}}
+
+/* Game loadout: equipped moves stay visible above the collection. */
+.hero-skill-deck{margin:0 0 12px;padding:12px;background:#102c40;border:1px solid #397c9b;color:#dce9ef;font:500 11px/1.5 'Be Vietnam Pro',sans-serif}
+.hero-skill-deck>header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.hero-skill-deck h3{margin:2px 0;color:#f2c06b;font:700 14px 'Be Vietnam Pro',sans-serif}.hero-skill-deck header small{font:700 8px 'Silkscreen',sans-serif;color:#8ed0e1}.hero-skill-deck header>span{font-size:10px;color:#a7c3d4}
+.hero-deck-group{display:grid;grid-template-columns:88px minmax(0,1fr);align-items:center;gap:10px;margin-top:7px}.hero-deck-group>strong{font-size:10px;color:#a7c3d4}.hero-deck-cards{display:flex;gap:7px;overflow-x:auto;padding:3px;min-width:0;scrollbar-width:thin}.hero-deck-card{display:flex;flex:1 0 110px;max-width:200px;min-height:82px;min-width:0;flex-direction:column;justify-content:center;gap:4px;padding:9px;border:1px solid #d5a964;background:#0b2033;color:#ecf4f5;text-align:left;cursor:pointer}.hero-deck-card>span{font:700 8px/1.4 'Be Vietnam Pro',sans-serif;color:#97cddd}.hero-deck-card strong{font:700 12px/1.4 'Be Vietnam Pro',sans-serif;overflow-wrap:anywhere}.hero-deck-card>small{font:500 10px 'Be Vietnam Pro',sans-serif;color:#a7c3d4}.hero-deck-card.is-inspected{border-color:#8ee1ed;background:#21485b;box-shadow:inset 0 0 0 1px #8ee1ed}.hero-deck-card:focus-visible{outline:3px solid #f2c06b;outline-offset:1px}.game-panel .hero-deck-note{margin:7px 0 0;color:#a7c3d4;font:400 10px/1.5 'Be Vietnam Pro',sans-serif}
+.hero-mission-brief{padding:14px;border:1px solid #35586e;background:#102c40;margin-top:12px;color:#dce9ef;font:400 12px/1.6 'Be Vietnam Pro',sans-serif}.hero-mission-brief>summary{min-height:40px;cursor:pointer;color:#8ed0e1;font-weight:700}.hero-mission-brief h3{font:700 16px/1.5 'Be Vietnam Pro',sans-serif;color:#f2c06b}.notion-hero-profile+.hero-equipped{margin-top:14px}
+@media(max-width:600px){.hero-skill-deck{padding:9px}.hero-skill-deck>header{align-items:start;margin-bottom:6px}.hero-skill-deck h3{font-size:12px}.hero-skill-deck header>span{font-size:9px;max-width:80px;text-align:right}.hero-deck-group{grid-template-columns:minmax(0,1fr);gap:3px}.hero-deck-card{min-height:74px;flex-basis:110px}.hero-deck-card strong{font-size:11px}.hero-mission-brief{padding:10px}}
+
+body[data-game-section="HERO"] .game-panel>header{padding:8px 16px;min-height:50px}body[data-game-section="HERO"] .game-panel>header h2{margin:4px 0;font-size:18px;line-height:1.3}body[data-game-section="HERO"] .game-panel>header small{font-size:8px}body[data-game-section="HERO"] .game-panel-content{padding:14px 16px 24px}body[data-game-section="HERO"] #game-panel-tabs{padding-block:6px}
+@media(min-width:601px){.hero-skill-deck{padding:10px}.hero-deck-card{min-height:66px;padding:7px}.hero-skill-deck>header{margin-bottom:5px}.hero-deck-group{margin-top:3px}.hero-skill-deck header small{display:none}.hero-skill-deck header h3{font-size:13px}}
+html[data-notion-authority] .combat-action-bar[data-layout="grouped"]{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}html[data-notion-authority] .combat-action-bar[data-layout="grouped"] .notion-passive-skills>button{flex:0 0 auto;min-height:32px;padding:5px 8px}
+@media(max-width:600px){body[data-game-section="HERO"] .game-panel>header{padding:8px 10px}body[data-game-section="HERO"] .game-panel>header h2{font-size:14px}body[data-game-section="HERO"] .game-panel-content{padding:10px 8px 24px}}
+
+.hero-source-portrait{display:block;width:55px;height:91px;background:url('../assets/spideytracker/cosmic-original-spiderman.png') -1175px -374px no-repeat;image-rendering:pixelated;scale:1.8;filter:drop-shadow(2px 3px #02070c)}
+body[data-game-section="HERO"]:not([data-field-immersive="true"]) .game-panel>header{padding:7px 16px;min-height:46px}body[data-game-section="HERO"] .game-panel>header h2{margin:2px 0;font-size:16px}
+@media(max-width:600px){.hero-source-portrait{scale:1.25}body[data-game-section="HERO"]:not([data-field-immersive="true"]) .game-panel>header{padding:7px 10px}body[data-game-section="HERO"] .game-panel>header h2{font-size:13px}}
+
+/* Stage-height adaptation keeps original enemies inside a short arena. */
+html[data-notion-authority] .action-combat-stage{container-type:size;container-name:spider-arena}
+@container spider-arena (max-height:230px){
+ .action-fighter--enemy .arena-foe{height:130px;max-height:130px}
+ .action-fighter--enemy .arena-foe .notion-enemy-idle{transform:scale(-.85,.85)!important;margin-bottom:-8px}
+}
+html[data-notion-authority] .notion-skill-detail{z-index:80;max-height:calc(100% - 16px)}

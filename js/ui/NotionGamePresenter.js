@@ -1,6 +1,7 @@
+import {missionBrief,combatLogView} from '../game/GamePresentation.mjs';
 import {skillGroup} from '../game/SkillPresentation.mjs';
 import {heroVitals,newerGameSnapshot} from '../game/HeroVitals.mjs';
-import { HeroLoadout } from './HeroLoadout.js?v=skill-vitals-6';
+import { HeroLoadout } from './HeroLoadout.js?v=game-loadout-7';
 import { selectedGameView, linkedRecords, sameId, logFingerprint } from '../integrations/notion/NotionGameAuthority.mjs';
 import { notionSkillAnimation } from '../game/NotionSkillAnimation.js';
 
@@ -101,7 +102,7 @@ export class NotionGamePresenter {
     if (mask) mask.innerHTML = badge && picture(badge) ? `<img src="${e(picture(badge))}" alt="${e(badge.Medal)}">` : '<svg aria-hidden="true"><use href="#icon-mask"></use></svg>';
     this.ui.text('hud-main-quest', view.missions[0]?.Encounter || 'CHƯA CHỌN MISSION TRONG HERO');
     this.ui.text('hud-quest-progress', view.missions[0]?.Status || 'NOTION');
-    this.ui.text('arena-turn-value', n(view.enemies.find((foe) => sameId(foe.id, this.selectedEnemyId))?.['Combat Turn']));
+    const quest=document.getElementById('hud-main-quest');if(quest){quest.setAttribute('role','button');quest.tabIndex=0;quest.title='Xem nhiệm vụ và các đợt trong Notion';quest.setAttribute('aria-label','Xem nhiệm vụ: '+(view.missions[0]?.Encounter||'chưa chọn'));quest.onclick=()=>this.showMissionDetail();quest.onkeydown=event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();this.showMissionDetail();}};}
     document.querySelector('.arena-turn-banner small').textContent = 'NOTION CONTROL';
     this.ui.text('arena-turn-tip', !this.vitalsConfirmed?'Đang đọc HP từ Notion; chưa xác nhận trạng thái KO.':vitals.ko?'HP = 0 được Notion xác nhận. Hồi phục trong Notion.':'Chọn chiêu và dùng nút Attack trong Notion.');
     this.ui.text('combat-district', view.map?.District || view.map?.Map || 'CHƯA CHỌN CURRENT MAP');
@@ -157,13 +158,24 @@ export class NotionGamePresenter {
   renderSelectedEnemy() {
     const enemy = this.view().enemies.find((foe) => sameId(foe.id, this.selectedEnemyId));
     this.ui.text('enemy-name', enemy?.Boss || 'CHƯA CHỌN MỤC TIÊU');
-    this.ui.text('enemy-tier', 'MỤC TIÊU HERO // NOTION');
+    this.ui.text('enemy-tier', 'ĐỐI THỦ ĐANG XEM');
+    this.ui.text('arena-turn-value',n(enemy?.['Combat Turn']));
     this.ui.text('enemy-hp-text', `${n(enemy?.['HP - (1)'])} / ${n(enemy?.['Max HP'])}`);
     this.ui.width('enemy-hp-fill', enemy?.['Max HP'] > 0 ? enemy['HP - (1)'] / enemy['Max HP'] * 100 : 0);
     const log = this.data?.logs?.[0];
-    this.ui.text('combat-log-line', log ? `NOTION // ${log.Outcome || log['Boss Outcome'] || log['Resolution Status'] || 'ĐÃ GHI NHẬN'} · ${n(log['Direct Damage'])} DMG` : 'Đang chờ kết quả đòn đánh từ Notion.');
+    const result=combatLogView(log,this.view().enemies);
+    this.ui.text('combat-log-line',log?(result.pending?'NOTION ĐANG XỬ LÝ':result.outcome+(result.damage!==null?' · '+result.damage+' DMG':'')+(result.targets.length?' · '+result.targets.map(target=>target.Boss).join(', '):'')):'Chưa có kết quả đòn đánh từ Notion.');
   }
 
+  missionContent(){
+    const view=this.view(),mission=view.missions[0],brief=missionBrief(mission,view.enemies);
+    return '<small>MISSION // '+e(mission?.Status||'CHƯA CHỌN')+'</small><h3>'+e(mission?.Encounter||'Chưa chọn mission trong Hero')+'</h3>'+(brief.waves.length?'<ol class="notion-wave-list">'+brief.waves.map(wave=>'<li><strong>'+e(wave.label)+'</strong><span>'+e(wave.text)+'</span></li>').join('')+'</ol>':'<p>Chưa có cấu hình đợt trong mission.</p>')+(brief.mismatch?'<p class="notion-source-warning">Nhóm quái đang chọn trong Hero khác nhóm của mission này. Kiểm tra hai quan hệ trên Notion trước khi đánh.</p>':'')+'<p class="hero-preview-note">Các đợt là kế hoạch trong mission; chưa có dữ liệu xác nhận đợt hiện tại. Chọn quái trên web chỉ đổi phần xem.</p>'+(mission?link(mission.sourceUrl,'MỞ MISSION'):link(HERO_URL,'CHỌN MISSION TRONG HERO'));
+  }
+  showMissionDetail(){
+    let detail=document.getElementById('notion-mission-detail');if(!detail){detail=document.createElement('aside');detail.id='notion-mission-detail';detail.className='notion-skill-detail notion-mission-detail';document.getElementById('action-rpg-screen').appendChild(detail);}
+    detail.hidden=false;detail.setAttribute('role','dialog');detail.setAttribute('aria-label','Chi tiết nhiệm vụ');detail.innerHTML='<button type="button" class="notion-detail-close" aria-label="Đóng nhiệm vụ">×</button>'+this.missionContent();
+    const close=()=>{detail.hidden=true;document.getElementById('hud-main-quest')?.focus({preventScroll:true});};detail.querySelector('button').onclick=close;detail.onkeydown=event=>{if(event.key==='Escape')close();};detail.querySelector('button').focus({preventScroll:true});
+  }
   renderSkillBar(skills) {
     const bar = document.querySelector('.combat-action-bar');
     if (!bar) return;
@@ -173,7 +185,7 @@ export class NotionGamePresenter {
     const passive=skills.filter(skill=>skillGroup(skill)==='passive'),active=skills.filter(skill=>skillGroup(skill)!=='passive');
     const action=skill=>'<button type="button" data-notion-skill="'+e(skill.id)+'" class="'+(skillGroup(skill)==='ultimate'?'combat-action--ultimate':'')+'" title="'+e(skill.Description)+'"><svg aria-hidden="true"><use href="#'+(/web/i.test(skill.Skill)?'icon-web-map':skillGroup(skill)==='ultimate'?'icon-bolt':'icon-arena')+'"></use></svg><strong>'+e(skill.Skill)+'</strong><small>'+e(Number.isFinite(skill['Energy Cost'])?skill['Energy Cost']+' ENERGY':skill['Skill Type'])+'</small></button>';
     bar.innerHTML='<div class="notion-active-skills" aria-label="Chiêu chủ động và Ultimate">'+(active.map(action).join('')||'<p>Chưa chọn chiêu chủ động trong Notion.</p>')+'</div>'+(passive.length?'<div class="notion-passive-skills"><span>NỘI TẠI / BỔ TRỢ</span>'+passive.map(skill=>'<button type="button" data-notion-skill="'+e(skill.id)+'">'+e(skill.Skill)+'</button>').join('')+'</div>':'');
-    bar.querySelectorAll('[data-notion-skill]').forEach((button) => button.addEventListener('click', () => { this.detailSkillId = button.dataset.notionSkill; this.showSkillDetail(); }));
+    bar.querySelectorAll('[data-notion-skill]').forEach((button) => button.addEventListener('click', () => { this.detailSkillId = button.dataset.notionSkill; this.showSkillDetail(); document.querySelector('#notion-skill-detail .notion-detail-close')?.focus({preventScroll:true}); }));
   }
 
   showSkillDetail() {
@@ -182,24 +194,25 @@ export class NotionGamePresenter {
       detail = document.createElement('aside');
       detail.id = 'notion-skill-detail';
       detail.className = 'notion-skill-detail';
-      document.getElementById('action-combat-stage').appendChild(detail);
+      document.getElementById('action-rpg-screen').appendChild(detail);
     }
     const skill = this.view().skills.find((record) => sameId(record.id, this.detailSkillId));
     detail.hidden = !skill;
     if (!skill) return;
     const animation = notionSkillAnimation(skill);
-    detail.innerHTML = `<button class="notion-detail-close" aria-label="Đóng mô tả chiêu">×</button><small>${e(skill['Skill Type'])} · CD ${n(skill.Cooldown)} · ENERGY ${n(skill['Energy Cost'])}</small><strong>${e(skill.Skill)}</strong><p>${e(skill.Description || 'Chưa có mô tả trong Notion.')}</p><div>${animation ? '<button type="button" data-notion-preview>XEM HOẠT ẢNH</button>' : '<span>Nội tại hoặc chưa có hoạt ảnh phù hợp.</span>'}${link(skill.sourceUrl, animation ? 'DÙNG TRONG NOTION' : 'XEM TRONG NOTION')}</div><em>Xem hoạt ảnh không đổi HP, Energy hay kết quả trận.</em>`;
-    detail.querySelector('.notion-detail-close').addEventListener('click', () => { this.detailSkillId = null; detail.hidden = true; });
+    detail.setAttribute('role','dialog');detail.setAttribute('aria-label','Chiêu '+skill.Skill);
+    detail.innerHTML = `<button class="notion-detail-close" aria-label="Đóng mô tả chiêu">×</button><small>${e(skill['Skill Type'])} · CD CƠ BẢN ${n(skill.Cooldown)} · ENERGY ${n(skill['Energy Cost'])}</small><strong>${e(skill.Skill)}</strong><p>${e(skill.Description || 'Chưa có mô tả trong Notion.')}</p><div>${animation ? '<button type="button" data-notion-preview>XEM HOẠT ẢNH</button>' : '<span>Nội tại hoặc chưa có hoạt ảnh phù hợp.</span>'}${link(skill.sourceUrl, animation ? 'MỞ CHIÊU TRONG NOTION' : 'XEM TRONG NOTION')}</div><em>Xem hoạt ảnh không đổi HP, Energy hay kết quả trận.</em>`;
+    const close=()=>{this.detailSkillId=null;detail.hidden=true;document.querySelector('[data-notion-skill="'+skill.id+'"]')?.focus({preventScroll:true});};detail.querySelector('.notion-detail-close').addEventListener('click',close);detail.onkeydown=event=>{if(event.key==='Escape')close();};
     detail.querySelector('[data-notion-preview]')?.addEventListener('click', () => { detail.hidden = true; void this.playSkill(skill, true); });
   }
 
-  async playSkill(skill, preview = false) {
+  async playSkill(skill, preview = false, targetId=this.selectedEnemyId, impact=true) {
     const visual = notionSkillAnimation(skill);
     if (!visual || !this.ui.heroAnimation) return;
     const token = ++this.previewToken;
     this.previewing = true;
     const stage = document.getElementById('action-combat-stage');
-    const target = stage.querySelector('.arena-foe--selected');
+    const target = [...stage.querySelectorAll('[data-notion-enemy]')].find(node=>sameId(node.dataset.notionEnemy,targetId));
     if (target) {
       const box = target.getBoundingClientRect(), arena = stage.getBoundingClientRect();
       stage.style.setProperty('--notion-target-x', `${(box.x + box.width / 2 - arena.x) / arena.width * 100}%`);
@@ -209,7 +222,7 @@ export class NotionGamePresenter {
     const effect = document.createElement('div');
     effect.className = `notion-skill-effect notion-skill-effect--${visual.effect}`;
     effect.textContent = preview ? `XEM THỬ · ${skill.Skill}` : skill.Skill;
-    stage.appendChild(effect);
+    if(target&&impact)stage.appendChild(effect);
     stage.dataset.notionEffect = visual.effect;
     this.ui.sound.playGameSfx(/web|trap/i.test(visual.effect) ? 'WEB_SHOOT' : visual.effect === 'barrage' ? 'ULTIMATE' : 'PUNCH_LIGHT');
     await this.ui.heroAnimation.play(visual.clip);
@@ -221,9 +234,11 @@ export class NotionGamePresenter {
   }
 
   async playLog(log) {
-    if (/pending|queued|processing/i.test(log['Resolution Status'] || '')) return;
+    const result=combatLogView(log,this.view().enemies);
+    if(result.pending)return;
     const skill = linkedRecords(this.data.skills, log['Combat Skill'])[0];
-    if (skill) await this.playSkill(skill);
+    // Never aim a recorded attack at the enemy selected merely for inspection.
+    if(skill&&result.targets.length)await this.playSkill(skill,false,result.targets[0].id,result.damage!==null&&result.damage>0);
     // Unknown skills are never replaced with a random or default attack.
   }
 
@@ -235,7 +250,7 @@ export class NotionGamePresenter {
     if (tab === 'MAPS') return header + (v.map ? this.recordCard(v.map, v.map.Map, 'CURRENT MAP // NOTION', '', `${v.map.District || ''} · ${v.map.Weather || ''}`) : '<div class="notion-empty-card"><h3>Chưa chọn Current Map</h3><p>Chọn map trong Hero Notion để đổi khung cảnh sân đấu.</p></div>');
     if (tab === 'SUITS') return header + (v.suit ? this.recordCard(v.suit, v.suit.Suit, 'TRANG PHỤC ĐANG CHỌN', picture(v.suit)) : '<div class="notion-empty-card"><h3>Chưa chọn Equipped Suit</h3><p>Hero đang để trống quan hệ này. Chọn một trang phục trên Notion để hiện ở đây.</p></div>');
     if (tab === 'BADGES') return header + `<div class="notion-record-grid">${v.badges.map((badge) => `<article class="notion-record-card">${this.ui.badgeArtwork(badge)}<small>${badge.Equipped && badge.Unlocked ? 'ĐANG TRANG BỊ' : badge.Unlocked ? 'ĐÃ MỞ KHÓA' : 'CHƯA MỞ KHÓA'}</small><h3>${e(badge.Medal)}</h3><p>${e(badge.Requirement)}</p>${link(badge.sourceUrl, 'XEM TRONG NOTION')}</article>`).join('') || '<p>Chưa chọn huy hiệu trên Hero.</p>'}</div>`;
-    return header + `<section class="notion-hero-profile"><div class="notion-hero-portrait">${v.suit && picture(v.suit) ? `<img src="${e(picture(v.suit))}" alt="${e(v.suit.Suit)}">` : '<svg aria-hidden="true"><use href="#icon-mask"></use></svg>'}</div><div><small>HERO // NOTION</small><h3>${e(p.Hero || 'Chưa đọc được Hero')}</h3><p>${e(v.suit?.Suit || 'Chưa chọn trang phục trong Equipped Suit')}</p><div class="notion-stat-grid"><span>LEVEL<b>${n(p.Level)}</b></span><span>EXP<b>${n(p.Exp)}</b></span><span>HP<b>${health.known?n(health.hp)+' / '+n(health.max):'ĐANG ĐỌC'}</b></span><span>ENERGY<b>${n(p.Energy)} / ${n(p['Max Energy'])}</b></span></div></div></section><h3 class="notion-section-title">CHIÊU ĐÃ CHỌN</h3><div class="notion-record-grid">${v.skills.map((skill) => this.skillCard(skill)).join('')}</div>`;
+    return `<section class="notion-hero-profile"><div class="notion-hero-portrait">${v.suit && picture(v.suit) ? `<img src="${e(picture(v.suit))}" alt="${e(v.suit.Suit)}">` : '<span class="hero-source-portrait" role="img" aria-label="Sprite Spider-Man từ Cosmic Invasion; chưa trang bị suit"></span>'}</div><div><small>HERO // NOTION</small><h3>${e(p.Hero || 'Chưa đọc được Hero')}</h3><p>${e(v.suit?.Suit || 'Chưa chọn trang phục trong Equipped Suit')}</p><div class="notion-stat-grid"><span>LEVEL<b>${n(p.Level)}</b></span><span>EXP<b>${n(p.Exp)}</b></span><span>HP<b>${health.known?n(health.hp)+' / '+n(health.max):'ĐANG ĐỌC'}</b></span><span>ENERGY<b>${n(p.Energy)} / ${n(p['Max Energy'])}</b></span></div></div></section>${this.loadout.equipped()}<details class="hero-mission-brief"><summary>NHIỆM VỤ & CÁC ĐỢT ĐỐI THỦ</summary>${this.missionContent()}</details>`;
   }
 
   skillCard(skill) {

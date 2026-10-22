@@ -1,5 +1,5 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
-import { NotionGamePresenter } from './NotionGamePresenter.js?build=skill-vitals-6';
+import { NotionGamePresenter } from './NotionGamePresenter.js?build=game-loadout-7';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -722,7 +722,7 @@ export class ActionRpgController {
 
     const titles = { 
       QUESTS: 'FRIENDLY NEIGHBORHOOD // QUESTS',
-      HERO: 'SPIDER SUIT // HERO BUILD',
+      HERO: 'HERO // LOADOUT',
       HABITS: 'SPIDER LIFE // HABITS',
       FIELD: 'SPIDER OS // FIELD SYSTEMS',
       ARCHIVE: 'SPIDEY ARCHIVE & BESTIARY', 
