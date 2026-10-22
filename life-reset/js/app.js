@@ -1,5 +1,6 @@
 import { dateKey, rollDailyState, questBucket, selectQuests, campaignDays } from './personal-progress.mjs';
 import { HelloHabitView } from './hello-habit-view.mjs';
+import { readDailyHabitHistory, recordedHabitDays, HABIT_PLANNER_DATABASE_ID, normalizeHabitPlan } from '../../js/integrations/notion/NotionHabitHistory.mjs';
 
 /**
  * Life Reset reference UI and Notion-backed personal views.
@@ -154,6 +155,12 @@ class LifeResetApp {
     this.notionActiveQuests = [];
     this.notionHeroXp = null;
     this.notionLive = false;
+    this.remoteHabitHistory = null;
+    this.habitHistorySyncedAt = null;
+    this.habitHistoryError = '';
+    this.habitPlans = [];
+    this.habitPlansSyncedAt = null;
+    this.habitPlansError = '';
     this.activeMeditation = null;
     this.breathingInterval = null;
     this.focusTimerInterval = null;
@@ -215,9 +222,26 @@ class LifeResetApp {
     this.state.notionHistory[id] = [...days].sort();
   }
 
+  habitRecordedDays(habit) {
+    return recordedHabitDays(habit, this.remoteHabitHistory, this.state.notionHistory);
+  }
+
+  async syncHabitHistory({ force = false } = {}) {
+    const allKnown = this.notionHabits.every(habit => Array.isArray(this.remoteHabitHistory?.[String(habit.rawId || habit.id).replaceAll('-', '').toLowerCase()]));
+    if (!force && allKnown && this.habitHistorySyncedAt && Date.now() - new Date(this.habitHistorySyncedAt).valueOf() < 300000) return;
+    try {
+      const history = await readDailyHabitHistory(this.notionHabits.map(habit => habit.rawId || habit.id));
+      this.remoteHabitHistory = history;
+      this.habitHistorySyncedAt = new Date().toISOString();
+      this.habitHistoryError = '';
+    } catch (error) {
+      this.habitHistoryError = error.message;
+    }
+  }
+
   init() {
     if (window.self !== window.top) document.body.classList.add('embedded');
-    document.querySelector('.status-time')?.replaceChildren(document.createTextNode(new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })));
+    document.querySelector('.status-time')?.replaceChildren(document.createTextNode(new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' })));
     this.preloadAudio();
     this.setupDockTabs();
     this.setupDayNavigation();
@@ -473,6 +497,10 @@ class LifeResetApp {
         this.lastSyncedAt = data.syncedAt;
         this.notionHabits = Array.isArray(data.habits) ? data.habits : [];
         this.habitSyncedAt = data.habitSyncedAt || data.syncedAt;
+        this.remoteHabitHistory = data.remoteHabitHistory || null;
+        this.habitHistorySyncedAt = data.habitHistorySyncedAt || null;
+        this.habitPlans = data.habitPlans || [];
+        this.habitPlansSyncedAt = data.habitPlansSyncedAt || null;
         const cacheIsToday = this.habitSyncedAt && dateKey(new Date(this.habitSyncedAt)) === this.todayKey();
         this.notionHabits.forEach((habit) => {
           if (!cacheIsToday) { habit.today = false; habit.done = false; }
@@ -549,7 +577,8 @@ class LifeResetApp {
   cacheNotionData(syncedAt = this.lastSyncedAt) {
     localStorage.setItem('life_reset_notion_cache_v1', JSON.stringify({
       habits: this.notionHabits, tasks: this.notionTasks, activeQuests: this.notionActiveQuests,
-      heroXp: this.notionHeroXp, syncedAt, habitSyncedAt: this.habitSyncedAt
+      heroXp: this.notionHeroXp, syncedAt, habitSyncedAt: this.habitSyncedAt,
+      remoteHabitHistory: this.remoteHabitHistory, habitHistorySyncedAt: this.habitHistorySyncedAt, habitPlans: this.habitPlans, habitPlansSyncedAt: this.habitPlansSyncedAt
     }));
   }
 
@@ -571,7 +600,8 @@ class LifeResetApp {
         queryAllNotionPages(NOTION_GAME_DATABASES.habits),
         queryAllNotionPages(NOTION_GAME_DATABASES.masterCalendar),
         queryAllNotionPages(NOTION_GAME_DATABASES.activeQuests),
-        queryAllNotionPages(NOTION_GAME_DATABASES.heroProfile)
+        queryAllNotionPages(NOTION_GAME_DATABASES.heroProfile),
+        queryAllNotionPages(HABIT_PLANNER_DATABASE_ID)
       ]);
       if (results.every((result) => result.status === 'rejected')) throw results[0].reason;
       if (results[0].status === 'fulfilled') {
@@ -593,6 +623,7 @@ class LifeResetApp {
           else delete this.state.notionDoneToday[task.id];
         }
       }
+      if (results[0].status === 'fulfilled') await this.syncHabitHistory({ force: !quiet });
       if (results[2].status === 'fulfilled') {
         this.notionActiveQuests = results[2].value.map((page) => normalizeNotionPage(page, 'activeQuests'));
         for (const quest of this.notionActiveQuests) {
@@ -604,14 +635,19 @@ class LifeResetApp {
         const profile = results[3].value.map(normalizeNotionCatalogPage)[0];
         this.notionHeroXp = profile ? Number(profile.Exp) || 0 : null;
       }
+      if (results[4].status === 'fulfilled') {
+        this.habitPlans = results[4].value.map(normalizeHabitPlan).filter(plan => !plan.archived);
+        this.habitPlansSyncedAt = new Date().toISOString();
+        this.habitPlansError = '';
+      } else this.habitPlansError = 'Chưa làm mới được kế hoạch; có thể đang xem bản lưu.';
       this.notionLive = results.every((result) => result.status === 'fulfilled');
       this.lastSyncedAt = new Date().toISOString();
       this.cacheNotionData();
       this.saveState();
       document.getElementById('badge-notion-habits-count')?.replaceChildren(document.createTextNode(String(this.notionHabits.length)));
       document.getElementById('badge-notion-tasks-count')?.replaceChildren(document.createTextNode(String(this.notionTasks.length + this.notionActiveQuests.length)));
-      const missing = ['Habit', 'Todo', 'Quest', 'Hero'].filter((_, index) => results[index].status === 'rejected');
-      if (statusEl) statusEl.textContent = `Notion · ${new Date(this.lastSyncedAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}${missing.length ? ` · Chưa tải: ${missing.join(', ')}` : ' · Đã cập nhật'}`;
+      const missing = ['Habit', 'Todo', 'Quest', 'Hero', 'Habit Planner'].filter((_, index) => results[index].status === 'rejected');
+      if (statusEl) statusEl.textContent = `Notion · ${new Date(this.lastSyncedAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' })}${missing.length ? ` · Chưa tải: ${missing.join(', ')}` : ' · Đã cập nhật'}`;
       document.querySelector('.notion-status-dot')?.classList.toggle('online', this.notionLive);
       this.renderHabitCards();
       this.renderHelloSquareHabits();
@@ -1127,10 +1163,10 @@ class LifeResetApp {
 
   habitReportText() {
     const rows = this.notionHabits.map((habit) => {
-      const days = (this.state.notionHistory?.[habit.rawId || habit.id] || []).filter((day) => day.startsWith(`${this.currentYear}-`));
+      const days = this.habitRecordedDays(habit).filter((day) => day.startsWith(`${this.currentYear}-`));
       return `${habit.name}: ${days.length} recorded check-ins`;
     });
-    return [`Hello Habit — ${this.currentYear}`, 'History recorded on this device from Notion check-ins.', ...rows].join('\n');
+    return [`Hello Habit — ${this.currentYear}`, this.habitHistorySyncedAt ? `Lịch sử Daily từ Notion, đọc lúc ${this.habitHistorySyncedAt}` : 'Lịch sử được ghi nhận trên thiết bị này.', ...rows].join('\n');
   }
 
   renderWeekStrip() {
@@ -1142,6 +1178,8 @@ class LifeResetApp {
   }
 
   renderHeatmapMatrices() {
+    const scope = document.getElementById('hello-report-scope');
+    if (scope) scope.textContent = this.habitHistorySyncedAt ? `Lịch sử Daily từ Notion, đọc lúc ${new Date(this.habitHistorySyncedAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}. Ô trống là chưa ghi nhận, không tự tính là bỏ lỡ.${this.habitHistoryError ? ' Lần làm mới gần nhất không thành công; đang dùng bản lưu.' : ''}` : 'Chỉ hiển thị check-in được ghi nhận trên thiết bị này. Ô trống là chưa có dữ liệu, không tự tính là bỏ lỡ.';
     const container = document.getElementById('heatmaps-list-container');
     const tooltip = document.getElementById('heatmap-popover-tooltip');
     if (!container) return;
@@ -1157,7 +1195,7 @@ class LifeResetApp {
     const columns = Math.ceil(dates.length / 7);
     const themes = ['theme-red', 'theme-blue', 'theme-slate', 'theme-teal', 'theme-purple'];
     this.notionHabits.forEach((habit, index) => {
-      const history = new Set(this.state.notionHistory?.[habit.rawId || habit.id] || []);
+      const history = new Set(this.habitRecordedDays(habit));
       const count = dates.filter((day) => history.has(day)).length;
       const card = document.createElement('div');
       card.className = `heatmap-unit-card ${themes[index % themes.length]}`;
@@ -1235,7 +1273,7 @@ class LifeResetApp {
     if (!grid) return;
     grid.innerHTML = '';
 
-    const recorded = new Set(Object.values(this.state.notionHistory || {}).flat());
+    const recorded = new Set(this.notionHabits.flatMap(habit => this.habitRecordedDays(habit)));
     for (const entry of campaignDays(this.state.campaignStartedAt, this.todayKey())) {
       const cell = document.createElement('button');
       cell.type = 'button';
@@ -1245,7 +1283,7 @@ class LifeResetApp {
       cell.textContent = entry.day;
       cell.setAttribute('aria-label', `Ngày ${entry.day}, ${entry.date}: ${isDone ? 'Có check-in' : entry.future ? 'Sắp tới' : 'Chưa ghi nhận'}`);
       if (isToday) cell.setAttribute('aria-current', 'date');
-      cell.addEventListener('click', () => this.openAlert(`Ngày ${entry.day} / 66`, `${entry.date} · ${isDone ? 'Đã ghi nhận check-in trên thiết bị này.' : entry.future ? 'Ngày sắp tới trong hành trình.' : 'Chưa có check-in được ghi nhận trên thiết bị này.'}`));
+      cell.addEventListener('click', () => this.openAlert(`Ngày ${entry.day} / 66`, `${entry.date} · ${isDone ? 'Có check-in trong lịch sử đã tải.' : entry.future ? 'Ngày sắp tới trong hành trình.' : 'Chưa có check-in trong lịch sử đã tải.'}`));
       grid.appendChild(cell);
     }
   }

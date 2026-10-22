@@ -36,7 +36,7 @@ Giữ mã giao diện gốc của các app được nhập vào mà chủ dự �
 
 ## Những điểm còn chưa hợp lý
 
-- Checkbox `Today` chưa thay thế được nhật ký Habit theo ngày. Cần nguồn nhật ký Notion để lịch sử đa thiết bị và reset theo ngày chính xác.
+- Checkbox `Today` chưa thay thế được nhật ký Habit theo ngày. Đã tìm và nối `Habits.Days ↔ Daily` làm lịch sử; luồng ghi Today vẫn chưa tự tạo một Daily/activity tương ứng. Cần thống nhất luồng ghi và reset theo ngày.
 - DB Habit có thể chứa cả trang ghi chú/đề xuất. Cần trường phân loại rõ để những bản ghi này không trở thành việc cần check; không lọc theo tên tùy đoán và không tự xóa.
 - Chế độ lịch Google và Routine Notion là hai nguồn lịch khác nhau. Cần chọn nguồn mặc định rõ ràng và đánh dấu nguồn khi đưa cả hai lên Time; không tự dịch giờ để lấp kín mặt đồng hồ.
 - Mã màn cũ và dữ liệu cục bộ vẫn còn để tránh mất thông tin. Chỉ xóa sau khi kiểm kê và chuyển dữ liệu, không coi việc giấu menu là đã di chuyển dữ liệu.

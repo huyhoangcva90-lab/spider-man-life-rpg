@@ -30,7 +30,8 @@ Giữ khung Spider và màu hiện tại. Habit mở bảng check giống cách 
 ## Điều kiện còn lại trước khi gọi toàn bộ hệ thống hoàn thiện
 
 - [ ] Kiểm chứng đọc và ghi trên tên miền triển khai sau đăng nhập riêng, bằng bản ghi thử dành riêng cho QA. Đợt này chỉ đọc dữ liệu thật; thao tác ghi và lỗi mạng được kiểm tra bằng dữ liệu giả lập.
-- [ ] Lịch sử Habit đa thiết bị cần một nguồn nhật ký theo ngày trong Notion. Checkbox `Today` không cung cấp lịch sử các ngày trước. Lịch sử hiện tại được ghi rõ là trên thiết bị.
+- [x] Đọc lịch sử theo ngày từ quan hệ `Habits.Days ↔ Daily` đã có trong Notion; giữ riêng lịch sử thiết bị và hiển thị nguồn/thời điểm tải.
+- [ ] Nối luồng ghi Today với lịch sử Daily/activity; mục tiêu theo số lượng và thời điểm vẫn chưa hoàn tất.
 - [ ] Notion cần tự đặt lại `Today` theo ngày bằng automation hoặc nhật ký check-in. App không tự sửa hàng loạt Habit khi đổi ngày.
 - [ ] Xác nhận Calendar bằng tài khoản Google đang kết nối trên tên miền thật; môi trường phát triển không có phiên Google đó.
 - [ ] Chạy thử thực tế trên Safari iPhone và Chrome Android, gồm đổi ngày khi app ngủ và quay lại.

@@ -1,3 +1,5 @@
+import { parseHabitStreak } from './NotionHabitHistory.mjs';
+
 export const NOTION_GAME_DATABASES = {
   masterCalendar: '272d787636c681d9ae35d494508b25d0',
   habits: '272d787636c681a29bf8e4d5e588e173',
@@ -82,7 +84,9 @@ export function normalizeNotionPage(page, kind) {
     outcome: text(properties['What do I expect at the end?']),
     today: Boolean(properties.Today?.checkbox),
     done: Boolean(properties.Today?.checkbox),
-    streak: Number(notionValue(properties.Streak)) || 0,
+    streak: parseHabitStreak(notionValue(properties.Streak)).current,
+    bestStreak: parseHabitStreak(notionValue(properties.Streak)).best,
+    color: named(properties.Color),
     gameEnabled: Boolean(properties['Game Enabled']?.checkbox),
     xp: properties['XP / Check']?.number ?? 1
   };

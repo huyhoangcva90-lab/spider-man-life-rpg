@@ -43,6 +43,10 @@
 .hh-check[aria-busy=true] { cursor: progress; }
 .hh-empty { padding: 22px 16px; border: 1px dashed #365164; border-radius: 6px; color: #adc4d2; font-size: 12px; line-height: 1.7; }
 .hh-scope { margin-top: 18px; font-size: 11px; }
+.hh-plan-heading { margin: 24px 0 12px; color: #e5f1f8; font-size: 14px; }
+.hh-plan { margin: 10px 0; padding: 16px; border: 1px solid #365164; border-radius: 7px; background: #11263a; color: #d7e8f1; font-size: 13px; line-height: 1.7; }
+.hh-plan p { margin: 8px 0; color: #adc4d2; font-size: 12px; overflow-wrap: anywhere; }
+.hh-plan progress { display: block; width: 100%; margin-top: 12px; accent-color: #9ed9c4; }
 .hh-back { min-height: 44px; margin-top: 6px; padding: 8px 0; border: 0; background: transparent; color: #9fc9e8; font: 700 12px/1.5 'Plus Jakarta Sans', sans-serif; cursor: pointer; }
 .hh-detail-title { margin: 12px 0 8px; color: #f2f5f9; font: 800 25px/1.4 'Plus Jakarta Sans', sans-serif; overflow-wrap: anywhere; }
 .hh-detail-meta { color: #a9c9d8; font-size: 12px; }

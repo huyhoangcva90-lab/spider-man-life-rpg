@@ -81,11 +81,12 @@ export class HelloHabitView {
   }
 
   checked(habit, day = this.app.helloTracker.selectedDay) {
+    if (day > this.app.todayKey()) return false;
     return day === this.app.todayKey() ? !!this.app.state.notionDoneToday[habit.id] : this.history(habit).includes(day);
   }
 
   history(habit) {
-    return [...new Set(this.app.state.notionHistory?.[habit.rawId || habit.id] || [])].filter(day => /^\d{4}-\d{2}-\d{2}$/.test(day)).sort();
+    return this.app.habitRecordedDays(habit);
   }
 
   action(habit) {
@@ -122,11 +123,12 @@ export class HelloHabitView {
     scope.textContent = selected === app.todayKey()
       ? 'Check hôm nay lưu vào Notion. Chạm tên Habit để xem chi tiết.'
       : selected > app.todayKey() ? 'Ngày sắp tới · chỉ xem. Chưa có dữ liệu hoạt động cho ngày này.'
-      : 'Lịch sử trên thiết bị này · ô chưa ghi nhận không có nghĩa là bỏ lỡ. Chưa hỗ trợ sửa ngày cũ.';
+      : app.habitHistorySyncedAt ? 'Lịch sử Daily từ Notion · chỉ xem. Ô trống là chưa ghi nhận, không tự tính là bỏ lỡ.' : 'Lịch sử trên thiết bị này · ô chưa ghi nhận không có nghĩa là bỏ lỡ. Chưa hỗ trợ sửa ngày cũ.';
+    if (app.habitHistoryError) scope.textContent += ` Lịch sử chưa làm mới: ${app.habitHistoryError}.`;
     const sync = document.getElementById('hello-sync-status');
     const syncedAt = app.habitSyncedAt;
     sync.textContent = app.syncing ? 'Đang đồng bộ…' : syncedAt
-      ? `Habit đọc lúc ${new Date(syncedAt).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}`
+      ? `Habit đọc lúc ${new Date(syncedAt).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' })}`
       : 'Chưa xác nhận đồng bộ trực tiếp';
     const habit = habits.find(item => item.id === this.detailId);
     const overview = document.getElementById('hello-overview');
@@ -160,6 +162,8 @@ export class HelloHabitView {
       const rows = element('div', 'hh-rows');
       for (const item of members) {
         const row = element('article', `hh-row hh-tone-${habits.indexOf(item) % 5}`);
+        const colors = { blue: '#9fc9e8', green: '#9ed9c4', red: '#e7aca8', purple: '#bfb4e3', yellow: '#e3c38e', orange: '#e6b28e', pink: '#e3b3cf', brown: '#c5b09b', gray: '#b7bdc7' };
+        if (colors[String(item.color).toLowerCase()]) row.style.setProperty('--hh-tone', colors[String(item.color).toLowerCase()]);
         const title = element('button', 'hh-row-title', item.name);
         title.type = 'button';
         title.dataset.habitId = item.id;
@@ -213,21 +217,57 @@ export class HelloHabitView {
       status.append(element('strong', '', this.checked(habit) ? 'Đã check' : this.app.helloTracker.selectedDay === this.app.todayKey() ? 'Chưa check' : 'Chưa ghi nhận'), this.action(habit));
       panel.append(status);
       if (habit.description || habit.outcome) panel.append(element('p', 'hh-description', habit.description || habit.outcome));
+      const habitKey = String(habit.rawId || habit.id).replaceAll('-', '').toLowerCase();
+      const plans = (this.app.habitPlans || []).filter(plan => plan.habitIds.includes(habitKey));
+      panel.append(element('h4', 'hh-plan-heading', 'Kế hoạch từ Notion'));
+      if (!plans.length) {
+        const empty = element('div', 'hh-plan');
+        empty.append(element('p', '', this.app.syncing ? 'Đang kiểm tra kế hoạch của Habit…' : this.app.habitPlansSyncedAt ? 'Chưa có kế hoạch đang mở liên kết với Habit này.' : 'Chưa tải được kế hoạch của Habit này.'));
+        const link = element('a', 'hh-source-link', 'Mở Habit Planner trong Notion ↗');
+        link.href = 'https://www.notion.so/272d787636c681228446e717b8137af1';
+        link.target = '_blank'; link.rel = 'noopener'; empty.append(link);
+        panel.append(empty);
+      }
+      if (this.app.habitPlansError) panel.append(element('p', 'personal-history-note', this.app.habitPlansError));
+      for (const plan of plans) {
+        const card = element('article', 'hh-plan');
+        card.append(element('strong', '', plan.name || 'Habit Planner'));
+        const unit = { Week: 'tuần', Month: 'tháng', Quarter: 'quý' }[plan.unit] || plan.unit;
+        if (plan.frequency !== null && unit) card.append(element('p', '', `${plan.frequency} lần / ${unit}`));
+        if (plan.start || plan.end) card.append(element('p', '', `${plan.start?.slice(0, 10) || 'Chưa đặt ngày đầu'} → ${plan.end?.slice(0, 10) || 'Chưa đặt ngày cuối'}`));
+        if (plan.completed !== null && plan.target !== null) {
+          card.append(element('p', '', `Toàn kế hoạch: ${plan.completed} / ${plan.target} · theo công thức Notion`));
+          if (plan.target > 0) {
+            const progress = element('progress');
+            progress.max = plan.target;
+            progress.value = Math.max(0, plan.completed);
+            progress.setAttribute('aria-label', `Tiến độ toàn kế hoạch ${plan.name}`);
+            card.append(progress);
+          }
+        }
+        if (/^[a-f0-9-]{32,36}$/i.test(plan.id)) {
+          const link = element('a', 'hh-source-link', 'Sửa kế hoạch trong Notion ↗');
+          link.href = `https://www.notion.so/${plan.id.replaceAll('-', '')}`;
+          link.target = '_blank'; link.rel = 'noopener'; card.append(link);
+        }
+        panel.append(card);
+      }
     }
     if (this.detailTab === 'stats') {
       const stats = element('dl', 'hh-stat-grid');
-      for (const [label, value] of [['Ngày đã ghi nhận trên máy', history.length], ['Streak từ Notion', habit.streak ?? 'Chưa có'], ['Ghi nhận gần nhất trên máy', history.at(-1) || 'Chưa có']]) {
+      const remote = !!this.app.habitHistorySyncedAt;
+      for (const [label, value] of [[remote ? 'Ngày có check-in Daily từ Notion' : 'Ngày đã ghi nhận trên máy', history.length], ['Streak từ Notion', habit.streak ?? 'Chưa có'], ['Streak dài nhất từ Notion', habit.bestStreak ?? 'Chưa có'], ['Ghi nhận gần nhất', history.at(-1) || 'Chưa có']]) {
         const cell = element('div');
         cell.append(element('dt', '', label), element('dd', '', value));
         stats.append(cell);
       }
-      panel.append(stats, element('p', 'personal-history-note', 'Chưa có nhật ký hoạt động Notion theo ngày; không tính tỷ lệ thành công, kỷ lục hay xu hướng từ các ô trống.'));
+      panel.append(stats, element('p', 'personal-history-note', remote ? `Nguồn: quan hệ Habits ↔ Daily trong Notion. Đọc lúc ${new Date(this.app.habitHistorySyncedAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}. Streak dùng kết quả công thức Notion; ô trống không tự tính là thất bại.` : 'Chưa tải được lịch sử Daily từ Notion. Số ngày hiện tại chỉ lấy từ thiết bị; streak lấy từ công thức Notion.'));
     }
     if (this.detailTab === 'activity') {
-      panel.append(element('p', 'personal-history-note', 'Các ngày check-in được lưu trên thiết bị này; đây chưa phải nhật ký số lượng và thời điểm đầy đủ.'));
+      panel.append(element('p', 'personal-history-note', this.app.habitHistorySyncedAt ? 'Các ngày có liên kết Habit trong Daily Notion. Checkbox Today và lịch sử Daily là hai trường riêng; check Today chưa tự tạo một hoạt động định lượng.' : 'Các ngày check-in được lưu trên thiết bị này; đây chưa phải nhật ký số lượng và thời điểm đầy đủ.'));
       const log = element('ol', 'hh-activity-list');
       for (const day of history.toReversed()) log.append(element('li', '', `${day} · Đã check-in`));
-      panel.append(history.length ? log : element('p', 'hh-empty', 'Chưa có check-in được ghi nhận trên thiết bị này.'));
+      panel.append(history.length ? log : element('p', 'hh-empty', this.app.habitHistorySyncedAt ? 'Chưa có ngày Daily nào liên kết Habit này trong dữ liệu đã tải.' : 'Chưa có check-in được ghi nhận trên thiết bị này.'));
     }
     const pageId = String(habit.rawId || '').replaceAll('-', '');
     const sourceUrl = /^https:\/\/(?:www\.)?notion\.so\//.test(habit.sourceUrl || '') ? habit.sourceUrl

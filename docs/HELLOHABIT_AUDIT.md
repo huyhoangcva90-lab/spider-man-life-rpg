@@ -137,6 +137,24 @@ Không đánh đồng iframe nhúng Notion hoặc shortcut PWA với widget nati
 
 ## Thứ tự tiếp theo và dữ liệu cần có
 
+### Đợt 2 — nối nguồn hiện có, không tạo DB trùng (22/10/2026)
+
+Kiểm tra schema thật cho thấy các nhận định “chưa có nguồn lịch sử” ở đợt đầu là **chưa đầy đủ**:
+
+- `Habits.Days` liên kết đến DB Daily `272d787636c681c8b8adc9d6fdada0b7`, data source `272d7876-36c6-8159-a810-000b01bef441`. Công thức `Streak` dùng ngày của chính các liên kết này. Đã nối lịch sử, heatmap, báo cáo và chiến dịch 66 ngày với nguồn đó; không dùng tên hay các checkbox Daily để đoán quan hệ.
+- Daily query có ba bản ghi liên kết Habit trong lượt kiểm tra, cả ba có Date. Đây là kết quả nguồn hiện tại, không suy ra các ngày khác đều thất bại. Không đưa bản ghi cá nhân vào Git.
+- `Streak` là chuỗi có cả `Curr` và `Long`, không phải luôn là số. Đã sửa lỗi chuyển chuỗi thành 0, hiển thị riêng streak hiện tại và dài nhất, giữ giá trị chưa biết là chưa có.
+- DB Habit Planner `272d787636c681228446e717b8137af1` có Frequency, Unit, Start Date, End Date, Total Target, Check và quan hệ Habits. Đã nối hiển thị kế hoạch theo **relation ID**, có lối mở chỉnh trong Notion; không tự nối bằng tên.
+- Lượt kiểm tra Planner có 10 kế hoạch chưa lưu trữ, nhưng **không kế hoạch nào có quan hệ Habits**. Vì vậy chi tiết Habit hiển thị chưa có kế hoạch liên kết thay vì giả vờ đã có mục tiêu.
+- Công thức Planner `Check` hiện đếm các Daily liên kết qua Habits, chưa lọc Start/End Date. `Total Target` nhân Frequency với số chu kỳ trọn vẹn. App giữ kết quả nguồn và ghi rõ “toàn kế hoạch”; chưa gọi đây là bộ đếm tuần/tháng tự tính của HelloHabit. Chưa sửa công thức Notion.
+- Màu Habit lấy trường Color khi có. Kế hoạch và lịch sử vẫn dùng kết nối riêng đã có; không thêm quyền truy cập công khai.
+
+Lịch sử Notion là nguồn chính khi tải thành công; bản quan sát cũ trên máy được giữ nhưng không cộng vào nguồn để tránh đếm đôi. Nếu lần làm mới lỗi, giữ bản đã tải cùng thời điểm đọc và báo rõ lỗi. Phân trang lỗi hoặc quan hệ bị rút gọn không được xem là lịch sử đầy đủ.
+
+**Giới hạn còn lại:** Today và Daily là hai nguồn trạng thái khác nhau. Check Today hiện chưa tự tạo activity có số lượng, đơn vị hoặc thời điểm; không được gọi tính năng này là đã hoàn tất. Mục tiêu số cốc/phút/km vẫn cần model hoạt động phù hợp. Journal, Habit Notification và các bảng Daily/Planner đã được phát hiện, cần ưu tiên tái sử dụng trước khi tạo bảng mới.
+
+Kiểm tra: 98 test đạt, gồm phân trang, timezone Việt Nam, dữ liệu bị rút gọn, remote rỗng, streak dạng chữ, ID quan hệ và giá trị mục tiêu bằng 0. Không sửa bản ghi Notion thật để thử nút check.
+
 1. **Habit + activity log trước**: kiểm tra schema thật, bổ sung model cho type, goal direction/amount/unit, period/start date, weekdays/N-days, increment, màu, list, priority, archive. Mỗi activity cần ID, Habit relation, timestamp, value, unit, kind (log/skip/pause/reset), note relation, nguồn và khóa chống ghi hai lần.
 2. **Lịch sử/statistics/reports** trên cùng log. Chỉ tính streak từ lịch mục tiêu và dữ liệu đủ; dữ liệu chưa biết không phải thất bại. Cần xử lý timezone, reset ngày và thao tác offline rõ ràng.
 3. **Timer rồi Journal**: phiên thời gian và note liên kết Habit, sửa được, không cộng hai lần; dùng DB Journal đang có sau khi kiểm tra schema.
