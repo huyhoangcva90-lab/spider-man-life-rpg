@@ -57,6 +57,9 @@ export class HubOverlayPanels {
 
     return `<section class="hub-panel-inner hub-panel-inner--apps">
       <div class="life-os-launcher">
+        <a class="life-os-app life-os-app--red" href="./battle-lab/">
+          <span class="life-os-app-icon">⚔</span><span><strong>ĐẤU THỬ THEO LƯỢT</strong><small>Trang thử riêng · chọn chiêu và đối thủ · chưa nối Notion</small></span><b>→</b>
+        </a>
         ${apps.map(([id, title, copy, icon, tone]) => `
           <button class="life-os-app life-os-app--${tone}" data-game-menu-target="${id}">
             <span class="life-os-app-icon">${icon}</span>

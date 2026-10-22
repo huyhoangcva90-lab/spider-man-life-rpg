@@ -7,7 +7,7 @@ const output = path.join(root, '.pages-private');
 if (path.dirname(path.resolve(output)) !== root || path.basename(output) !== '.pages-private') {
   throw new Error('Unexpected private Pages output path');
 }
-const directories = ['assets', 'cards_custom_snap', 'css', 'data', 'js', 'life-os', 'life-reset', 'spider_gadgets_gallery_and_covers'];
+const directories = ['assets', 'battle-lab', 'cards_custom_snap', 'css', 'data', 'js', 'life-os', 'life-reset', 'spider_gadgets_gallery_and_covers'];
 const files = ['index.html', 'spidey_contact.png'];
 const allowedExtensions = new Set(['.html', '.css', '.js', '.mjs', '.json', '.png', '.webp', '.jpg', '.jpeg', '.gif', '.svg', '.wav', '.mp3', '.ogg', '.xml', '.ico', '.woff', '.woff2']);
 const maxAssetBytes = 25 * 1024 * 1024;
