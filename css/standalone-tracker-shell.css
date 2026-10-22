@@ -1,9 +1,9 @@
 html:has(.has-standalone-tracker) { margin:0; padding:0; height:100dvh; overflow:hidden; }
 body.has-standalone-tracker { position:fixed; inset:0; display:block; margin:0; padding:0; height:100dvh; min-height:0; overflow:hidden; background:#02060b; }
-.standalone-tracker { position:relative; box-sizing:border-box; display:grid; grid-template-columns:36px minmax(0,1fr) 36px; grid-template-rows:76px minmax(0,1fr) 19px 50px 7px; width:100%; height:100dvh; }
-.standalone-tracker-frame { position:absolute; inset:0; display:grid; grid-template-columns:36px minmax(0,1fr) 36px; grid-template-rows:36px minmax(0,1fr) 19px 50px 7px; pointer-events:none; }
+.standalone-tracker { position:relative; isolation:isolate; overflow:hidden; box-sizing:border-box; display:grid; grid-template-columns:36px minmax(0,1fr) 36px; grid-template-rows:76px minmax(0,1fr) 19px 50px 7px; width:100%; height:100dvh; }
+.standalone-tracker-frame { position:absolute; z-index:20; inset:0; display:grid; grid-template-columns:36px minmax(0,1fr) 36px; grid-template-rows:36px minmax(0,1fr) 19px 50px 7px; pointer-events:none; }
 .standalone-tracker-frame i { background-size:100% 100%; image-rendering:pixelated; }
-.standalone-tracker-content { position:relative; grid-area:2/2; min-width:0; min-height:0; overflow:auto; background:#071426; }
+.standalone-tracker-content { position:relative; z-index:0; contain:paint; isolation:isolate; grid-area:2/2; min-width:0; min-height:0; overflow:auto; background:#071426; }
 .standalone-tracker-content .os-header { position:sticky; top:0; }
 .standalone-tracker-content .desktop-screen-wrapper { min-height:100%; height:auto; padding-top:12px; }
 .standalone-tracker-content .phone-frame { max-height:none; }
@@ -20,7 +20,7 @@ body.has-standalone-tracker { position:fixed; inset:0; display:block; margin:0; 
 .standalone-logo { position:absolute; top:16px; left:50%; transform:translateX(-50%); }
 .standalone-logo img { width:280px; image-rendering:pixelated; }
 .standalone-apps { position:absolute; top:13px; right:23px; width:64px; height:64px; background:url('../assets/spideytracker/hub-ui/alert_btn_white.png') center/contain no-repeat; }
-.standalone-tracker-footer { position:relative; grid-area:4/2; display:flex; justify-content:center; align-items:center; }
+.standalone-tracker-footer { position:relative; z-index:30; grid-area:4/2; display:flex; justify-content:center; align-items:center; }
 .standalone-tracker-footer a { color:#96e0f7; text-decoration:none; font:700 11px monospace; }
 .standalone-spidey { position:absolute; left:-29px; bottom:-5px; width:59.2px; height:95.2px; background:url('../assets/spideytracker/SpiderMan_HeadTurn.png') 0 0/4499.2px 95.2px; image-rendering:pixelated; animation:standalone-spidey 6.3333s steps(76) infinite; }
 @keyframes standalone-spidey { to { background-position-x:-4499.2px; } }

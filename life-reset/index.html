@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>66 日間 - Life Reset: 66 Day Habit</title>
-  <link rel="stylesheet" href="../css/standalone-tracker-shell.css" />
+  <link rel="stylesheet" href="../css/standalone-tracker-shell.css?build=frame-layers-1" />
   <script type="module" src="../js/ui/StandaloneTrackerShell.js"></script>
   <link rel="stylesheet" href="css/reset-app.css?build=unified-personal-1" />
   <link rel="icon" type="image/png" href="assets/images/house_ember.png" />
@@ -541,6 +541,14 @@
         </div>
       </div>
 
+      <div id="quick-alert-box" class="alert-box-overlay">
+        <div class="alert-box-card" role="dialog" aria-modal="true" aria-labelledby="alert-title-text" aria-describedby="alert-body-text">
+          <h2 id="alert-title-text"></h2>
+          <p id="alert-body-text"></p>
+          <button id="btn-alert-dismiss" type="button" class="personal-quest-complete">Đóng</button>
+        </div>
+      </div>
+
       <!-- Spider-Man RPG Comic Combo Toast (Integration with Game) -->
       <div id="spidey-rpg-toast" class="spidey-rpg-toast">
         <div class="toast-spider-icon">🕷️</div>
@@ -561,6 +569,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/app.js?build=unified-personal-1"></script>
+  <script type="module" src="js/app.js?build=frame-layers-1"></script>
 </body>
 </html>

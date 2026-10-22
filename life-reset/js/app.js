@@ -1544,13 +1544,24 @@ class LifeResetApp {
     const okBtn = document.getElementById('btn-alert-dismiss');
 
     if (!overlay) return;
+    this.closeAlert?.();
+    const previousFocus = document.activeElement;
     if (titleEl) titleEl.textContent = title;
     if (bodyEl) bodyEl.textContent = msg;
 
     overlay.classList.add('active');
-    okBtn.onclick = () => overlay.classList.remove('active');
+    const close = () => {
+      overlay.classList.remove('active');
+      document.removeEventListener('keydown', onKey);
+      previousFocus?.focus({ preventScroll: true });
+      this.closeAlert = null;
+    };
+    const onKey = event => { if (event.key === 'Escape') close(); };
+    this.closeAlert = close;
+    document.addEventListener('keydown', onKey);
+    if (okBtn) { okBtn.onclick = close; okBtn.focus(); }
     overlay.onclick = e => {
-      if (e.target === overlay) overlay.classList.remove('active');
+      if (e.target === overlay) close();
     };
   }
 }
