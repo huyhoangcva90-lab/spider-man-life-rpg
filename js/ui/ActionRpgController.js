@@ -1,4 +1,5 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
+import { vietnamDay } from '../core/GameDay.mjs';
 import { NotionGamePresenter } from './NotionGamePresenter.js?build=game-loadout-7';
 import { personalAppRoute, personalFieldDestination } from './PersonalAppRoutes.mjs';
 
@@ -217,8 +218,7 @@ export class ActionRpgController {
   }
 
   todayKey() {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    return vietnamDay();
   }
 
   notionAccessHtml() {
@@ -311,7 +311,8 @@ export class ActionRpgController {
       }
       // Locally completed records remain completed until their Notion write succeeds.
       for (const write of readPendingNotionWrites()) {
-        const list = write.kind === 'habits' ? this.notionHabits : write.kind === 'activeQuests' ? this.notionActiveQuests : this.notionTasks;
+        if (write.kind === 'habits') continue; // Undated legacy actions need review in Habit.
+        const list = write.kind === 'activeQuests' ? this.notionActiveQuests : this.notionTasks;
         const record = list.find((item) => item.id === write.id);
         if (record) { record.done = true; if (write.kind === 'habits') record.today = true; }
       }
@@ -444,6 +445,7 @@ export class ActionRpgController {
     if (section === 'CITY') {
       this.closePanel();
       document.body.dataset.gameMode = 'MAP';
+      this.bus.emit('MAP_OPENED');
       this.setActiveNav('CITY');
       this.updateRoute('CITY');
       requestAnimationFrame(() => this.mapEngine.resize?.());
@@ -1782,7 +1784,8 @@ export class ActionRpgController {
         this.engine.state.progression.maxHp = Number(this.notionHeroProfile['Max HP']) || this.engine.data.hero.maxHp;
       }
       for (const write of readPendingNotionWrites()) {
-        const list = write.kind === 'habits' ? this.notionHabits : write.kind === 'activeQuests' ? this.notionActiveQuests : this.notionTasks;
+        if (write.kind === 'habits') continue; // Undated legacy actions need review in Habit.
+        const list = write.kind === 'activeQuests' ? this.notionActiveQuests : this.notionTasks;
         const record = list.find((item) => item.id === write.id);
         if (record) { record.done = true; if (write.kind === 'habits') record.today = true; }
       }
@@ -2011,7 +2014,12 @@ export class ActionRpgController {
       this.render();
     });
     content.querySelector('#btn-send-pending-notion')?.addEventListener('click', async () => {
-      const pending = readPendingNotionWrites().length + (localStorage.getItem('spidey_notion_profile_pending') ? 1 : 0);
+      const pending = readPendingNotionWrites().filter(item => item.kind !== 'habits').length + (localStorage.getItem('spidey_notion_profile_pending') ? 1 : 0);
+      if (!pending && readPendingNotionWrites().some(item => item.kind === 'habits')) {
+        this.toast('HABIT CŨ THIẾU NGÀY: MỞ HABIT ĐỂ KIỂM TRA, KHÔNG TỰ GỬI');
+        this.selectSection('HABITS');
+        return;
+      }
       if (!pending || !window.confirm(`Gửi ${pending} thay đổi đang chờ lên Notion?`)) return;
       await flushPendingNotionWrites();
       await this.flushHeroProfileSync();
@@ -2104,33 +2112,9 @@ export class ActionRpgController {
       });
     });
 
-    // 3. Habit Check-in -> Restore HP & Web + Sync
+    // All legacy check-in buttons lead to the single dated Habit writer.
     content.querySelectorAll('[data-checkin-habit]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        if (!this.canUseData('habits')) return;
-        const idx = parseInt(btn.dataset.checkinHabit, 10);
-        const habit = this.notionHabits[idx];
-        if (!habit || habit.done || habit.today) return;
-
-        const live = this.canWriteNotion('habits') && !habit.localOnly;
-        habit.done = true;
-        habit.today = true;
-        if (!live) { habit.localDoneOn = this.todayKey(); this.saveLocalData(); }
-        else this.persistNotionCache();
-        this.sound.playSelect();
-
-        this.engine.recordHabitCheckin(habit.id);
-        if (live) this.queueHeroProfileSync();
-        this.toast(live ? 'HABIT ĐÃ GHI NHẬN TRÊN MÁY // ĐANG GỬI NOTION' : 'HABIT ĐÃ LƯU TRÊN THIẾT BỊ');
-
-        // Persist the local check-in and retry the Notion write on the next sync.
-        if (live && habit.id) {
-          queueNotionWrite('habits', habit.id);
-          void flushPendingNotionWrites().then((remaining) => { this.toast(remaining ? 'HABIT ĐANG CHỜ GỬI NOTION' : 'HABIT ĐÃ ĐỒNG BỘ NOTION'); this.renderPanel(); });
-        }
-
-        this.renderPanel();
-      });
+      btn.addEventListener('click', () => this.selectSection('HABITS'));
     });
 
     // 4. Preview Suit (click tile)

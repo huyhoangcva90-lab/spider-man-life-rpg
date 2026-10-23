@@ -1,8 +1,8 @@
-import { dateKey, rollDailyState, questBucket, selectQuests, campaignDays } from './personal-progress.mjs';
+import { dateKey, vietnamDay, rollDailyState, questBucket, selectQuests, campaignDays } from './personal-progress.mjs';
 import { HelloHabitView } from './hello-habit-view.mjs';
 import { readDailyHabitHistory, recordedHabitDays, HABIT_PLANNER_DATABASE_ID, normalizeHabitPlan } from '../../js/integrations/notion/NotionHabitHistory.mjs';
 import { pendingHabitActions, saveHabitAction, settleHabitAction } from './habit-actions.mjs';
-import { setupOwnerConnection } from './owner-connection.mjs';
+import { setupOwnerConnection, readOwnerSession } from './owner-connection.mjs';
 
 /**
  * Life Reset reference UI and Notion-backed personal views.
@@ -214,7 +214,7 @@ class LifeResetApp {
   }
 
   todayKey() {
-    return dateKey();
+    return vietnamDay();
   }
 
   recordNotionHabitDay(habit, checked) {
@@ -517,7 +517,7 @@ class LifeResetApp {
         this.habitHistorySyncedAt = data.habitHistorySyncedAt || null;
         this.habitPlans = data.habitPlans || [];
         this.habitPlansSyncedAt = data.habitPlansSyncedAt || null;
-        const cacheIsToday = this.habitSyncedAt && dateKey(new Date(this.habitSyncedAt)) === this.todayKey();
+        const cacheIsToday = this.habitSyncedAt && vietnamDay(new Date(this.habitSyncedAt)) === this.todayKey();
         this.notionHabits.forEach((habit) => {
           if (!cacheIsToday) { habit.today = false; habit.done = false; }
           if (habit.today) this.state.notionDoneToday[habit.id] = true;
@@ -533,56 +533,9 @@ class LifeResetApp {
         this.renderQuestBoard();
         return;
       }
-      const res = await fetch('/api/personal-state', { cache: 'no-store' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (data && data.collections) {
-        this.notionHabits = (data.collections.habits || []).map(h => ({
-          id: `notion_${h.id}`,
-          rawId: h.id,
-          name: h.name,
-          category: h.category || 'Good Habit',
-          priority: h.priority || 'Medium',
-          timeBlock: h.timeBlock || 'Allday',
-          outcome: h.outcome || '',
-          description: h.description || '',
-          today: false, // A fresh read timestamp does not date a timeless Today checkbox.
-          xp: h.xp ? h.xp * 35 : 35,
-          gold: h.gold ? h.gold * 15 : 20,
-          sourceUrl: h.sourceUrl
-        }));
-
-        this.notionTasks = (data.collections.masterCalendar || []).map(t => ({
-          id: `notion_task_${t.id}`,
-          rawId: t.id,
-          title: t.title,
-          date: t.date,
-          type: t.type || 'Work',
-          priority: t.priority || 'Low',
-          done: !!t.done,
-          gameXp: t.gameXp,
-          sourceUrl: t.sourceUrl
-        }));
-
-        const hCount = document.getElementById('badge-notion-habits-count');
-        const tCount = document.getElementById('badge-notion-tasks-count');
-        const statusEl = document.getElementById('notion-status-text');
-
-        if (hCount) hCount.textContent = this.notionHabits.length;
-        if (tCount) tCount.textContent = this.notionTasks.length;
-        if (statusEl) statusEl.textContent = `Notion Zeus: ${this.notionHabits.length} habits ready`;
-
-        this.notionHabits.forEach((habit) => {
-          if (habit.today && this.state.notionDoneToday[habit.id] === undefined) this.state.notionDoneToday[habit.id] = true;
-        });
-        this.saveState();
-        this.renderHelloSquareHabits();
-        this.renderQuestBoard();
-
-        if (this.activeSource !== 'anime') {
-          this.renderHabitCards();
-        }
-      }
+      // Live sync follows immediately. Do not query the same databases twice
+      // or derive placeholder rewards while waiting for their source.
+      return;
     } catch (err) {
       console.warn('[Notion Snapshot] Could not load snapshot:', err);
       const statusEl = document.getElementById('notion-status-text');
@@ -600,6 +553,8 @@ class LifeResetApp {
 
   async syncNotionLive({ quiet = false } = {}) {
     if (this.syncing || this.pendingHabitIds.size || this.pendingQuestIds.size) return;
+    if (quiet && this.lastAutoSyncAttempt && Date.now() - this.lastAutoSyncAttempt < 60000) return;
+    this.lastAutoSyncAttempt = Date.now();
     this.syncing = true;
     const syncBtn = document.getElementById('btn-sync-notion-now');
     const statusEl = document.getElementById('notion-status-text');
@@ -611,6 +566,8 @@ class LifeResetApp {
     this.renderQuestBoard();
 
     try {
+      const session = await readOwnerSession({ force: !quiet });
+      if (!session?.connected) throw new Error('Mở kết nối riêng để cập nhật dữ liệu Notion.');
       const { queryAllNotionPages, normalizeNotionPage, normalizeNotionCatalogPage, NOTION_GAME_DATABASES } = await import('../../js/integrations/notion/NotionGameData.js');
       const results = await Promise.allSettled([
         queryAllNotionPages(NOTION_GAME_DATABASES.habits),

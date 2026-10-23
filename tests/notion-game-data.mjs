@@ -33,12 +33,12 @@ await assert.rejects(() => queryAllNotionPages('database-id', async () => ({ ok:
 
 const values = new Map();
 const storage = { getItem: (key) => values.get(key) || null, setItem: (key, value) => values.set(key, value) };
-queueNotionWrite('habits', 'abc-def', storage);
-queueNotionWrite('habits', 'abc-def', storage);
+queueNotionWrite('masterCalendar', 'abc-def', storage);
+queueNotionWrite('masterCalendar', 'abc-def', storage);
 assert.equal(readPendingNotionWrites(storage).length, 1);
 let firstAttempt = true;
 const fetcher = async (_url, options) => {
-  assert.equal(JSON.parse(options.body).properties.Today.checkbox, true);
+  assert.equal(JSON.parse(options.body).properties.Done.checkbox, true);
   if (firstAttempt) { firstAttempt = false; return { ok: false }; }
   return { ok: true, json: async () => ({ ok: true }) };
 };

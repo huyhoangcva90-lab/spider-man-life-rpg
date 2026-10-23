@@ -1,9 +1,12 @@
+import { vietnamDay } from '../../js/core/GameDay.mjs';
+export { vietnamDay };
+
 export function dateKey(date = new Date()) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
 // Notion owns completion. Local history only records observations and successful writes.
-export function rollDailyState(state, habits, today = dateKey()) {
+export function rollDailyState(state, habits, today = vietnamDay()) {
   if (state.notionDay === today) return false;
   state.notionDay = today;
   state.notionDoneToday = {};
@@ -13,14 +16,14 @@ export function rollDailyState(state, habits, today = dateKey()) {
   return true;
 }
 
-export function questBucket(quest, today = dateKey()) {
+export function questBucket(quest, today = vietnamDay()) {
   const due = String(quest.date || quest.dueDate || '').slice(0, 10);
   if (due && due < today) return 'overdue';
   if (due === today || /daily|hàng ngày/i.test(quest.frequency || '')) return 'today';
   return due ? 'upcoming' : 'unscheduled';
 }
 
-export function selectQuests(quests, filter, completed, today = dateKey(), search = '') {
+export function selectQuests(quests, filter, completed, today = vietnamDay(), search = '') {
   const query = search.trim().toLocaleLowerCase('vi');
   return quests.filter(quest => {
     const done = !!(quest.done || completed[quest.id]);
@@ -31,7 +34,7 @@ export function selectQuests(quests, filter, completed, today = dateKey(), searc
   }).sort((a, b) => String(a.date || a.dueDate || '9999').localeCompare(String(b.date || b.dueDate || '9999')));
 }
 
-export function campaignDays(start, today = dateKey(), length = 66) {
+export function campaignDays(start, today = vietnamDay(), length = 66) {
   const days = [];
   const cursor = new Date(`${start}T12:00:00`);
   for (let i = 0; i < length; i++, cursor.setDate(cursor.getDate() + 1)) {
@@ -40,11 +43,11 @@ export function campaignDays(start, today = dateKey(), length = 66) {
   return days;
 }
 
-export function personalDashboardSummary(cache, state, today = dateKey()) {
+export function personalDashboardSummary(cache, state, today = vietnamDay()) {
   if (!cache || !Array.isArray(cache.habits)) return { habits: 'Mở Habit', quests: 'Mở Quest' };
   const marks = state?.notionDay === today ? state.notionDoneToday || {} : {};
   const stamp = cache.habitSyncedAt || cache.syncedAt;
-  const freshDay = stamp && dateKey(new Date(stamp)) === today;
+  const freshDay = stamp && vietnamDay(new Date(stamp)) === today;
   const done = cache.habits.filter(habit => marks[habit.id] || freshDay && habit.today).length;
   const quests = [...(cache.tasks || []), ...(cache.activeQuests || [])];
   return {

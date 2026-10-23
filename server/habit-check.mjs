@@ -1,12 +1,10 @@
 import { DAILY_DATABASE_ID } from '../js/integrations/notion/NotionHabitHistory.mjs';
 import { NOTION_GAME_DATABASES } from '../js/integrations/notion/NotionRecords.mjs';
+import { vietnamDay } from '../js/core/GameDay.mjs';
+export { vietnamDay };
 
 const locks = new Map();
 const clean = value => String(value || '').replaceAll('-', '').toLowerCase();
-export function vietnamDay(now = new Date()) {
-  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(now);
-  return ['year', 'month', 'day'].map(type => parts.find(part => part.type === type).value).join('-');
-}
 function failure(message, status = 502, partial = false) { return Object.assign(new Error(message), { status, partial }); }
 async function serial(key, task) {
   const previous = locks.get(key) || Promise.resolve();

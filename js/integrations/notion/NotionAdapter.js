@@ -8,8 +8,10 @@ export class NotionAdapter {
     this.unlocatedMissions = [];
   }
 
-  async loadSnapshot() {
+  async loadSnapshot({ force = false } = {}) {
     if (this.loading) return false;
+    if (!force && this.lastAttempt && Date.now() - this.lastAttempt < 60000) return false;
+    this.lastAttempt = Date.now();
     this.loading = true;
     try {
       const response = await fetch('/api/personal-state', { cache: 'no-store' });
@@ -72,6 +74,7 @@ export class NotionAdapter {
     const item = this.unlocatedMissions.splice(itemIdx, 1)[0];
 
     const createdEntry = this.repo.create({
+      id: 'notion-' + String(item.rawItem.id).replaceAll('-', ''),
       type: 'NOTION_MISSION',
       title: item.title,
       lat,

@@ -2,6 +2,7 @@ export * from './NotionRecords.mjs';
 
 export async function queryAllNotionPages(databaseId, fetcher = fetch) {
   const results = [];
+  const cursors = new Set();
   let cursor;
   do {
     const response = await fetcher(`/api/notion?path=${encodeURIComponent(`/v1/databases/${databaseId}/query`)}`, {
@@ -17,6 +18,8 @@ export async function queryAllNotionPages(databaseId, fetcher = fetch) {
     results.push(...payload.data.results);
     cursor = payload.data.has_more ? payload.data.next_cursor : null;
     if (payload.data.has_more && !cursor) throw new Error('Notion pagination cursor missing');
+    if (cursor && cursors.has(cursor)) throw new Error('Notion pagination cursor repeated');
+    if (cursor) cursors.add(cursor);
   } while (cursor);
   return results;
 }
@@ -39,6 +42,9 @@ export async function flushPendingNotionWrites(fetcher = fetch, storage = localS
   const attempted = readPendingNotionWrites(storage);
   const remaining = [];
   for (const item of attempted) {
+    // These legacy actions have no date. Keep them for review; never apply them
+    // to today's Habit or bypass the dated check-in flow.
+    if (item.kind === 'habits') { remaining.push(item); continue; }
     const property = item.kind === 'habits' ? 'Today' : item.kind === 'activeQuests' ? 'Completed' : 'Done';
     try {
       const response = await fetcher(`/api/notion?path=${encodeURIComponent(`/v1/pages/${item.id.replace(/-/g, '')}`)}`, {

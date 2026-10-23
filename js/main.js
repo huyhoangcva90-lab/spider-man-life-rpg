@@ -90,7 +90,7 @@ class App {
     window.requestAnimationFrame(() => this.mapEngine.resize());
 
     // 3. Load Notion snapshot & update Notion queue & badge immediately
-    await this.notion.loadSnapshot();
+    if (document.body.dataset.gameMode === 'MAP') await this.notion.loadSnapshot();
     this.unlocatedQueue.render();
 
     // 4. Bind map & repo events
@@ -101,14 +101,15 @@ class App {
     this.trackerFrame.updateFilterCounts(this.repo.getAll());
 
     const refreshPrivate = async () => {
-      if (document.hidden) return;
-      await this.notion.loadSnapshot();
+      if (document.hidden || document.body.dataset.gameMode !== 'MAP') return;
+      if (!await this.notion.loadSnapshot()) return;
       this.unlocatedQueue.render();
       this.updateMarkers();
       this.trackerFrame.updateFilterCounts(this.repo.getAll());
     };
     setInterval(refreshPrivate, 60000);
     document.addEventListener('visibilitychange', refreshPrivate);
+    this.bus.on('MAP_OPENED', refreshPrivate);
 
     // NOTE: GPS is NOT requested automatically on boot per requirements.
     // Geolocation must be initiated from a user gesture (e.g. clicking Center GPS / Track button).
