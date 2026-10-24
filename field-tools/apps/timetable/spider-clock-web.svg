@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520" fill="none" aria-hidden="true">
+  <defs>
+    <path id="web-spoke" d="M260 179V58"/>
+    <path id="web-strand" d="M260 140Q288 153 320 156M260 116Q298 132 333 132M260 92Q309 112 346 107M260 68Q319 92 359 82"/>
+  </defs>
+  <g stroke="#90d5e6" stroke-width="1.15" opacity=".24">
+    <use href="#web-spoke"/>
+    <use href="#web-spoke" transform="rotate(30 260 260)"/>
+    <use href="#web-spoke" transform="rotate(60 260 260)"/>
+    <use href="#web-spoke" transform="rotate(90 260 260)"/>
+    <use href="#web-spoke" transform="rotate(120 260 260)"/>
+    <use href="#web-spoke" transform="rotate(150 260 260)"/>
+    <use href="#web-spoke" transform="rotate(180 260 260)"/>
+    <use href="#web-spoke" transform="rotate(210 260 260)"/>
+    <use href="#web-spoke" transform="rotate(240 260 260)"/>
+    <use href="#web-spoke" transform="rotate(270 260 260)"/>
+    <use href="#web-spoke" transform="rotate(300 260 260)"/>
+    <use href="#web-spoke" transform="rotate(330 260 260)"/>
+  </g>
+  <g stroke="#90d5e6" stroke-width="1.05" opacity=".25">
+    <use href="#web-strand"/>
+    <use href="#web-strand" transform="rotate(30 260 260)"/>
+    <use href="#web-strand" transform="rotate(60 260 260)"/>
+    <use href="#web-strand" transform="rotate(90 260 260)"/>
+    <use href="#web-strand" transform="rotate(120 260 260)"/>
+    <use href="#web-strand" transform="rotate(150 260 260)"/>
+    <use href="#web-strand" transform="rotate(180 260 260)"/>
+    <use href="#web-strand" transform="rotate(210 260 260)"/>
+    <use href="#web-strand" transform="rotate(240 260 260)"/>
+    <use href="#web-strand" transform="rotate(270 260 260)"/>
+    <use href="#web-strand" transform="rotate(300 260 260)"/>
+    <use href="#web-strand" transform="rotate(330 260 260)"/>
+  </g>
+  <circle cx="260" cy="260" r="211" stroke="#f0645c" stroke-width="4" opacity=".94"/>
+  <circle cx="260" cy="260" r="217" stroke="#54b6d0" stroke-width="1" opacity=".67"/>
+  <circle cx="260" cy="260" r="79" stroke="#54b6d0" stroke-width="2" opacity=".75"/>
+  <path d="M260 42v13M260 465v13M42 260h13M465 260h13" stroke="#f0645c" stroke-width="3" stroke-linecap="round"/>
+</svg>
