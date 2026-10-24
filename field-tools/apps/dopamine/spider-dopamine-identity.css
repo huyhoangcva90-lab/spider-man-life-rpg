@@ -1,0 +1,38 @@
+@import url('../../../css/spider-app-tokens.css');
+
+/* Preserve Gambit's two-column menu and every original control. */
+:root {
+  --bg: #f2f2f7;
+  --card: #ffffff;
+  --card2: #e5edf0;
+  --lbl: #132636;
+  --lbl2: #506674;
+  --lbl3: #718897;
+  --sep: rgba(30, 78, 104, .16);
+  --sep2: rgba(30, 78, 104, .3);
+  --blue: #257b99;
+  --red: #b84046;
+  --green: #438650;
+}
+[data-dark] {
+  --bg: #071426;
+  --card: rgba(16, 44, 69, .82);
+  --card2: rgba(22, 54, 78, .9);
+  --lbl: #eef4f2;
+  --lbl2: #aec5cc;
+  --lbl3: #81a0ae;
+  --sep: rgba(84, 182, 208, .16);
+  --sep2: rgba(84, 182, 208, .3);
+  --blue: #54b6d0;
+  --red: #f0645c;
+  --green: #83b96b;
+}
+.nav-title { color: var(--red); }
+.large-title { color: var(--lbl); }
+.mc { box-shadow: inset 3px 0 0 var(--red), 0 1px 3px rgba(0, 0, 0, .08); }
+[data-dark] .mc { box-shadow: inset 3px 0 0 var(--red); }
+.nav-back:focus-visible,
+.nav-ic:focus-visible,
+.mc:focus-visible,
+.fc:focus-visible,
+button:focus-visible { outline-color: var(--spider-amber); }

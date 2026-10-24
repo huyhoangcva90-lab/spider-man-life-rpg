@@ -1,0 +1,17 @@
+@import url('../../css/spider-app-tokens.css');
+
+/* Keep the Habit list, detail view, dates, and connection panel as designed. */
+#tab-reports .tracker-header-title,
+#tab-reports .hh-detail-title { color: var(--spider-paper); }
+#tab-reports .hh-connection { border-color: #42687c; }
+#tab-reports .hh-row,
+#tab-reports .hh-plan,
+#tab-reports .hh-stat-grid > div { background: #102438; border-color: #42687c; }
+#tab-reports .hh-tone-1 { --hh-tone: #83b96b; }
+#tab-reports .hh-tone-2 { --hh-tone: #f0645c; }
+#tab-reports .hh-tone-3 { --hh-tone: #54b6d0; }
+#tab-reports .hh-tone-4 { --hh-tone: #f2c06b; }
+#tab-reports .hh-detail-nav button.active { background: var(--spider-cyan); }
+#tab-reports :is(button, summary, a, input, select):focus-visible {
+  outline-color: var(--spider-amber);
+}

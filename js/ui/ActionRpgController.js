@@ -110,9 +110,13 @@ export class ActionRpgController {
       if (event.data?.type === 'spider:gambit-home') this.closeEmbeddedFieldApp();
       if (event.data?.type === 'spider:notion-status') {
         const auto=['todo','habits'].includes(document.querySelector('[data-field-app]')?.dataset.fieldApp);
-        const labels = { connected:auto?'Notion · tự cập nhật 30s':'Đã mở kết nối Field', locked:'Mở kết nối riêng', unconfigured:'Chưa mở được kết nối', error:'Kiểm tra kết nối' };
+        const labels = { connected:auto?'Phiên Notion đã mở · tự cập nhật 30 giây':'Phiên dữ liệu đã mở', locked:'Mở kết nối riêng', unconfigured:'Chưa cấu hình kết nối', error:'Kết nối cần kiểm tra' };
         const button = document.querySelector('[data-notion-connect]');
-        if (button && labels[event.data.state]) button.textContent = labels[event.data.state];
+        if (button && labels[event.data.state]) {
+          button.dataset.connectionState = event.data.state;
+          button.setAttribute('aria-label', labels[event.data.state]);
+          button.title = labels[event.data.state];
+        }
       }
     });
     if (!this.notionPresenter && !localStorage.getItem('spidey_owner_clean_start_v2')) {
@@ -775,11 +779,12 @@ export class ActionRpgController {
 
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
     const personalRoute = personalAppRoute(this.panelSection, this.panelTab);
+    const personalStandalone = personalRoute?.section === 'HABITS';
     const requestedApp = this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
-    if (FIELD_APPS[requestedApp]) document.body.dataset.fieldImmersive = 'true';
+    if (FIELD_APPS[requestedApp] || personalStandalone) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
-    // Every destination uses the same Spider frame, including imported Field apps.
-    delete document.body.dataset.fieldStandalone;
+    if ((FIELD_APPS[requestedApp] && requestedApp !== 'launcher') || personalStandalone) document.body.dataset.fieldStandalone = 'true';
+    else delete document.body.dataset.fieldStandalone;
     const keepCurrentApp = requestedApp && content.querySelector('[data-field-app]')?.dataset.fieldApp === requestedApp;
     const personalKey = personalRoute ? `${personalRoute.section}:${personalRoute.view}:${personalRoute.filter || ''}` : '';
     const keepPersonalApp = personalRoute && content.querySelector('[data-personal-route]')?.dataset.personalRoute === personalKey;
@@ -787,6 +792,7 @@ export class ActionRpgController {
     if (!keepCurrentApp && !keepPersonalApp) {
       content.innerHTML = this.renderSection();
       this.bindEvents(content);
+      content.querySelector('[data-personal-back]')?.addEventListener('click', () => this.returnToHome());
     }
     if (resetScroll) content.scrollTop = 0;
   }
@@ -797,7 +803,8 @@ export class ActionRpgController {
       const query = new URLSearchParams({ tab: personal.view });
       if (personal.filter) query.set('filter', personal.filter);
       const key = `${personal.section}:${personal.view}:${personal.filter || ''}`;
-      return `<iframe class="habit-app-frame" data-personal-app="${personal.section}" data-personal-route="${key}" src="./life-reset/index.html?${query}" title="${personal.section === 'QUESTS' ? 'Quest' : 'Habit'} của tôi" loading="lazy"></iframe>`;
+      const frame = `<iframe class="habit-app-frame" data-personal-app="${personal.section}" data-personal-route="${key}" src="./life-reset/index.html?${query}" title="${personal.section === 'QUESTS' ? 'Quest' : 'Habit'} của tôi" loading="lazy"></iframe>`;
+      return personal.section === 'HABITS' ? `<div class="spider-personal-app"><div class="spider-personal-toolbar" role="toolbar" aria-label="Điều hướng Habit"><h2>Habit của tôi</h2><button type="button" data-personal-back aria-label="Về Spider Life" title="Về Spider Life">←</button></div>${frame}</div>` : frame;
     }
     switch (this.panelSection) {
       case 'QUESTS': return this.renderQuestsSection();

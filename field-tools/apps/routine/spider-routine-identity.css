@@ -1,0 +1,20 @@
+@import url('../../../css/spider-app-tokens.css');
+
+/* Color treatment only; the React screens retain their original layout. */
+:root {
+  --bg: #071426;
+  --surface: #102438;
+  --surface-2: #17354a;
+  --ink: #eef4f2;
+  --muted: #a9c2ca;
+  --line: rgba(84, 182, 208, .2);
+  --accent: #54b6d0;
+  --accent-soft: rgba(84, 182, 208, .16);
+  --danger: #f0645c;
+}
+.routine-frame h1 { color: var(--spider-red); }
+.routine-frame .routine-card:hover { border-color: var(--spider-red) !important; }
+.routine-frame :is(button, a, input, select, textarea, .routine-card):focus-visible {
+  outline: 3px solid var(--spider-amber);
+  outline-offset: 3px;
+}

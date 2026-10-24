@@ -1,0 +1,218 @@
+/* Shared SpideyTracker-inspired shell for standalone Spider Life apps. */
+@import url('./spider-app-tokens.css');
+
+.spider-app {
+  --app-ink: var(--spider-ink);
+  --app-midnight: var(--spider-midnight);
+  --app-panel: var(--spider-panel);
+  --app-cyan: var(--spider-cyan);
+  --app-red: var(--spider-red);
+  --app-amber: var(--spider-amber);
+  --app-green: var(--spider-green);
+  --app-paper: var(--spider-paper);
+  --app-muted: var(--spider-muted);
+  min-height: 100dvh;
+  padding: 8px;
+  background: radial-gradient(circle at 50% -20%, #14334b 0, var(--app-midnight) 46%, var(--app-ink) 100%);
+  color: var(--app-paper);
+  box-shadow: inset 0 0 0 3px var(--app-cyan), inset 0 0 0 7px #143950;
+  font: 400 13px/1.55 var(--spider-body-font);
+}
+
+.spider-app::before {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  border: 7px solid transparent;
+  pointer-events: none;
+  content: '';
+  box-shadow: inset 0 0 0 1px #92d9e87a;
+}
+
+.spider-app button,
+.spider-app input,
+.spider-app select { font-family: inherit; }
+.spider-app button:focus-visible,
+.spider-app a:focus-visible,
+.spider-app select:focus-visible,
+.spider-app input:focus-visible,
+.spider-app summary:focus-visible { outline: 3px solid var(--app-amber); outline-offset: 3px; }
+
+.spider-app .top,
+.spider-app--library > header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  max-width: 1500px;
+  min-height: 88px;
+  margin: 0 auto;
+  padding: 16px 24px 16px 100px;
+  border: 3px solid var(--app-cyan);
+  background: linear-gradient(180deg, #112e47, #091b2d);
+  box-shadow: inset 0 0 0 2px var(--app-ink), 5px 5px 0 var(--app-ink);
+}
+
+.spider-app .top::before,
+.spider-app--library > header::before {
+  position: absolute;
+  left: 21px;
+  top: 50%;
+  width: 58px;
+  height: 58px;
+  transform: translateY(-50%);
+  background: url('../assets/spideytracker/tracker_logo3.png') center / auto 155% no-repeat;
+  content: '';
+}
+
+.spider-app .top small,
+.spider-app--library > header small {
+  color: var(--app-cyan);
+  font: 700 11px/1.3 'Silkscreen', monospace;
+  letter-spacing: .12em;
+}
+.spider-app .top h1,
+.spider-app--library > header h1 {
+  margin: 4px 0 0;
+  color: var(--app-paper);
+  font: 700 clamp(15px, 1.45vw, 21px)/1.45 'Press Start 2P', 'Silkscreen', monospace;
+  letter-spacing: -.03em;
+}
+.spider-app .top nav,
+.spider-app--library > header nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.spider-app .top a,
+.spider-app--library > header a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 8px 11px;
+  border: 2px solid #447e98;
+  background: #0a253a;
+  box-shadow: 3px 3px 0 var(--app-ink);
+  color: var(--app-paper);
+  text-decoration: none;
+  font: 700 11px/1.3 'Silkscreen', monospace;
+}
+.spider-app .top a:hover,
+.spider-app--library > header a:hover { border-color: var(--app-cyan); color: #fff; background: #16415b; }
+
+.spider-app--battle .mode-switch { gap: 6px; padding: 16px 22px 0; }
+.spider-app--battle .mode-switch button,
+.spider-app--battle .mode-switch a,
+.spider-app--battle #skill-filters button,
+.spider-app--battle #native-filters button {
+  min-height: 44px;
+  border: 2px solid #3c6f86;
+  border-radius: 0;
+  background: #0b2337;
+  box-shadow: 3px 3px 0 var(--app-ink);
+  color: var(--app-paper);
+  font: 700 11px/1.3 'Silkscreen', monospace;
+}
+.spider-app--battle .mode-switch button[aria-pressed='true'],
+.spider-app--battle #skill-filters button[aria-pressed='true'],
+.spider-app--battle #native-filters button[aria-pressed='true'] {
+  border-color: var(--app-cyan);
+  background: #1c4b61;
+  color: #fff;
+}
+.spider-app--battle .mode-switch a { color: var(--app-muted); }
+.spider-app--battle main { gap: 16px; margin-top: 16px; }
+.spider-app--battle .game,
+.spider-app--battle .panel { border: 3px solid var(--app-cyan); background: #0b2236; box-shadow: inset 0 0 0 2px var(--app-ink), 5px 5px 0 var(--app-ink); }
+.spider-app--battle .hud { border-bottom: 3px solid #327995; background: #112f47; }
+.spider-app--battle .hud small,
+.spider-app--battle .command-heading,
+.spider-app--battle .panel h2,
+.spider-app--battle #native-toolbar strong { color: var(--app-cyan); font-family: 'Silkscreen', monospace; }
+.spider-app--battle .hud strong { color: #fff; font-family: 'Silkscreen', monospace; }
+.spider-app--battle .turn-strip { border-block: 1px solid #a74446; background: #692d36; }
+.spider-app--battle .turn-strip > strong,
+.spider-app--battle #target-name { color: #fff; font-family: 'Silkscreen', monospace; }
+.spider-app--battle .arena { border-block: 2px solid var(--app-ink); }
+.spider-app--battle .command,
+.spider-app--battle #native-controls { background: #0b2034; }
+.spider-app--battle #skills button,
+.spider-app--battle #native-moves button {
+  border: 2px solid #3e7188;
+  border-radius: 0;
+  background: #12334b;
+  box-shadow: 3px 3px 0 var(--app-ink);
+  color: var(--app-paper);
+}
+.spider-app--battle #skills button:hover:not(:disabled),
+.spider-app--battle #native-moves button:hover { border-color: var(--app-cyan); background: #1b4b61; }
+.spider-app--battle #skills button[aria-pressed='true'],
+.spider-app--battle #native-moves button[aria-pressed='true'] { border-color: var(--app-amber); background: #33465a; }
+.spider-app--battle #skills button strong,
+.spider-app--battle #native-moves button strong { font: 700 12px/1.35 'Silkscreen', monospace; }
+.spider-app--battle .skill-info,
+.spider-app--battle .native-detail,
+.spider-app--battle .source-preview,
+.spider-app--battle #defense-lab { border: 2px solid #356e86; background: #081b2c; }
+.spider-app--battle .skill-info strong,
+.spider-app--battle .native-detail strong,
+.spider-app--battle .panel .rules summary { color: var(--app-amber); }
+.spider-app--battle .panel .note,
+.spider-app--battle .native-limit { color: var(--app-muted); }
+.spider-app--battle .options select,
+.spider-app--battle .options button,
+.spider-app--battle .source-preview select,
+.spider-app--battle .source-preview button,
+.spider-app--battle .reaction-review select,
+.spider-app--battle .reaction-review button,
+.spider-app--battle .native-player button,
+.spider-app--battle #native-states button {
+  min-height: 44px;
+  border: 2px solid #447e98;
+  border-radius: 0;
+  background: #0c293e;
+  box-shadow: 2px 2px 0 var(--app-ink);
+  color: var(--app-paper);
+}
+.spider-app--battle select { color: var(--app-paper); }
+.spider-app--battle .panel p,
+.spider-app--battle .panel li,
+.spider-app--battle .skill-info p,
+.spider-app--battle .native-detail p { font-size: 12px; line-height: 1.6; }
+
+.spider-app--library > header { display: block; max-width: 1300px; }
+.spider-app--library > header p { margin: 6px 0 12px; color: var(--app-muted); font-size: 12px; }
+.spider-app--library main { max-width: 1300px; border-inline: 3px solid #356e86; background: #0b2034; box-shadow: 5px 5px 0 var(--app-ink); }
+.spider-app--library aside { border-color: #356e86; background: #102c45; }
+.spider-app--library #search,
+.spider-app--library select { border: 2px solid #447e98; border-radius: 0; background: #071a2b; color: var(--app-paper); }
+.spider-app--library #list button { min-height: 48px; border-radius: 0; font-family: 'Be Vietnam Pro', sans-serif; }
+.spider-app--library #list button[aria-pressed='true'] { border-left: 3px solid var(--app-amber); background: #1d4057; }
+.spider-app--library #list small,
+.spider-app--library #status,
+.spider-app--library .note { color: var(--app-muted); }
+.spider-app--library section h2 { color: var(--app-amber); font: 700 17px/1.5 'Silkscreen', monospace; }
+.spider-app--library canvas { border: 3px solid var(--app-cyan); border-radius: 0; box-shadow: 4px 4px 0 var(--app-ink); }
+.spider-app--library .controls button { min-height: 44px; border: 2px solid #447e98; border-radius: 0; background: #12334b; box-shadow: 2px 2px 0 var(--app-ink); }
+.spider-app--library .controls #play { border-color: #ef8176; background: var(--app-red); color: var(--app-ink); font-weight: 700; }
+.spider-app--library #frame { accent-color: var(--app-cyan); }
+
+@media (max-width: 800px) {
+  .spider-app .top,
+  .spider-app--library > header { padding: 12px 12px 12px 65px; min-height: 76px; }
+  .spider-app .top::before,
+  .spider-app--library > header::before { left: 11px; width: 42px; height: 42px; }
+  .spider-app .top h1,
+  .spider-app--library > header h1 { font-size: 13px; }
+  .spider-app--battle .mode-switch { padding-inline: 8px; }
+}
+@media (max-width: 600px) {
+  .spider-app { padding: 5px; box-shadow: inset 0 0 0 2px var(--app-cyan), inset 0 0 0 5px #143950; }
+  .spider-app .top { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .spider-app .top a,
+  .spider-app--library > header a { min-height: 40px; font-size: 10px; }
+  .spider-app--battle .mode-switch button,
+  .spider-app--battle .mode-switch a { flex: 1 1 auto; justify-content: center; font-size: 10px; }
+  .spider-app--battle main { padding-inline: 5px; }
+  .spider-app--library main { border-inline-width: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spider-app *, .spider-app *::before, .spider-app *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

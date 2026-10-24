@@ -1,0 +1,32 @@
+/* Shared, reset-free tokens for standalone Spider Life screens. */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
+
+@font-face {
+  font-family: 'Spider Vietnam';
+  src: url('../field-tools/assets/fonts/be-vietnam-pro-400.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Spider Vietnam';
+  src: url('../field-tools/assets/fonts/be-vietnam-pro-600.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+}
+
+:root {
+  --spider-ink: #050b12;
+  --spider-midnight: #071426;
+  --spider-panel: #102c45;
+  --spider-cyan: #54b6d0;
+  --spider-red: #f0645c;
+  --spider-amber: #f2c06b;
+  --spider-green: #83b96b;
+  --spider-paper: #d9e0df;
+  --spider-muted: #a7c0c9;
+  --spider-body-font: 'Spider Vietnam', 'Be Vietnam Pro', sans-serif;
+  --spider-label-font: 'Silkscreen', monospace;
+  --spider-display-font: 'Press Start 2P', 'Silkscreen', monospace;
+}

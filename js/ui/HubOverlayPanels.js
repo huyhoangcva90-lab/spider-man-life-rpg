@@ -60,6 +60,9 @@ export class HubOverlayPanels {
         <a class="life-os-app life-os-app--red" href="./battle-lab/">
           <span class="life-os-app-icon">⚔</span><span><strong>ĐẤU THỬ THEO LƯỢT</strong><small>Trang thử riêng · chọn chiêu và đối thủ · chưa nối Notion</small></span><b>→</b>
         </a>
+        <a class="life-os-app life-os-app--cyan" href="./battle-lab/clip-library.html">
+          <span class="life-os-app-icon">▶</span><span><strong>HOẠT ẢNH SPIDER-MAN</strong><small>Xem 47 hoạt ảnh gốc, chọn động tác và điều chỉnh tốc độ</small></span><b>→</b>
+        </a>
         ${apps.map(([id, title, copy, icon, tone]) => `
           <button class="life-os-app life-os-app--${tone}" data-game-menu-target="${id}">
             <span class="life-os-app-icon">${icon}</span>

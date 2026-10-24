@@ -39,7 +39,7 @@
   if(typeof notionFetch==='function') window.notionFetch=request;
 
   var dialog=document.createElement('dialog');
-  dialog.style.cssText='max-width:420px;width:calc(100% - 32px);padding:24px;border:1px solid #397c9b;border-radius:12px;background:#101c24;color:#edf4f5;font:14px/1.6 system-ui;';
+  dialog.style.cssText='max-width:420px;width:calc(100% - 32px);padding:24px;border:2px solid #54b6d0;border-radius:0;background:#102c45;color:#d9e0df;font:14px/1.6 system-ui;';
   dialog.innerHTML='<form><h2 style="margin-top:0">Kết nối Notion</h2><p data-state></p><label>Mã truy cập Spider<input name="accessCode" type="password" autocomplete="current-password" required style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0"></label><button type="submit" style="min-height:44px;padding:8px 16px">Kết nối</button><button type="button" data-close style="min-height:44px;padding:8px 16px;margin-left:8px">Đóng</button></form>';
   document.body.appendChild(dialog);
   document.getElementById('btn-notion-status')?.addEventListener('click',function(event){event.preventDefault();event.stopImmediatePropagation();check(true);},true);
@@ -55,7 +55,13 @@
       dialog.querySelector('[type="submit"]').hidden=!s.configured||connected;
       if(open)dialog.showModal();
       if(connected&&!open)refresh();
-    }catch(e){status('error');}finally{checking=false;}
+    }catch(e){
+      status('error');
+      dialog.querySelector('[data-state]').textContent='Không kiểm tra được kết nối từ máy chủ. Dữ liệu hiện có vẫn là bản lưu trên thiết bị.';
+      dialog.querySelector('label').hidden=true;
+      dialog.querySelector('[type="submit"]').hidden=true;
+      if(open&&!dialog.open)dialog.showModal();
+    }finally{checking=false;}
   }
   dialog.querySelector('form').onsubmit=async function(event){
     event.preventDefault();var form=event.currentTarget,button=form.querySelector('[type="submit"]');button.disabled=true;

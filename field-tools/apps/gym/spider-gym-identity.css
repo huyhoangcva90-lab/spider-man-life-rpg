@@ -1,0 +1,28 @@
+@import url('../../../css/spider-app-tokens.css');
+
+/* Original Gym dashboard, timetable, metrics, and workout flow remain visible. */
+:root {
+  --bg: #071426;
+  --panel: #0b2034;
+  --card: #102438;
+  --card2: #18354a;
+  --line: #31546b;
+  --text: #eef4f2;
+  --muted: #a9c2ca;
+  --blue: #54b6d0;
+  --blue2: #337c98;
+  --green: #83b96b;
+  --red: #f0645c;
+  --amber: #f2c06b;
+  --purple: #b28dd4;
+  --cyan: #54b6d0;
+}
+.hero-main::after {
+  background: radial-gradient(circle, rgba(240, 100, 92, .32), rgba(84, 182, 208, .14) 38%, transparent 68%);
+}
+.eyebrow { color: var(--spider-red); }
+.timetable-item.active-slot { border-color: var(--spider-red) !important; }
+:is(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid var(--spider-amber);
+  outline-offset: 3px;
+}

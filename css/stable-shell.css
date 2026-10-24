@@ -12,7 +12,7 @@ html:not([data-pk-embed]) body[data-game-section]:not([data-field-immersive="tru
 body[data-destination-open="true"] .game-primary-nav { display:none !important; }
 html:not([data-pk-embed]) body[data-destination-open="true"] .action-rpg-screen { bottom:0; }
 body[data-game-section] #game-panel-close { display:inline-flex !important; align-items:center; justify-content:center; }
-/* Gambit keeps its own UI and scroll area inside this same outer frame. */
+/* The Field directory keeps the outer frame; individual Gambit tools switch to a full screen surface. */
 html:not([data-pk-embed]) body[data-field-immersive="true"] #game-panel-backdrop { position:absolute !important; inset:max(var(--shell-clearance),34px) 0 0 !important; width:100% !important; height:auto !important; z-index:50 !important; }
 html:not([data-pk-embed]) body[data-field-immersive="true"] .game-panel { height:100% !important; }
 @media(max-width:800px) {
@@ -32,8 +32,8 @@ html:not([data-pk-embed]) body[data-field-standalone="true"] #game-panel-backdro
 html:not([data-pk-embed]) body[data-field-standalone="true"] .frame-top-bar { position:fixed!important; inset:0 0 auto!important; height:60px; width:100%; z-index:100; pointer-events:none; background:none; border:0; box-shadow:none; }
 body[data-field-standalone="true"] #btn-hub-menu { --menu-cell:44px; position:absolute; top:8px; left:8px; width:44px; height:45px; pointer-events:auto; }
 body[data-field-standalone="true"] #btn-field-mode { position:absolute; top:8px; right:8px; width:44px; height:44px; pointer-events:auto; }
-body[data-field-standalone="true"] .spider-field-toolbar { padding-inline:64px; }
-body[data-field-standalone="true"] .spider-field-app-return { display:none; }
+body[data-field-standalone="true"] :is(.frame-top-bar,#game-panel-close) { display:none!important; }
+body[data-field-standalone="true"] .spider-field-toolbar { padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right)); }
 body[data-field-standalone="true"] .tracker-corner-menu { position:fixed; top:64px; z-index:110; max-height:calc(100dvh - 80px); overflow:auto; }
 #btn-hub-menu { touch-action:manipulation; -webkit-touch-callout:none; user-select:none; }
 
@@ -55,3 +55,13 @@ body[data-game-section]:not([data-field-immersive="true"]):has(.habit-app-frame)
 body[data-game-section]:not([data-field-immersive="true"]):has(.habit-app-frame) .game-panel {
   grid-template-rows: minmax(0, 1fr) !important;
 }
+
+/* Habit uses the same clear full-screen app surface as selected Field tools. */
+.spider-personal-app { display:grid; grid-template-rows:58px minmax(0,1fr); width:100%; height:100%; min-height:0; background:#071426; }
+.spider-personal-toolbar { display:flex; align-items:center; gap:12px; padding:6px clamp(12px,2.2vw,28px); border-bottom:2px solid #54b6d0; background:linear-gradient(100deg,#842d38 0%,#17344b 30%,#0b1d2e 76%); }
+.spider-personal-toolbar h2 { display:flex; align-items:center; gap:12px; flex:1; min-width:0; margin:0; color:#eef3ef; font:700 clamp(16px,2vw,19px)/1.2 'Be Vietnam Pro',sans-serif; letter-spacing:.02em; }
+.spider-personal-toolbar h2::before { content:""; width:34px; height:34px; flex:none; background:url('../assets/spideytracker/tracker_logo3.png') calc(50% + 12px) center/auto 34px no-repeat; image-rendering:pixelated; }
+.spider-personal-toolbar button { display:grid; place-items:center; width:44px; height:44px; flex:none; border:1px solid #42677a; background:#10293d; color:#f0645c; font:700 24px/1 'Silkscreen',monospace; cursor:pointer; }
+.spider-personal-toolbar button:hover { background:#1a4055; border-color:#78c4d6; }
+.spider-personal-toolbar button:focus-visible { outline:3px solid #f2c06b; outline-offset:2px; }
+.spider-personal-app .habit-app-frame { min-height:0; }

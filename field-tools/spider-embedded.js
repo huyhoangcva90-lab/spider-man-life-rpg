@@ -25,6 +25,15 @@
   navigationStyle.textContent='html[data-gambit-back-mode="managed"] :is([data-gambit-home],a.hub-back,a.back-home,a[href="../../index.html"]){display:none!important}';
   (document.head||document.documentElement).appendChild(navigationStyle);
 
+  // Keep the imported Timetable source intact; its host toolbar opens the
+  // original settings button through this embedding bridge.
+  window.addEventListener('message', function(event) {
+    if (event.origin !== location.origin || event.source !== window.parent) return;
+    if (event.data && event.data.type === 'spider:open-app-settings' && document.documentElement.dataset.gambitApp === 'timetable') {
+      document.getElementById('settBtn')?.click();
+    }
+  });
+
   function announceReady(){window.parent.postMessage({type:'spider:field-ready'},location.origin);}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',announceReady,{once:true});
   else announceReady();

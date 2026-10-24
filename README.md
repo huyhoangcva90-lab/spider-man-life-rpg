@@ -3,7 +3,7 @@
 Ứng dụng Life RPG kết hợp Habit, hành trình 66 ngày, Quest, Spider Apps và Battle. Notion là nguồn dữ liệu thật; dữ liệu mẫu và moveset tham khảo được giữ riêng.
 
 - Live: <https://spider.huykl.id.vn/>
-- Bản đấu thử theo lượt và moveset riêng: <https://spider.huykl.id.vn/battle-lab/> (chưa nối Notion).
+- Bản đấu thử theo lượt và moveset riêng: <https://spider.huykl.id.vn/battle-lab/> (chưa nối Notion). Thư viện 47 hoạt ảnh: `/battle-lab/clip-library.html`; có lối vào trực tiếp từ Battle và menu ứng dụng.
 - Repository: <https://github.com/huyhoangcva90-lab/spider-man-life-rpg>
 - Brand guide: [`docs/SPIDEY_LIFE_BRAND_GUIDE.md`](docs/SPIDEY_LIFE_BRAND_GUIDE.md)
 - Phạm vi từng chức năng, tránh xây trùng: [`docs/FEATURE_OWNERSHIP.md`](docs/FEATURE_OWNERSHIP.md)
