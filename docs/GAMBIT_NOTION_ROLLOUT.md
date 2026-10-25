@@ -24,7 +24,13 @@ Notion buttons are not executed via the REST API. Open the original record to ru
 Set `NOTION_API_KEY` (or `NOTION_TOKEN`) and `NOTION_PROXY_ACCESS_TOKEN` in Vercel,
 then redeploy. Never put either value in frontend code or Git.
 Use the private Spider access code in the app, not a Notion integration token.
-Owner session: HttpOnly, Secure, SameSite cookie, 12 hours, scoped to `/api`.
+Owner session: HttpOnly, Secure, SameSite cookie, up to one year to match Gambit, scoped to `/api`.
+The original Gambit session is still checked by its existing server. All Spider tools use
+this one session; an expired cookie from the old twelve-hour bridge needs one login
+with the existing Gambit password. Cookies on another hostname cannot be copied by Spider.
+Confirmed writes from embedded Gambit tools notify the hub. Hero performs a fresh read
+after saving a selection, and Habit/Quest check-ins trigger the same refresh. Database
+queries, failed writes and ordinary navigation do not trigger extra game reads.
 `GET /api/routine` requires that session and returns `private, no-store`; mutations rejected.
 Proxy/session handlers use native `.mjs` Vercel functions with clean URL rewrites.
 Local dev uses the same protected handlers, bound to loopback only.

@@ -10,7 +10,7 @@ export function setupOwnerConnection(onConnected) {
     try {
       const data = await readOwnerSession({ force });
       label.textContent = data.connected ? 'Kết nối riêng đã mở' : 'Mở kết nối Notion';
-      state.textContent = data.connected ? 'Các nguồn dữ liệu báo thời điểm đồng bộ riêng ở từng màn.' : data.configured ? 'Dùng mã truy cập Spider hoặc mật khẩu Field hiện có. Không nhập khóa API Notion.' : 'Kết nối chưa sẵn sàng. Dữ liệu hiện tại có thể là bản lưu.';
+      state.textContent = data.connected ? 'Đang dùng kết nối Notion chung với Hero và Spider Apps.' : data.configured ? 'Dùng mật khẩu Gambit hiện có một lần cho các mục trong Spider. Không cần khóa Notion mới.' : 'Kết nối chưa sẵn sàng. Dữ liệu hiện tại có thể là bản lưu.';
       form.hidden = !data.configured || data.connected;
       return !!data.connected;
     } catch { state.textContent = 'Chưa kiểm tra được kết nối. Thử lại khi có mạng.'; return false; }

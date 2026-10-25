@@ -1,8 +1,8 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
-import {fieldStatus,fieldRequest,fieldCookie} from '../server/field-backend.mjs';
+import {fieldStatus,fieldRequest,fieldCookie,fieldSession} from '../server/field-backend.mjs';
 
 const COOKIE_NAME = 'spidey_notion_session';
-const SESSION_SECONDS = 12 * 60 * 60;
+const SESSION_SECONDS = 365 * 24 * 60 * 60;
 
 function signature(timestamp, secret) {
   return createHmac('sha256', secret).update(`spidey-notion:${timestamp}`).digest('hex');
@@ -33,10 +33,15 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   const secret = process.env.NOTION_PROXY_ACCESS_TOKEN || '';
   const local=Boolean(secret && (process.env.NOTION_API_KEY || process.env.NOTION_TOKEN));
-  if (req.method === 'GET') return res.status(200).json({ ok: true, ...(local?{configured:true,connected:hasOwnerSession(req,secret),backend:'notion'}:{...await fieldStatus(req),backend:'field'}) });
+  if (req.method === 'GET') {
+    const state=local?{configured:true,connected:hasOwnerSession(req,secret),backend:'notion'}:{...await fieldStatus(req),backend:'field'};
+    // Migrate a still-valid short-lived cookie when any app checks its connection.
+    if(state.connected && !local)res.setHeader('Set-Cookie',fieldCookie(fieldSession(req)));
+    return res.status(200).json({ok:true,...state});
+  }
   if (!sameOrigin(req)) return res.status(403).json({ ok: false, error: 'Request must come from this site' });
   if (req.method === 'DELETE') {
-    res.setHeader('Set-Cookie', [`${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=0`,fieldCookie('',0)]);
+    res.setHeader('Set-Cookie', [`${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=0`,fieldCookie('',0),'gambit_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0']);
     return res.status(200).json({ ok: true });
   }
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });

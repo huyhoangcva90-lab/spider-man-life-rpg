@@ -2,9 +2,12 @@
 // Only server requests cross this boundary; integration keys never reach clients.
 export const FIELD_BACKEND='https://gambit-d9b.pages.dev';
 export const FIELD_COOKIE='spider_field_session';
+// Match the existing Gambit login instead of discarding it after twelve hours.
+export const FIELD_SESSION_SECONDS=365*24*60*60;
 export function fieldSession(req){
-  const item=String(req.headers.cookie||'').split(';').map(s=>s.trim()).find(s=>s.startsWith(FIELD_COOKIE+'='));
-  const value=item?.slice(FIELD_COOKIE.length+1)||'';
+  const cookies=String(req.headers.cookie||'').split(';').map(s=>s.trim());
+  const item=cookies.find(s=>s.startsWith(FIELD_COOKIE+'='))||cookies.find(s=>s.startsWith('gambit_session='));
+  const value=item?.slice(item.indexOf('=')+1)||'';
   return /^[A-Za-z0-9_.-]{20,4096}$/.test(value)?value:'';
 }
 export async function fieldRequest(path,{method='GET',body,session='',fetcher=fetch}={}){
@@ -21,5 +24,5 @@ export async function fieldStatus(req,fetcher=fetch){
     const data=await response.json();return {configured:true,connected:response.ok&&data.ok===true};
   }catch{return {configured:false,connected:false};}
 }
-export function fieldCookie(value,maxAge=43200){return `${FIELD_COOKIE}=${value}; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=${maxAge}`;}
+export function fieldCookie(value,maxAge=FIELD_SESSION_SECONDS){return `${FIELD_COOKIE}=${value}; HttpOnly; Secure; SameSite=Strict; Path=/api; Max-Age=${maxAge}`;}
 export function sameFieldOrigin(req){try{return new URL(req.headers.origin).host===req.headers.host;}catch{return false;}}

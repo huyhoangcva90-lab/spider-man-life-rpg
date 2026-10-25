@@ -17,6 +17,7 @@ export default async function handler(req, res) {
   const token = process.env.NOTION_API_KEY || process.env.NOTION_TOKEN || '';
   res.setHeader('Cache-Control', 'no-store');
   const remote=fieldSession(req);
+  const fresh=req.query?.fresh==='1'||new URL(req.url||'/api/game-state','https://spider.local').searchParams.get('fresh')==='1';
   try {
     if(!token&&(!remote||!(await fieldStatus(req)).connected)){
       const response=await fieldRequest('/api/spider-game');
@@ -29,7 +30,10 @@ export default async function handler(req, res) {
       const data=await readNotionGameState('field-session',{fetcher:(url,options)=>fieldRequest('/api/notion?path='+encodeURIComponent(new URL(url).pathname+new URL(url).search),{method:options.method,body:options.body,session:remote})});
       return res.status(200).json({ok:true,data});
     }
-    if (!cached || Date.now() - cached.at > 15000) {
+    // A write may finish while an older read is still running. A fresh request
+    // must start its read after that earlier request has completed.
+    if(fresh && pending)await pending;
+    if (fresh || !cached || Date.now() - cached.at > 15000) {
       if (!pending) pending = readNotionGameState(token).then((data) => { cached = { data, at: Date.now() }; }).finally(() => { pending = null; });
       await pending;
     }

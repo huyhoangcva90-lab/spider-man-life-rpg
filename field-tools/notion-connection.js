@@ -40,7 +40,7 @@
 
   var dialog=document.createElement('dialog');
   dialog.style.cssText='max-width:420px;width:calc(100% - 32px);padding:24px;border:2px solid #54b6d0;border-radius:0;background:#102c45;color:#d9e0df;font:14px/1.6 system-ui;';
-  dialog.innerHTML='<form><h2 style="margin-top:0">Kết nối Notion</h2><p data-state></p><label>Mã truy cập Spider<input name="accessCode" type="password" autocomplete="current-password" required style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0"></label><button type="submit" style="min-height:44px;padding:8px 16px">Kết nối</button><button type="button" data-close style="min-height:44px;padding:8px 16px;margin-left:8px">Đóng</button></form>';
+  dialog.innerHTML='<form><h2 style="margin-top:0">Kết nối dùng chung</h2><p data-state></p><label><span data-access-label>Mật khẩu Gambit hiện có</span><input name="accessCode" type="password" autocomplete="current-password" required style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0"></label><button type="submit" style="min-height:44px;padding:8px 16px">Kết nối</button><button type="button" data-close style="min-height:44px;padding:8px 16px;margin-left:8px">Đóng</button></form>';
   document.body.appendChild(dialog);
   document.getElementById('btn-notion-status')?.addEventListener('click',function(event){event.preventDefault();event.stopImmediatePropagation();check(true);},true);
   dialog.querySelector('[data-close]').onclick=function(){dialog.close();};
@@ -50,7 +50,8 @@
       var r=await fetch('/api/notion-session',{cache:'no-store'}),s=await r.json();
       connected=!!s.connected;
       status(connected?'connected':s.configured?'locked':'unconfigured');
-      dialog.querySelector('[data-state]').textContent=connected?'Đã mở kết nối riêng trên thiết bị này.':s.configured?(s.backend==='field'?'Dùng mật khẩu Gambit hiện tại để mở các dữ liệu đã chuyển vào Spider Field.':'Nhập mã truy cập Spider. Không nhập khóa tích hợp Notion.'):'Chưa mở được kết nối dữ liệu. Thử lại khi có mạng.';
+      dialog.querySelector('[data-state]').textContent=connected?'Đang dùng kết nối Notion cũ của bạn. Các mục dùng chung phiên đăng nhập đã lưu trên trình duyệt này.':s.configured?(s.backend==='field'?'Dùng mật khẩu Gambit hiện có một lần cho các mục trong Spider. Trình duyệt sẽ giữ đăng nhập theo phiên Gambit.':'Dùng mật khẩu truy cập Spider đã cấu hình. Các mục dùng chung phiên đăng nhập.'):'Chưa mở được kết nối dữ liệu. Thử lại khi có mạng.';
+      dialog.querySelector('[data-access-label]').textContent=s.backend==='field'?'Mật khẩu Gambit hiện có':'Mật khẩu truy cập Spider';
       dialog.querySelector('label').hidden=!s.configured||connected;
       dialog.querySelector('[type="submit"]').hidden=!s.configured||connected;
       if(open)dialog.showModal();

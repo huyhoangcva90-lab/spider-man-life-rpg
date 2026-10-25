@@ -1,6 +1,6 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
 import { vietnamDay } from '../core/GameDay.mjs';
-import { NotionGamePresenter } from './NotionGamePresenter.js?build=game-loadout-7';
+import { NotionGamePresenter } from './NotionGamePresenter.js?build=shared-notion-sync-1';
 import { personalAppRoute, personalFieldDestination } from './PersonalAppRoutes.mjs';
 
 export class ActionRpgController {
@@ -79,6 +79,8 @@ export class ActionRpgController {
     window.addEventListener('message', event => {
       const personalFrame = document.querySelector('.habit-app-frame[data-personal-app]');
       if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'SPIDEY_NOTION_CHECKIN') {
+        // Re-read real Hero values even if this record is not in the hub's cache.
+        if(this.notionPresenter){void this.notionPresenter.refresh({force:true});return;}
         const { kind, id } = event.data;
         const list = kind === 'habits' ? this.notionHabits : kind === 'activeQuests' ? this.notionActiveQuests : kind === 'masterCalendar' ? this.notionTasks : null;
         const record = list?.find(item => item.id === id);
@@ -105,6 +107,16 @@ export class ActionRpgController {
       }
       const frame = document.querySelector('[data-field-app-frame]');
       if (event.origin !== location.origin || event.source !== frame?.contentWindow) return;
+      if(event.data?.type==='spider:notion-changed'){
+        void this.notionPresenter?.refresh({force:true});
+        return;
+      }
+      if(event.data?.type==='spider:session-changed'){
+        void this.notionPresenter?.loadout.check();
+        void this.checkNotionSession();
+        void this.notionPresenter?.refresh({force:true});
+        return;
+      }
       if (event.data?.type === 'spider:gambit-open' && FIELD_APPS[event.data.id] && event.data.id !== 'launcher') this.openEmbeddedFieldApp(event.data.id);
       if (event.data?.type === 'spider:field-ready') document.querySelector('.spider-field-app-loading')?.setAttribute('hidden','');
       if (event.data?.type === 'spider:gambit-home') this.closeEmbeddedFieldApp();
@@ -189,10 +201,6 @@ export class ActionRpgController {
   }
 
   async checkNotionSession() {
-    if (['localhost', '127.0.0.1'].includes(location.hostname)) {
-      this.notionConnection = 'connected';
-      return this.syncLiveFromNotion(null, { quiet: true });
-    }
     try {
       const response = await fetch('/api/notion-session', { cache: 'no-store', credentials: 'same-origin' });
       if (!response.ok) throw new Error('Phiên Notion không khả dụng trên máy chủ này.');
@@ -228,7 +236,7 @@ export class ActionRpgController {
   notionAccessHtml() {
     if (this.notionConnection === 'connected') return '<div class="notion-access-actions"><button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue" type="button">↻ ĐỒNG BỘ NOTION</button><button id="btn-disconnect-notion" class="pixel-action-btn" type="button">NGẮT KẾT NỐI</button></div>';
     if (this.notionConnection === 'checking') return '<span class="notion-access-note">Đang kiểm tra kết nối riêng…</span>';
-    if (this.notionConnection === 'locked') return '<form id="notion-auth-form" class="notion-auth-form"><label for="notion-access-code">Mã kết nối riêng</label><input id="notion-access-code" name="accessCode" type="password" autocomplete="off" required minlength="8" placeholder="Nhập mã truy cập…"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">KẾT NỐI</button></form>';
+    if (this.notionConnection === 'locked') return '<form id="notion-auth-form" class="notion-auth-form"><label for="notion-access-code">Mật khẩu Gambit / Spider hiện có · dùng chung cho các mục</label><input id="notion-access-code" name="accessCode" type="password" autocomplete="current-password" required placeholder="Mật khẩu hiện có…"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">KẾT NỐI</button></form>';
     return '<div class="notion-access-actions"><span class="notion-access-note">Tiến độ lưu trên thiết bị này.</span><button id="btn-recheck-notion" class="pixel-action-btn pixel-action-btn--blue" type="button">KIỂM TRA NOTION</button></div>';
   }
 

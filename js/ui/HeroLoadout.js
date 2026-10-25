@@ -133,7 +133,7 @@ export class HeroLoadout {
       const current=await readHeroRelation(payload.data,property);
       const next=multi?(current.some(value=>sameId(value,id))?current.filter(value=>!sameId(value,id)):[...current,id]):[id];
       const r=await fetch(`/api/notion?path=${encodeURIComponent('/v1/pages/'+HERO_PAGE_ID)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({properties:{[property]:{relation:next.map(value=>({id:value}))}}})});const saved=await r.json();if(!r.ok)throw Error();
-      this.ownedProfile=publicGameRecord(saved.data,'profile');this.ownedProfileAt=Date.now();this.message='Đã lưu lựa chọn vào Hero Notion. Arena sẽ tự cập nhật.';void this.p.refresh();
+      this.ownedProfile=publicGameRecord(saved.data,'profile');this.ownedProfileAt=Date.now();this.message='Đã lưu lựa chọn vào Hero Notion. Đang đọc lại dữ liệu…';await this.p.refresh({force:true});this.message='Đã lưu lựa chọn vào Hero Notion.';
     }catch{this.message='Chưa lưu được vào Notion. Lựa chọn chưa thay đổi.';}finally{this.busy=false;this.redraw();}
   }
 }

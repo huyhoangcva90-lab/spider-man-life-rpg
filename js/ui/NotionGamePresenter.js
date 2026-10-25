@@ -1,7 +1,7 @@
 import {missionBrief,combatLogView} from '../game/GamePresentation.mjs';
 import {skillGroup} from '../game/SkillPresentation.mjs';
 import {heroVitals,newerGameSnapshot} from '../game/HeroVitals.mjs';
-import { HeroLoadout } from './HeroLoadout.js?v=game-loadout-7';
+import { HeroLoadout } from './HeroLoadout.js?v=shared-notion-sync-1';
 import { selectedGameView, linkedRecords, sameId, logFingerprint } from '../integrations/notion/NotionGameAuthority.mjs';
 import { notionSkillAnimation } from '../game/NotionSkillAnimation.js';
 
@@ -23,6 +23,7 @@ export class NotionGamePresenter {
     this.selectedEnemyId = null;
     this.detailSkillId = null;
     this.inFlight = null;
+    this.refreshAfterFlight = false;
     this.previewToken = 0;
     this.vitalsConfirmed=false;
     this.loadout = new HeroLoadout(this);
@@ -39,19 +40,24 @@ export class NotionGamePresenter {
     document.addEventListener('visibilitychange', () => { if (!document.hidden) void this.refresh(); });
   }
 
-  async refresh() {
+  async refresh({force=false}={}) {
+    if(force)this.refreshAfterFlight=true;
     if (this.inFlight) return this.inFlight;
     this.inFlight = (async () => {
-      try {
-        const response = await fetch('/api/game-state', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Notion refresh unavailable');
-        const payload = await response.json();
-        if (!payload.ok || !payload.data?.profile) throw new Error('Invalid game display');
-        this.apply(payload.data, 'live');
-      } catch {
-        this.mode = this.data ? 'snapshot' : 'unavailable';
-        this.renderBattle();
-      }
+      do {
+        const fresh=this.refreshAfterFlight;
+        this.refreshAfterFlight=false;
+        try {
+          const response = await fetch('/api/game-state'+(fresh?'?fresh=1':''), { cache: 'no-store' });
+          if (!response.ok) throw new Error('Notion refresh unavailable');
+          const payload = await response.json();
+          if (!payload.ok || !payload.data?.profile) throw new Error('Invalid game display');
+          this.apply(payload.data, 'live');
+        } catch {
+          this.mode = this.data ? 'snapshot' : 'unavailable';
+          this.renderBattle();
+        }
+      } while(this.refreshAfterFlight);
     })();
     try { await this.inFlight; } finally { this.inFlight = null; }
   }

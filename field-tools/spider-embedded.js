@@ -19,6 +19,29 @@
   // Set managed mode before app-guard runs
   document.documentElement.setAttribute('data-gambit-back-mode', 'managed');
 
+  // Notify the host only after the existing app has saved through its real API.
+  // Database queries also use POST, so they must never be treated as mutations.
+  var originalFetch=window.fetch.bind(window),changedTimer;
+  window.fetch=async function(input,options){
+    var response=await originalFetch(input,options);
+    try{
+      var url=new URL(typeof input==='string'||input instanceof URL?input:input.url,location.href);
+      var method=String(options?.method||input?.method||'GET').toUpperCase();
+      var notionPath=url.searchParams.get('path')||'';
+      var notionWrite=url.pathname==='/api/notion'&&(method==='PATCH'||method==='POST'&&notionPath==='/v1/pages');
+      var appWrite=/^\/api\/(cloud|finance|finance-v2|habit-check)$/.test(url.pathname)&&['POST','PUT','PATCH','DELETE'].includes(method);
+      var login=url.pathname==='/api/notion-session'&&method==='POST';
+      if(url.origin===location.origin&&response.ok&&(notionWrite||appWrite||login)){
+        void response.clone().json().then(function(payload){
+          if(payload.ok===false||payload.error)return;
+          clearTimeout(changedTimer);
+          changedTimer=setTimeout(function(){parent.postMessage({type:login?'spider:session-changed':'spider:notion-changed'},location.origin);},250);
+        }).catch(function(){});
+      }
+    }catch(_){}
+    return response;
+  };
+
   // The host owns app navigation. Suppress only legacy home controls,
   // including controls mounted later by React; app menus/settings stay intact.
   var navigationStyle=document.createElement('style');
