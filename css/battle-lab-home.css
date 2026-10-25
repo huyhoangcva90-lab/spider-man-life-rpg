@@ -1,0 +1,44 @@
+/* Battle Lab owns the main Battle screen while legacy nodes stay available to existing controllers. */
+html[data-notion-authority]:not([data-pk-embed]) .action-rpg-screen.battle-lab-home {
+  visibility: visible;
+}
+
+html:not([data-pk-embed]) .action-rpg-screen.battle-lab-home {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) !important;
+  gap: 0;
+  padding: 0 !important;
+  overflow: hidden;
+  border: 2px solid #397c9b;
+  background: #06111e;
+  box-shadow: inset 0 0 0 1px #071426;
+}
+
+html:not([data-pk-embed]) .battle-lab-home > :not(.battle-lab-home__frame) {
+  display: none !important;
+}
+
+html:not([data-pk-embed]) .battle-lab-home__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+  background: #06111e;
+}
+
+@media (max-width: 680px) {
+  html:not([data-pk-embed]) .action-rpg-screen.battle-lab-home {
+    border-width: 1px;
+  }
+}
+
+body[data-game-mode="MAP"] .action-rpg-screen.battle-lab-home,
+body[data-game-section] .action-rpg-screen.battle-lab-home {
+  display: none;
+}
+
+html[data-pk-embed] .battle-lab-home__frame {
+  display: none;
+}
