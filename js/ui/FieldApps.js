@@ -4,6 +4,7 @@ export const FIELD_APPS = Object.freeze({
   routine: { title: 'Nhịp sinh học', backend: false },
   dopamine: { title: 'Dopamine Menu', backend: true },
   timetable: { title: 'Spider Time', backend: true },
+  animations: { title: 'Hoạt ảnh Spider-Man', src: './battle-lab/clip-library.html' },
   gym: { title: 'Gym OS', backend: true },
   habits: { title: 'Thói quen', backend: true },
   journal: { title: 'Parker Journal' },
@@ -18,6 +19,7 @@ export const FIELD_APPS = Object.freeze({
 export function renderFieldApp(id) {
   const app = FIELD_APPS[id];
   if (!app) return '';
+  const src = app.src || `./field-tools/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
   return `<section class="spider-field-app" data-field-app="${id}" aria-label="${app.title}">
     <div role="toolbar" class="spider-field-toolbar" aria-label="Điều hướng ứng dụng">
     <h2 class="spider-field-app-title">${app.title}</h2>
@@ -26,13 +28,13 @@ export function renderFieldApp(id) {
     ${!app.launcher ? '<button type="button" class="spider-field-app-return" data-field-app-back aria-label="Trở về Spider Apps" title="Trở về Spider Apps"><span aria-hidden="true">←</span></button>' : ''}
     </div>
     <p class="spider-field-app-loading" role="status">Đang mở ${app.title}…</p>
-    <iframe class="spider-field-app-frame" title="${app.title} — Spider Field" src="./field-tools/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original" data-field-app-frame></iframe>
+    <iframe class="spider-field-app-frame" title="${app.title} — Spider Field" src="${src}" data-field-app-frame></iframe>
   </section>`;
 }
 
 export function bindFieldApps(controller, content) {
-  content.querySelectorAll('a[href^="./field-tools/apps/"]').forEach((link) => {
-    const id = link.getAttribute('href').split('/')[3];
+  content.querySelectorAll('a[href^="./field-tools/apps/"], a[data-field-app-id]').forEach((link) => {
+    const id = link.dataset.fieldAppId || link.getAttribute('href').split('/')[3];
     if (!FIELD_APPS[id]) return;
     link.addEventListener('click', (event) => {
       if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;

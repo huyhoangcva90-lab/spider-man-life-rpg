@@ -17,10 +17,6 @@
   <circle cx="260" cy="260" r="206" stroke="url(#crimson)" stroke-width="5"/>
   <circle cx="260" cy="260" r="201" stroke="#c5d8e4" stroke-width="1" opacity=".85"/>
   <circle cx="260" cy="260" r="232" stroke="#9ba9b4" stroke-width="1" opacity=".7"/>
-  <g fill="url(#crimson)" stroke="#101724" stroke-width="3">
-    <path id="armor" d="M215 27 260 20 305 27 298 39 222 39Z"/>
-    <use href="#armor" transform="rotate(90 260 260)"/><use href="#armor" transform="rotate(180 260 260)"/><use href="#armor" transform="rotate(270 260 260)"/>
-  </g>
   <g opacity=".75">
     <use href="#minute"/><use href="#minute" transform="rotate(30 260 260)"/><use href="#minute" transform="rotate(60 260 260)"/><use href="#minute" transform="rotate(90 260 260)"/>
     <use href="#minute" transform="rotate(120 260 260)"/><use href="#minute" transform="rotate(150 260 260)"/><use href="#minute" transform="rotate(180 260 260)"/><use href="#minute" transform="rotate(210 260 260)"/>

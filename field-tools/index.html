@@ -384,6 +384,19 @@
     .app-card:hover .app-icon {
       transform: scale(1.1);
     }
+    .app-card--animations .app-icon {
+      width: 58px;
+      height: 58px;
+      margin-bottom: 4px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 50% 80%, rgba(236, 67, 88, .25), rgba(8, 18, 32, .95));
+    }
+    .app-card--animations canvas {
+      display: block;
+      width: 54px;
+      height: 54px;
+      image-rendering: pixelated;
+    }
 
     /* Labels */
     .app-title {
@@ -562,7 +575,7 @@
       }
     }
   </style>
-<script src="./spider-embedded.js?v=field-navigation-3"></script><style>.field-vector-icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:-.125em}.app-icon .field-vector-icon{width:24px;height:24px}</style>
+<script src="./spider-embedded.js?v=field-navigation-4"></script><style>.field-vector-icon{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:-.125em}.app-icon .field-vector-icon{width:24px;height:24px}</style>
 <style>@media(max-width:380px){.apps-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.app-card{padding-inline:10px}.app-title{font-size:13px}.summary-strip{font-size:11px}}</style>
 <link rel="stylesheet" href="field-identity.css">
 </head>
@@ -612,7 +625,7 @@
 
     <!-- Filter Pills -->
     <div class="filter-pills" role="group" aria-label="Lọc danh mục">
-      <button class="filter-pill active" data-cat="all" aria-pressed="true">Tất cả (13)</button>
+      <button class="filter-pill active" data-cat="all" aria-pressed="true">Tất cả (14)</button>
       <button class="filter-pill" data-cat="life" aria-pressed="false">Lối sống & Habit</button>
       <button class="filter-pill" data-cat="work" aria-pressed="false">Tài chính & Việc</button>
       <button class="filter-pill" data-cat="learn" aria-pressed="false">Học tập & Giải trí</button>
@@ -633,6 +646,13 @@
         <div class="app-icon"><svg class="field-vector-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/field-icons.svg#clock"></use></svg></div>
         <span class="app-title">Lịch trong ngày</span>
         <span class="app-desc">Lịch tròn · kế hoạch theo giờ</span>
+      </a>
+
+      <a class="app-card app-card--animations theme-red" data-field-app-id="animations" data-cat="learn" data-keywords="spider man hoạt ảnh animation clip chuyển động" href="../battle-lab/clip-library.html">
+        <div class="app-badge"></div>
+        <div class="app-icon"><canvas id="spider-animation-preview" width="108" height="108" aria-hidden="true"></canvas></div>
+        <span class="app-title">Hoạt ảnh Spider-Man</span>
+        <span class="app-desc">47 động tác · Xem ngay</span>
       </a>
 
       <a class="app-card theme-teal" data-cat="life" data-keywords="dopamine menu shuffle hoạt động giải trí" href="apps/dopamine/index.html">
@@ -861,5 +881,5 @@
       downloadAnchor.remove();
     });
   </script>
-<script src="./notion-connection.js?v=gambit-native-1"></script><script type="module" src="./field-backup.js"></script></body>
+<script src="./notion-connection.js?v=gambit-native-1"></script><script type="module" src="./field-backup.js"></script><script type="module" src="./spider-animation-preview.js"></script></body>
 </html>

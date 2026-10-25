@@ -74,10 +74,10 @@
         return;
       }
 
-      var appLink = target.closest('a[href^="apps/"]');
+      var appLink = target.closest('a[href^="apps/"], a[data-field-app-id]');
       if (appLink && window.parent !== window) {
-        var appId = appLink.getAttribute('href').split('/')[1];
-        if (['routine','dopamine','timetable','gym','habits','journal','todo','finance','english','oracle','style30','someday'].indexOf(appId) !== -1) {
+        var appId = appLink.dataset.fieldAppId || appLink.getAttribute('href').split('/')[1];
+        if (['routine','dopamine','timetable','animations','gym','habits','journal','todo','finance','english','oracle','style30','someday'].indexOf(appId) !== -1) {
           event.preventDefault();
           event.stopPropagation();
           window.parent.postMessage({ type:'spider:gambit-open', id:appId }, location.origin);

@@ -5,6 +5,8 @@ SpideyTracker supplies the Spider-Man palette and the outer navigation. Imported
 ## Integration rules
 
 - Timetable uses the original Gambit 24-hour clock, central PLAY spin, activity zones, theme controls, and Google Calendar controls. Its entry page adds the Spider embed/style links and Field session adapter, initializes the original manual zones before Google loads, prevents older Calendar responses from replacing a newer date, and opens Google authorization outside the iframe. The 12-hour planner variant is no longer used. The dial uses the user's supplied red mask HUD image, cropped to a circle, with a transparent SVG bezel based on the supplied steel/red/navy watch image. Activity labels use short names on the dial; the full names remain in settings.
+- The dial uses custom suit glyphs for activities and three instrument markers on its hands. Hover highlights the activity, number, glyph, and full time range while retaining all 24 numerals.
+- The Field launcher previews the local Spider-Man idle sprite and opens the existing 47-clip library as its own embedded app. Sprite playback does not require Notion.
 - Dopamine Menu (Random), Routine, Habit, and Gym retain their Gambit app code with a Spider stylesheet link.
 - The Spider Life host provides a compact top bar with back, connection status, and Timetable settings where applicable. The original Timetable settings panel is opened through the shared embedding bridge in `field-tools/spider-embedded.js`.
 - The host omits duplicate home controls while an app is embedded. The app's own functional controls stay available.
