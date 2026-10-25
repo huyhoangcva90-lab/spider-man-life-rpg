@@ -169,7 +169,7 @@ body.dk .toast{box-shadow:0 8px 32px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3)}
 .routine-actions .routine-go{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 </style>
 <link rel="stylesheet" href="../../assets/gambit-app-polish.css">
-<link rel="stylesheet" href="spider-time-identity.css?v=spider-watch-2">
+<link rel="stylesheet" href="spider-time-identity.css?v=spider-watch-3">
 </head>
 <body>
 
@@ -243,9 +243,19 @@ body.dk .toast{box-shadow:0 8px 32px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3)}
   </div>
   <div class="cv-wrap">
     <div class="ripple" id="ripple"></div>
-    <canvas id="cv" width="520" height="520" aria-label="Đồng hồ 24 giờ"></canvas>
+    <canvas id="cv" width="520" height="520" tabindex="0" aria-label="Đồng hồ 24 giờ. Dùng phím mũi tên để chọn giờ, Enter để quay"></canvas>
     <div class="spin-hint">Bấm PLAY để quay</div>
   </div>
+  <div class="time-readout" id="timeReadout" aria-live="polite">
+    <div class="time-readout-icon"><canvas id="readoutIcon" width="44" height="44" aria-hidden="true"></canvas></div>
+    <div class="time-readout-copy">
+      <span id="readoutMode">HIỆN TẠI</span>
+      <strong id="readoutName">Đang tải lịch…</strong>
+      <small id="readoutTime">--:-- — --:--</small>
+    </div>
+    <span class="time-readout-pulse" aria-hidden="true"></span>
+  </div>
+  <p class="time-readout-help">Rê hoặc chạm vòng giờ để xem hoạt động · Nhấn PLAY để quay</p>
 </div>
 
 <div class="routine-gate" id="routineGate" role="dialog" aria-modal="true" aria-labelledby="routineTitle">
@@ -421,10 +431,30 @@ function getT(){
 }
 
 /* ── HOVER ZONE DETECT ── */
-let hoveredZone=null,hoveredHour=null;
+let hoveredZone=null,hoveredHour=null,selectedZone=null,selectedHour=null,readoutKey='';
 function zoneContainsHour(zone,hour){
   const comparable=zone.to>24&&hour<zone.from?hour+24:hour;
   return comparable>=zone.from&&comparable<zone.to;
+}
+
+function renderZoneReadout(){
+  const date=document.getElementById('calendarDate').value;
+  const today=!date||date===localDateValue();
+  const now=new Date();
+  const currentHour=now.getHours()+now.getMinutes()/60;
+  const zone=hoveredZone||selectedZone||(today?zones.find(item=>zoneContainsHour(item,currentHour)):zones[0])||null;
+  const mode=hoveredZone?'ĐANG QUÉT':selectedZone?'ĐÃ CHỌN':today?'HIỆN TẠI':'LỊCH NGÀY';
+  const key=zone?`${mode}:${zone.id}:${zone.name}:${zone.from}:${zone.to}:${zone.color}`:`${mode}:empty`;
+  if(key===readoutKey)return;
+  readoutKey=key;
+  const panel=document.getElementById('timeReadout');
+  panel.style.setProperty('--zone-color',zone?.color||'#56d7f4');
+  document.getElementById('readoutMode').textContent=mode;
+  document.getElementById('readoutName').textContent=zone?.name||'Chưa có hoạt động';
+  document.getElementById('readoutTime').textContent=zone?`${formatHour(zone.from)} — ${formatHour(zone.to)}`:'Chỉnh vùng giờ trong cài đặt';
+  const icon=document.getElementById('readoutIcon'),iconCtx=icon.getContext('2d');
+  iconCtx.clearRect(0,0,44,44);
+  drawSpiderZoneIcon(iconCtx,zone?.icon||zone?.name||'',22,22,32,zone?.color||'#56d7f4',true);
 }
 
 const ROUTINE_LINKS={
@@ -479,7 +509,7 @@ cv.addEventListener('mousemove',e=>{
   const dist=Math.sqrt(mx*mx+my*my);
   if(dist>R||dist<44){
     hoveredZone=null;hoveredHour=null;
-    document.querySelector('.spin-hint').textContent='Bấm PLAY để quay';
+    renderZoneReadout();
     cv.style.cursor=dist<=44?'pointer':'default';return;
   }
   cv.style.cursor='default';
@@ -487,18 +517,24 @@ cv.addEventListener('mousemove',e=>{
   const h=angle/360*24;
   hoveredZone=zones.find(z=>zoneContainsHour(z,h))||null;
   hoveredHour=Math.round(h)||24;
-  document.querySelector('.spin-hint').textContent=hoveredZone
-    ? `${hoveredZone.name} · ${String(hoveredZone.from).padStart(2,'0')}:00–${String(hoveredZone.to).padStart(2,'0')}:00`
-    : 'Bấm PLAY để quay';
+  renderZoneReadout();
 });
 cv.addEventListener('mouseleave',()=>{
   hoveredZone=null;hoveredHour=null;
-  document.querySelector('.spin-hint').textContent='Bấm PLAY để quay';
+  renderZoneReadout();
 });
 
 function drawZoneLabel(z,textCol,isHovered){
   const span=z.to-z.from;
   if(!z.name||span<=0)return;
+  if(spiderHud.complete&&spiderHud.naturalWidth>0){
+    const a=hAng((z.from+z.to)/2),r=R*.79;
+    ctx.save();
+    ctx.globalAlpha=isHovered?1:.74;
+    drawSpiderZoneIcon(ctx,z.icon||z.name,ppx(r,a),ppy(r,a),isHovered?26:21,z.color||textCol,isHovered);
+    ctx.restore();
+    return;
+  }
 
   const aMid=hAng((z.from+z.to)/2);
   const rBlock=spiderHud.complete&&spiderHud.naturalWidth>0?R*.73:R*.61;
@@ -625,19 +661,16 @@ function draw(){
   ctx.beginPath();ctx.arc(CX,CY,R+3,0,2*Math.PI);
   ctx.strokeStyle=ink;ctx.lineWidth=2;ctx.stroke();
 
+  const focusedZone=hoveredZone||selectedZone;
   // sector fills
   zones.forEach(z=>{
-    const isH=hoveredZone&&hoveredZone.id===z.id;
+    const isH=focusedZone&&focusedZone.id===z.id;
     ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,R,hAng(z.from),hAng(z.to));ctx.closePath();
     ctx.save();
-    ctx.globalAlpha=isH ? .29 : (dk ? .075 : .055);
+    ctx.globalAlpha=isH ? .085 : .025;
     ctx.fillStyle=z.color||ink;
     ctx.fill();
     ctx.restore();
-    if(isH){
-      ctx.strokeStyle=z.color||ink;
-      ctx.globalAlpha=.9;ctx.lineWidth=2;ctx.stroke();ctx.globalAlpha=1;
-    }
     ctx.beginPath();
     ctx.arc(CX,CY,R-4,hAng(z.from),hAng(z.to));
     ctx.strokeStyle=z.color||ink;
@@ -653,7 +686,7 @@ function draw(){
 
   // zone labels
   zones.forEach(z=>{
-    const isH=hoveredZone&&hoveredZone.id===z.id;
+    const isH=focusedZone&&focusedZone.id===z.id;
     drawZoneLabel(z,ink,isH);
   });
 
@@ -661,17 +694,17 @@ function draw(){
   for(let h=1;h<=24;h++){
     const a=hAng(h),mj=h%6===0;
     ctx.beginPath();ctx.moveTo(ppx(R+3,a),ppy(R+3,a));ctx.lineTo(ppx(R+3-(mj?20:8),a),ppy(R+3-(mj?20:8),a));
-    const selected=h===hoveredHour;
+    const selected=h===(hoveredHour??selectedHour);
     ctx.strokeStyle=selected?'#56d7f4':ink;ctx.lineWidth=selected?3:mj?2.5:1.2;ctx.globalAlpha=selected?1:mj?.9:.52;ctx.stroke();ctx.globalAlpha=1;
     ctx.fillStyle=selected?'#56d7f4':mj?'#ffffff':'#d6e2ec';
-    ctx.font=`${selected?800:600} ${selected?15:mj?14:12}px 'Space Grotesk',sans-serif`;
+    ctx.font=`${selected?800:700} ${selected?17:mj?16:13.5}px 'Space Grotesk',sans-serif`;
     ctx.textAlign='center';ctx.textBaseline='middle';
     if(selected){ctx.shadowColor='#56d7f4';ctx.shadowBlur=10;}
     ctx.fillText(h,ppx(RN,a),ppy(RN,a));
     ctx.shadowBlur=0;
   }
 
-  // ── HANDS + MINIONS ──
+  // ── HANDS + SUIT MARKERS ──
   const t=getT();
   const hrD=(spinning&&spinHand==='hr')?spinDeg:t.hr;
   const mnD=(spinning&&spinHand==='mn')?spinDeg:t.mn;
@@ -825,20 +858,61 @@ cv.addEventListener('click',e=>{
   const rc=cv.getBoundingClientRect();
   const mx=(e.clientX-rc.left)*W/rc.width-CX;
   const my=(e.clientY-rc.top)*W/rc.height-CY;
-  if(Math.sqrt(mx*mx+my*my)<=44){triggerRipple();startSpin();}
+  const distance=Math.hypot(mx,my);
+  if(distance<=44){triggerRipple();startSpin();return;}
+  if(distance>R)return;
+  const hour=((Math.atan2(my,mx)*180/Math.PI+90+360)%360)/360*24;
+  selectedZone=zones.find(zone=>zoneContainsHour(zone,hour))||null;
+  selectedHour=Math.round(hour)||24;
+  renderZoneReadout();
+});
+cv.addEventListener('keydown',event=>{
+  if(event.key==='Enter'||event.key===' '){
+    event.preventDefault();if(!spinning){triggerRipple();startSpin();}return;
+  }
+  if(event.key==='Escape'){
+    selectedZone=null;selectedHour=null;renderZoneReadout();return;
+  }
+  if(event.key!=='ArrowRight'&&event.key!=='ArrowLeft')return;
+  event.preventDefault();
+  const delta=event.key==='ArrowRight'?1:-1;
+  const hour=selectedHour??new Date().getHours();
+  selectedHour=(hour+delta+23)%24+1;
+  selectedZone=zones.find(zone=>zoneContainsHour(zone,selectedHour%24))||null;
+  renderZoneReadout();
 });
 
 function loop(timestamp){
   draw();
-  if(timestamp-lastRoutineCheck>15000){lastRoutineCheck=timestamp;checkBiologicalRoutine();}
+  if(timestamp-lastRoutineCheck>15000){lastRoutineCheck=timestamp;checkBiologicalRoutine();renderZoneReadout();}
   requestAnimationFrame(loop);
 }
 
-/* FIX: dùng githubusercontent thay vì github.com/raw để tránh bị chặn */
-const sS=new Audio('https://raw.githubusercontent.com/tranbinh02/STORAGE_BOX/main/spin.mp3');
-const cS=new Audio('https://raw.githubusercontent.com/tranbinh02/STORAGE_BOX/main/clap.mp3');
-sS.preload='auto';
-cS.preload='auto';
+let suitAudioContext=null;
+function playSuitCue(type){
+  try{
+    const settings=JSON.parse(localStorage.getItem('spidey-action-rpg-save-v2')||'{}').settings;
+    if(settings?.sfx===false||settings?.volume===0)return;
+    const AudioContextType=window.AudioContext||window.webkitAudioContext;
+    if(!AudioContextType)return;
+    suitAudioContext ||= new AudioContextType();
+    if(suitAudioContext.state==='suspended')void suitAudioContext.resume();
+    const now=suitAudioContext.currentTime;
+    const volume=Math.max(0,Math.min(1,Number(settings?.volume??.8)));
+    const tones=type==='start'?[[330,620,0,.2],[510,780,.13,.16]]:[[620,900,0,.11],[820,1100,.11,.2]];
+    tones.forEach(([from,to,delay,duration])=>{
+      const oscillator=suitAudioContext.createOscillator(),gain=suitAudioContext.createGain();
+      oscillator.type='sine';
+      oscillator.frequency.setValueAtTime(from,now+delay);
+      oscillator.frequency.exponentialRampToValueAtTime(to,now+delay+duration);
+      gain.gain.setValueAtTime(.0001,now+delay);
+      gain.gain.exponentialRampToValueAtTime(Math.max(.0001,.035*volume),now+delay+.025);
+      gain.gain.exponentialRampToValueAtTime(.0001,now+delay+duration);
+      oscillator.connect(gain).connect(suitAudioContext.destination);
+      oscillator.start(now+delay);oscillator.stop(now+delay+duration+.01);
+    });
+  }catch(_){}
+}
 
 function startSpin(){
   if(spinning)return;spinning=true;hideToast();
@@ -849,7 +923,7 @@ function startSpin(){
   const startDeg=spinHand==='hr'?t0val.hr:spinHand==='mn'?t0val.mn:t0val.sc;
   spinDeg=startDeg;
   const total=(10+Math.random()*8)*360,dur=7000,t0=performance.now();
-  try{sS.currentTime=0;sS.play();}catch(_){}
+  playSuitCue('start');
   function frame(ts){
     const p=Math.min((ts-t0)/dur,1);
     spinDeg=startDeg+(1-Math.pow(1-p,4))*total;
@@ -858,7 +932,7 @@ function startSpin(){
     spinning=false;
     const fh=Math.round(((spinDeg%360)+360)%360/15)%24||24;
     const zone=zones.find(z=>zoneContainsHour(z,fh===24?0:fh))||null;
-    try{sS.pause();cS.currentTime=0;cS.play();}catch(_){}
+    playSuitCue('complete');
     showToast(fh,zone);
     // Kim trở về giờ thực (không spinning nên dùng getT() tự nhiên)
   }
@@ -935,6 +1009,8 @@ function setCalendarStatus(message,type=''){
 
 function useActiveZones(){
   zones=document.getElementById('calendarSync').checked&&calendarLoaded?calendarZones:manualZones;
+  selectedZone=null;selectedHour=null;readoutKey='';
+  renderZoneReadout();
   buildPanel();
 }
 
@@ -954,15 +1030,15 @@ function eventHour(date,dayStart){
 function styleForEvent(event,calendar,index){
   const text=`${event.summary||''} ${calendar?.summaryOverride||calendar?.summary||''}`.toLowerCase();
   const styles=[
-    {terms:['sleep','ngủ','mộng'],color:'#7c3aed',icon:'xứ sở mộng mơ'},
-    {terms:['morning','sáng'],color:'#d97706',icon:'buổi sáng'},
-    {terms:['game'],color:'#2563eb',icon:'chơi game'},
-    {terms:['read','study','đọc','học','kiến thức','dữ liệu'],color:'#16a34a',icon:'đọc manga'},
-    {terms:['content','creative','sáng tạo','work','workshop'],color:'#be123c',icon:'workshop'},
-    {terms:['web','website'],color:'#0891b2',icon:'website'},
-    {terms:['lunch','ăn','trưa'],color:'#ca8a04',icon:'bữa ăn'},
-    {terms:['exercise','gym','sport','tập'],color:'#059669',icon:'tập luyện'},
-    {terms:['personal','life','daily','routine'],color:'#9333ea',icon:'routine'}
+    {terms:['sleep','ngủ','mộng'],color:'#788dff',icon:'xứ sở mộng mơ'},
+    {terms:['morning','sáng'],color:'#56d7f4',icon:'buổi sáng'},
+    {terms:['game'],color:'#f04b61',icon:'chơi game'},
+    {terms:['read','study','đọc','học','kiến thức','dữ liệu'],color:'#77cce8',icon:'đọc manga'},
+    {terms:['content','creative','sáng tạo','work','workshop'],color:'#ec6572',icon:'workshop'},
+    {terms:['web','website'],color:'#4b8fff',icon:'website'},
+    {terms:['lunch','ăn','trưa'],color:'#d2e7f3',icon:'bữa ăn'},
+    {terms:['exercise','gym','sport','tập'],color:'#f04b61',icon:'tập luyện'},
+    {terms:['personal','life','daily','routine'],color:'#a58eff',icon:'routine'}
   ];
   return styles.find(style=>style.terms.some(term=>text.includes(term)))||{
     color:ZCOLS[index%ZCOLS.length],icon:'calendar'
@@ -1118,6 +1194,7 @@ async function initGoogleCalendarControls(){
     saveCalendarConfig();
     updateDisplayedDate();
     if(googleConnected)loadGoogleCalendar();
+    else{selectedZone=null;selectedHour=null;readoutKey='';renderZoneReadout();}
   });
   document.getElementById('calendarSync').addEventListener('change',()=>{
     saveCalendarConfig();useActiveZones();
@@ -1153,13 +1230,13 @@ function buildPanel(){
           <select class="sf" data-id="${z.id}" data-f="to">${opts}</select>
         </div>
       </div>`;
-    d.querySelectorAll('.sf').forEach(s=>{s.value=z[s.dataset.f];s.addEventListener('change',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz)zz[e.target.dataset.f]=+e.target.value;buildPanel();});});
-    d.querySelector('input')?.addEventListener('input',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz){zz.name=e.target.value;d.querySelector('.zn').textContent=e.target.value||'—';}});
+    d.querySelectorAll('.sf').forEach(s=>{s.value=z[s.dataset.f];s.addEventListener('change',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz)zz[e.target.dataset.f]=+e.target.value;buildPanel();readoutKey='';renderZoneReadout();});});
+    d.querySelector('input')?.addEventListener('input',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz){zz.name=e.target.value;d.querySelector('.zn').textContent=e.target.value||'—';readoutKey='';renderZoneReadout();}});
     d.querySelector('.zdel')?.addEventListener('click',e=>{
       e.stopPropagation();
       const id=+e.currentTarget.dataset.id;
       d.style.transform='translateX(8px)';d.style.opacity='0';d.style.transition='all .25s';
-      setTimeout(()=>{manualZones=manualZones.filter(x=>x.id!==id);zones=manualZones;buildPanel();},220);
+      setTimeout(()=>{manualZones=manualZones.filter(x=>x.id!==id);useActiveZones();},220);
     });
     list.appendChild(d);
   });
@@ -1168,8 +1245,7 @@ document.getElementById('addBtn').addEventListener('click',()=>{
   document.getElementById('calendarSync').checked=false;
   saveCalendarConfig();
   manualZones.push({id:nid++,name:'hoạt động mới',from:0,to:2,color:ZCOLS[nid%ZCOLS.length]});
-  zones=manualZones;
-  buildPanel();
+  useActiveZones();
   setTimeout(()=>{const l=document.getElementById('zlist');l.lastChild?.scrollIntoView({behavior:'smooth'});},50);
 });
 

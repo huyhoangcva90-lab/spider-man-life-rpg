@@ -14,7 +14,7 @@ Spider Life là bộ công cụ hằng ngày của một Người Nhện: màn c
 
 ## Lộ trình theo thứ tự
 
-1. **Time và Field:** hoàn thành bộ icon Spider cho đồng hồ, phản hồi vùng giờ khi rê, preview hoạt ảnh Người Nhện tại Field và lối vào thư viện 47 clip. Xác nhận hoạt ảnh phát không cần Notion.
+1. **Time và Field:** bộ icon Spider, mặt nạ thông thoáng với bảng tín hiệu riêng, phản hồi vùng giờ khi rê/chạm/bàn phím, preview hoạt ảnh Người Nhện tại Field và lối vào thư viện 47 clip. Xác nhận hoạt ảnh phát không cần Notion.
 2. **Màn chính:** gom trạng thái nhiệm vụ hôm nay, năng lượng, kết nối và cảnh báo vào một HUD gọn. Khi có dữ liệu trống hoặc mất kết nối, báo đúng nguồn thay vì hiển thị số liệu mẫu như dữ liệu thật.
 3. **Luồng nhiệm vụ → hành động:** Habit/Quest được xác nhận từ nguồn thật mới kích hoạt Hero animation và kết quả Arena; click xem trước vẫn phát clip nhưng không đổi HP/XP. Xác định rõ animation nào ứng với hoàn thành, bỏ lỡ, cảnh báo và chiến thắng.
 4. **Đồng bộ từng app:** làm lại Routine, Dopamine Menu, Habit, Gym theo cùng vật liệu, icon, trạng thái và chuyển cảnh; giữ thao tác gốc của mỗi app và kiểm tra desktop/mobile sau từng app.
