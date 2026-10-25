@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../field-tools/apps/timetable/index.html', import.meta.url), 'utf8');
 
-test('clock scripts parse after planner changes', () => {
+test('Gambit 24-hour clock scripts parse with Spider integration', () => {
   for (const match of source.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)) new vm.Script(match[1]);
 });
 
@@ -19,7 +19,8 @@ test('switching dates keeps the latest Calendar response even when the old reque
     URLSearchParams, fetch: () => new Promise(resolve => requests.push(resolve)),
     googleConnected: true, googleCalendars: [{}], selectedCalendarIds: () => ['calendar'],
     setCalendarStatus() {}, useActiveZones() {},
-    googleEventsToZones: items => items, calendarZones: [], calendarLoaded: false
+    googleEventsToZones: items => items, balanceDayZones: items => items,
+    calendarZones: [], calendarLoaded: false
   });
   const start = source.indexOf('let calendarRequestVersion=0;');
   const end = source.indexOf('function connectGoogleCalendar()', start);

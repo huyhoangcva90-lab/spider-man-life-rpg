@@ -1,66 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520" fill="none" aria-hidden="true">
   <defs>
-    <linearGradient id="bezel" x1="86" y1="90" x2="437" y2="430" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#f0f4f8"/>
-      <stop offset=".18" stop-color="#202936"/>
-      <stop offset=".43" stop-color="#080b11"/>
-      <stop offset=".72" stop-color="#657383"/>
-      <stop offset="1" stop-color="#0a111b"/>
+    <linearGradient id="steel" x1="92" y1="72" x2="438" y2="443" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#eef4f7"/><stop offset=".1" stop-color="#667787"/><stop offset=".23" stop-color="#070c14"/><stop offset=".39" stop-color="#8998a5"/><stop offset=".52" stop-color="#141b27"/><stop offset=".67" stop-color="#e8eef3"/><stop offset=".82" stop-color="#263444"/><stop offset="1" stop-color="#bccbd5"/>
     </linearGradient>
-    <linearGradient id="red-rim" x1="110" y1="110" x2="408" y2="410" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#b60816"/>
-      <stop offset=".45" stop-color="#ff3646"/>
-      <stop offset="1" stop-color="#7d0715"/>
+    <linearGradient id="crimson" x1="90" y1="87" x2="437" y2="432" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#850914"/><stop offset=".24" stop-color="#ff3548"/><stop offset=".55" stop-color="#5a0510"/><stop offset=".82" stop-color="#e21b2d"/><stop offset="1" stop-color="#660a17"/>
     </linearGradient>
-    <path id="web-spoke" d="M260 176V62"/>
-    <path id="web-strand" d="M260 150Q283 159 315 164M260 127Q293 141 328 141M260 104Q303 121 341 118M260 81Q313 102 354 95"/>
-    <g id="tick-cluster" stroke-linecap="round">
-      <path d="M260 40v17" stroke-width="3"/>
-      <path d="M260 43v7" transform="rotate(6 260 260)" stroke-width="1.6"/>
-      <path d="M260 43v7" transform="rotate(12 260 260)" stroke-width="1.6"/>
-      <path d="M260 43v7" transform="rotate(18 260 260)" stroke-width="1.6"/>
-      <path d="M260 43v7" transform="rotate(24 260 260)" stroke-width="1.6"/>
+    <g id="hour"><path d="M254 48 257 64 263 64 266 48 263 42 257 42Z" fill="#edf5f8" stroke="#192434" stroke-width="2"/><path d="M260 67v7" stroke="#e9f4fb" stroke-width="1.3"/></g>
+    <g id="minute" stroke="#b9c8d1" stroke-width="1.1">
+      <path d="M260 40v9"/><path d="M260 40v9" transform="rotate(6 260 260)"/><path d="M260 40v9" transform="rotate(12 260 260)"/><path d="M260 40v9" transform="rotate(18 260 260)"/><path d="M260 40v9" transform="rotate(24 260 260)"/>
     </g>
   </defs>
-  <!-- The dial stays translucent so Gambit's live time, events and hand remain readable. -->
-  <circle cx="260" cy="260" r="200" fill="#040508" fill-opacity=".22"/>
-  <g stroke="#e91e32" stroke-width="1.65" opacity=".53">
-    <use href="#web-spoke"/><use href="#web-spoke" transform="rotate(30 260 260)"/>
-    <use href="#web-spoke" transform="rotate(60 260 260)"/><use href="#web-spoke" transform="rotate(90 260 260)"/>
-    <use href="#web-spoke" transform="rotate(120 260 260)"/><use href="#web-spoke" transform="rotate(150 260 260)"/>
-    <use href="#web-spoke" transform="rotate(180 260 260)"/><use href="#web-spoke" transform="rotate(210 260 260)"/>
-    <use href="#web-spoke" transform="rotate(240 260 260)"/><use href="#web-spoke" transform="rotate(270 260 260)"/>
-    <use href="#web-spoke" transform="rotate(300 260 260)"/><use href="#web-spoke" transform="rotate(330 260 260)"/>
+  <circle cx="260" cy="260" r="227" stroke="#03060a" stroke-width="12"/>
+  <circle cx="260" cy="260" r="224" stroke="url(#steel)" stroke-width="5"/>
+  <circle cx="260" cy="260" r="215" stroke="#07111f" stroke-width="15"/>
+  <circle cx="260" cy="260" r="206" stroke="url(#crimson)" stroke-width="5"/>
+  <circle cx="260" cy="260" r="201" stroke="#c5d8e4" stroke-width="1" opacity=".85"/>
+  <circle cx="260" cy="260" r="232" stroke="#9ba9b4" stroke-width="1" opacity=".7"/>
+  <g fill="url(#crimson)" stroke="#101724" stroke-width="3">
+    <path id="armor" d="M215 27 260 20 305 27 298 39 222 39Z"/>
+    <use href="#armor" transform="rotate(90 260 260)"/><use href="#armor" transform="rotate(180 260 260)"/><use href="#armor" transform="rotate(270 260 260)"/>
   </g>
-  <g stroke="#f52a3d" stroke-width="1.3" opacity=".48">
-    <use href="#web-strand"/><use href="#web-strand" transform="rotate(30 260 260)"/>
-    <use href="#web-strand" transform="rotate(60 260 260)"/><use href="#web-strand" transform="rotate(90 260 260)"/>
-    <use href="#web-strand" transform="rotate(120 260 260)"/><use href="#web-strand" transform="rotate(150 260 260)"/>
-    <use href="#web-strand" transform="rotate(180 260 260)"/><use href="#web-strand" transform="rotate(210 260 260)"/>
-    <use href="#web-strand" transform="rotate(240 260 260)"/><use href="#web-strand" transform="rotate(270 260 260)"/>
-    <use href="#web-strand" transform="rotate(300 260 260)"/><use href="#web-strand" transform="rotate(330 260 260)"/>
+  <g opacity=".75">
+    <use href="#minute"/><use href="#minute" transform="rotate(30 260 260)"/><use href="#minute" transform="rotate(60 260 260)"/><use href="#minute" transform="rotate(90 260 260)"/>
+    <use href="#minute" transform="rotate(120 260 260)"/><use href="#minute" transform="rotate(150 260 260)"/><use href="#minute" transform="rotate(180 260 260)"/><use href="#minute" transform="rotate(210 260 260)"/>
+    <use href="#minute" transform="rotate(240 260 260)"/><use href="#minute" transform="rotate(270 260 260)"/><use href="#minute" transform="rotate(300 260 260)"/><use href="#minute" transform="rotate(330 260 260)"/>
   </g>
-  <!-- The metal bezel and minute indices follow the watch reference. -->
-  <circle cx="260" cy="260" r="213" stroke="url(#bezel)" stroke-width="17"/>
-  <circle cx="260" cy="260" r="202" stroke="url(#red-rim)" stroke-width="5"/>
-  <circle cx="260" cy="260" r="223" stroke="#dfe8ef" stroke-width="1.5" opacity=".85"/>
-  <circle cx="260" cy="260" r="192" stroke="#f43a47" stroke-width="1" opacity=".72"/>
-  <g stroke="#f5f8fb" opacity=".89">
-    <use href="#tick-cluster"/><use href="#tick-cluster" transform="rotate(30 260 260)"/>
-    <use href="#tick-cluster" transform="rotate(60 260 260)"/><use href="#tick-cluster" transform="rotate(90 260 260)"/>
-    <use href="#tick-cluster" transform="rotate(120 260 260)"/><use href="#tick-cluster" transform="rotate(150 260 260)"/>
-    <use href="#tick-cluster" transform="rotate(180 260 260)"/><use href="#tick-cluster" transform="rotate(210 260 260)"/>
-    <use href="#tick-cluster" transform="rotate(240 260 260)"/><use href="#tick-cluster" transform="rotate(270 260 260)"/>
-    <use href="#tick-cluster" transform="rotate(300 260 260)"/><use href="#tick-cluster" transform="rotate(330 260 260)"/>
-  </g>
-  <circle cx="260" cy="260" r="80" stroke="#e82a3d" stroke-width="3" opacity=".8"/>
-  <!-- A compact crest sits above the live time. -->
-  <g transform="translate(260 200) scale(.72)" stroke-linecap="round" stroke-linejoin="round">
-    <g stroke="#e7edf2" stroke-width="2.6" opacity=".88">
-      <path d="M-5-7-19-20-36-15-47-25M-7-3-25-8-43-3-53-10M-7 2-25 3-40 13-51 9M-5 6-18 15-30 27-40 25"/>
-      <path d="M5-7 19-20 36-15 47-25M7-3 25-8 43-3 53-10M7 2 25 3 40 13 51 9M5 6 18 15 30 27 40 25"/>
-    </g>
-    <path d="M0-17c-6 0-10 5-10 11 0 4 3 7 6 9l-4 16L0 32l8-13L4 3c3-2 6-5 6-9 0-6-4-11-10-11Z" fill="#070a0f" stroke="#e7edf2" stroke-width="2.5"/>
-    <path d="M-3-2h6M0 4v17" stroke="#ef3346" stroke-width="2"/>
+  <g>
+    <use href="#hour"/><use href="#hour" transform="rotate(30 260 260)"/><use href="#hour" transform="rotate(60 260 260)"/><use href="#hour" transform="rotate(90 260 260)"/>
+    <use href="#hour" transform="rotate(120 260 260)"/><use href="#hour" transform="rotate(150 260 260)"/><use href="#hour" transform="rotate(180 260 260)"/><use href="#hour" transform="rotate(210 260 260)"/>
+    <use href="#hour" transform="rotate(240 260 260)"/><use href="#hour" transform="rotate(270 260 260)"/><use href="#hour" transform="rotate(300 260 260)"/><use href="#hour" transform="rotate(330 260 260)"/>
   </g>
 </svg>

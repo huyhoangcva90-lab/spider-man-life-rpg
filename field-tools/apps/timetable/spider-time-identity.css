@@ -1,28 +1,40 @@
 @import url('../../../css/spider-app-tokens.css');
 
 /* Keep the Gambit clock, controls, spacing, and theme switch intact. */
-:root,
+:root {
+  --bg: #e9f0f4;
+  --surface: #f8fafc;
+  --ink: #102033;
+  --ink2: #40576b;
+  --ink3: #607a8f;
+  --border: rgba(16, 52, 82, .16);
+  --border2: rgba(16, 52, 82, .32);
+  --inp: rgba(27, 80, 115, .07);
+  --lc: rgba(27, 80, 115, .055);
+  --play1: #d73742;
+  --play2: #f0645c;
+}
 body.dk {
-  --bg: #071426;
-  --surface: #102438;
+  --bg: #030508;
+  --surface: #0b121d;
   --ink: #eef4f2;
   --ink2: #b3c8cf;
   --ink3: #87a6b3;
-  --border: rgba(84, 182, 208, .17);
-  --border2: rgba(84, 182, 208, .32);
-  --inp: rgba(84, 182, 208, .08);
-  --lc: rgba(84, 182, 208, .055);
-  --play1: #54b6d0;
+  --border: rgba(209, 225, 235, .17);
+  --border2: rgba(209, 225, 235, .32);
+  --inp: rgba(209, 225, 235, .08);
+  --lc: rgba(209, 225, 235, .055);
+  --play1: #cf1b30;
   --play2: #f0645c;
 }
-.nav,
-body.dk .nav { background: rgba(7, 20, 38, .92); border-bottom-color: rgba(240, 100, 92, .55); }
+.nav { background: rgba(237, 244, 248, .94); border-bottom-color: rgba(171, 30, 46, .45); }
+body.dk .nav { background: rgba(3, 5, 8, .92); border-bottom-color: rgba(240, 100, 92, .55); }
 .nav-brand,
 .panel-head h3 { color: var(--spider-red); }
 .title p,
-.p-label { color: var(--spider-cyan); }
-.planner-period button[aria-pressed='true'] { background: #a84242; border-color: var(--spider-red); }
-.planner-spin { background: var(--spider-red); border-color: var(--spider-red); color: #071426; }
+.p-label { color: #a8c5d5; }
+.main { width: min(100%, 570px); }
+.cv-wrap { width: min(100%, 500px); filter: drop-shadow(0 22px 35px rgba(0, 0, 0, .38)); }
 .cv-wrap::after {
   content: '';
   position: absolute;
@@ -31,16 +43,11 @@ body.dk .nav { background: rgba(7, 20, 38, .92); border-bottom-color: rgba(240, 
   pointer-events: none;
 }
 .cv-wrap:hover #cv { filter: drop-shadow(0 0 16px rgba(240, 100, 92, .18)); }
-.planner-toolbar button,
-.planner-period button,
-.planner-event { border-radius: 4px; }
-.planner-event { border-left: 2px solid var(--event-color, var(--spider-cyan)); }
-.planner-spin { border-radius: 4px; font-weight: 800; }
 .nav-btn:focus-visible,
-.planner-toolbar button:focus-visible,
-.planner-period button:focus-visible,
-.planner-spin:focus-visible { outline-color: var(--spider-amber); }
+.theme-btn:focus-visible,
+.calendar-btn:focus-visible,
+.add-btn:focus-visible { outline: 2px solid var(--spider-amber); outline-offset: 2px; }
 
 /* The host supplies back/settings controls while embedded. */
 html[data-gambit-back-mode='managed'] .nav { display: none; }
-html[data-gambit-back-mode='managed'] body.planner-view .main { padding-top: 24px; }
+html[data-gambit-back-mode='managed'] .main { padding-top: 24px; }

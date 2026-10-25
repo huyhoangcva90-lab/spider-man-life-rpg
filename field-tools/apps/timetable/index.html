@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#07090e">
 <meta name="color-scheme" content="dark">
-<title>Notion King — Lịch trong ngày</title>
+<title>Notion King — Lịch 24 giờ</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon.png">
@@ -157,28 +157,6 @@ body.dk .toast{box-shadow:0 8px 32px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3)}
 /* ── SPIN INDICATOR ── */
 .spin-hint{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
 .cv-wrap:hover .spin-hint{opacity:1}
-.planner-toolbar,.planner-period{display:flex;align-items:center;justify-content:center;gap:8px;width:min(100%,360px);margin:0 auto 12px}
-.planner-toolbar button,.planner-period button,.planner-spin{min-height:38px;border:1px solid var(--border2);border-radius:10px;background:var(--surface);color:var(--ink);font:700 12px 'Space Grotesk',sans-serif;cursor:pointer}
-.planner-toolbar button:first-child,.planner-toolbar button:last-child{width:42px;font-size:25px;line-height:1}
-.planner-toolbar button:nth-child(2){flex:1}
-.planner-toolbar button:focus-visible,.planner-period button:focus-visible,.planner-spin:focus-visible{outline:2px solid #78b9fa;outline-offset:2px}
-.planner-period button{flex:1;font-size:11px;font-variant-numeric:tabular-nums}
-.planner-period button[aria-pressed="true"]{background:#276bb8;border-color:#4c9af0;color:#fff}
-.planner-events{width:min(100%,390px);display:grid;gap:7px;margin:18px auto 0;text-align:left}
-.planner-event{display:grid;grid-template-columns:6px minmax(0,1fr) auto;align-items:center;gap:11px;min-height:48px;padding:7px 11px;border:1px solid var(--border);border-radius:11px;background:var(--surface)}
-.planner-event-bar{align-self:stretch;border-radius:5px;background:var(--event-color)}
-.planner-event-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:700}
-.planner-event-time{color:var(--ink2);font-size:11px;font-variant-numeric:tabular-nums}
-.planner-empty{padding:18px;color:var(--ink2);font-size:12px;text-align:center;border:1px dashed var(--border2);border-radius:11px}
-.planner-spin{width:min(100%,390px);margin-top:12px;background:#e5ad44;color:#101d2b;border-color:#e5ad44}
-body.planner-view .main{justify-content:flex-start;padding-top:calc(max(20px,env(safe-area-inset-top)) + 56px)}
-body.planner-view .title{margin-bottom:16px}
-body.planner-view .title h1{font-size:clamp(25px,6vw,31px);letter-spacing:1px;text-transform:none}
-body.planner-view .cv-wrap{width:min(100%,360px)}
-body.planner-view .spin-hint,body.planner-view .ripple{display:none}
-body:not(.planner-view) :is(.planner-toolbar,.planner-period,.planner-events,.planner-spin){display:none}
-@media(max-width:400px){.planner-event{grid-template-columns:5px minmax(0,1fr);gap:8px}.planner-event-time{grid-column:2}.planner-events{margin-top:12px}}
-@media(prefers-reduced-motion:reduce){body.planner-view .cv-wrap,body.planner-view .title{animation:none}}
 .routine-gate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(8,10,9,.52);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .25s ease}
 .routine-gate.show{opacity:1;pointer-events:auto}
 .routine-prompt{width:min(360px,100%);background:var(--surface);border:1px solid var(--border2);padding:28px 24px;text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.24)}
@@ -191,7 +169,7 @@ body:not(.planner-view) :is(.planner-toolbar,.planner-period,.planner-events,.pl
 .routine-actions .routine-go{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 </style>
 <link rel="stylesheet" href="../../assets/gambit-app-polish.css">
-<link rel="stylesheet" href="spider-time-identity.css?v=original-layout-1">
+<link rel="stylesheet" href="spider-time-identity.css?v=spider-watch-2">
 </head>
 <body>
 
@@ -216,13 +194,6 @@ body:not(.planner-view) :is(.planner-toolbar,.planner-period,.planner-events,.pl
         <div class="theme-row">
           <button class="theme-btn on" id="tL"><i class="ti ti-sun"></i>Sáng</button>
           <button class="theme-btn" id="tD"><i class="ti ti-moon"></i>Tối</button>
-        </div>
-      </div>
-      <div>
-        <span class="p-label">Mặt đồng hồ</span>
-        <div class="theme-row">
-          <button class="theme-btn on" id="plannerMode" type="button">Lịch vòng</button>
-          <button class="theme-btn" id="classicMode" type="button">Bản cũ</button>
         </div>
       </div>
       <div class="div"></div>
@@ -267,25 +238,14 @@ body:not(.planner-view) :is(.planner-toolbar,.planner-period,.planner-events,.pl
 
 <div class="main">
   <div class="title">
-    <h1 id="clockTitle">Lịch trong ngày</h1>
+    <h1>Lịch 24 giờ</h1>
     <p id="displayedDate">Today's time table</p>
-  </div>
-  <div class="planner-toolbar" id="plannerToolbar" aria-label="Điều hướng lịch">
-    <button type="button" id="previousDay" aria-label="Ngày trước">‹</button>
-    <button type="button" id="todayDay">Hôm nay</button>
-    <button type="button" id="nextDay" aria-label="Ngày sau">›</button>
-  </div>
-  <div class="planner-period" id="plannerPeriod" role="group" aria-label="Nửa ngày">
-    <button type="button" id="morningPeriod">00:00–12:00</button>
-    <button type="button" id="afternoonPeriod">12:00–24:00</button>
   </div>
   <div class="cv-wrap">
     <div class="ripple" id="ripple"></div>
-    <canvas id="cv" width="520" height="520" aria-label="Lịch vòng 12 giờ"></canvas>
+    <canvas id="cv" width="520" height="520" aria-label="Đồng hồ 24 giờ"></canvas>
     <div class="spin-hint">Bấm PLAY để quay</div>
   </div>
-  <div class="planner-events" id="plannerEvents" aria-live="polite"></div>
-  <button type="button" class="planner-spin" id="plannerSpin">Quay giờ ngẫu nhiên</button>
 </div>
 
 <div class="routine-gate" id="routineGate" role="dialog" aria-modal="true" aria-labelledby="routineTitle">
@@ -408,22 +368,16 @@ let manualZones=[
   {id:7,name:'workshop',from:19,to:22,color:'#be123c'},
   {id:8,name:'tự do',from:22,to:24,color:'#0891b2'},
 ];
-try{
-  const saved=JSON.parse(localStorage.getItem('notionKingManualZones')||'null');
-  if(Array.isArray(saved))manualZones=saved.filter(zone=>
-    zone&&Number.isFinite(zone.from)&&Number.isFinite(zone.to)&&
-    zone.from>=0&&zone.to<=24&&zone.to>zone.from&&typeof zone.name==='string'
-  );
-}catch(_){/* Keep the original routine if saved data is invalid. */}
-let zones=manualZones;
-let nid=Math.max(9,...manualZones.map(zone=>Number(zone.id)||0))+1,dk=false,spinning=false,spinDeg=0,spinHand='hr',nTimer=null;
-function saveManualZones(){localStorage.setItem('notionKingManualZones',JSON.stringify(manualZones));}
+let zones=[];
+let nid=9,dk=false,spinning=false,spinDeg=0,spinHand='hr',nTimer=null;
 let routineGateTimer=null,routineGateTick=null,lastRoutineCheck=0;
 const GCAL_CONFIG_KEY='notionKingGoogleCalendar';
 let googleConnected=false,googleCalendars=[],calendarZones=[],calendarLoaded=false;
 
 const cv=document.getElementById('cv');
 const ctx=cv.getContext('2d');
+const spiderHud=new Image();
+spiderHud.src='spider-mask-hud-reference.png';
 const r2d=d=>d*Math.PI/180;
 const hAng=h=>r2d(h/24*360-90);
 const ppx=(r,a)=>CX+r*Math.cos(a);
@@ -440,130 +394,6 @@ let hoveredZone=null;
 function zoneContainsHour(zone,hour){
   const comparable=zone.to>24&&hour<zone.from?hour+24:hour;
   return comparable>=zone.from&&comparable<zone.to;
-}
-
-let clockView=localStorage.getItem('notionKingClockView')==='classic'?'classic':'planner';
-let periodStart=new Date().getHours()<12?0:12;
-const plannerCanvas=document.getElementById('cv');
-
-function plannerSegments(){
-  const end=periodStart+12;
-  return zones.flatMap(zone=>[-24,0,24].map(offset=>({
-    zone,
-    from:Math.max(periodStart,zone.from+offset),
-    to:Math.min(end,zone.to+offset)
-  })).filter(segment=>segment.to>segment.from));
-}
-
-function plannerAngle(hour){return (hour-periodStart)/12*Math.PI*2-Math.PI/2;}
-
-function renderPlannerEvents(){
-  const list=document.getElementById('plannerEvents');
-  const items=plannerSegments().sort((a,b)=>a.from-b.from||a.to-b.to);
-  list.replaceChildren();
-  if(!items.length){
-    const empty=document.createElement('div');
-    empty.className='planner-empty';
-    empty.textContent='Chưa có lịch. Thêm vùng trong cài đặt hoặc kết nối Google Calendar.';
-    list.appendChild(empty);
-    return;
-  }
-  for(const item of items){
-    const row=document.createElement('div');
-    row.className='planner-event';
-    row.style.setProperty('--event-color',item.zone.color||'#5ba8df');
-    const bar=document.createElement('span');bar.className='planner-event-bar';
-    const name=document.createElement('span');name.className='planner-event-name';name.textContent=item.zone.name;
-    const time=document.createElement('span');time.className='planner-event-time';
-    time.textContent=`${formatHour(item.from)}–${formatHour(item.to)}`;
-    row.append(bar,name,time);
-    list.appendChild(row);
-  }
-}
-
-function setClockView(mode){
-  clockView=mode;
-  localStorage.setItem('notionKingClockView',mode);
-  document.body.classList.toggle('planner-view',mode==='planner');
-  document.getElementById('plannerMode').classList.toggle('on',mode==='planner');
-  document.getElementById('classicMode').classList.toggle('on',mode==='classic');
-  document.getElementById('clockTitle').textContent=mode==='planner'?'Lịch trong ngày':'Lịch 24 giờ';
-  plannerCanvas.setAttribute('aria-label',mode==='planner'?'Lịch vòng 12 giờ':'Đồng hồ 24 giờ');
-  renderPlannerEvents();
-}
-
-function setPeriod(start){
-  periodStart=start;
-  document.getElementById('morningPeriod').setAttribute('aria-pressed',String(start===0));
-  document.getElementById('afternoonPeriod').setAttribute('aria-pressed',String(start===12));
-  renderPlannerEvents();
-}
-
-function shiftPlannerDay(days){
-  const field=document.getElementById('calendarDate');
-  const date=new Date(`${field.value||localDateValue()}T12:00:00`);
-  date.setDate(date.getDate()+days);
-  field.value=localDateValue(date);
-  field.dispatchEvent(new Event('change',{bubbles:true}));
-}
-
-function drawPlanner(){
-  ctx.clearRect(0,0,W,W);
-  const dark=dk;
-  const outer=205,inner=78;
-  ctx.save();
-  ctx.beginPath();ctx.arc(CX,CY,outer+2,0,Math.PI*2);
-  ctx.fillStyle=dark?'#131d2b':'#f5f7fa';ctx.fill();
-  ctx.lineWidth=2;ctx.strokeStyle=dark?'#59697d':'#b9c6d4';ctx.stroke();
-  for(const segment of plannerSegments()){
-    const start=plannerAngle(segment.from),end=plannerAngle(segment.to);
-    const active=hoveredZone?.id===segment.zone.id;
-    ctx.beginPath();ctx.arc(CX,CY,outer-7,start,end);ctx.arc(CX,CY,inner,end,start,true);ctx.closePath();
-    ctx.fillStyle=segment.zone.color||'#4c9af0';ctx.globalAlpha=active?1:.82;ctx.fill();ctx.globalAlpha=1;
-    ctx.lineWidth=2;ctx.strokeStyle=dark?'#09121d':'#fff';ctx.stroke();
-    if(segment.to-segment.from>=1){
-      const mid=(start+end)/2;
-      const radius=inner+(outer-inner)*.55;
-      const text=segment.zone.name.trim();
-      ctx.save();ctx.translate(CX+Math.cos(mid)*radius,CY+Math.sin(mid)*radius);
-      ctx.fillStyle='#fff';ctx.font="700 12px 'Space Grotesk',sans-serif";
-      ctx.textAlign='center';ctx.textBaseline='middle';
-      ctx.shadowColor='rgba(0,0,0,.65)';ctx.shadowBlur=3;
-      const label=text.length>14?`${text.slice(0,13)}…`:text;
-      ctx.fillText(label,0,0,Math.max(35,(segment.to-segment.from)*29));
-      ctx.restore();
-    }
-  }
-  ctx.beginPath();ctx.arc(CX,CY,inner-1,0,Math.PI*2);
-  ctx.fillStyle=dark?'#0b1420':'#fff';ctx.fill();
-  ctx.lineWidth=2;ctx.strokeStyle=dark?'#657b91':'#cad3de';ctx.stroke();
-  for(let i=0;i<=12;i++){
-    const angle=plannerAngle(periodStart+i);
-    const x=CX+Math.cos(angle)*232,y=CY+Math.sin(angle)*232;
-    ctx.fillStyle='#d8e4f0';
-    ctx.font=`${i%3===0?700:500} ${i%3===0?17:12}px 'Space Grotesk',sans-serif`;
-    ctx.textAlign='center';ctx.textBaseline='middle';
-    if(i<12)ctx.fillText(String((periodStart+i)%12||12),x,y);
-  }
-  const selected=document.getElementById('calendarDate').value;
-  const now=new Date(),isToday=!selected||selected===localDateValue(now);
-  const currentHour=now.getHours()+now.getMinutes()/60;
-  if(isToday&&currentHour>=periodStart&&currentHour<periodStart+12){
-    const angle=plannerAngle(currentHour);
-    ctx.beginPath();ctx.moveTo(CX,CY);
-    ctx.lineTo(CX+Math.cos(angle)*(outer-4),CY+Math.sin(angle)*(outer-4));
-    ctx.strokeStyle='#ffdb6d';ctx.lineWidth=3;ctx.stroke();
-    ctx.beginPath();ctx.arc(CX+Math.cos(angle)*(outer-4),CY+Math.sin(angle)*(outer-4),5,0,Math.PI*2);
-    ctx.fillStyle='#ffdb6d';ctx.fill();
-  }
-  ctx.fillStyle=dark?'#f3f6fa':'#15283b';
-  ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.font="700 26px 'Space Grotesk',sans-serif";
-  ctx.fillText(isToday?now.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}):selected.slice(5),CX,CY-10);
-  ctx.font="700 10px 'Space Grotesk',sans-serif";
-  ctx.fillStyle=dark?'#9fb2c5':'#5d7187';
-  ctx.fillText(periodStart===0?'BUỔI SÁNG':'BUỔI CHIỀU',CX,CY+20);
-  ctx.restore();
 }
 
 const ROUTINE_LINKS={
@@ -616,14 +446,6 @@ cv.addEventListener('mousemove',e=>{
   const mx=(e.clientX-rc.left)*W/rc.width-CX;
   const my=(e.clientY-rc.top)*W/rc.height-CY;
   const dist=Math.sqrt(mx*mx+my*my);
-  if(clockView==='planner'){
-    if(dist>205||dist<78){hoveredZone=null;cv.style.cursor='default';return;}
-    const angle=(Math.atan2(my,mx)+Math.PI/2+Math.PI*2)%(Math.PI*2);
-    const hour=periodStart+angle/(Math.PI*2)*12;
-    hoveredZone=plannerSegments().find(segment=>hour>=segment.from&&hour<segment.to)?.zone||null;
-    cv.style.cursor=hoveredZone?'pointer':'default';
-    return;
-  }
   if(dist>R||dist<44){hoveredZone=null;cv.style.cursor=dist<=44?'pointer':'default';return;}
   cv.style.cursor='default';
   let angle=(Math.atan2(my,mx)*180/Math.PI+90+360)%360;
@@ -637,7 +459,7 @@ function drawZoneLabel(z,textCol,isHovered){
   if(!z.name||span<=0)return;
 
   const aMid=hAng((z.from+z.to)/2);
-  const rBlock=R*.61;
+  const rBlock=spiderHud.complete&&spiderHud.naturalWidth>0?R*.73:R*.61;
   const bx=CX+rBlock*Math.cos(aMid),by=CY+rBlock*Math.sin(aMid);
   const arcAngle=span/24*2*Math.PI;
   const tangent=Math.max(7,2*rBlock*Math.sin(Math.min(arcAngle/2,Math.PI/2))*.78);
@@ -646,7 +468,13 @@ function drawZoneLabel(z,textCol,isHovered){
   const rx=Math.abs(Math.cos(aMid)),ry=Math.abs(Math.sin(aMid));
   const maxW=Math.max(12,Math.min(142,tangent*tx+radial*rx));
   const maxH=Math.max(10,Math.min(88,tangent*ty+radial*ry));
-  const label=z.name.trim().toUpperCase();
+  const fullLabel=z.name.trim().toUpperCase();
+  const dialNames={
+    'BUỔI SÁNG':'SÁNG','BUỔI TRƯA':'TRƯA','BUỔI TỐI':'TỐI',
+    'XỨ SỞ MỘNG MƠ':'MỘNG MƠ','CHƠI GAME':'GAME',
+    'ĐỌC MANGA':'MANGA','TẬP LUYỆN':'TẬP','BỮA ĂN':'ĂN'
+  };
+  const label=spiderHud.complete&&spiderHud.naturalWidth>0?(dialNames[fullLabel]||fullLabel):fullLabel;
 
   function compactName(){
     const readable={
@@ -727,14 +555,28 @@ function drawZoneLabel(z,textCol,isHovered){
 
 function draw(){
   ctx.clearRect(0,0,W,W);
-  const ink=dk?'#f0efe8':'#0a0a0a';
+  const hasSpiderHud=spiderHud.complete&&spiderHud.naturalWidth>0;
+  const ink=hasSpiderHud?'#f0efe8':dk?'#f0efe8':'#0a0a0a';
   const face=dk?'#161616':'#ffffff';
 
-  ctx.save();
-  ctx.shadowColor=dk?'rgba(0,0,0,.5)':'rgba(0,0,0,.12)';
-  ctx.shadowBlur=32;ctx.shadowOffsetY=8;
-  ctx.beginPath();ctx.arc(CX,CY,R+3,0,2*Math.PI);ctx.fillStyle=face;ctx.fill();
-  ctx.restore();
+  if(hasSpiderHud){
+    ctx.save();
+    ctx.beginPath();ctx.arc(CX,CY,R+3,0,2*Math.PI);ctx.clip();
+    // Square crop keeps the supplied circular HUD round (source is 1099×1200).
+    const sourceSide=spiderHud.naturalWidth;
+    ctx.drawImage(spiderHud,0,(spiderHud.naturalHeight-sourceSide)/2,sourceSide,sourceSide,0,0,W,W);
+    ctx.restore();
+    ctx.save();
+    ctx.beginPath();ctx.arc(CX,CY,R-12,0,2*Math.PI);ctx.arc(CX,CY,91,0,2*Math.PI,true);
+    ctx.fillStyle='rgba(0,0,0,.35)';ctx.fill('evenodd');
+    ctx.restore();
+  }else{
+    ctx.save();
+    ctx.shadowColor=dk?'rgba(0,0,0,.5)':'rgba(0,0,0,.12)';
+    ctx.shadowBlur=32;ctx.shadowOffsetY=8;
+    ctx.beginPath();ctx.arc(CX,CY,R+3,0,2*Math.PI);ctx.fillStyle=face;ctx.fill();
+    ctx.restore();
+  }
 
   ctx.beginPath();ctx.arc(CX,CY,R+3,0,2*Math.PI);
   ctx.strokeStyle=ink;ctx.lineWidth=2;ctx.stroke();
@@ -864,8 +706,9 @@ function draw(){
   // ── NÚT PLAY / ĐỒNG HỒ CÁT ──
   ctx.save();
   const gr=ctx.createRadialGradient(CX,CY-5,1,CX,CY,42);
-  gr.addColorStop(0,'#ffe470');gr.addColorStop(1,'#f4a823');
-  ctx.shadowColor='rgba(244,168,35,.45)';ctx.shadowBlur=spinning?28:10;
+  gr.addColorStop(0,hasSpiderHud?'#f04454':'#ffe470');
+  gr.addColorStop(1,hasSpiderHud?'#8a081b':'#f4a823');
+  ctx.shadowColor=hasSpiderHud?'rgba(230,24,48,.55)':'rgba(244,168,35,.45)';ctx.shadowBlur=spinning?28:10;
   ctx.beginPath();ctx.arc(CX,CY,42,0,2*Math.PI);ctx.fillStyle=gr;ctx.fill();
   ctx.restore();
   ctx.strokeStyle=dk?'rgba(240,239,232,.5)':'rgba(0,0,0,.55)';ctx.lineWidth=1.5;
@@ -941,7 +784,7 @@ function draw(){
 
     ctx.restore();
   } else {
-    ctx.fillStyle='rgba(0,0,0,.75)';
+    ctx.fillStyle=hasSpiderHud?'#fff':'rgba(0,0,0,.75)';
     ctx.font=`700 12px 'Space Grotesk',sans-serif`;
     ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.fillText('PLAY',CX,CY);
@@ -962,21 +805,11 @@ cv.addEventListener('click',e=>{
   const rc=cv.getBoundingClientRect();
   const mx=(e.clientX-rc.left)*W/rc.width-CX;
   const my=(e.clientY-rc.top)*W/rc.height-CY;
-  if(clockView==='planner'){
-    const dist=Math.hypot(mx,my);
-    if(dist>=78&&dist<=205){
-      const angle=(Math.atan2(my,mx)+Math.PI/2+Math.PI*2)%(Math.PI*2);
-      const hour=periodStart+angle/(Math.PI*2)*12;
-      const zone=plannerSegments().find(segment=>hour>=segment.from&&hour<segment.to)?.zone||null;
-      if(zone)showToast(Math.floor(hour),zone);
-    }
-    return;
-  }
   if(Math.sqrt(mx*mx+my*my)<=44){triggerRipple();startSpin();}
 });
 
 function loop(timestamp){
-  if(clockView==='planner')drawPlanner();else draw();
+  draw();
   if(timestamp-lastRoutineCheck>15000){lastRoutineCheck=timestamp;checkBiologicalRoutine();}
   requestAnimationFrame(loop);
 }
@@ -1080,9 +913,8 @@ function setCalendarStatus(message,type=''){
 }
 
 function useActiveZones(){
-  zones=document.getElementById('calendarSync').checked?(calendarLoaded?calendarZones:[]):manualZones;
+  zones=document.getElementById('calendarSync').checked&&calendarLoaded?calendarZones:manualZones;
   buildPanel();
-  renderPlannerEvents();
 }
 
 function escapeHtml(value){
@@ -1230,12 +1062,12 @@ async function loadGoogleCalendar(){
     if(requestVersion!==calendarRequestVersion)return;
     const items=results.flatMap(result=>result.items);
     const eventZones=results.flatMap(result=>googleEventsToZones(result.items,dateValue,result.calendar));
-    calendarZones=eventZones.sort((a,b)=>a.from-b.from||a.to-b.to);
+    calendarZones=balanceDayZones(eventZones);
     calendarLoaded=true;
     const allDayCount=items.filter(event=>event.start?.date&&!event.start?.dateTime).length;
     useActiveZones();
     const extra=allDayCount?` · ${allDayCount} sự kiện cả ngày không đưa lên mặt đồng hồ`:'';
-    setCalendarStatus(`Đã tải ${eventZones.length} sự kiện theo đúng giờ bắt đầu và kết thúc${extra}.`,'ok');
+    setCalendarStatus(`Đã cân bằng ${eventZones.length} khung lịch · ngủ 22:00–06:00${extra}.`,'ok');
     document.getElementById('calendarConnect').querySelector('span').textContent='Đã kết nối';
   }catch(error){
     if(requestVersion!==calendarRequestVersion)return;
@@ -1250,21 +1082,20 @@ async function loadGoogleCalendar(){
 
 function connectGoogleCalendar(){
   saveCalendarConfig();
-  window.location.href='/api/google/start';
+  if(window.parent!==window)window.open('/api/google/start','_blank','noopener');
+  else window.location.href='/api/google/start';
 }
 
 async function initGoogleCalendarControls(){
   const config=readCalendarConfig();
   document.getElementById('calendarDate').value=config.date||localDateValue();
   document.getElementById('calendarSync').checked=config.sync!==false;
-  useActiveZones();
   updateDisplayedDate();
   document.getElementById('calendarConnect').addEventListener('click',connectGoogleCalendar);
   document.getElementById('calendarRefresh').addEventListener('click',loadGoogleCalendar);
   document.getElementById('calendarDate').addEventListener('change',()=>{
     saveCalendarConfig();
     updateDisplayedDate();
-    calendarZones=[];calendarLoaded=false;useActiveZones();
     if(googleConnected)loadGoogleCalendar();
   });
   document.getElementById('calendarSync').addEventListener('change',()=>{
@@ -1282,7 +1113,7 @@ async function initGoogleCalendarControls(){
 
 function buildPanel(){
   const list=document.getElementById('zlist');list.innerHTML='';
-  const opts=Array.from({length:97},(_,i)=>`<option value="${i/4}">${formatHour(i/4)}</option>`).join('');
+  const opts=Array.from({length:25},(_,i)=>`<option value="${i}">${String(i).padStart(2,'0')}:00</option>`).join('');
   zones.filter(z=>!z.hideInPanel).forEach(z=>{
     const d=document.createElement('div');d.className='zi';
     const locked=Boolean(z.source);
@@ -1301,45 +1132,28 @@ function buildPanel(){
           <select class="sf" data-id="${z.id}" data-f="to">${opts}</select>
         </div>
       </div>`;
-    d.querySelectorAll('.sf').forEach(s=>{s.value=z[s.dataset.f];s.addEventListener('change',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz){const field=e.target.dataset.f,next=+e.target.value;if(field==='from'?next>=zz.to:next<=zz.from){setCalendarStatus('Giờ kết thúc phải sau giờ bắt đầu.','err');e.target.value=zz[field];return;}zz[field]=next;saveManualZones();}buildPanel();});});
-    d.querySelector('input')?.addEventListener('input',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz){zz.name=e.target.value;d.querySelector('.zn').textContent=e.target.value||'—';saveManualZones();renderPlannerEvents();}});
+    d.querySelectorAll('.sf').forEach(s=>{s.value=z[s.dataset.f];s.addEventListener('change',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz)zz[e.target.dataset.f]=+e.target.value;buildPanel();});});
+    d.querySelector('input')?.addEventListener('input',e=>{const zz=manualZones.find(x=>x.id==e.target.dataset.id);if(zz){zz.name=e.target.value;d.querySelector('.zn').textContent=e.target.value||'—';}});
     d.querySelector('.zdel')?.addEventListener('click',e=>{
       e.stopPropagation();
       const id=+e.currentTarget.dataset.id;
       d.style.transform='translateX(8px)';d.style.opacity='0';d.style.transition='all .25s';
-      setTimeout(()=>{manualZones=manualZones.filter(x=>x.id!==id);saveManualZones();useActiveZones();},220);
+      setTimeout(()=>{manualZones=manualZones.filter(x=>x.id!==id);zones=manualZones;buildPanel();},220);
     });
     list.appendChild(d);
   });
-  renderPlannerEvents();
 }
 document.getElementById('addBtn').addEventListener('click',()=>{
   document.getElementById('calendarSync').checked=false;
   saveCalendarConfig();
   manualZones.push({id:nid++,name:'hoạt động mới',from:0,to:2,color:ZCOLS[nid%ZCOLS.length]});
   zones=manualZones;
-  saveManualZones();
   buildPanel();
   setTimeout(()=>{const l=document.getElementById('zlist');l.lastChild?.scrollIntoView({behavior:'smooth'});},50);
 });
 
-document.getElementById('plannerMode').addEventListener('click',()=>setClockView('planner'));
-document.getElementById('classicMode').addEventListener('click',()=>setClockView('classic'));
-document.getElementById('morningPeriod').addEventListener('click',()=>setPeriod(0));
-document.getElementById('afternoonPeriod').addEventListener('click',()=>setPeriod(12));
-document.getElementById('previousDay').addEventListener('click',()=>shiftPlannerDay(-1));
-document.getElementById('nextDay').addEventListener('click',()=>shiftPlannerDay(1));
-document.getElementById('todayDay').addEventListener('click',()=>{
-  const field=document.getElementById('calendarDate');
-  field.value=localDateValue();
-  field.dispatchEvent(new Event('change',{bubbles:true}));
-  setPeriod(new Date().getHours()<12?0:12);
-});
-document.getElementById('plannerSpin').addEventListener('click',()=>{setClockView('classic');triggerRipple();startSpin();});
 setTheme(localStorage.getItem('notionKingTheme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
-setPeriod(periodStart);
-setClockView(clockView);
-initGoogleCalendarControls();buildPanel();loop();
+initGoogleCalendarControls();useActiveZones();loop();
 
 }); // end DOMContentLoaded
 </script>
