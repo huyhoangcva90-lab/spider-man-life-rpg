@@ -2,8 +2,9 @@
 
 Trang độc lập được chuyển từ bản xem ở cổng 4190 lên `/battle-lab/`.
 
-- Mặc định mở đấu thử theo lượt; chọn mục tiêu rồi bấm chiêu.
-- `?mode=native` mở bảng moveset gốc, gồm các cảnh thử né và Spider-Senses.
+- Mặc định mở Battle Lab native với sân đấu và bảng lệnh 4 chiêu, 2 gadget, 1 ultimate; chọn mục tiêu rồi bấm lệnh để xem hoạt ảnh. Sau mỗi đòn, nhân vật trở về vị trí đứng chuẩn.
+- `?mode=native` mở cùng giao diện native; thư viện moveset đầy đủ, các cảnh thử né và Spider-Senses nằm trong mục mở rộng.
+- `?mode=trial` mở đấu thử theo lượt cũ.
 - `clip-library.html` xem thư viện 47 clip Spider.
 - Sprite, dữ liệu hoạt ảnh, thời gian frame, điểm đặt và hiệu ứng dùng dữ liệu đã trích từ game tham khảo của chủ dự án.
 - HP, Energy, damage, cooldown và luật lượt là luật thử của trang này. Chưa kết nối Notion hoặc thay thế Arena chính.
