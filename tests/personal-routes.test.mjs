@@ -29,7 +29,7 @@ test('Field Habit and To-do launch the canonical screens; unrelated tools are un
 test('old Quest and Habit pages render the same iframe instead of another tracker', () => {
   for (const section of ['HABITS', 'QUESTS']) {
     const html = ActionRpgController.prototype.renderSection.call({ panelSection: section, panelTab: 'GAMBIT' });
-    assert.match(html, /life-reset\/index.html/);
+    assert.match(html, /life-reset\/personal\/index.html/);
     assert.doesNotMatch(html, /field-tools\/apps/);
   }
   const overdue = ActionRpgController.prototype.renderSection.call({ panelSection: 'QUESTS', panelTab: 'OVERDUE' });

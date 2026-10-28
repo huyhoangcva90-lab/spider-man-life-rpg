@@ -358,6 +358,10 @@ class LifeResetApp {
   }
 
   switchTab(targetTab) {
+    if (['today','reports','quests'].includes(targetTab)) {
+      location.href = './personal/index.html?tab=' + encodeURIComponent(targetTab);
+      return;
+    }
     const dockBtns = document.querySelectorAll('.dock-item-btn');
     dockBtns.forEach(b => {
       const active = b.dataset.tab === targetTab;

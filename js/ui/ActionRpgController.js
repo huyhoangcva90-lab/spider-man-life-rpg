@@ -78,6 +78,9 @@ export class ActionRpgController {
     this.bus.on('OPEN_FIELD_APP',({id})=>this.openEmbeddedFieldApp(id));
     window.addEventListener('message', event => {
       const personalFrame = document.querySelector('.habit-app-frame[data-personal-app]');
+      if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'spider:gambit-open' && FIELD_APPS[event.data.id]) {
+        this.openEmbeddedFieldApp(event.data.id); return;
+      }
       if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'SPIDEY_NOTION_CHECKIN') {
         // Re-read real Hero values even if this record is not in the hub's cache.
         if(this.notionPresenter){void this.notionPresenter.refresh({force:true});return;}
@@ -787,7 +790,7 @@ export class ActionRpgController {
 
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
     const personalRoute = personalAppRoute(this.panelSection, this.panelTab);
-    const personalStandalone = personalRoute?.section === 'HABITS';
+    const personalStandalone = !!personalRoute;
     const requestedApp = this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
     if (FIELD_APPS[requestedApp] || personalStandalone) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
@@ -811,8 +814,8 @@ export class ActionRpgController {
       const query = new URLSearchParams({ tab: personal.view });
       if (personal.filter) query.set('filter', personal.filter);
       const key = `${personal.section}:${personal.view}:${personal.filter || ''}`;
-      const frame = `<iframe class="habit-app-frame" data-personal-app="${personal.section}" data-personal-route="${key}" src="./life-reset/index.html?${query}" title="${personal.section === 'QUESTS' ? 'Quest' : 'Habit'} của tôi" loading="lazy"></iframe>`;
-      return personal.section === 'HABITS' ? `<div class="spider-personal-app"><div class="spider-personal-toolbar" role="toolbar" aria-label="Điều hướng Habit"><h2>Habit của tôi</h2><button type="button" data-personal-back aria-label="Về Spider Life" title="Về Spider Life">←</button></div>${frame}</div>` : frame;
+      const frame = `<iframe class="habit-app-frame" data-personal-app="${personal.section}" data-personal-route="${key}" src="${personal.src}?${query}" title="${personal.section === 'QUESTS' ? 'Quest' : 'Habit'} của tôi" loading="lazy"></iframe>`;
+      return `<div class="spider-personal-app"><div class="spider-personal-toolbar" role="toolbar" aria-label="Điều hướng"><h2>${personal.section === 'QUESTS' ? 'Quest · Day' : 'Habit của tôi'}</h2><button type="button" data-personal-back aria-label="Về Spider Life" title="Về Spider Life">←</button></div>${frame}</div>`;
     }
     switch (this.panelSection) {
       case 'QUESTS': return this.renderQuestsSection();

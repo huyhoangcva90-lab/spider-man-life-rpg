@@ -1,0 +1,810 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+.sg-main {
+  padding: 0;
+}
+.sg-date-center input,
+.sg-date-center small {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+:root {
+  font-family: Roboto, Arial, sans-serif;
+  --accent: #54a9f1;
+  --surface: #fff;
+  --ink: #202020;
+  --muted: #8f8f8f;
+  --line: #ededed;
+  --soft: #edf6fe;
+  background: #fff;
+  color: var(--ink);
+}
+body,
+button,
+input,
+select,
+textarea,
+h1,
+h2,
+h3 {
+  font-family: Roboto, Arial, sans-serif;
+}
+h1,
+h2,
+h3 {
+  letter-spacing: 0;
+}
+button {
+  border-radius: 0;
+}
+.sg-toolbar {
+  height: 56px;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 13px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 6px #0002;
+}
+.sg-toolbar h1 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 auto 0 0;
+}
+.sg-toolbar button {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 40px;
+}
+.sg-toolbar svg {
+  width: 21px;
+  height: 21px;
+}
+.sg-main {
+  max-width: 1280px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: minmax(350px, 1fr) minmax(300px, 430px);
+  min-height: calc(100dvh - 56px);
+}
+.sg-dial-pane {
+  position: sticky;
+  top: 56px;
+  height: calc(100dvh - 56px);
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+  padding: 10px 16px 45px;
+  overflow: hidden;
+}
+.sg-caption {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.sg-caption small {
+  display: block;
+  font-size: 10px;
+  margin-top: 4px;
+}
+.round-button {
+  border-radius: 50%;
+  height: 43px;
+  width: 43px;
+  background: var(--accent);
+  color: white;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.round-button svg {
+  width: 24px;
+  height: 24px;
+}
+.sg-month-button {
+  position: absolute;
+  top: 14px;
+  right: 17px;
+}
+.sg-clock-wrap {
+  width: min(100%, 570px);
+  position: relative;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+}
+.sg-clock {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+.sg-clock text {
+  font-family: Roboto, sans-serif;
+}
+.sg-clock .tick {
+  stroke: #d4d4d4;
+  stroke-width: 1;
+}
+.sg-clock .tick.major {
+  stroke: #aaa;
+  stroke-width: 2;
+}
+.sg-clock .hour-label {
+  fill: #aaa;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-size: 17px;
+  font-weight: 300;
+}
+.sg-clock .sector {
+  cursor: pointer;
+  stroke: var(--surface);
+  stroke-width: 1;
+}
+.sg-clock .sector:focus {
+  outline: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+.sg-clock .sector-text {
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-size: 11px;
+  pointer-events: none;
+}
+.sg-clock .minute-hand {
+  stroke: #b7b7b7;
+  stroke-width: 1.2;
+  pointer-events: none;
+}
+.sg-clock .hour-hand {
+  stroke: #fa4a59;
+  stroke-width: 3;
+  cursor: grab;
+  touch-action: none;
+}
+.sg-clock .hand-hit {
+  stroke: transparent;
+  stroke-width: 25;
+  cursor: grab;
+  touch-action: none;
+}
+.sg-clock .free-label {
+  font-size: 9px;
+  fill: #b1b1b1;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.sg-clock .boundary {
+  stroke: #f4a8ad;
+  stroke-width: 2;
+  stroke-dasharray: 2 4;
+}
+.sg-scrub-left,
+.sg-scrub-right {
+  position: absolute;
+  top: 48%;
+  color: var(--accent);
+  padding: 6px;
+  z-index: 1;
+}
+.sg-scrub-left {
+  left: 0;
+}
+.sg-scrub-right {
+  right: 0;
+}
+.sg-dial-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: -12px;
+  padding: 0 8px;
+}
+.sg-range {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+.sg-hours {
+  height: 33px;
+  width: 33px;
+  border-radius: 50%;
+  background: #ddd;
+  color: #fff;
+  font-size: 14px;
+}
+.sg-reset {
+  height: 34px;
+  width: 34px;
+}
+.sg-reset svg {
+  width: 22px;
+}
+.sg-preview-label {
+  font-size: 10px;
+  color: var(--muted);
+}
+.sg-agenda-pane {
+  min-width: 0;
+}
+.sg-date-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  position: sticky;
+  top: 56px;
+  background: var(--surface);
+  z-index: 4;
+  border-bottom: 1px solid var(--line);
+}
+.sg-date-center {
+  margin: auto;
+  text-align: center;
+}
+.sg-date-center button {
+  display: block;
+  font-size: 18px;
+  font-weight: 400;
+  padding: 0;
+  color: var(--ink);
+}
+.sg-date-center small {
+  font-size: 12px;
+}
+.sg-date-center input {
+  max-width: 155px;
+  border: 0;
+  padding: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 16px;
+  text-align: center;
+}
+.sg-date-bar .round-button {
+  height: 43px;
+  width: 43px;
+}
+.sg-list {
+  padding: 0 12px 90px;
+}
+.sg-event {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 12px 5px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.sg-event .initial {
+  background: var(--color);
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  flex-shrink: 0;
+  position: relative;
+}
+.sg-event .initial::before {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  top: -3px;
+  left: -4px;
+  background: var(--color);
+}
+.sg-event .event-copy {
+  flex: 1;
+  text-align: left;
+  padding: 0;
+  min-width: 0;
+}
+.sg-event strong {
+  font-size: 13px;
+  font-weight: 400;
+  display: block;
+  overflow-wrap: anywhere;
+}
+.sg-event.past strong {
+  text-decoration: line-through;
+  color: #888;
+}
+.sg-event small {
+  font-size: 10px;
+  display: block;
+  margin-top: 4px;
+}
+.sg-event .event-more {
+  font-size: 22px;
+  color: #999;
+  padding: 0 3px;
+}
+.sg-event .duration-label {
+  font-size: 10px;
+  color: #aaa;
+  position: absolute;
+  right: 30px;
+  bottom: 11px;
+}
+.sg-fab {
+  position: fixed;
+  bottom: 22px;
+  right: max(22px, calc((100vw - 1280px) / 2 + 20px));
+  width: 54px;
+  height: 54px;
+  box-shadow: 0 3px 8px #0004;
+  z-index: 9;
+}
+.sg-day-grip {
+  width: 38px;
+  height: 3px;
+  background: #ddd;
+  border-radius: 4px;
+  display: none;
+  margin: 10px auto;
+}
+.sg-empty {
+  color: #aaa;
+  text-align: center;
+  padding: 50px 15px;
+  line-height: 1.7;
+  font-size: 13px;
+}
+.sg-info {
+  color: #aaa;
+  font-size: 10px;
+  line-height: 1.7;
+  padding: 18px;
+}
+.sg-editor {
+  position: fixed;
+  bottom: 0;
+  right: max(0px, calc((100vw - 1280px) / 2));
+  width: min(440px, 100vw);
+  max-height: calc(100dvh - 65px);
+  overflow: auto;
+  background: var(--surface);
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -4px 35px #0003;
+  z-index: 15;
+  padding: 12px 20px 22px;
+}
+.sg-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 15px;
+  gap: 10px;
+}
+.sg-editor-head button {
+  font-size: 13px;
+  padding: 9px 18px;
+  border-radius: 24px;
+  background: var(--soft);
+  color: var(--accent);
+}
+.sg-editor-head .editor-close {
+  padding: 8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: none;
+  color: var(--ink);
+}
+.sg-editor-name {
+  font-size: 28px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+  padding: 8px 0 16px;
+  color: var(--ink);
+  background: var(--surface);
+  font-weight: 400;
+  outline-offset: 0;
+}
+.sg-editor .editor-field {
+  display: flex;
+  gap: 15px;
+  padding: 15px 0;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.sg-editor .editor-field > span:first-child {
+  color: #888;
+  width: 23px;
+  flex-shrink: 0;
+  display: flex;
+}
+.sg-editor .editor-field input,
+.sg-editor .editor-field select,
+.sg-editor .editor-field textarea {
+  border: 0;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 6px;
+  min-width: 0;
+  font-size: 13px;
+}
+.sg-editor .editor-field label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font-size: 13px;
+}
+.sg-editor input[type="range"] {
+  accent-color: var(--accent);
+  width: 100%;
+}
+.sg-editor .date-time {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  gap: 5px;
+  justify-content: space-between;
+}
+.sg-editor input[type="date"] {
+  width: 135px;
+}
+.sg-editor input[type="time"] {
+  width: 90px;
+}
+.sg-editor input[type="checkbox"] {
+  accent-color: var(--accent);
+}
+.sg-editor .editor-error {
+  font-size: 12px;
+  color: #d95454;
+  line-height: 1.6;
+}
+.sg-editor .editor-note {
+  font-size: 10px;
+  color: #999;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+.sg-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  max-height: none;
+  height: 100dvh;
+  width: 285px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink);
+}
+.sg-drawer::backdrop {
+  background: #0006;
+}
+.sg-drawer-header {
+  background: var(--accent);
+  color: white;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 25px;
+  font-size: 22px;
+}
+.sg-drawer-header small {
+  color: white;
+  font-size: 12px;
+}
+.sg-drawer button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 17px 22px;
+  font-size: 14px;
+}
+.sg-drawer button svg {
+  color: #888;
+}
+.sg-drawer-footer {
+  padding: 25px;
+  margin-top: 30px;
+  color: #54a9f1;
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+}
+.sg-settings {
+  max-width: 780px;
+  margin: auto;
+  padding: 0 0 100px;
+}
+.sg-setting-title {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 500;
+  padding: 25px 20px 12px;
+  background: var(--soft);
+}
+.sg-setting {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+.sg-setting small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.6;
+  max-width: 480px;
+  margin-top: 6px;
+}
+.sg-setting input[type="checkbox"] {
+  width: 19px;
+  height: 19px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+.sg-setting input[type="range"] {
+  max-width: 120px;
+  accent-color: var(--accent);
+}
+.sg-setting select {
+  border: 0;
+  background: var(--surface);
+  color: var(--accent);
+  padding: 10px;
+  font-size: 13px;
+}
+.sg-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 18px;
+}
+.sg-actions .primary {
+  border-radius: 30px;
+  background: var(--accent);
+}
+.sg-actions .secondary {
+  border-radius: 30px;
+}
+.sg-month {
+  max-width: 980px;
+  margin: auto;
+  padding: 18px 15px;
+}
+.sg-month-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 25px;
+}
+.sg-month-header h2 {
+  font-size: 20px;
+  font-weight: 400;
+}
+.sg-month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+.sg-month-grid small {
+  text-align: center;
+  padding: 8px;
+  font-size: 11px;
+}
+.sg-day-cell {
+  border: 1px solid transparent;
+  padding: 4px;
+  position: relative;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+.sg-day-cell.selected {
+  border-color: var(--accent);
+  background: var(--soft);
+}
+.sg-day-cell svg {
+  width: 100%;
+  max-width: 88px;
+  aspect-ratio: 1;
+}
+.sg-day-cell .day-number {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--ink);
+  font-size: 12px;
+}
+.sg-timeline {
+  position: relative;
+  height: 1440px;
+  margin: 15px 20px 100px 55px;
+  border-left: 1px solid var(--line);
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--surface) 0,
+    var(--surface) 59px,
+    var(--line) 59px,
+    var(--line) 60px
+  );
+}
+.sg-time-label {
+  position: absolute;
+  left: -45px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.sg-time-event {
+  position: absolute;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 11px;
+  padding: 7px;
+  text-align: left;
+  border: 1px solid white;
+  overflow: hidden;
+  min-height: 15px;
+}
+.sg-dark {
+  --surface: #1c1e1f;
+  --ink: #e6e6e6;
+  --line: #343738;
+  --muted: #92999c;
+  --soft: #263b4d;
+  background: #1c1e1f;
+  color: var(--ink);
+}
+.sg-dark .sg-toolbar {
+  background: #1c1e1f;
+}
+.sg-dark .sg-clock .tick {
+  stroke: #595d60;
+}
+.sg-dark .sg-clock .hour-label {
+  fill: #999;
+}
+.sg-dark .sg-drawer-header {
+  background: #292d30;
+}
+.sg-dark .sg-hours {
+  background: #555;
+}
+.sg-dark dialog {
+  background: var(--surface);
+  color: var(--ink);
+}
+.sg-hour-options {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 10px;
+}
+.sg-hour-options button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #eee;
+}
+.sg-hour-options button.active {
+  background: var(--accent);
+  color: white;
+}
+@media (max-width: 760px) {
+  .sg-main {
+    display: block;
+  }
+  .sg-dial-pane {
+    position: relative;
+    top: 0;
+    height: auto;
+    min-height: 0;
+    border-right: 0;
+    padding: 45px 9px 14px;
+  }
+  .sg-clock-wrap {
+    max-width: 430px;
+    margin: 0 auto;
+  }
+  .sg-caption {
+    top: 12px;
+    left: 16px;
+    font-size: 14px;
+  }
+  .sg-month-button {
+    top: 11px;
+    right: 15px;
+    width: 43px;
+    height: 43px;
+  }
+  .sg-dial-controls {
+    margin-top: -11px;
+  }
+  .sg-date-bar {
+    top: 56px;
+    padding: 10px 17px;
+  }
+  .sg-date-center button {
+    font-size: 18px;
+  }
+  .sg-list {
+    padding: 0 11px 90px;
+  }
+  .sg-event {
+    padding: 13px 4px;
+  }
+  .sg-event strong {
+    font-size: 13px;
+  }
+  .sg-day-grip {
+    display: block;
+  }
+  .sg-clock .hour-label {
+    font-size: 18px;
+  }
+  .sg-toolbar {
+    gap: 14px;
+  }
+  .sg-toolbar h1 {
+    font-size: 17px;
+  }
+  .sg-editor {
+    width: 100%;
+    right: 0;
+    max-height: 70dvh;
+  }
+  .sg-month {
+    padding: 18px 8px;
+  }
+  .sg-month-grid {
+    gap: 2px;
+  }
+  .sg-day-cell {
+    padding: 2px;
+  }
+  .sg-day-cell .day-number {
+    font-size: 10px;
+  }
+  .sg-setting {
+    font-size: 13px;
+  }
+  .sg-setting small {
+    max-width: 250px;
+  }
+  .sg-preview-label {
+    font-size: 9px;
+  }
+  .sg-month-header h2 {
+    font-size: 18px;
+  }
+}
