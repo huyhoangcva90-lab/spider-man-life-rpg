@@ -79,3 +79,19 @@ body[data-mode=native] #native-notion{margin:0 0 12px;padding:0 12px;border:1px 
 body[data-mode=native] #native-notion summary{padding:7px 0;color:#b8dedf;font-weight:700}
 body[data-mode=native] #native-notion p{margin:6px 0;color:#c4dadd;font-size:11px}
 body[data-mode=native] #notion-skills{margin:8px 0 12px;padding-left:18px;color:#d4e8e8;font-size:11px;line-height:1.6}
+
+/* The command area stays close to the arena, as in a four-move battle screen. */
+body[data-mode=native] main{max-width:1100px;margin:8px auto}
+body[data-mode=native] .battle-console{min-height:190px}
+body[data-mode=native] .battle-prompt{padding:16px 21px;gap:8px}
+body[data-mode=native] .battle-loadout{padding:11px 13px 13px}
+body[data-mode=native] #native-actions{grid-template-rows:repeat(2,minmax(70px,1fr));gap:7px}
+body[data-mode=native] #native-actions button{min-height:70px}
+body[data-mode=native] #foe-plates .is-target strong{border-color:#ffde85;box-shadow:0 0 0 2px #152b39,0 0 12px #ffd77d8a}
+body[data-mode=native] #native-impact{position:absolute;z-index:4;top:35%;left:50%;transform:translateX(-50%);pointer-events:none;opacity:0;white-space:nowrap;color:#ffe392;font:900 clamp(19px,3vw,36px)/1 'Silkscreen',monospace;letter-spacing:.04em;text-shadow:3px 3px #5c2029,-2px -2px #102b38,0 0 13px #07131d}
+body[data-mode=native] #native-impact[data-tone=enemy]{color:#fff3ee;text-shadow:3px 3px #9d3043,-2px -2px #102b38,0 0 13px #07131d}
+body[data-mode=native] #native-notion-link{display:inline-flex;align-items:center;min-height:28px;padding:3px 7px;border:1px solid #427987;border-radius:4px;color:#aee4dc;font-size:10px;text-decoration:none}
+body[data-mode=native] #native-notion-link[hidden]{display:none}
+body[data-mode=native] #native-notion-link:hover,body[data-mode=native] #native-notion-link:focus-visible{color:#fff3ce;border-color:#e1c785}
+@media(max-width:850px){body[data-mode=native] .battle-console{min-height:0}body[data-mode=native] .battle-prompt{padding:11px 14px;gap:3px}body[data-mode=native] .battle-loadout{padding:10px}}
+@media(max-width:600px){body[data-mode=native] main{margin:5px auto}body[data-mode=native] #native-actions{grid-template-rows:repeat(4,minmax(60px,auto));gap:6px}body[data-mode=native] #native-actions button{min-height:60px}body[data-mode=native] #native-impact{top:30%;font-size:16px}}

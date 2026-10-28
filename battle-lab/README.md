@@ -9,6 +9,8 @@ Trang độc lập được chuyển từ bản xem ở cổng 4190 lên `/battl
 - Sprite, dữ liệu hoạt ảnh, thời gian frame, điểm đặt và hiệu ứng dùng dữ liệu đã trích từ game tham khảo của chủ dự án.
 - HP, Energy, damage, cooldown và luật lượt là luật thử của trang này. Trận thử không thay thế Arena chính.
 - Mục mở rộng đọc Hero và các Skill Slot hiện có qua `/api/game-state`; khi API không hoạt động, hiển thị bản lưu và ghi rõ nguồn. Phần đọc này không thay đổi chỉ số trận thử.
+- Mỗi nút trong bộ 4 chiêu, 2 gadget, 1 ultimate có liên kết tới bản ghi Combat Skills tương ứng trên Notion. Spider-Slide, Webbings và Web Shooters Battle Lab Ultimate được bổ sung ngày 28/10/2026.
+- Trang chủ nhúng `?mode=native&embed=1`; mọi lối vào Battle Lab chính cũng trỏ tới `?mode=native`.
 - Không ghi save Hero, Habit, Quest hay Finance của Spider Life.
 
 Chỉ các file chạy trên web và asset cần thiết được đưa vào đây; các công cụ trích xuất, thư viện Python và file game nhị phân vẫn ở thư mục làm việc gốc.
