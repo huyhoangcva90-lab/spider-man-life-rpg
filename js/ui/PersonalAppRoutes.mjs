@@ -1,11 +1,11 @@
-// Old links remain entry points into one Habit/Quest app, not separate trackers.
+// Old links remain entry points into the same Notion-backed Habit/Quest screens.
 export function personalAppRoute(section, tab = 'APP') {
   if (section === 'HABITS') {
-    const views = { APP: 'reports', GAMBIT: 'reports', TODAY: 'today', PROGRESS: 'reports', '66 DAYS': 'core-habits' };
-    return views[tab] ? { section, view: views[tab], src: tab === '66 DAYS' ? './life-reset/index.html' : './life-reset/personal/index.html' } : null;
+    const tabs = ['APP', 'GAMBIT', 'TODAY', 'PROGRESS', '66 DAYS'];
+    return tabs.includes(tab) ? { section, view: 'reports', src: './life-reset/personal/index.html' } : null;
   }
   if (section === 'QUESTS' && ['APP', 'GAMBIT', 'TODAY', 'OVERDUE'].includes(tab)) {
-    return { section, view: 'quests', src: './life-reset/personal/index.html', filter: tab === 'OVERDUE' ? 'overdue' : 'today' };
+    return { section, view: 'quests', src: './life-reset/personal/index.html', filter: tab === 'OVERDUE' ? 'overdue' : null };
   }
   return null;
 }

@@ -44,8 +44,8 @@ export class HubOverlayPanels {
 
   renderApps() {
     const apps = [
-      ['QUESTS:APP', 'QUEST', 'Việc từ Notion · hôm nay, quá hạn và đã xong', '✓', 'cyan'],
-      ['HABITS:APP', 'HABIT', 'Check Habit, báo cáo và hành trình 66 ngày', '▦', 'green'],
+      ['QUESTS:APP', 'QUEST', 'Active Quests từ Notion · đang làm và đã xong', '✓', 'cyan'],
+      ['HABITS:APP', 'HABIT', 'Habit và lịch sử check-in từ Notion', '▦', 'green'],
       ['FIELD:SYSTEMS', 'SPIDER APPS', 'Trung tâm Gym, Time, Journal và công cụ', '⌘', 'cyan'],
       ['FIELD:PLACES', 'PLACE MAP', 'Sổ địa chỉ, danh mục và chỉ đường', '⌖', 'green'],
       ['CITY', 'CITY MAP', 'Bản đồ nhiệm vụ và địa điểm', '⌖', 'cyan'],

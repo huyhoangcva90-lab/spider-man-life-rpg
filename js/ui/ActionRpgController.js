@@ -758,9 +758,9 @@ export class ActionRpgController {
     title.textContent = titles[this.panelSection] || 'SPIDEY LIFE';
 
     const tabMap = {
-      QUESTS: ['APP', 'TODAY', ...(this.notionPresenter ? ['MISSIONS'] : []), 'OVERDUE', 'MAIN', 'SIDE', 'DAILY', 'GOALS', 'ACTIVE'],
+      QUESTS: ['APP'],
       HERO: this.notionPresenter ? ['PROFILE', 'SUITS', 'SKILLS', 'MAPS', 'BADGES'] : ['PROFILE', 'SUITS', 'ROSTER', 'SKILLS', 'GADGETS', 'MAPS', 'BADGES'],
-      HABITS: ['APP', 'TODAY', 'PROGRESS', '66 DAYS'],
+      HABITS: ['APP'],
       FIELD: ['SYSTEMS', 'TIME', 'GYM', 'PLACES', 'JOURNAL', 'ENEMIES'],
       ARCHIVE: ['BESTIARY', 'BACKPACKS', 'BADGES'],
       CHRONICLE: ['RHYTHM', 'JOURNAL', 'GYM'],
@@ -946,13 +946,12 @@ export class ActionRpgController {
       { id: '04', icon: 'icon-arena', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', href: './field-tools/apps/gym/index.html', desc: 'Quản lý bài tập, giáo án và lịch sử luyện tập.' },
       { id: '05', icon: 'icon-bolt', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './field-tools/apps/dopamine/index.html', desc: 'Chọn hoạt động giúp nạp lại năng lượng và đổi tâm trạng.' },
       { id: '06', icon: 'icon-database', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GAMBIT APP', tone: 'green', href: './field-tools/apps/finance/index.html', desc: 'Theo dõi thu chi, ngân sách và kế hoạch tài chính.' },
-      { id: '07', icon: 'icon-missions', name: 'TODAY MISSIONS', meta: 'QUICK TASKS', source: 'NOTION', tone: 'red', href: './field-tools/apps/todo/index.html', desc: 'Sắp xếp và theo dõi những việc cần hoàn thành.' },
-      { id: '08', icon: 'icon-spider', name: 'LIFE RESET 66', meta: 'HABIT CAMPAIGN', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'TODAY', desc: 'Check-in thói quen để hồi HP, Energy và giữ streak.' },
+      { id: '07', icon: 'icon-missions', name: 'QUEST', meta: 'ACTIVE QUESTS', source: 'NOTION', tone: 'red', section: 'QUESTS', tab: 'APP', desc: 'Xem và hoàn thành Quest trong Notion.' },
+      { id: '08', icon: 'icon-spider', name: 'HABIT', meta: 'DAILY HABITS', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'APP', desc: 'Check-in thói quen từ Notion và xem lịch sử.' },
       { id: '09', icon: 'icon-book', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: './field-tools/apps/english/index.html', desc: 'Học ngữ pháp, ôn flashcard và tra cứu từ vựng.' },
       { id: '10', icon: 'icon-book', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', href: './field-tools/apps/journal/index.html', desc: 'Ghi chép suy nghĩ, trải nghiệm và bài học mỗi ngày.' },
       { id: '11', icon: 'icon-dice', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: './field-tools/apps/oracle/index.html', desc: 'Rút bài và dành thời gian tự chiêm nghiệm.' },
       { id: '12', icon: 'icon-mask', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: './field-tools/apps/style30/index.html', desc: 'Khám phá phối đồ và xây dựng phong cách cá nhân.' }
-      ,{ id: '13', icon: 'icon-missions', name: 'HABIT TRACKER', meta: 'DAILY HABITS', source: 'GAMBIT APP', tone: 'green', href: './field-tools/apps/habits/index.html', desc: 'Theo dõi thói quen, tiến độ và chuỗi ngày liên tiếp.' }
       ,{ id: '14', icon: 'icon-clock', name: 'AMBIENT FOCUS', meta: 'SOUNDSCAPES · POMODORO', source: 'GAMBIT APP', tone: 'blue', href: './field-tools/apps/someday/index.html', desc: 'Âm thanh thư giãn và Pomodoro cho buổi tập trung.' }
     ];
     return `

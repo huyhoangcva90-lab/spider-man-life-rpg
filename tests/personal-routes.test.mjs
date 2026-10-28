@@ -3,17 +3,31 @@ import assert from 'node:assert/strict';
 import { personalAppRoute, personalFieldDestination } from '../js/ui/PersonalAppRoutes.mjs';
 import { ActionRpgController } from '../js/ui/ActionRpgController.js';
 import { HubOverlayPanels } from '../js/ui/HubOverlayPanels.js';
+import { dayView } from '../life-reset/personal/reference-views.mjs';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
-test('Habit legacy links share one app and keep the requested view', () => {
-  for (const tab of ['APP', 'GAMBIT', 'PROGRESS']) assert.equal(personalAppRoute('HABITS', tab).view, 'reports');
-  assert.equal(personalAppRoute('HABITS', 'TODAY').view, 'today');
-  assert.equal(personalAppRoute('HABITS', '66 DAYS').view, 'core-habits');
+test('Habit legacy links share the one Notion-backed Habit screen', () => {
+  for (const tab of ['APP', 'GAMBIT', 'TODAY', 'PROGRESS', '66 DAYS']) {
+    assert.equal(personalAppRoute('HABITS', tab).view, 'reports');
+    assert.equal(personalAppRoute('HABITS', tab).src, './life-reset/personal/index.html');
+  }
   assert.equal(personalAppRoute('QUESTS', 'OVERDUE').filter, 'overdue');
+  assert.equal(personalAppRoute('QUESTS', 'APP').filter, null);
   assert.equal(personalAppRoute('QUESTS', 'MISSIONS'), null);
   assert.equal(personalAppRoute('QUESTS', 'GOALS'), null);
   assert.equal(personalAppRoute('HERO', 'PROFILE'), null);
+});
+
+test('Spider Quest cards use Active Quests from Notion, not Calendar tasks or a local 66-day counter', () => {
+  const view=dayView({
+    store:{data:{tasks:[{id:'calendar',title:'Calendar task'}],activeQuests:[{id:'quest',title:'Notion Quest',done:false,sourceUrl:'https://www.notion.so/quest'}]},writable:new Set(['activeQuests']),busy:new Set()},
+    state:{search:'',filter:'all',bucket:'todo',date:'2026-10-28'},
+    esc:value=>String(value),icon:()=>'',flavor:()=> 'patrol',status:()=>'',safeLink:()=>''
+  });
+  assert.match(view,/Notion Quest/);
+  assert.doesNotMatch(view,/Calendar task|DAY 1|\/ 66|Skip today/);
+  assert.match(view,/aaad787636c682b1a61b0119fca3398b/);
 });
 
 test('Field Habit and To-do launch the canonical screens; unrelated tools are unchanged', () => {
@@ -45,6 +59,13 @@ test('main menu offers one Habit and one Quest entry', () => {
     assert.equal((html.match(/data-game-menu-target="QUESTS:/g) || []).length, 1);
     assert.doesNotMatch(html, /GAMBIT TO-DO|GAMBIT HABITS/);
   } finally { if (previous === undefined) delete globalThis.window; else globalThis.window = previous; }
+});
+
+test('Spider Systems offers one Quest and one Habit entry without the duplicate tracker', () => {
+  const html=ActionRpgController.prototype.renderSpiderSystems.call({});
+  assert.equal((html.match(/data-open-system-section="QUESTS"/g)||[]).length,1);
+  assert.equal((html.match(/data-open-system-section="HABITS"/g)||[]).length,1);
+  assert.doesNotMatch(html,/HABIT TRACKER|LIFE RESET 66|field-tools\/apps\/todo\/index.html/);
 });
 
 test('Life OS bookmarks redirect to the single launcher or the requested canonical app', () => {
