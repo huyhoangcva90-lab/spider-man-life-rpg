@@ -43,6 +43,7 @@
   <link rel="stylesheet" href="./css/stable-shell.css?build=native-personal-layout-6" />
   <link rel="stylesheet" href="./css/hero-loadout.css?build=game-loadout-7" />
   <link rel="stylesheet" href="./css/battle-lab-home.css?build=battle-lab-home-1" />
+  <link rel="stylesheet" href="./css/notion-home-preview.css?build=notion-home-preview-1" />
 </head>
 <body data-game-mode="ARENA">
   <a class="skip-link" href="#tracker-main">Bỏ qua điều hướng</a>
@@ -110,6 +111,21 @@
             </div>
             <div class="hud-economy"><span><small>WEB COINS</small><b id="hud-coins">0</b></span><span><small>STREAK</small><b><i id="hud-streak">0</i>D</b></span></div>
           </div>
+
+        <section class="notion-home-preview" aria-label="Quest và Habit từ Notion">
+          <button class="notion-home-preview__card notion-home-preview__card--quest" type="button" data-game-section="QUESTS" aria-label="Mở Quest từ Notion">
+            <span class="notion-home-preview__label">QUEST · NOTION</span>
+            <strong id="home-notion-quest-title">Đang đọc Quest…</strong>
+            <small id="home-notion-quest-progress">Đang kết nối</small>
+            <span class="notion-home-preview__arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="notion-home-preview__card notion-home-preview__card--habit" type="button" data-game-section="HABITS" aria-label="Mở Habit từ Notion">
+            <span class="notion-home-preview__label">HABIT · NOTION</span>
+            <strong id="home-notion-habit-title">Đang đọc Habit…</strong>
+            <small id="home-notion-habit-progress">Đang kết nối</small>
+            <span class="notion-home-preview__arrow" aria-hidden="true">↗</span>
+          </button>
+        </section>
 
         <section class="action-rpg-screen battle-lab-home" id="action-rpg-screen" aria-label="Battle Lab · Đấu thử theo lượt">
           <iframe class="battle-lab-home__frame" src="./battle-lab/?mode=native&amp;embed=1&amp;build=20261028" title="Battle Lab · Đấu thử theo lượt" loading="eager"></iframe>
@@ -467,6 +483,6 @@
   </div>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/main.js?build=simple-flow-1"></script>
+  <script type="module" src="./js/main.js?build=notion-home-preview-1"></script>
 </body>
 </html>

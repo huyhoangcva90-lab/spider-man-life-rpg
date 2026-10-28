@@ -2,6 +2,8 @@ import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage,
 import { vietnamDay } from '../core/GameDay.mjs';
 import { NotionGamePresenter } from './NotionGamePresenter.js?build=shared-notion-sync-1';
 import { personalAppRoute, personalFieldDestination } from './PersonalAppRoutes.mjs';
+import { SpiderPersonalStore } from '../../life-reset/js/spider-personal-store.mjs';
+import { homeNotionPreview } from './HomeNotionPreview.mjs';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -10,6 +12,7 @@ export class ActionRpgController {
     this.sound = soundController;
     this.mapEngine = mapEngine;
     this.notionPresenter = engine.notionAuthority ? new NotionGamePresenter(this) : null;
+    this.homePersonalStore = new SpiderPersonalStore({ onChange: () => this.renderHomeNotionPreview() });
     this.panelSection = 'QUESTS';
     this.panelTab = 'TODO';
     this.introPlayed = false;
@@ -88,6 +91,7 @@ export class ActionRpgController {
         this.openEmbeddedFieldApp(event.data.id); return;
       }
       if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'SPIDEY_NOTION_CHECKIN') {
+        void this.homePersonalStore.refresh();
         // Re-read real Hero values even if this record is not in the hub's cache.
         if(this.notionPresenter){void this.notionPresenter.refresh({force:true});return;}
         const { kind, id } = event.data;
@@ -117,10 +121,12 @@ export class ActionRpgController {
       const frame = document.querySelector('[data-field-app-frame]');
       if (event.origin !== location.origin || event.source !== frame?.contentWindow) return;
       if(event.data?.type==='spider:notion-changed'){
+        void this.homePersonalStore.refresh();
         void this.notionPresenter?.refresh({force:true});
         return;
       }
       if(event.data?.type==='spider:session-changed'){
+        void this.homePersonalStore.refresh();
         void this.notionPresenter?.loadout.check();
         void this.checkNotionSession();
         void this.notionPresenter?.refresh({force:true});
@@ -174,7 +180,10 @@ export class ActionRpgController {
       this.updateRoute();
     });
 
-    document.addEventListener('visibilitychange', () => this.syncAutoCombat(this.engine.snapshot().settings));
+    document.addEventListener('visibilitychange', () => {
+      this.syncAutoCombat(this.engine.snapshot().settings);
+      if (!document.hidden) void this.homePersonalStore.refresh();
+    });
     this.bus.on('CAMPAIGN_UPDATED', (result) => this.handleUpdate(result));
     this.bus.on('ENEMY_COUNTERATTACK', () => this.animateEnemy('attack', 520));
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
@@ -205,8 +214,28 @@ export class ActionRpgController {
     this.restoreRoute(initialRoute);
     window.addEventListener('popstate', () => this.restoreRoute());
     this.render();
+    this.renderHomeNotionPreview();
+    void this.homePersonalStore.refresh();
+    window.setInterval(() => { if (!document.hidden) void this.homePersonalStore.refresh(); }, 60000);
     this.focusInterval = window.setInterval(() => this.updateFocusClock(), 1000);
     void this.checkNotionSession();
+  }
+
+  renderHomeNotionPreview() {
+    const root = document.querySelector('.notion-home-preview');
+    if (!root) return;
+    const view = homeNotionPreview(this.homePersonalStore);
+    root.dataset.source = view.source;
+    const values = {
+      'home-notion-quest-title': view.questTitle,
+      'home-notion-quest-progress': view.questProgress,
+      'home-notion-habit-title': view.habitTitle,
+      'home-notion-habit-progress': view.habitProgress,
+    };
+    for (const [id, value] of Object.entries(values)) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    }
   }
 
   async checkNotionSession() {
