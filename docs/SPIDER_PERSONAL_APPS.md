@@ -2,6 +2,8 @@
 
 Updated 2026-10-28.
 
+The current interface directly reuses the native study CSS for Day and HelloHabit. Day keeps the original stats strip, DAY heading, beveled tabs, artwork cards and six-item bottom bar. HelloHabit keeps the original light palette, compact colored tags, 35-day strip, four-item rail and full-page Track / Stats / Activity Log view. Spider styling is limited to card illustrations, a small logo and a thin selection accent. The extra host app bars are hidden for these three views to preserve their original layout; return actions remain available inside Settings or the calendar drawer.
+
 ## Entry points
 
 - `/?game=QUESTS`: Life Reset Day layout, custom Spider card compositions. To-dos, done, local per-day skips, due-date filters and search use the existing Master Calendar and Active Quests.

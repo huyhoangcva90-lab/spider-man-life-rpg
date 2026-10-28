@@ -78,6 +78,9 @@ export class ActionRpgController {
     this.bus.on('OPEN_FIELD_APP',({id})=>this.openEmbeddedFieldApp(id));
     window.addEventListener('message', event => {
       const personalFrame = document.querySelector('.habit-app-frame[data-personal-app]');
+      if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'spider:personal-home') {
+        this.returnToHome(); return;
+      }
       if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'spider:personal-open' && ['HABITS','QUESTS'].includes(event.data.section)) {
         this.selectSection(event.data.section); return;
       }

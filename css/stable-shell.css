@@ -65,3 +65,8 @@ body[data-game-section]:not([data-field-immersive="true"]):has(.habit-app-frame)
 .spider-personal-toolbar button:hover { background:#1a4055; border-color:#78c4d6; }
 .spider-personal-toolbar button:focus-visible { outline:3px solid #f2c06b; outline-offset:2px; }
 .spider-personal-app .habit-app-frame { min-height:0; }
+/* Imported native layouts own their headers; avoid stacking a second app bar. */
+.spider-personal-app:has(> .habit-app-frame[src*="/personal/"]) { grid-template-rows:minmax(0,1fr); }
+.spider-personal-app:has(> .habit-app-frame[src*="/personal/"]) > .spider-personal-toolbar { display:none; }
+body[data-field-standalone="true"] .spider-field-app[data-field-app="timetable"] { grid-template-rows:minmax(0,1fr); }
+.spider-field-app[data-field-app="timetable"] > .spider-field-toolbar { display:none; }

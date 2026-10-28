@@ -320,6 +320,7 @@ function bindClock() {
 function drawer() {
   const d = $("#nav-drawer");
   d.innerHTML = `<div class="sg-drawer-header">Sectograph<small>Visual time planner</small></div>${[
+    ["spider-home", "Spider Apps", "left"],
     ["calendars", "My calendars", "calendar"],
     ["settings", "Settings", "settings"],
     ["widgets", "Widget themes", "grid"],
@@ -452,7 +453,9 @@ async function connectNotion(){
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.type==='spider:open-app-settings')action('settings');if(e.data?.type==='spider:notion-connect')connectNotion();if(e.data?.type==='spider:session-changed')loadSources();});
 let lastSourceRead=Date.now();
 function refreshVisibleSources(){if(document.visibilityState==='visible'&&!sources.loading&&!draft&&!$('#editor')?.open&&Date.now()-lastSourceRead>30000){lastSourceRead=Date.now();loadSources();}}
-window.addEventListener('focus',refreshVisibleSources);document.addEventListener('visibilitychange',refreshVisibleSources);
+let sourceFocusTimer;
+function queueSourceRead(){clearTimeout(sourceFocusTimer);sourceFocusTimer=setTimeout(refreshVisibleSources,300);}
+window.addEventListener('focus',queueSourceRead);document.addEventListener('visibilitychange',queueSourceRead);
 const each = (q, fn) => document.querySelectorAll(q).forEach(fn);
 function bind() {
   each('[data-google-calendar]',b=>b.onchange=()=>{calendarConfig.calendarIds=[...document.querySelectorAll('[data-google-calendar]:checked')].map(c=>c.dataset.googleCalendar);localStorage.setItem('notionKingGoogleCalendar',JSON.stringify(calendarConfig));loadSources();});
@@ -693,6 +696,7 @@ function exportIcs() {
   download(lines.join("\r\n"), "sectograph-web.ics", "text/calendar");
 }
 function action(a) {
+  if(a==='spider-home'){parent.postMessage({type:'spider:gambit-home'},location.origin);return;}
   if(a==='source-refresh')return loadSources();
   if(a==='google-connect'){window.open('/api/google/start','_blank','noopener');return;}
   if(a==='notion-connect')return connectNotion();
