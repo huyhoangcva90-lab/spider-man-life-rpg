@@ -32,6 +32,10 @@
       "destination": "https://gambit-d9b.pages.dev/field/"
     },
     {
+      "source": "/field/",
+      "destination": "https://gambit-d9b.pages.dev/field/"
+    },
+    {
       "source": "/field/:path*",
       "destination": "https://gambit-d9b.pages.dev/field/:path*"
     },
