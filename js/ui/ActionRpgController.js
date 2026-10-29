@@ -970,18 +970,18 @@ export class ActionRpgController {
   renderSpiderSystems() {
     const apps = [
       { id: '01', icon: 'icon-compass', name: 'PLACE MAP', meta: 'ADDRESS BOOK · ROUTES', source: 'LOCAL + NOTION', tone: 'blue', map: true, desc: 'Quản lý địa chỉ theo danh mục, mở chỉ đường và gửi link sang điện thoại.' },
-      { id: '02', icon: 'icon-clock', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './field-tools/apps/routine/index.html', desc: 'Sắp xếp các chuỗi hoạt động cho từng thời điểm trong ngày.' },
-      { id: '03', icon: 'icon-clock', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', href: './field-tools/apps/timetable/index.html', desc: 'Xem lịch, khung giờ và nhiệm vụ trong ngày.' },
-      { id: '04', icon: 'icon-arena', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', href: './field-tools/apps/gym/index.html', desc: 'Quản lý bài tập, giáo án và lịch sử luyện tập.' },
-      { id: '05', icon: 'icon-bolt', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './field-tools/apps/dopamine/index.html', desc: 'Chọn hoạt động giúp nạp lại năng lượng và đổi tâm trạng.' },
-      { id: '06', icon: 'icon-database', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GAMBIT APP', tone: 'green', href: './field-tools/apps/finance/index.html', desc: 'Theo dõi thu chi, ngân sách và kế hoạch tài chính.' },
+      { id: '02', icon: 'icon-clock', name: 'NHỊP SINH HỌC', meta: 'ROUTINE · GIỜ VÀNG', source: 'GAMBIT CLOUD', tone: 'green', href: './field/apps/routine/index.html', desc: 'Sắp xếp các chuỗi hoạt động cho từng thời điểm trong ngày.' },
+      { id: '03', icon: 'icon-clock', name: 'TIME TABLE', meta: '24H CITY CLOCK', source: 'NOTION', tone: 'gold', href: './field/apps/timetable/index.html', desc: 'Xem lịch, khung giờ và nhiệm vụ trong ngày.' },
+      { id: '04', icon: 'icon-arena', name: 'GYM OS', meta: 'WORKOUT · HEVY OS', source: 'NOTION', tone: 'red', href: './field/apps/gym/index.html', desc: 'Quản lý bài tập, giáo án và lịch sử luyện tập.' },
+      { id: '05', icon: 'icon-bolt', name: 'DOPAMINE MENU', meta: 'SPIDER-SENSE PICK', source: 'GAMBIT CLOUD', tone: 'red', href: './field/apps/dopamine/index.html', desc: 'Chọn hoạt động giúp nạp lại năng lượng và đổi tâm trạng.' },
+      { id: '06', icon: 'icon-database', name: 'PARKER FINANCE', meta: 'VELA CASH FLOW', source: 'GAMBIT APP', tone: 'green', href: './field/apps/finance/index.html', desc: 'Theo dõi thu chi, ngân sách và kế hoạch tài chính.' },
       { id: '07', icon: 'icon-missions', name: 'QUEST', meta: 'ACTIVE QUESTS', source: 'NOTION', tone: 'red', section: 'QUESTS', tab: 'APP', desc: 'Xem và hoàn thành Quest trong Notion.' },
       { id: '08', icon: 'icon-spider', name: 'HABIT', meta: 'DAILY HABITS', source: 'NOTION', tone: 'green', section: 'HABITS', tab: 'APP', desc: 'Check-in thói quen từ Notion và xem lịch sử.' },
-      { id: '09', icon: 'icon-book', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: './field-tools/apps/english/index.html', desc: 'Học ngữ pháp, ôn flashcard và tra cứu từ vựng.' },
-      { id: '10', icon: 'icon-book', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', href: './field-tools/apps/journal/index.html', desc: 'Ghi chép suy nghĩ, trải nghiệm và bài học mỗi ngày.' },
-      { id: '11', icon: 'icon-dice', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: './field-tools/apps/oracle/index.html', desc: 'Rút bài và dành thời gian tự chiêm nghiệm.' },
-      { id: '12', icon: 'icon-mask', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: './field-tools/apps/style30/index.html', desc: 'Khám phá phối đồ và xây dựng phong cách cá nhân.' }
-      ,{ id: '14', icon: 'icon-clock', name: 'AMBIENT FOCUS', meta: 'SOUNDSCAPES · POMODORO', source: 'GAMBIT APP', tone: 'blue', href: './field-tools/apps/someday/index.html', desc: 'Âm thanh thư giãn và Pomodoro cho buổi tập trung.' }
+      { id: '09', icon: 'icon-book', name: 'ENGLISH 32', meta: 'GRAMMAR · FLASHCARDS', source: 'GAMBIT APP', tone: 'blue', href: './field/apps/english/index.html', desc: 'Học ngữ pháp, ôn flashcard và tra cứu từ vựng.' },
+      { id: '10', icon: 'icon-book', name: 'PARKER JOURNAL', meta: 'FIELD NOTES', source: 'NOTION', tone: 'blue', href: './field/apps/journal/index.html', desc: 'Ghi chép suy nghĩ, trải nghiệm và bài học mỗi ngày.' },
+      { id: '11', icon: 'icon-dice', name: 'ORACLE', meta: 'REFLECTION CARDS', source: 'GAMBIT APP', tone: 'violet', href: './field/apps/oracle/index.html', desc: 'Rút bài và dành thời gian tự chiêm nghiệm.' },
+      { id: '12', icon: 'icon-mask', name: 'STYLE 30', meta: 'PARKER WARDROBE', source: 'GAMBIT APP', tone: 'gold', href: './field/apps/style30/index.html', desc: 'Khám phá phối đồ và xây dựng phong cách cá nhân.' }
+      ,{ id: '14', icon: 'icon-clock', name: 'AMBIENT FOCUS', meta: 'SOUNDSCAPES · POMODORO', source: 'GAMBIT APP', tone: 'blue', href: './field/apps/someday/index.html', desc: 'Âm thanh thư giãn và Pomodoro cho buổi tập trung.' }
     ];
     return `
       <section class="spider-system-command">

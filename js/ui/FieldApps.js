@@ -19,7 +19,7 @@ export const FIELD_APPS = Object.freeze({
 export function renderFieldApp(id) {
   const app = FIELD_APPS[id];
   if (!app) return '';
-  const src = app.src || `./field-tools/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
+  const src = app.src || `./field/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
   return `<section class="spider-field-app" data-field-app="${id}" aria-label="${app.title}">
     <div role="toolbar" class="spider-field-toolbar" aria-label="Điều hướng ứng dụng">
     <h2 class="spider-field-app-title">${app.title}</h2>
@@ -33,7 +33,7 @@ export function renderFieldApp(id) {
 }
 
 export function bindFieldApps(controller, content) {
-  content.querySelectorAll('a[href^="./field-tools/apps/"], a[data-field-app-id]').forEach((link) => {
+  content.querySelectorAll('a[href^="./field/apps/"], a[data-field-app-id]').forEach((link) => {
     const id = link.dataset.fieldAppId || link.getAttribute('href').split('/')[3];
     if (!FIELD_APPS[id]) return;
     link.addEventListener('click', (event) => {

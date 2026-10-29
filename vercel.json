@@ -17,16 +17,24 @@
     },
     {
       "source": "/gambit/apps/:path*",
-      "destination": "/field-tools/apps/:path*",
+      "destination": "/field/apps/:path*",
       "permanent": false
     },
     {
       "source": "/gambit/assets/:path*",
-      "destination": "/field-tools/assets/:path*",
+      "destination": "/field/assets/:path*",
       "permanent": false
     }
   ],
   "rewrites": [
+    {
+      "source": "/field",
+      "destination": "https://gambit-d9b.pages.dev/field/"
+    },
+    {
+      "source": "/field/:path*",
+      "destination": "https://gambit-d9b.pages.dev/field/:path*"
+    },
     {
       "source": "/api/habit-check",
       "destination": "/api/habit-check.mjs"

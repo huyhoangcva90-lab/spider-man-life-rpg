@@ -14,6 +14,15 @@ Mục đích: tránh phát triển lại cùng tính năng trong Life Reset, RPG
 | Routine | Field / Nhịp sinh học | Sắp xếp các khung sinh hoạt; không tạo bộ Habit độc lập |
 | Finance | App Finance hiện tại | Giữ nguyên theo yêu cầu của chủ dự án |
 
+## Nguồn giao diện Field
+
+Repo `Gambit` là nguồn chính cho launcher và 12 app Field. Trên web,
+`/field/` của Spider chuyển tiếp tới `/field/` ở Cloudflare Pages; cả launcher
+và app được nhúng dưới miền Spider để dùng chung phiên và API. Khi sửa app Field,
+sửa ở Gambit rồi kiểm tra qua `https://spider.huykl.id.vn/field/`. Bản
+`field-tools/` trong repo Spider chỉ giữ để quay lại bản cũ nếu triển khai lỗi.
+Quest, Habit, Hero và Battle vẫn theo chủ sở hữu màn chính ở bảng trên.
+
 ## Đã hợp nhất ngày 2026-10-22
 
 - `spiderApp=habits` và `spiderApp=todo` mở màn Habit/Quest chính.
