@@ -46,11 +46,9 @@ export class HubOverlayPanels {
     const apps = [
       ['QUESTS:APP', 'QUEST', 'Active Quests từ Notion · đang làm và đã xong', '✓', 'cyan'],
       ['HABITS:APP', 'HABIT', 'Habit và lịch sử check-in từ Notion', '▦', 'green'],
-      ['FIELD:SYSTEMS', 'SPIDER APPS', 'Trung tâm Gym, Time, Journal và công cụ', '⌘', 'cyan'],
-      ['FIELD:PLACES', 'PLACE MAP', 'Sổ địa chỉ, danh mục và chỉ đường', '⌖', 'green'],
+      ['FIELD:SYSTEMS', 'GAMBIT FIELD', 'Mở web công cụ: lịch, gym, nhật ký và tài chính', '⌘', 'cyan'],
       ['CITY', 'CITY MAP', 'Bản đồ nhiệm vụ và địa điểm', '⌖', 'cyan'],
       ['HERO:PROFILE', 'HERO', 'Hồ sơ, trang phục, kỹ năng, map và huy hiệu', '🕷️', 'red'],
-      ['FIELD:ENEMIES', 'BESTIARY', 'Hồ sơ kẻ địch Bosses & Minions', '◉', 'red'],
       ['ARCHIVE:BESTIARY', 'GAME ARCHIVE', 'Bestiary, backpacks và badges bản game cũ', '▣', 'red'],
       ['SETTINGS', 'GAME SETTINGS', 'Âm thanh, hiệu ứng, sao lưu save', '⚙', 'paper']
     ];

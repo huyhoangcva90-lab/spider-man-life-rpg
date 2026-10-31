@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chuyển dữ liệu Field sang Gambit</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#071426;color:#d9e0df}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px}
+    main{width:min(100%,560px);padding:28px;background:#102c45;border:2px solid #397c9b;box-shadow:6px 6px 0 #050b12}
+    h1{font-size:clamp(24px,6vw,34px);line-height:1.15;margin:0 0 16px}p{line-height:1.55;color:#a7c0c9}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0 10px}button,a{min-height:44px;padding:11px 16px;border:2px solid #54b6d0;background:#16415a;color:#fff;font:700 14px system-ui;text-decoration:none;cursor:pointer}
+    button:hover,a:hover,button:focus-visible,a:focus-visible{outline:2px solid #f2c06b;outline-offset:2px}
+    small{color:#a7c0c9;line-height:1.5}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Chuyển dữ liệu Field sang Gambit</h1>
+    <p>Dữ liệu bạn từng lưu trên miền Spider nằm trong trình duyệt này. Tải bản sao lưu, mở Gambit Field, rồi chọn <strong>Nhập bản sao lưu cũ</strong> ở cuối trang.</p>
+    <div class="actions">
+      <button id="export" type="button">Tải dữ liệu Field</button>
+      <a href="https://gambit-d9b.pages.dev/field/">Mở Gambit Field →</a>
+    </div>
+    <p id="status" role="status"></p>
+    <small>File có thể chứa nhật ký và dữ liệu tài chính của bạn. Chỉ giữ file trên thiết bị riêng; quá trình tải không gửi dữ liệu lên máy chủ.</small>
+  </main>
+  <script>
+    const FIELD_KEYS = new Set(['journal_v2','dhv2','gambit-gym-hevy-v1','routines_v5','english28-grammar-v3','dopamine-menus-v13','dk','todo_mono_theme','todo_mono_data','notionKingTheme','notionKingGoogleCalendar','gambit_transaction_draft_v1','gambit_finance_plans_v1','monarch_finance_txns_v1','gambit_finance_privacy_v1','gambit_finance_bill_states_v1','monarch_bill_states','gambit_finance_reviewed_v1','gambit_target_year','gambit_report_views']);
+    function allowed(key){return FIELD_KEYS.has(key)||/^gambit_budget_source_\d{4}_\d{2}$/.test(key)}
+    function clean(value){if(Array.isArray(value))return value.map(clean);if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).filter(([key])=>!/token|secret|password|api.?key|authorization|__proto__|constructor/i.test(key)).map(([key,item])=>[key,clean(item)]));return value}
+    document.getElementById('export').addEventListener('click',()=>{
+      const backup={};
+      for(let index=0;index<localStorage.length;index++){
+        const key=localStorage.key(index);
+        if(!allowed(key))continue;
+        const value=localStorage.getItem(key);
+        if(value===null)continue;
+        try{backup[key]=JSON.stringify(clean(JSON.parse(value)))}catch{backup[key]=value}
+      }
+      const status=document.getElementById('status');
+      if(!Object.keys(backup).length){status.textContent='Không có dữ liệu Field cũ trong trình duyệt này.';return}
+      const url=URL.createObjectURL(new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}));
+      const link=document.createElement('a');link.href=url;link.download=`spider_field_backup_${new Date().toISOString().slice(0,10)}.json`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      status.textContent=`Đã chuẩn bị ${Object.keys(backup).length} mục. Mở Gambit Field để nhập file vừa tải.`;
+    });
+  </script>
+</body>
+</html>

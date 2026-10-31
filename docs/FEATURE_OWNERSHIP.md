@@ -16,12 +16,14 @@ Mục đích: tránh phát triển lại cùng tính năng trong Life Reset, RPG
 
 ## Nguồn giao diện Field
 
-Repo `Gambit` là nguồn chính cho launcher và 12 app Field. Trên web,
-`/field/` của Spider chuyển tiếp tới `/field/` ở Cloudflare Pages; cả launcher
-và app được nhúng dưới miền Spider để dùng chung phiên và API. Khi sửa app Field,
-sửa ở Gambit rồi kiểm tra qua `https://spider.huykl.id.vn/field/`. Bản
-`field-tools/` trong repo Spider chỉ giữ để quay lại bản cũ nếu triển khai lỗi.
-Quest, Habit, Hero và Battle vẫn theo chủ sở hữu màn chính ở bảng trên.
+Repo `Gambit` là nguồn chính cho launcher và app Field tại
+`https://gambit-d9b.pages.dev/field/`. Nút Field trong Spider và các link
+`/field/` cũ mở web Gambit; Spider không nhúng app Field nữa. Phiên đăng nhập
+và bộ nhớ trình duyệt của hai miền tách riêng; Notion dùng cùng database khi
+Gambit được cấu hình token. Dữ liệu Field từng lưu dưới miền Spider có thể tải
+từ `/field-transfer.html` rồi nhập ở Gambit. Bản `field-tools/` trong Spider
+chỉ là mã lưu cũ. Quest, Habit, Hero và Battle trong màn game Spider vẫn giữ
+vai trò riêng; lối mở Habit/Việc từ Field đi vào app Gambit.
 
 ## Đã hợp nhất ngày 2026-10-22
 

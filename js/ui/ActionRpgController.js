@@ -1,7 +1,7 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
 import { vietnamDay } from '../core/GameDay.mjs';
 import { NotionGamePresenter } from './NotionGamePresenter.js?build=shared-notion-sync-1';
-import { personalAppRoute, personalFieldDestination } from './PersonalAppRoutes.mjs';
+import { personalAppRoute } from './PersonalAppRoutes.mjs';
 import { SpiderPersonalStore } from '../../life-reset/js/spider-personal-store.mjs';
 import { homeNotionPreview } from './HomeNotionPreview.mjs';
 
@@ -188,6 +188,7 @@ export class ActionRpgController {
     this.bus.on('ENEMY_COUNTERATTACK', () => this.animateEnemy('attack', 520));
     this.bus.on('GAME_MENU_TARGET', ({ section, tab }) => {
       if (section === 'CITY') return this.selectSection('CITY');
+      if (section === 'FIELD') return this.openEmbeddedFieldApp('launcher');
       this.selectSection(section, false);
       this.panelTab = tab || this.defaultTab(section);
       this.renderPanel();
@@ -490,6 +491,11 @@ export class ActionRpgController {
 
 
   selectSection(section, playSound = true, openDestination = true) {
+    if (section === 'FIELD') {
+      if (playSound) this.sound.playClick();
+      location.assign(fieldAppUrl('launcher'));
+      return;
+    }
     if (openDestination) document.body.dataset.destinationOpen = 'true';
     if (playSound) this.sound.playClick();
     if (section === 'CITY') {
@@ -902,20 +908,8 @@ export class ActionRpgController {
   }
 
   openEmbeddedFieldApp(id) {
-    if (!FIELD_APPS[id]) return;
-    const personalSection = personalFieldDestination(id);
-    if (personalSection) {
-      this.fieldAppId = null;
-      this.selectSection(personalSection);
-      return;
-    }
-    document.body.dataset.gameMode = 'ARENA';
-    this.openPanel('FIELD');
-    this.setActiveNav('FIELD');
-    this.fieldAppId = id;
-    this.panelTab = 'SYSTEMS';
-    this.renderPanel({ resetScroll:true });
-    this.updateRoute();
+    const destination = fieldAppUrl(id);
+    if (destination) location.assign(destination);
   }
 
   returnToHome() {
@@ -2525,4 +2519,4 @@ export class ActionRpgController {
   text(id, value) { const el = document.getElementById(id); if (el) el.textContent = String(value); }
   width(id, value) { const el = document.getElementById(id); if (el) el.style.width = `${Math.max(0,Math.min(100,value))}%`; }
 }
-import { FIELD_APPS, renderFieldApp, bindFieldApps } from './FieldApps.js?v=gambit-native-1';
+import { FIELD_APPS, fieldAppUrl, renderFieldApp, bindFieldApps } from './FieldApps.js?v=gambit-field-web-1';

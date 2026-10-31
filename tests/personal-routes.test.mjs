@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { personalAppRoute, personalFieldDestination } from '../js/ui/PersonalAppRoutes.mjs';
 import { ActionRpgController } from '../js/ui/ActionRpgController.js';
+import { fieldAppUrl } from '../js/ui/FieldApps.js';
 import { HubOverlayPanels } from '../js/ui/HubOverlayPanels.js';
 import { dayView } from '../life-reset/personal/reference-views.mjs';
 import fs from 'node:fs';
@@ -30,14 +31,20 @@ test('Spider Quest cards use Active Quests from Notion, not Calendar tasks or a 
   assert.match(view,/aaad787636c682b1a61b0119fca3398b/);
 });
 
-test('Field Habit and To-do launch the canonical screens; unrelated tools are unchanged', () => {
-  const selected = [];
-  const ui = { selectSection: section => selected.push(section), fieldAppId: 'old' };
-  ActionRpgController.prototype.openEmbeddedFieldApp.call(ui, 'habits');
-  ActionRpgController.prototype.openEmbeddedFieldApp.call(ui, 'todo');
-  assert.deepEqual(selected, ['HABITS', 'QUESTS']);
-  assert.equal(ui.fieldAppId, null);
-  for (const app of ['finance', 'timetable', 'gym', 'journal', 'routine']) assert.equal(personalFieldDestination(app), null);
+test('Field links open Gambit web while game Habit and Quest keep their Spider screens', () => {
+  const opened = [];
+  const previous = globalThis.location;
+  globalThis.location = { assign: url => opened.push(url) };
+  try {
+    for (const app of ['habits', 'todo', 'finance', 'timetable', 'gym', 'journal', 'routine']) {
+      ActionRpgController.prototype.openEmbeddedFieldApp.call({}, app);
+      assert.equal(opened.at(-1), fieldAppUrl(app));
+    }
+    assert.equal(fieldAppUrl('launcher'), 'https://gambit-d9b.pages.dev/field/');
+    assert.equal(fieldAppUrl('unknown'), null);
+  } finally { if (previous === undefined) delete globalThis.location; else globalThis.location = previous; }
+  assert.equal(personalFieldDestination('habits'), 'HABITS');
+  assert.equal(personalFieldDestination('todo'), 'QUESTS');
 });
 
 test('old Quest and Habit pages render the same iframe instead of another tracker', () => {

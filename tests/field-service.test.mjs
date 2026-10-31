@@ -1,25 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {execFileSync} from 'node:child_process';
-execFileSync(process.execPath,['tools/build_field_service.mjs'],{cwd:new URL('..',import.meta.url)});
-const {onRequest:middleware}=await import('../.field-service-release/functions/_middleware.js');
-const {onRequest:google}=await import('../.field-service-release/functions/api/google/[[path]].js');
-test('retired Gambit pages redirect into Spider while private APIs stay locked',async()=>{
-  for(const [path,game] of [['/','FIELD'],['/apps/todo/index.html','QUESTS'],['/apps/habits/index.html','HABITS'],['/apps/finance/index.html','FIELD']]){
-    const r=await middleware({request:new Request('https://gambit-d9b.pages.dev'+path)}),url=new URL(r.headers.get('location'));
-    assert.equal(url.origin,'https://spider.huykl.id.vn');assert.equal(url.searchParams.get('game'),game);
+import fs from 'node:fs';
+import { fieldAppUrl } from '../js/ui/FieldApps.js';
+
+const vercel = JSON.parse(fs.readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
+
+test('Spider Field links and legacy URLs lead to Gambit web', () => {
+  assert.equal(fieldAppUrl('launcher'), 'https://gambit-d9b.pages.dev/field/');
+  for (const app of ['routine', 'timetable', 'dopamine', 'finance', 'todo', 'habits', 'journal', 'gym']) {
+    assert.equal(fieldAppUrl(app), `https://gambit-d9b.pages.dev/field/apps/${app}/index.html`);
   }
-  const locked=await middleware({request:new Request('https://gambit-d9b.pages.dev/api/cloud?key=habits'),env:{AUTH_SECRET:'test'}});assert.equal(locked.status,401);
+  for (const source of ['/field', '/field/', '/gambit', '/gambit/']) {
+    assert.equal(vercel.redirects.find(rule => rule.source === source)?.destination, 'https://gambit-d9b.pages.dev/field/');
+  }
+  assert.equal(vercel.redirects.find(rule => rule.source === '/field/:path*')?.destination, 'https://gambit-d9b.pages.dev/field/:path*');
+  assert.ok(!vercel.rewrites.some(rule => rule.source.startsWith('/field')));
 });
-test('Google reconnect uses signed one-use state and returns to Spider without a cross-domain cookie',async()=>{
-  const kv=new Map(),env={AUTH_SECRET:'test-field-secret',GOOGLE_CLIENT_ID:'test-client',GOOGLE_CLIENT_SECRET:'test-secret',GOOGLE_OAUTH:{get:async key=>kv.get(key),put:async(key,value)=>kv.set(key,value),delete:async key=>kv.delete(key)}};
-  const start=await google({request:new Request('https://gambit-d9b.pages.dev/api/google/start'),env});
-  const target=new URL(start.headers.get('Location')),state=target.searchParams.get('state');assert.equal(target.hostname,'accounts.google.com');assert.equal(target.searchParams.get('scope'),'https://www.googleapis.com/auth/calendar.readonly');
-  const bad=await google({request:new Request('https://gambit-d9b.pages.dev/api/google/callback?state=invalid&code=fake'),env});assert.equal(bad.status,400);
-  const previous=globalThis.fetch;globalThis.fetch=async()=>new Response(JSON.stringify({refresh_token:'mock',access_token:'mock',expires_in:3600}));
-  try{
-    const request=new Request('https://gambit-d9b.pages.dev/api/google/callback?state='+encodeURIComponent(state)+'&code=fake');
-    const ok=await google({request,env});assert.equal(ok.status,302);assert.match(ok.headers.get('Location'),/^https:\/\/spider.huykl.id.vn\//);assert.ok(kv.has('google-calendar-token'));
-    const repeat=await google({request,env});assert.equal(repeat.status,400);
-  }finally{globalThis.fetch=previous;}
+
+test('Spider keeps a local export path for data saved before the domain move', () => {
+  const page = fs.readFileSync(new URL('../field-transfer.html', import.meta.url), 'utf8');
+  assert.match(page, /Tải dữ liệu Field/);
+  assert.match(page, /gambit-d9b\.pages\.dev\/field\//);
 });

@@ -16,6 +16,14 @@ export const FIELD_APPS = Object.freeze({
   someday: { title: 'Ambient Focus' }
 });
 
+const GAMBIT_FIELD_ORIGIN = 'https://gambit-d9b.pages.dev';
+
+export function fieldAppUrl(id) {
+  if (!FIELD_APPS[id]) return null;
+  if (id === 'animations') return 'https://spider.huykl.id.vn/battle-lab/clip-library.html';
+  return `${GAMBIT_FIELD_ORIGIN}/field/${id === 'launcher' ? '' : `apps/${id}/index.html`}`;
+}
+
 export function renderFieldApp(id) {
   const app = FIELD_APPS[id];
   if (!app) return '';
