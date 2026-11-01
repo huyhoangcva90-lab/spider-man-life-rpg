@@ -54,7 +54,7 @@
       dialog.querySelector('[data-access-label]').textContent=s.backend==='field'?'Mật khẩu Gambit hiện có':'Mật khẩu truy cập Spider';
       dialog.querySelector('label').hidden=!s.configured||connected;
       dialog.querySelector('[type="submit"]').hidden=!s.configured||connected;
-      if(open)dialog.showModal();
+      if(open){if(parent!==window)parent.postMessage({type:'spider:open-connection'},location.origin);else location.href='/?game=SETTINGS';}
       if(connected&&!open)refresh();
     }catch(e){
       status('error');

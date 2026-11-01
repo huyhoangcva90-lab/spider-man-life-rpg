@@ -16,18 +16,18 @@ export const FIELD_APPS = Object.freeze({
   someday: { title: 'Ambient Focus' }
 });
 
-const GAMBIT_FIELD_ORIGIN = 'https://gambit-d9b.pages.dev';
+const FIELD_BASE = './field-tools';
 
 export function fieldAppUrl(id) {
   if (!FIELD_APPS[id]) return null;
   if (id === 'animations') return 'https://spider.huykl.id.vn/battle-lab/clip-library.html';
-  return `${GAMBIT_FIELD_ORIGIN}/field/${id === 'launcher' ? '' : `apps/${id}/index.html`}`;
+  return `${FIELD_BASE}/${id === 'launcher' ? 'index.html' : `apps/${id}/index.html`}`;
 }
 
 export function renderFieldApp(id) {
   const app = FIELD_APPS[id];
   if (!app) return '';
-  const src = app.src || `./field-view/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
+  const src = app.src || `./field-tools/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
   return `<section class="spider-field-app" data-field-app="${id}" aria-label="${app.title}">
     <div role="toolbar" class="spider-field-toolbar" aria-label="Điều hướng ứng dụng">
     <h2 class="spider-field-app-title">${app.title}</h2>

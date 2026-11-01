@@ -9,6 +9,11 @@ const $=id=>document.getElementById(id),S=2.3,GROUND=345;
 const put=(id,value)=>{if($(id).textContent!==value)$(id).textContent=value;};
 export async function installNativeLab({game,getTarget,getEnemies,setTarget,onModeChange}){
  const canvas=$('stage'),ctx=canvas.getContext('2d'),moves=techniques(game),images={};
+ function alignScene(){
+ const scale=Math.min(canvas.clientWidth/canvas.width,canvas.clientHeight/canvas.height),width=canvas.width*scale,height=canvas.height*scale,arena=canvas.parentElement;
+ arena.style.setProperty('--scene-left',((canvas.clientWidth-width)/2)+'px');arena.style.setProperty('--scene-top',((canvas.clientHeight-height)/2)+'px');arena.style.setProperty('--arena-background-height',(((canvas.clientHeight-height)/2+GROUND*scale)*700/512)+'px');arena.style.setProperty('--scene-width',width+'px');arena.style.setProperty('--scene-height',height+'px');
+ }
+ new ResizeObserver(alignScene).observe(canvas);alignScene();
  await Promise.all([game.hero,...Object.values(game.enemies),...Object.values(game.fx)].map(async a=>{const img=new Image();img.src=a.texture;await img.decode();images[a.texture]=img;}));
  let selected=moves.find(m=>m.id==='native-combo'),timeline=makeTimeline(game.hero,selected),elapsed=0,playing=false,last=0,clock=0,filter='all',defense=null;
  const loadout=[

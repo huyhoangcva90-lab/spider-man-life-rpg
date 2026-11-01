@@ -6,3 +6,23 @@
 /* The host supplies primary navigation when this app is inside Spider. */
 body[data-spider-frame="true"] .rail{display:none!important}
 body[data-spider-frame="true"] .app{padding-left:0!important;padding-bottom:0!important}
+
+/* Landscape quest artwork inside the game frame. */
+.quest-layout main{padding:14px;max-width:1050px;margin:auto}
+.quest-category-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:14px}
+.quest-category-tabs button{min-height:48px;border:1px solid #476879;border-bottom:3px solid #355369;border-radius:7px;background:#142e43;color:#b9d5e3;font:700 13px system-ui;display:flex;align-items:center;justify-content:center;gap:6px;padding:7px}
+.quest-category-tabs button[aria-pressed=true]{background:#345568;color:#ffe4a5;border-color:#ebc777}
+.quest-category-tabs small{font-size:10px;opacity:.8}
+.quest-layout .quest-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.quest-layout .quest-card-wide{position:relative;min-height:132px;height:auto;aspect-ratio:auto;overflow:hidden;border-radius:9px;background-image:linear-gradient(90deg,#091d32f5 10%,#142b3cbe 60%,#142b3c33),var(--art);background-size:cover;background-position:center;border:1px solid #557185;box-shadow:0 3px #071522}
+.quest-layout .quest-info{position:relative;left:auto;bottom:auto;width:72%;padding:20px 16px;z-index:2}
+.quest-layout .quest-name{display:block;font:700 18px/1.3 system-ui;text-align:left;color:#f3eddd;padding:5px 0;overflow-wrap:anywhere}
+.quest-layout .quest-kind{font:600 10px system-ui;text-transform:uppercase;letter-spacing:1px;color:#9fc2d5}
+.quest-layout .quest-meta{font-size:11px;margin-top:5px}
+.quest-layout .spider-pose{left:auto;right:-18px;bottom:12px;transform:scale(.6);transform-origin:bottom right;opacity:.75;pointer-events:none}
+.quest-layout .quest-check{position:absolute;right:13px;bottom:13px;top:auto;width:44px;height:44px;z-index:3}
+.quest-layout .is-complete{opacity:.65}
+.quest-footer{display:flex;align-items:center;justify-content:space-between;margin-top:15px;gap:12px}
+.quest-footer button{min-height:44px;background:transparent;border:0;color:#a9c8d8;font:600 12px system-ui}
+.quest-footer svg{width:20px;height:20px}
+@media(min-width:850px){.quest-layout .quest-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

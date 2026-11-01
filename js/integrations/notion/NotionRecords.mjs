@@ -63,6 +63,7 @@ export function normalizeNotionPage(page, kind) {
     done: Boolean(properties.Completed?.checkbox),
     xp: properties.EXP?.number || 0,
     frequency: named(properties.Frequency),
+    type: named(properties.Type) || named(properties.Category) || '',
     dueDate: properties['Due Date']?.date?.start || null,
     description: text(properties.Remaining)
   };

@@ -1,4 +1,4 @@
-import {installNativeLab} from './native-lab.mjs?build=clash-rack-1';
+import {installNativeLab} from './native-lab.mjs?build=scene-alignment-1';
 import {GAME_MOVES,GAME_STATES} from './moveset.mjs';
 import {SKILLS,ENEMIES,createBattle,skillReason,beginSkill,resolveSkill,beginEnemyPhase,enemyTurn,nextPlayerTurn} from './combat.mjs';
 import {sequenceDuration,sampleSequence,heroPlan,enemyPlan,reactionPlan} from './choreography.mjs';

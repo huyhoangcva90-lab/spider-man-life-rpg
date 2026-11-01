@@ -1,7 +1,7 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
 import { vietnamDay } from '../core/GameDay.mjs';
 import { NotionGamePresenter } from './NotionGamePresenter.js?build=shared-notion-sync-1';
-import { personalAppRoute } from './PersonalAppRoutes.mjs?build=gambit-habit-2';
+import { personalAppRoute } from './PersonalAppRoutes.mjs?build=local-hello-1';
 import { SpiderPersonalStore } from '../../life-reset/js/spider-personal-store.mjs';
 import { homeNotionPreview } from './HomeNotionPreview.mjs';
 import { linkGambitSession } from '../integrations/GambitSessionLink.mjs';
@@ -793,7 +793,7 @@ export class ActionRpgController {
     if (!title || !tabs || !content) return;
 
     const titles = { 
-      QUESTS: 'FRIENDLY NEIGHBORHOOD // QUESTS',
+      QUESTS: 'QUESTS',
       HERO: 'HERO // LOADOUT',
       HABITS: 'SPIDER LIFE // HABITS',
       FIELD: 'SPIDER OS // FIELD SYSTEMS',
@@ -845,7 +845,7 @@ export class ActionRpgController {
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
     const personalRoute = personalAppRoute(this.panelSection, this.panelTab);
     const personalStandalone = false;
-    const requestedApp = this.panelSection === 'HABITS' ? 'habits' : this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
+    const requestedApp = this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
     if (FIELD_APPS[requestedApp] || personalStandalone) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
     delete document.body.dataset.fieldStandalone;
@@ -863,7 +863,7 @@ export class ActionRpgController {
 
   renderSection() {
     const personal = personalAppRoute(this.panelSection, this.panelTab);
-    if (personal?.gambit) return renderFieldApp('habits');
+
     if (personal) {
       const query = new URLSearchParams({ tab: personal.view });
       if (personal.filter) query.set('filter', personal.filter);
@@ -2541,4 +2541,4 @@ export class ActionRpgController {
   text(id, value) { const el = document.getElementById(id); if (el) el.textContent = String(value); }
   width(id, value) { const el = document.getElementById(id); if (el) el.style.width = `${Math.max(0,Math.min(100,value))}%`; }
 }
-import { FIELD_APPS, fieldAppUrl, renderFieldApp, bindFieldApps } from './FieldApps.js?v=framed-apps-2';
+import { FIELD_APPS, fieldAppUrl, renderFieldApp, bindFieldApps } from './FieldApps.js?v=local-field-1';
