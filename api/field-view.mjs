@@ -10,6 +10,13 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', path.endsWith('.html') ? 'no-store' : 'public, max-age=300');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Content-Security-Policy', "frame-ancestors 'self'");
+    if (path.endsWith('.html')) {
+      let html = await response.text();
+      const embed = "<script>if(parent!==window){const u=new URL(location.href);u.searchParams.set('spiderEmbed','1');history.replaceState(null,'',u);}</script>";
+      html = html.replace(/<head([^>]*)>/i, '<head$1>' + embed);
+      if (path === 'index.html') html = html.replace('</body>', '<script src="./spider-embedded.js"></script></body>');
+      return res.status(200).send(html);
+    }
     if (path === 'notion-connection.js') {
       const source = (await response.text()).replace('async function check(open) {', "async function check(open) { if(open && parent!==window){parent.postMessage({type:'spider:open-connection'},location.origin);return;}");
       return res.status(200).send(source);
