@@ -40,7 +40,7 @@ test('Field apps stay embedded and Habit opens the HelloHabit section', () => {
       assert.equal(opened.at(-1), app === 'habits' ? 'HABITS' : 'FIELD');
       assert.equal(controller.fieldAppId, app === 'habits' ? null : app);
     }
-    assert.equal(fieldAppUrl('launcher'), './field-tools/index.html');
+    assert.equal(fieldAppUrl('launcher'), 'https://gambit-d9b.pages.dev/field/index.html');
     assert.equal(fieldAppUrl('unknown'), null);
   assert.equal(personalFieldDestination('habits'), 'HABITS');
   assert.equal(personalFieldDestination('todo'), 'QUESTS');

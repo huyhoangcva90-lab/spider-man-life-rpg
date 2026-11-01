@@ -2,50 +2,51 @@
   "redirects": [
     {
       "source": "/gambit",
-      "destination": "/?game=FIELD",
+      "destination": "https://gambit-d9b.pages.dev/field/",
       "permanent": false
     },
     {
       "source": "/gambit/",
-      "destination": "/?game=FIELD",
+      "destination": "https://gambit-d9b.pages.dev/field/",
       "permanent": false
     },
     {
       "source": "/gambit/index.html",
-      "destination": "/?game=FIELD",
+      "destination": "https://gambit-d9b.pages.dev/field/",
       "permanent": false
     },
     {
       "source": "/gambit/apps/:path*",
-      "destination": "/field-tools/apps/:path*",
+      "destination": "https://gambit-d9b.pages.dev/field/apps/:path*",
       "permanent": false
     },
     {
       "source": "/gambit/assets/:path*",
-      "destination": "/field-tools/assets/:path*",
+      "destination": "https://gambit-d9b.pages.dev/field/assets/:path*",
       "permanent": false
     },
     {
       "source": "/field",
-      "destination": "/?game=FIELD",
+      "destination": "https://gambit-d9b.pages.dev/field/",
       "permanent": false
     },
     {
       "source": "/field/",
-      "destination": "/?game=FIELD",
+      "destination": "https://gambit-d9b.pages.dev/field/",
       "permanent": false
     },
     {
       "source": "/field/:path*",
-      "destination": "/field-tools/:path*",
+      "destination": "https://gambit-d9b.pages.dev/field/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/field-view/:asset*",
+      "destination": "https://gambit-d9b.pages.dev/field/:asset*",
       "permanent": false
     }
   ],
   "rewrites": [
-    {
-      "source": "/field-view/:asset*",
-      "destination": "/field-tools/:asset*"
-    },
     {
       "source": "/api/habit-check",
       "destination": "/api/habit-check.mjs"

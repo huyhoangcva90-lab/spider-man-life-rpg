@@ -132,7 +132,8 @@ export class ActionRpgController {
         return;
       }
       const frame = document.querySelector('[data-field-app-frame]');
-      if (event.origin !== location.origin || event.source !== frame?.contentWindow) return;
+      const fieldOrigin = frame ? new URL(frame.src, location.href).origin : null;
+      if (![location.origin, 'https://gambit-d9b.pages.dev'].includes(event.origin) || event.origin !== fieldOrigin || event.source !== frame?.contentWindow) return;
       if (event.data?.type === 'spider:open-connection') { this.selectSection('SETTINGS'); return; }
       if(event.data?.type==='spider:notion-changed'){
         void this.homePersonalStore.refresh();
@@ -2541,4 +2542,4 @@ export class ActionRpgController {
   text(id, value) { const el = document.getElementById(id); if (el) el.textContent = String(value); }
   width(id, value) { const el = document.getElementById(id); if (el) el.style.width = `${Math.max(0,Math.min(100,value))}%`; }
 }
-import { FIELD_APPS, fieldAppUrl, renderFieldApp, bindFieldApps } from './FieldApps.js?v=local-field-1';
+import { FIELD_APPS, fieldAppUrl, renderFieldApp, bindFieldApps } from './FieldApps.js?v=remote-field-1';

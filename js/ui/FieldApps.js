@@ -16,7 +16,7 @@ export const FIELD_APPS = Object.freeze({
   someday: { title: 'Ambient Focus' }
 });
 
-const FIELD_BASE = './field-tools';
+const FIELD_BASE = 'https://gambit-d9b.pages.dev/field';
 
 export function fieldAppUrl(id) {
   if (!FIELD_APPS[id]) return null;
@@ -27,7 +27,7 @@ export function fieldAppUrl(id) {
 export function renderFieldApp(id) {
   const app = FIELD_APPS[id];
   if (!app) return '';
-  const src = app.src || `./field-tools/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
+  const src = app.src || `${FIELD_BASE}/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
   return `<section class="spider-field-app" data-field-app="${id}" aria-label="${app.title}">
     <div role="toolbar" class="spider-field-toolbar" aria-label="Điều hướng ứng dụng">
     <h2 class="spider-field-app-title">${app.title}</h2>
@@ -57,7 +57,7 @@ export function bindFieldApps(controller, content) {
   const backLabel=controller.panelSection==='FIELD'&&controller.fieldAppId?'Về Spider Apps':'Về Home';
   back?.setAttribute('aria-label',backLabel);back?.setAttribute('title',backLabel);
   const frame = content.querySelector('[data-field-app-frame]');
-  content.querySelector('[data-field-app-settings]')?.addEventListener('click', () => frame?.contentWindow?.postMessage({type:'spider:open-app-settings'},location.origin));
+  content.querySelector('[data-field-app-settings]')?.addEventListener('click', () => frame?.contentWindow?.postMessage({type:'spider:open-app-settings'},new URL(frame.src,location.href).origin));
   content.querySelector('[data-notion-connect]')?.addEventListener('click', () => controller.selectSection('SETTINGS'));
   frame?.addEventListener('load', () => {
     content.querySelector('.spider-field-app-loading')?.setAttribute('hidden', '');
