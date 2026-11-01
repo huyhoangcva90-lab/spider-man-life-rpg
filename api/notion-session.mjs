@@ -34,7 +34,8 @@ export default async function handler(req, res) {
   const secret = process.env.NOTION_PROXY_ACCESS_TOKEN || '';
   const local=Boolean(secret && (process.env.NOTION_API_KEY || process.env.NOTION_TOKEN));
   if (req.method === 'GET') {
-    const state=local?{configured:true,connected:hasOwnerSession(req,secret),backend:'notion'}:{...await fieldStatus(req),backend:'field'};
+    const owner=local&&hasOwnerSession(req,secret);
+    const state=owner?{configured:true,connected:true,backend:'notion'}:fieldSession(req)?{...await fieldStatus(req),backend:'field'}:local?{configured:true,connected:false,backend:'notion'}:{...await fieldStatus(req),backend:'field'};
     // Migrate a still-valid short-lived cookie when any app checks its connection.
     if(state.connected && !local)res.setHeader('Set-Cookie',fieldCookie(fieldSession(req)));
     return res.status(200).json({ok:true,...state});
@@ -45,6 +46,15 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  if (req.body?.bridgeCode) {
+    const {bridgeCode,state}=req.body;
+    if(!/^[a-f0-9]{64}$/.test(bridgeCode)||!/^[a-f0-9]{64}$/.test(state||''))return res.status(400).json({ok:false,error:'Invalid session link'});
+    try{
+      const result=await fieldRequest('/api/spider-link',{method:'POST',origin:'https://spider.huykl.id.vn',body:{action:'exchange',code:bridgeCode,state}}),data=await result.json();
+      if(!result.ok||!data.ok||!/^[A-Za-z0-9_.-]{20,4096}$/.test(data.token||''))return res.status(401).json({ok:false,error:'Phiên liên kết đã hết hạn.'});
+      res.setHeader('Set-Cookie',fieldCookie(data.token));return res.status(200).json({ok:true,backend:'field'});
+    }catch{return res.status(502).json({ok:false,error:'Chưa nối được phiên Gambit.'});}
+  }
   const supplied = req.body?.accessCode;
   if (typeof supplied !== 'string' || supplied.length > 512) return res.status(400).json({ ok: false, error: 'Invalid access code' });
   if(!local){

@@ -10,9 +10,9 @@ export function fieldSession(req){
   const value=item?.slice(item.indexOf('=')+1)||'';
   return /^[A-Za-z0-9_.-]{20,4096}$/.test(value)?value:'';
 }
-export async function fieldRequest(path,{method='GET',body,session='',fetcher=fetch}={}){
-  if(!/^\/api\/(auth\/(check|login)|notion|cloud|finance|finance-v2|spider-game|google(?:\/[^?#]*)?)(?:\?|$)/.test(path))throw Error('Unknown Field API');
-  return fetcher(FIELD_BACKEND+path,{method,redirect:'manual',signal:AbortSignal.timeout(30000),headers:{'Content-Type':'application/json',...(session?{Cookie:'gambit_session='+session}:{})},...(body!==undefined?{body:typeof body==='string'?body:JSON.stringify(body)}:{})});
+export async function fieldRequest(path,{method='GET',body,session='',origin='',fetcher=fetch}={}){
+  if(!/^\/api\/(auth\/(check|login)|notion|cloud|finance|finance-v2|spider-game|spider-link|google(?:\/[^?#]*)?)(?:\?|$)/.test(path))throw Error('Unknown Field API');
+  return fetcher(FIELD_BACKEND+path,{method,redirect:'manual',signal:AbortSignal.timeout(30000),headers:{'Content-Type':'application/json',...(origin?{Origin:origin}:{}),...(session?{Cookie:'gambit_session='+session}:{})},...(body!==undefined?{body:typeof body==='string'?body:JSON.stringify(body)}:{})});
 }
 export async function fieldStatus(req,fetcher=fetch){
   try{

@@ -1,9 +1,10 @@
 import { NOTION_GAME_DATABASES, normalizeNotionPage, normalizeNotionCatalogPage, queryAllNotionPages, queueNotionWrite, flushPendingNotionWrites, readPendingNotionWrites } from '../integrations/notion/NotionGameData.js?build=arena-maps-1';
 import { vietnamDay } from '../core/GameDay.mjs';
 import { NotionGamePresenter } from './NotionGamePresenter.js?build=shared-notion-sync-1';
-import { personalAppRoute } from './PersonalAppRoutes.mjs';
+import { personalAppRoute } from './PersonalAppRoutes.mjs?build=gambit-habit-2';
 import { SpiderPersonalStore } from '../../life-reset/js/spider-personal-store.mjs';
 import { homeNotionPreview } from './HomeNotionPreview.mjs';
+import { linkGambitSession } from '../integrations/GambitSessionLink.mjs';
 
 export class ActionRpgController {
   constructor(eventBus, engine, soundController, mapEngine) {
@@ -78,6 +79,15 @@ export class ActionRpgController {
 
   async init() {
     this.fieldAppId = null;
+    window.addEventListener('spider:session-linked', () => {
+      this.notionConnection = 'connected';
+      void this.homePersonalStore?.refresh();
+      document.querySelector('.habit-app-frame')?.contentWindow?.postMessage({type:'spider:session-changed'},location.origin);
+      const field = document.querySelector('[data-field-app-frame]');
+      if (field) field.src = field.src;
+      void this.checkNotionSession();
+      if (this.panelSection === 'SETTINGS') this.renderPanel();
+    });
     this.bus.on('OPEN_FIELD_APP',({id})=>this.openEmbeddedFieldApp(id));
     window.addEventListener('message', event => {
       const personalFrame = document.querySelector('.habit-app-frame[data-personal-app]');
@@ -247,7 +257,11 @@ export class ActionRpgController {
     try {
       const response = await fetch('/api/notion-session', { cache: 'no-store', credentials: 'same-origin' });
       if (!response.ok) throw new Error('Phiên Notion không khả dụng trên máy chủ này.');
-      const session = await response.json();
+      let session = await response.json();
+      if (!session.connected && session.configured && !this.gambitAutoAttempted) {
+        this.gambitAutoAttempted = true;
+        if (await linkGambitSession()) session = await (await fetch('/api/notion-session',{cache:'no-store',credentials:'same-origin'})).json();
+      }
       this.notionConnection = session.connected ? 'connected' : session.configured ? 'locked' : 'unconfigured';
       if (session.connected) return this.syncLiveFromNotion(null, { quiet: true });
       this.notionError = session.configured ? 'Nhập mã kết nối riêng để đồng bộ Notion.' : 'Máy chủ chưa cấu hình khóa Notion và mã truy cập riêng.';
@@ -279,7 +293,7 @@ export class ActionRpgController {
   notionAccessHtml() {
     if (this.notionConnection === 'connected') return '<div class="notion-access-actions"><button id="btn-sync-notion-live" class="pixel-action-btn pixel-action-btn--blue" type="button">↻ ĐỒNG BỘ NOTION</button><button id="btn-disconnect-notion" class="pixel-action-btn" type="button">NGẮT KẾT NỐI</button></div>';
     if (this.notionConnection === 'checking') return '<span class="notion-access-note">Đang kiểm tra kết nối riêng…</span>';
-    if (this.notionConnection === 'locked') return '<form id="notion-auth-form" class="notion-auth-form"><label for="notion-access-code">Mật khẩu Gambit / Spider hiện có · dùng chung cho các mục</label><input id="notion-access-code" name="accessCode" type="password" autocomplete="current-password" required placeholder="Mật khẩu hiện có…"><button class="pixel-action-btn pixel-action-btn--blue" type="submit">KẾT NỐI</button></form>';
+    if (this.notionConnection === 'locked') return '<button type="button" class="pixel-action-btn pixel-action-btn--blue" data-link-gambit>DÙNG KẾT NỐI GAMBIT ĐANG CÓ</button>';
     return '<div class="notion-access-actions"><span class="notion-access-note">Tiến độ lưu trên thiết bị này.</span><button id="btn-recheck-notion" class="pixel-action-btn pixel-action-btn--blue" type="button">KIỂM TRA NOTION</button></div>';
   }
 
@@ -831,7 +845,7 @@ export class ActionRpgController {
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
     const personalRoute = personalAppRoute(this.panelSection, this.panelTab);
     const personalStandalone = false;
-    const requestedApp = this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
+    const requestedApp = this.panelSection === 'HABITS' ? 'habits' : this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
     if (FIELD_APPS[requestedApp] || personalStandalone) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
     delete document.body.dataset.fieldStandalone;
@@ -849,6 +863,7 @@ export class ActionRpgController {
 
   renderSection() {
     const personal = personalAppRoute(this.panelSection, this.panelTab);
+    if (personal?.gambit) return renderFieldApp('habits');
     if (personal) {
       const query = new URLSearchParams({ tab: personal.view });
       if (personal.filter) query.set('filter', personal.filter);
@@ -907,6 +922,7 @@ export class ActionRpgController {
 
   openEmbeddedFieldApp(id) {
     if (!FIELD_APPS[id]) return;
+    if (id === 'habits') { this.fieldAppId = null; this.selectSection('HABITS'); return; }
     this.fieldAppId = id;
     this.selectSection('FIELD');
     this.panelTab = 'SYSTEMS';
@@ -1985,6 +2001,10 @@ export class ActionRpgController {
 
   bindEvents(content) {
     bindFieldApps(this, content);
+    content.querySelector('[data-link-gambit]')?.addEventListener('click', async () => {
+      const ok = await linkGambitSession({interactive:true});
+      if (!ok) this.toast('Mở Gambit trên trình duyệt này rồi thử nối lại.');
+    });
     this.notionPresenter?.loadout?.bind(content);
     content.querySelector('[data-open-quests]')?.addEventListener('click', () => this.selectSection('QUESTS'));
     content.querySelectorAll('[data-open-hero-maps]').forEach((button) => button.addEventListener('click', () => {

@@ -27,3 +27,8 @@ html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) .game-pa
 html:not([data-pk-embed]) body[data-game-section] #game-panel-backdrop,
 html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) #game-panel-backdrop,
 html:not([data-pk-embed]) body[data-field-immersive="true"] #game-panel-backdrop{bottom:calc(var(--mission-dock-height) + 4px)!important}
+/* The owner removed the duplicate profile strip from the shell. */
+html:not([data-pk-embed]) #tracker-main .game-hud-strip{display:none!important}
+html:not([data-pk-embed]) body[data-game-section] #tracker-main #game-panel-backdrop,
+html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) #tracker-main #game-panel-backdrop{top:var(--shell-clearance)!important}
+html:not([data-pk-embed]) #tracker-main>.game-primary-nav{display:grid!important;visibility:visible!important;z-index:75}

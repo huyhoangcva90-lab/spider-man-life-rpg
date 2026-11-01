@@ -1,4 +1,4 @@
-import { dayView, helloRail, helloList, helloDetails } from './reference-views.mjs';
+import { dayView, helloRail, helloList, helloDetails } from './reference-views.mjs?build=quest-db-2';
 import { SpiderPersonalStore, cleanId } from '../js/spider-personal-store.mjs';
 import { vietnamDay } from '../js/personal-progress.mjs';
 

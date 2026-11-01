@@ -11,7 +11,8 @@ import vm from 'node:vm';
 test('Habit legacy links share the one Notion-backed Habit screen', () => {
   for (const tab of ['APP', 'GAMBIT', 'TODAY', 'PROGRESS', '66 DAYS']) {
     assert.equal(personalAppRoute('HABITS', tab).view, 'reports');
-    assert.equal(personalAppRoute('HABITS', tab).src, './life-reset/personal/index.html');
+    assert.equal(personalAppRoute('HABITS', tab).src, './field-view/apps/habits/index.html');
+    assert.equal(personalAppRoute('HABITS', tab).gambit, true);
   }
   assert.equal(personalAppRoute('QUESTS', 'OVERDUE').filter, 'overdue');
   assert.equal(personalAppRoute('QUESTS', 'APP').filter, null);
@@ -31,26 +32,24 @@ test('Spider Quest cards use Active Quests from Notion, not Calendar tasks or a 
   assert.match(view,/aaad787636c682b1a61b0119fca3398b/);
 });
 
-test('Field links open Gambit web while game Habit and Quest keep their Spider screens', () => {
-  const opened = [];
-  const previous = globalThis.location;
-  globalThis.location = { assign: url => opened.push(url) };
-  try {
+test('Field apps stay embedded and Habit opens the canonical Gambit app section', () => {
+    const opened = [];
+    const controller = {selectSection(section){opened.push(section);},renderPanel(){},updateRoute(){}};
     for (const app of ['habits', 'todo', 'finance', 'timetable', 'gym', 'journal', 'routine']) {
-      ActionRpgController.prototype.openEmbeddedFieldApp.call({}, app);
-      assert.equal(opened.at(-1), fieldAppUrl(app));
+      ActionRpgController.prototype.openEmbeddedFieldApp.call(controller, app);
+      assert.equal(opened.at(-1), app === 'habits' ? 'HABITS' : 'FIELD');
+      assert.equal(controller.fieldAppId, app === 'habits' ? null : app);
     }
     assert.equal(fieldAppUrl('launcher'), 'https://gambit-d9b.pages.dev/field/');
     assert.equal(fieldAppUrl('unknown'), null);
-  } finally { if (previous === undefined) delete globalThis.location; else globalThis.location = previous; }
   assert.equal(personalFieldDestination('habits'), 'HABITS');
   assert.equal(personalFieldDestination('todo'), 'QUESTS');
 });
 
-test('old Quest and Habit pages render the same iframe instead of another tracker', () => {
+test('Quest reads the existing DB while Habit renders the original Gambit app', () => {
   for (const section of ['HABITS', 'QUESTS']) {
     const html = ActionRpgController.prototype.renderSection.call({ panelSection: section, panelTab: 'GAMBIT' });
-    assert.match(html, /life-reset\/personal\/index.html/);
+    assert.match(html, section === 'HABITS' ? /field-view\/apps\/habits\/index.html/ : /life-reset\/personal\/index.html/);
     assert.doesNotMatch(html, /field-tools\/apps/);
   }
   const overdue = ActionRpgController.prototype.renderSection.call({ panelSection: 'QUESTS', panelTab: 'OVERDUE' });
