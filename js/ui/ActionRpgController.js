@@ -1735,7 +1735,7 @@ export class ActionRpgController {
      5. SETTINGS SECTION
   ------------------------------------------------------------- */
   renderSettings() {
-    if (this.notionPresenter) return this.notionPresenter.renderPresentationSettings();
+    if (this.notionPresenter) return `<section class="notion-view-banner"><div><strong>KẾT NỐI NOTION DÙNG CHUNG</strong><p>Đăng nhập một lần trên thiết bị này để Habit, Quest và các app dùng cùng phiên. Token Notion được giữ trên máy chủ.</p>${this.notionAccessHtml()}</div></section>` + this.notionPresenter.renderPresentationSettings();
     const settings = this.engine.snapshot().settings;
     if (this.panelTab === 'SAVE') return `<div class="game-save-tools">
       <article class="game-card"><small>VERSIONED LOCAL SAVE</small><h3>PROGRESSION BACKUP</h3><p>Export lưu trận đấu, Quest, Habit và Goal vào một file JSON. Import để khôi phục trên thiết bị khác. Reset chỉ xóa tiến độ trận đấu.</p></article>
