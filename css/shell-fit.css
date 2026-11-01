@@ -3,6 +3,8 @@ html:not([data-pk-embed]) body .tracker-viewport{box-sizing:border-box;width:100
 html:not([data-pk-embed]) body .tracker-device-frame{box-sizing:border-box;justify-self:center;align-self:center}
 .brand-plaque{left:50%!important;right:auto!important;transform:translateX(-50%)!important;display:flex;justify-content:center;align-items:center;padding:0!important}
 .tracker-logo-image{display:block;object-fit:contain;max-width:100%;margin:auto}
+/* Collection, quests and embedded tools keep the same primary destinations. */
+html:not([data-pk-embed]) body[data-game-section] .game-primary-nav{display:grid!important;z-index:75}
 body[data-game-mode="ARENA"]:not([data-game-section]) .game-hud-strip,
 body[data-game-mode="ARENA"]:not([data-game-section]) .notion-home-preview{display:none!important}
 html:not([data-pk-embed]) body[data-game-mode="ARENA"]:not([data-game-section]) #action-rpg-screen.battle-lab-home{top:var(--shell-clearance)!important;bottom:calc(var(--mission-dock-height) + 4px)!important}
@@ -22,3 +24,6 @@ html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) .game-pa
  .game-panel>header h2{font-size:12px!important}
  .game-panel>header button{min-height:36px}
 }
+html:not([data-pk-embed]) body[data-game-section] #game-panel-backdrop,
+html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) #game-panel-backdrop,
+html:not([data-pk-embed]) body[data-field-immersive="true"] #game-panel-backdrop{bottom:calc(var(--mission-dock-height) + 4px)!important}
