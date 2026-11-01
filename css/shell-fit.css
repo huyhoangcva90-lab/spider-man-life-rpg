@@ -8,7 +8,7 @@ body[data-game-mode="ARENA"]:not([data-game-section]) .notion-home-preview{displ
 html:not([data-pk-embed]) body[data-game-mode="ARENA"]:not([data-game-section]) #action-rpg-screen.battle-lab-home{top:var(--shell-clearance)!important;bottom:calc(var(--mission-dock-height) + 4px)!important}
 html:not([data-pk-embed]) body[data-field-immersive="true"] #game-panel-backdrop{position:absolute!important;inset:var(--shell-clearance) 0 0!important;height:auto!important;z-index:50!important}
 html:not([data-pk-embed]) body[data-field-immersive="true"] .game-panel{height:100%!important}
-body:has(.habit-app-frame) .game-panel{grid-template-rows:auto minmax(0,1fr)!important}
+body:has(.habit-app-frame) #game-panel-backdrop .game-panel{grid-template-rows:auto minmax(0,1fr)!important}
 body:has(.habit-app-frame) #game-panel-tabs{display:none!important}
 body:has(.habit-app-frame) .game-panel-content{padding:0!important;overflow:hidden!important}
 html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) #game-panel-backdrop{inset:calc(var(--shell-clearance) + var(--mission-hud-height) + 8px) 0 0!important;height:auto!important}
