@@ -61,3 +61,25 @@ html[data-notion-authority] .action-combat-stage{container-type:size;container-n
  .action-fighter--enemy .arena-foe .notion-enemy-idle{transform:scale(-.85,.85)!important;margin-bottom:-8px}
 }
 html[data-notion-authority] .notion-skill-detail{z-index:80;max-height:calc(100% - 16px)}
+
+/* Hero is a character screen: one stage, one build summary, then the collection. */
+body[data-game-section="HERO"] .notion-hero-profile{gap:16px;padding:16px;border:0;border-bottom:1px solid #397c9b;background:linear-gradient(110deg,#102d42,#081b2b)}
+body[data-game-section="HERO"] .notion-hero-portrait{min-height:180px;background:radial-gradient(ellipse at 50% 78%,#326d84 0,#15374d 43%,transparent 72%)}
+body[data-game-section="HERO"] .notion-hero-portrait img{image-rendering:pixelated;max-height:190px}
+body[data-game-section="HERO"] .notion-stat-grid{gap:0;margin-top:14px;border-top:1px solid #397c9b}
+body[data-game-section="HERO"] .notion-stat-grid>span{gap:3px;padding:10px 8px;border-right:1px solid #31516a;background:transparent;font-size:10px}
+body[data-game-section="HERO"] .notion-stat-grid>span:last-child{border-right:0}
+body[data-game-section="HERO"] .notion-stat-grid b{font-size:15px}
+body[data-game-section="HERO"] .hero-equipped{border-width:0 0 1px;margin:0 0 12px;background:#0d273a}
+body[data-game-section="HERO"] .hero-equipped-slots>button{border-width:0 0 2px;box-shadow:none}
+body[data-game-section="HERO"] .hero-equipped-slots>button:focus-visible{outline:2px solid #f2c06b;outline-offset:2px}
+@media(max-width:600px){
+ body[data-game-section="HERO"] .notion-hero-profile{padding:10px 12px}
+ body[data-game-section="HERO"] .notion-hero-portrait{min-height:125px}
+ body[data-game-section="HERO"] .notion-hero-portrait img{max-height:150px}
+ body[data-game-section="HERO"] .notion-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-game-section="HERO"] .notion-stat-grid>span:nth-child(2){border-right:0}
+ body[data-game-section="HERO"] .notion-stat-grid>span:nth-child(-n+2){border-bottom:1px solid #31516a}
+ body[data-game-section="HERO"] .hero-equipped-slots{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body[data-game-section="HERO"] .hero-equipped-slots>button{min-height:48px}
+}

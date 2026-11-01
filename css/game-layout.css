@@ -567,6 +567,16 @@ body[data-game-section="FIELD"] .game-panel-backdrop {
   .spider-app-card { min-height: 142px; padding: 13px; }
 }
 
+/* Quest cards read as a list of actions inside the tracker frame. */
+body[data-game-section="QUESTS"] .quest-source-banner{border-width:0 0 1px;padding:11px 14px;background:#0e293b}
+body[data-game-section="QUESTS"] .quest-board-list{gap:1px;background:#31516a}
+body[data-game-section="QUESTS"] .quest-board-card{border:0;padding:13px 15px;background:#0b2234}
+body[data-game-section="QUESTS"] .quest-board-card h3{font:700 clamp(15px,1.5vw,18px)/1.35 'Be Vietnam Pro',sans-serif}
+body[data-game-section="QUESTS"] .quest-board-card p:empty{display:none}
+body[data-game-section="QUESTS"] .quest-board-card .pixel-card-footer{border:0}
+body[data-game-section="QUESTS"] .quest-board-card .pixel-action-btn{min-height:44px}
+body[data-game-section="QUESTS"] .quest-empty-state{min-height:160px;display:grid;align-content:center;justify-items:center;gap:8px;text-align:center}
+
 @media (prefers-reduced-motion: reduce) {
   .spider-app-card { transition: none; }
   .spider-app-card:hover,

@@ -18,6 +18,11 @@
 body {
   background: #14110e;
 }
+.journey-link{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:58px;margin:14px 0 18px;padding:11px 14px;border:1px solid #b44a4f;border-left:4px solid #e85562;border-radius:5px;background:linear-gradient(110deg,#3b2026,#251c1b);color:#f7e7da;text-align:left;cursor:pointer}
+.journey-link span{font:800 11px/1.4 Archivo,sans-serif;letter-spacing:.07em;color:#ff9c9c}
+.journey-link strong{font:700 12px/1.4 Inter,sans-serif;text-align:right}
+.journey-link:hover{border-color:#ff9c9c;background:#4b2730}
+.journey-link:focus-visible{outline:2px solid #ffb284;outline-offset:3px}
 h1,
 h2,
 h3 {

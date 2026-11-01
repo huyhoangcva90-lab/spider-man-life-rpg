@@ -95,3 +95,42 @@ body[data-mode=native] #native-notion-link[hidden]{display:none}
 body[data-mode=native] #native-notion-link:hover,body[data-mode=native] #native-notion-link:focus-visible{color:#fff3ce;border-color:#e1c785}
 @media(max-width:850px){body[data-mode=native] .battle-console{min-height:0}body[data-mode=native] .battle-prompt{padding:11px 14px;gap:3px}body[data-mode=native] .battle-loadout{padding:10px}}
 @media(max-width:600px){body[data-mode=native] main{margin:5px auto}body[data-mode=native] #native-actions{grid-template-rows:repeat(4,minmax(60px,auto));gap:6px}body[data-mode=native] #native-actions button{min-height:60px}body[data-mode=native] #native-impact{top:30%;font-size:16px}}
+
+/* Native battle is the playable screen. Keep the old move browser in the trial mode. */
+body[data-mode=native] .command{display:none}
+body[data-mode=native] .game{border-radius:0}
+body[data-mode=native] .battle-prompt{border-color:#356378}
+body[data-mode=native] .battle-prompt strong{font-family:'Be Vietnam Pro',system-ui,sans-serif;font-size:clamp(16px,1.6vw,21px)}
+body[data-mode=native] #native-frame{min-height:0;font-size:11px}
+body[data-mode=native] #native-actions button{border-width:1px;border-radius:4px;box-shadow:inset 0 -3px #071d29}
+body[data-mode=native] #native-actions button[data-slot=ultimate]{border-color:#e5a66c;background:linear-gradient(145deg,#803b4a,#412a46)}
+body[data-mode=native] .native-detail{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center}
+body[data-mode=native] .native-detail strong{font-size:13px;color:#f5dfb3}
+body[data-mode=native] .native-detail p{grid-column:1;font-size:11px;line-height:1.45}
+body[data-mode=native] .native-detail>a{grid-column:2;grid-row:1/span 2}
+body[data-mode=native] .native-detail>details{grid-column:1/-1}
+body[data-mode=native] .native-extra>summary{min-height:40px}
+body[data-mode=native][data-embed=true] .native-detail,
+body[data-mode=native][data-embed=true] .native-extra{display:none}
+@media(max-width:600px){
+ body[data-mode=native] .hud{padding:6px 10px}
+ body[data-mode=native] .turn-strip{padding:5px 9px}
+ body[data-mode=native] .turn-strip #order{display:none}
+ body[data-mode=native] .arena canvas{aspect-ratio:1200/610}
+ body[data-mode=native] .battle-prompt{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;min-height:0;padding:7px 10px;gap:2px 8px}
+ body[data-mode=native] .battle-eyebrow{grid-column:1/-1;font-size:9px}
+ body[data-mode=native] .battle-prompt strong{grid-column:1;font-size:15px}
+ body[data-mode=native] #native-frame{display:none}
+ body[data-mode=native] #battle-message{grid-column:1;font-size:11px;min-height:0}
+ body[data-mode=native] #native-reset{grid-column:2;grid-row:2/span 2;min-height:44px}
+ body[data-mode=native] .battle-loadout{padding:7px}
+ body[data-mode=native] #native-actions{grid-template-rows:repeat(4,minmax(52px,auto));gap:5px}
+ body[data-mode=native] #native-actions button{min-height:52px;padding:5px 5px 5px 34px}
+ body[data-mode=native] #native-actions button:nth-child(7){min-height:54px}
+ body[data-mode=native] #native-actions .action-index{left:5px;top:7px;width:24px;height:24px}
+ body[data-mode=native] #native-actions strong{font-size:12px}
+ body[data-mode=native] #native-actions small{font-size:10px;margin-top:2px}
+ body[data-mode=native] .native-detail{padding:8px 10px;grid-template-columns:minmax(0,1fr)}
+ body[data-mode=native] .native-detail p{grid-column:1}
+ body[data-mode=native] .native-detail>a{grid-column:1;grid-row:auto;justify-self:start}
+}
