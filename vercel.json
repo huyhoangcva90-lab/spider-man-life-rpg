@@ -43,6 +43,10 @@
   ],
   "rewrites": [
     {
+      "source": "/field-view/:asset*",
+      "destination": "/api/field-view?asset=:asset*"
+    },
+    {
       "source": "/api/habit-check",
       "destination": "/api/habit-check.mjs"
     },

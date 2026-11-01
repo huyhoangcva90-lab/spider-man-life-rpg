@@ -1,0 +1,24 @@
+/* Every destination stays inside the same centered tracker. */
+html:not([data-pk-embed]) body .tracker-viewport{box-sizing:border-box;width:100%;padding:4px 6px!important;overflow:hidden}
+html:not([data-pk-embed]) body .tracker-device-frame{box-sizing:border-box;justify-self:center;align-self:center}
+.brand-plaque{left:50%!important;right:auto!important;transform:translateX(-50%)!important;display:flex;justify-content:center;align-items:center;padding:0!important}
+.tracker-logo-image{display:block;object-fit:contain;max-width:100%;margin:auto}
+body[data-game-mode="ARENA"]:not([data-game-section]) .game-hud-strip,
+body[data-game-mode="ARENA"]:not([data-game-section]) .notion-home-preview{display:none!important}
+html:not([data-pk-embed]) body[data-game-mode="ARENA"]:not([data-game-section]) #action-rpg-screen.battle-lab-home{top:var(--shell-clearance)!important;bottom:calc(var(--mission-dock-height) + 4px)!important}
+html:not([data-pk-embed]) body[data-field-immersive="true"] #game-panel-backdrop{position:absolute!important;inset:var(--shell-clearance) 0 0!important;height:auto!important;z-index:50!important}
+html:not([data-pk-embed]) body[data-field-immersive="true"] .game-panel{height:100%!important}
+body:has(.habit-app-frame) .game-panel{grid-template-rows:auto minmax(0,1fr)!important}
+body:has(.habit-app-frame) #game-panel-tabs{display:none!important}
+body:has(.habit-app-frame) .game-panel-content{padding:0!important;overflow:hidden!important}
+html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) #game-panel-backdrop{inset:calc(var(--shell-clearance) + var(--mission-hud-height) + 8px) 0 0!important;height:auto!important}
+html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) .game-hud-strip{display:grid!important}
+html:not([data-pk-embed]) body[data-game-section]:has(.habit-app-frame) .game-panel>header{display:flex!important}
+@media(max-width:600px){
+ html:not([data-pk-embed]) body .tracker-viewport{padding:3px!important}
+ .brand-plaque{width:calc(100% - 104px)!important;max-width:230px!important;top:12px!important}
+ .tracker-logo-image{width:100%!important}
+ .game-panel>header{min-height:40px!important;padding:5px 9px!important}
+ .game-panel>header h2{font-size:12px!important}
+ .game-panel>header button{min-height:36px}
+}

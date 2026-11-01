@@ -27,7 +27,7 @@ export function fieldAppUrl(id) {
 export function renderFieldApp(id) {
   const app = FIELD_APPS[id];
   if (!app) return '';
-  const src = app.src || `./field/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
+  const src = app.src || `./field-view/${app.launcher ? '' : `apps/${id}/`}index.html?spiderEmbed=1&amp;spiderTheme=original`;
   return `<section class="spider-field-app" data-field-app="${id}" aria-label="${app.title}">
     <div role="toolbar" class="spider-field-toolbar" aria-label="Điều hướng ứng dụng">
     <h2 class="spider-field-app-title">${app.title}</h2>
@@ -58,7 +58,7 @@ export function bindFieldApps(controller, content) {
   back?.setAttribute('aria-label',backLabel);back?.setAttribute('title',backLabel);
   const frame = content.querySelector('[data-field-app-frame]');
   content.querySelector('[data-field-app-settings]')?.addEventListener('click', () => frame?.contentWindow?.postMessage({type:'spider:open-app-settings'},location.origin));
-  content.querySelector('[data-notion-connect]')?.addEventListener('click', () => frame?.contentWindow?.postMessage({type:'spider:notion-connect'},location.origin));
+  content.querySelector('[data-notion-connect]')?.addEventListener('click', () => controller.selectSection('SETTINGS'));
   frame?.addEventListener('load', () => {
     content.querySelector('.spider-field-app-loading')?.setAttribute('hidden', '');
   }, { once: true });

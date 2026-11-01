@@ -81,6 +81,9 @@ export class ActionRpgController {
     this.bus.on('OPEN_FIELD_APP',({id})=>this.openEmbeddedFieldApp(id));
     window.addEventListener('message', event => {
       const personalFrame = document.querySelector('.habit-app-frame[data-personal-app]');
+      if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'spider:open-connection') {
+        this.selectSection('SETTINGS'); return;
+      }
       if (event.origin === location.origin && event.source === personalFrame?.contentWindow && event.data?.type === 'spider:personal-home') {
         this.returnToHome(); return;
       }
@@ -120,6 +123,7 @@ export class ActionRpgController {
       }
       const frame = document.querySelector('[data-field-app-frame]');
       if (event.origin !== location.origin || event.source !== frame?.contentWindow) return;
+      if (event.data?.type === 'spider:open-connection') { this.selectSection('SETTINGS'); return; }
       if(event.data?.type==='spider:notion-changed'){
         void this.homePersonalStore.refresh();
         void this.notionPresenter?.refresh({force:true});
@@ -491,11 +495,6 @@ export class ActionRpgController {
 
 
   selectSection(section, playSound = true, openDestination = true) {
-    if (section === 'FIELD') {
-      if (playSound) this.sound.playClick();
-      location.assign(fieldAppUrl('launcher'));
-      return;
-    }
     if (openDestination) document.body.dataset.destinationOpen = 'true';
     if (playSound) this.sound.playClick();
     if (section === 'CITY') {
@@ -831,12 +830,11 @@ export class ActionRpgController {
 
     const tabApps = { TIME:'timetable', GYM:'gym', JOURNAL:'journal' };
     const personalRoute = personalAppRoute(this.panelSection, this.panelTab);
-    const personalStandalone = !!personalRoute;
+    const personalStandalone = false;
     const requestedApp = this.panelSection === 'FIELD' ? (this.panelTab === 'SYSTEMS' ? this.fieldAppId || 'launcher' : tabApps[this.panelTab]) : null;
     if (FIELD_APPS[requestedApp] || personalStandalone) document.body.dataset.fieldImmersive = 'true';
     else delete document.body.dataset.fieldImmersive;
-    if ((FIELD_APPS[requestedApp] && requestedApp !== 'launcher') || personalStandalone) document.body.dataset.fieldStandalone = 'true';
-    else delete document.body.dataset.fieldStandalone;
+    delete document.body.dataset.fieldStandalone;
     const keepCurrentApp = requestedApp && content.querySelector('[data-field-app]')?.dataset.fieldApp === requestedApp;
     const personalKey = personalRoute ? `${personalRoute.section}:${personalRoute.view}:${personalRoute.filter || ''}` : '';
     const keepPersonalApp = personalRoute && content.querySelector('[data-personal-route]')?.dataset.personalRoute === personalKey;
@@ -908,8 +906,12 @@ export class ActionRpgController {
   }
 
   openEmbeddedFieldApp(id) {
-    const destination = fieldAppUrl(id);
-    if (destination) location.assign(destination);
+    if (!FIELD_APPS[id]) return;
+    this.fieldAppId = id;
+    this.selectSection('FIELD');
+    this.panelTab = 'SYSTEMS';
+    this.renderPanel({ resetScroll: true });
+    this.updateRoute();
   }
 
   returnToHome() {
@@ -1742,7 +1744,7 @@ export class ActionRpgController {
       <button class="game-panel-action game-panel-action--danger" data-save-reset>RESET GAME SAVE</button>
     </div>`;
     const toggle = (key, label) => `<label class="game-setting-row"><span>${label}</span><input type="checkbox" data-setting="${key}" ${settings[key] ? 'checked' : ''}></label>`;
-    return `<div class="game-settings-grid">
+    return `<section class="notion-view-banner"><div><strong>KẾT NỐI NOTION DÙNG CHUNG</strong><p>Đăng nhập một lần trên thiết bị này để Habit, Quest và các app dùng cùng phiên. Token Notion được giữ trên máy chủ.</p>${this.notionAccessHtml()}</div></section><div class="game-settings-grid">
       ${toggle('sfx', 'SFX')}${toggle('music', 'MUSIC')}${toggle('reduceMotion', 'REDUCE MOTION')}${toggle('screenShake', 'SCREEN SHAKE')}${toggle('comicText', 'COMIC TEXT')}
       <label class="game-setting-row"><span>COMBAT SPEED</span><select data-setting="combatSpeed"><option value="1" ${settings.combatSpeed === 1 ? 'selected' : ''}>x1</option><option value="2" ${settings.combatSpeed === 2 ? 'selected' : ''}>x2</option></select></label>
       <label class="game-setting-row"><span>DIFFICULTY</span><select data-setting="difficulty">${Object.keys(this.engine.content.difficulties).map((id) => `<option ${id === settings.difficulty ? 'selected' : ''}>${id}</option>`).join('')}</select></label>
@@ -2519,4 +2521,4 @@ export class ActionRpgController {
   text(id, value) { const el = document.getElementById(id); if (el) el.textContent = String(value); }
   width(id, value) { const el = document.getElementById(id); if (el) el.style.width = `${Math.max(0,Math.min(100,value))}%`; }
 }
-import { FIELD_APPS, fieldAppUrl, renderFieldApp, bindFieldApps } from './FieldApps.js?v=gambit-field-web-1';
+import { FIELD_APPS, fieldAppUrl, renderFieldApp, bindFieldApps } from './FieldApps.js?v=framed-apps-2';
