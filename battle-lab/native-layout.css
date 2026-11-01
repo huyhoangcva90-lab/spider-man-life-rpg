@@ -110,20 +110,20 @@ body[data-mode=native] .native-detail p{grid-column:1;font-size:11px;line-height
 body[data-mode=native] .native-detail>a{grid-column:2;grid-row:1/span 2}
 body[data-mode=native] .native-detail>details{grid-column:1/-1}
 body[data-mode=native] .native-extra>summary{min-height:40px}
-body[data-mode=native][data-embed=true] .native-detail,
-body[data-mode=native][data-embed=true] .native-extra{display:none}
-body[data-mode=native][data-embed=true]{overflow:hidden}
-body[data-mode=native][data-embed=true] main{height:100dvh;min-height:0;margin:0;padding:0}
-body[data-mode=native][data-embed=true] .game{height:100%;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;border:0;box-shadow:none}
-body[data-mode=native][data-embed=true] .arena{min-height:0}
-body[data-mode=native][data-embed=true] .arena canvas{height:100%;width:100%;object-fit:contain;aspect-ratio:auto}
-body[data-mode=native][data-embed=true] .battle-console{min-height:0}
-body[data-mode=native][data-embed=true] .battle-prompt{padding:6px 10px;gap:2px}
-body[data-mode=native][data-embed=true] .battle-eyebrow{display:none}
-body[data-mode=native][data-embed=true] #battle-message{min-height:0}
-body[data-mode=native][data-embed=true] #native-actions{grid-auto-rows:auto;grid-template-rows:repeat(2,54px)}
-body[data-mode=native][data-embed=true] #native-actions button{min-height:44px}
-@media(max-width:600px){body[data-mode=native][data-embed=true] #native-actions{grid-template-rows:repeat(4,44px)}body[data-mode=native][data-embed=true] #native-actions button:nth-child(7){min-height:44px}body[data-mode=native][data-embed=true] #native-actions strong{font-size:11px}body[data-mode=native][data-embed=true] .battle-prompt strong{font-size:13px}body[data-mode=native][data-embed=true] .native-detail{display:none}}
+body[data-mode=native] .native-detail,
+body[data-mode=native] .native-extra{display:none}
+body[data-mode=native]{overflow:hidden}
+body[data-mode=native] main{height:100dvh;min-height:0;margin:0;padding:0}
+body[data-mode=native] .game{height:100%;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;border:0;box-shadow:none}
+body[data-mode=native] .arena{min-height:0}
+body[data-mode=native] .arena canvas{height:100%;width:100%;object-fit:contain;aspect-ratio:auto}
+body[data-mode=native] .battle-console{min-height:0}
+body[data-mode=native] .battle-prompt{padding:6px 10px;gap:2px}
+body[data-mode=native] .battle-eyebrow{display:none}
+body[data-mode=native] #battle-message{min-height:0}
+body[data-mode=native] #native-actions{grid-auto-rows:auto;grid-template-rows:repeat(2,54px)}
+body[data-mode=native] #native-actions button{min-height:44px}
+@media(max-width:600px){body[data-mode=native] #native-actions{grid-template-rows:repeat(4,44px)}body[data-mode=native] #native-actions button:nth-child(7){min-height:44px}body[data-mode=native] #native-actions strong{font-size:11px}body[data-mode=native] .battle-prompt strong{font-size:13px}body[data-mode=native] .native-detail{display:none}}
 @media(max-width:600px){
  body[data-mode=native] .hud{padding:6px 10px}
  body[data-mode=native] .turn-strip{padding:5px 9px}
@@ -146,3 +146,6 @@ body[data-mode=native][data-embed=true] #native-actions button{min-height:44px}
  body[data-mode=native] .native-detail p{grid-column:1}
  body[data-mode=native] .native-detail>a{grid-column:1;grid-row:auto;justify-self:start}
 }
+
+body[data-mode=native] .top{display:none}
+@media(max-width:600px){body[data-mode=native] #native-actions button,body[data-mode=native] #native-actions button:nth-child(7){min-height:44px;height:44px}body[data-mode=native] #native-actions{grid-template-rows:repeat(4,44px)}}
